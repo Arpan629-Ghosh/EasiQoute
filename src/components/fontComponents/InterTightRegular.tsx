@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, TextProps } from 'react-native';
-import { fontFamily } from '../../constants/fontFamily';
+import { fontFamily } from '@constants/fontFamily';
 
 interface Props extends TextProps {
   fcolor: string;

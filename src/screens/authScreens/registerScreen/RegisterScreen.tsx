@@ -1,63 +1,45 @@
-import {
-  Image,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  TextInput,
-  View,
-} from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { styles } from './styles';
-import GradientHeader from '@components/gradient/GradientHeader';
-import InterTightSemiBold from '@components/fontComponents/InterTightSemiBold';
-import InterTightRegular from '@components/fontComponents/InterTightRegular';
-import Input from '@components/inputComponent/Input';
-import { images } from '@config/images';
-import InterTightMedium from '@components/fontComponents/InterTightMedium';
+import { View, TextInput, ScrollView, KeyboardAvoidingView, Platform, Image } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
+import GradientHeader from '@/components/gradient/GradientHeader';
+import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
+import InterTightRegular from '@/components/fontComponents/InterTightRegular';
+import Input from '@/components/inputComponent/Input';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import { LoginScreenProps } from '@appTypes/navigation.types';
+import InterTightMedium from '@/components/fontComponents/InterTightMedium';
+import { styles } from './style';
+import { images } from '@/config/images';
+import { RegisterScreenProps } from '@/types/navigation.types';
+
 
 interface LoginForm {
   email: string;
   password: string;
 }
-const LoginScreen = ({ navigation }: LoginScreenProps) => {
+const RegisterScreen = ({navigation} : RegisterScreenProps) => {
+
   const [formData, setFormData] = useState<LoginForm>({
-    email: '',
-    password: '',
-  });
-  const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true)
-
-  const emailRef = useRef<TextInput | null>(null);
-  const passwordRef = useRef<TextInput | null>(null);
-
-  useEffect(() => {
-    emailRef.current?.focus();
-  }, []);
-
-  const handleInput = (name: string, value: string) => {
-    setFormData(prev => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const createAccount = () => {
-    navigation.navigate('RegisterScreen');
-  };
-
-  const resetPassword = () => {
-    navigation.navigate('ResetPasswordScreen')
-  }
-
-  const handleSecureTextEntry = () => {
-    setSecureTextEntry(!secureTextEntry)
-  }
-
-  const handleLogin = () => {
-    navigation.replace('IntroScreen1')
-  }
-
+      email: '',
+      password: '',
+    });
+  
+    const emailRef = useRef<TextInput | null>(null);
+    const passwordRef = useRef<TextInput | null>(null);
+  
+    useEffect(() => {
+      emailRef.current?.focus()
+    },[])
+  
+    const handleInput = (name: string, value: string) => {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value,
+      }));
+    };
+  
+  const goLoginScreen = () => {
+      navigation.navigate("LoginScreen")
+    }
+  
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -65,7 +47,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       enabled={true}
       keyboardVerticalOffset={3}
     >
-      <ScrollView style={styles.scrollView} keyboardShouldPersistTaps="handled">
+      <ScrollView keyboardShouldPersistTaps="handled">
         <View style={styles.container}>
           <View style={styles.formContainer}>
             <GradientHeader />
@@ -73,10 +55,10 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
             <View style={styles.form}>
               <View style={styles.textView}>
                 <InterTightSemiBold fsize={24} fcolor="#2D2D2D" textAlign='left'>
-                  Welcome Back 👋
+                  Let’s Get Started 🚀
                 </InterTightSemiBold>
                 <InterTightRegular fsize={14} fcolor="#89909D">
-                  Log in to manage your quotes and invoices with ease.
+                  Sign up and simplify your quoting and invoicing process.
                 </InterTightRegular>
               </View>
 
@@ -108,34 +90,20 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
                       onChangeText={(txt: string) =>
                         handleInput('password', txt)
                       }
-                      secureTextEntry={secureTextEntry}
+                      secureTextEntry
                       textContentType="password"
                       style={styles.noBorderInput}
                     />
-                    <ButtonComponent onPress={handleSecureTextEntry}>
+                    <ButtonComponent>
                       <Image source={images.img_vector} style={styles.img} />
                     </ButtonComponent>
                   </View>
                 </View>
-                <ButtonComponent
-                  onPress={handleLogin}
-                  style={styles.bttn}
-                >
+                <ButtonComponent style={styles.bttn}>
                   <InterTightMedium fsize={16} fcolor="#FFFFFF">
-                    Login
+                    Create Account
                   </InterTightMedium>
                 </ButtonComponent>
-
-                <View style={styles.forgotpasswordView}>
-                  <InterTightRegular fsize={16} fcolor="#89909D">
-                    Forgot password?
-                  </InterTightRegular>
-                  <ButtonComponent onPress={resetPassword}>
-                    <InterTightRegular fsize={16} fcolor="#082B60">
-                      Reset
-                    </InterTightRegular>
-                  </ButtonComponent>
-                </View>
               </View>
             </View>
           </View>
@@ -144,11 +112,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
             <View style={styles.footerTxtView}>
               <View style={styles.createaccountView}>
                 <InterTightRegular fsize={16} fcolor="#89909D">
-                  Don't have an account?{' '}
+                  Already have an account?
                 </InterTightRegular>
-                <ButtonComponent onPress={createAccount}>
+                <ButtonComponent onPress={goLoginScreen}>
                   <InterTightRegular fsize={16} fcolor="#082B60">
-                    Create Account
+                    Login
                   </InterTightRegular>
                 </ButtonComponent>
               </View>
@@ -178,6 +146,6 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
       </ScrollView>
     </KeyboardAvoidingView>
   );
-};
+}
 
-export default LoginScreen;
+export default RegisterScreen

@@ -5,18 +5,20 @@ import {
   View,
   StyleProp,
   TextStyle,
+  ViewStyle,
 } from 'react-native';
 import React, { forwardRef } from 'react';
-import { fontFamily } from '../../constants/fontFamily';
+import { fontFamily } from '@constants/fontFamily';
 
-interface Props extends TextInputProps { 
-  style?: StyleProp<TextStyle>; 
+interface Props extends TextInputProps {
+  containerStyle?: StyleProp<ViewStyle>;
+  style?: StyleProp<TextStyle>;
 }
 
 const Input = forwardRef<TextInput, Props>(
-  ({ style, ...rest }, ref) => {
+  ({ containerStyle, style, ...rest }, ref) => {
     return (
-      <View style={[styles.container]}>
+      <View style={[styles.container, containerStyle]}>
         <TextInput
           {...rest}
           ref={ref}
@@ -28,20 +30,20 @@ const Input = forwardRef<TextInput, Props>(
   },
 );
 
-export default Input;
+export default React.memo(Input);
 
 
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    flex: 1
   },
   input: {
     fontFamily: fontFamily.INTER_TIGHT.regular,
     height: 48,
-    width: '100%',
+    width: "100%",
     borderRadius: 12,
-    borderWidth: 1,
+    borderWidth: 2,
     paddingHorizontal: 12,
     borderColor: '#E4E6F4',
   },

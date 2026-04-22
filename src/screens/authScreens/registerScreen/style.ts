@@ -2,9 +2,6 @@ import { StyleSheet } from "react-native";
 
 
 export const styles = StyleSheet.create({
-  scrollView: {
-    flexGrow: 1
-  },
   container: {
     flex: 1,
     gap: 32,
@@ -79,7 +76,7 @@ export const styles = StyleSheet.create({
   footer: {
     height: 143,
     width: '100%',
-    marginTop: 142,
+    marginTop: 145,
   },
   footerTxtView: {
     height: 109,
@@ -87,15 +84,15 @@ export const styles = StyleSheet.create({
     padding: 12,
     gap: 16,
     alignItems: 'center',
-    marginTop: "auto"
+    marginTop: 'auto',
   },
   createaccountView: {
     // flex: 1,
     flexDirection: 'row',
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
     alignItems: 'center',
-    justifyContent: "center",
-    paddingHorizontal: 32
+    justifyContent: 'center',
+    paddingHorizontal: 32,
     // width: "100%"
   },
   borderLine: {
@@ -105,8 +102,7 @@ export const styles = StyleSheet.create({
     backgroundColor: '#E4E6F4',
   },
   privacyView: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 5,
-    
-  }
+  },
 });
