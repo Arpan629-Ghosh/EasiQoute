@@ -55,7 +55,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
   }
 
   const handleLogin = () => {
-    navigation.replace('IntroScreen1')
+    navigation.replace('IntroScreen')
   }
 
   return (

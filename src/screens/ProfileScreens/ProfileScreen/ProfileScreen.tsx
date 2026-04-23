@@ -36,8 +36,12 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
         nameRef.current?.focus()
     },[])
   const navigateToBack = () => {
-    navigation.navigate('IntroScreen2');
+    navigation.navigate('IntroScreen');
   };
+
+  const navigateToBusinessSetup = () => {
+    navigation.navigate('BusinessScreen')
+  }
     
   const handleInput = (name: string, value: string) => {
     setFormData(prev => ({
@@ -109,7 +113,7 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
           </View>
           <View style={styles.footer}>
             <View style={styles.footerComponent}>
-              <ButtonComponent style={styles.bttn}>
+              <ButtonComponent onPress={navigateToBusinessSetup} style={styles.bttn}>
                 <InterTightMedium fsize={16} fcolor="#FFFFFF">
                   Continue
                 </InterTightMedium>

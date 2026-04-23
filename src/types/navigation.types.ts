@@ -9,9 +9,9 @@ export type AuthStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
   ResetPasswordScreen: undefined;
-  IntroScreen1: undefined;
-  IntroScreen2: undefined;
+  IntroScreen: undefined;
   ProfileScreen: undefined;
+  BusinessScreen: undefined;
 };
 
 export type LoginScreenProps = NativeStackScreenProps<
@@ -27,14 +27,11 @@ export type ResetPasswordScreenProps = NativeStackScreenProps<
   'ResetPasswordScreen'
 >;
 
-export type IntroScreen1Props = NativeStackScreenProps<
+export type IntroScreenProps = NativeStackScreenProps<
   AuthStackParamList,
-  'IntroScreen1'
->;
-
-export type IntroScreen2Props = NativeStackScreenProps<
-  AuthStackParamList,
-  'IntroScreen2'
+  'IntroScreen'
 >;
 
 export type ProfileScreenProps = NativeStackScreenProps<AuthStackParamList, 'ProfileScreen'>
+
+export type BusinessScreenProps = NativeStackScreenProps<AuthStackParamList, 'BusinessScreen'>

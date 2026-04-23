@@ -4,5 +4,7 @@ export const images = {
     img_vector: require("@assets/images/img_vector.png"),
     img_intro: require("../assets/images/img_intro.png"),
     img_onboarding: require("../assets/images/img_onboarding.png"),
-    img_profile: require("../assets/images/img_profile.png")
+    img_profile: require("../assets/images/img_profile.png"),
+    img_camera: require("../assets/images/img_camera.png"),
+    img_brandcolor: require("../assets/images/img_brandcolor.png")
 }

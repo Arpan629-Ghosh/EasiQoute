@@ -12,17 +12,17 @@ import { fontFamily } from '@constants/fontFamily';
 
 interface Props extends TextInputProps {
   containerStyle?: StyleProp<ViewStyle>;
-  style?: StyleProp<TextStyle>;
+  textstyle?: StyleProp<TextStyle>;
 }
 
 const Input = forwardRef<TextInput, Props>(
-  ({ containerStyle, style, ...rest }, ref) => {
+  ({ containerStyle, textstyle, ...rest }, ref) => {
     return (
       <View style={[styles.container, containerStyle]}>
         <TextInput
           {...rest}
           ref={ref}
-          style={[styles.input, style]}
+          style={[styles.input, textstyle]}
           placeholderTextColor="#ABABAB"
         />
       </View>

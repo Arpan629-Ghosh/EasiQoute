@@ -13,9 +13,10 @@ module.exports = {
           '@navigation': './src/navigation',
           '@screens': './src/screens',
           '@appTypes': './src/types',
-          '@constants': './src/constants'
+          '@constants': './src/constants',
         },
       },
     ],
+    'react-native-reanimated/plugin',
   ],
 };
