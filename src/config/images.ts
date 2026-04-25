@@ -6,5 +6,6 @@ export const images = {
     img_onboarding: require("../assets/images/img_onboarding.png"),
     img_profile: require("../assets/images/img_profile.png"),
     img_camera: require("../assets/images/img_camera.png"),
-    img_brandcolor: require("../assets/images/img_brandcolor.png")
+    img_brandcolor: require("../assets/images/img_brandcolor.png"),
+    img_address: require("../assets/images/img_address.png"),
 }

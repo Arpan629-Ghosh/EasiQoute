@@ -15,6 +15,7 @@ import { images } from '@/config/images';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Input from '@/components/inputComponent/Input';
 import { ProfileScreenProps } from '@/types/navigation.types';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface ProfileForm {
     name: string,
@@ -36,7 +37,7 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
         nameRef.current?.focus()
     },[])
   const navigateToBack = () => {
-    navigation.navigate('IntroScreen');
+    navigation.goBack()
   };
 
   const navigateToBusinessSetup = () => {
@@ -50,79 +51,85 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
     }));
   };
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.keyboardContainer}
-      enabled={true}
-      keyboardVerticalOffset={3}
-    >
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <View style={styles.container}>
-          <View style={styles.mainContainer}>
-            <View style={styles.headerContainer}>
-              <View style={styles.headerComponent}>
-                <ButtonComponent onPress={navigateToBack}>
-                  <Image source={icons.ic_back} style={styles.img} />
-                </ButtonComponent>
+    <SafeAreaView style={styles.safeareaview} edges={['top']}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardContainer}
+        enabled={true}
+        keyboardVerticalOffset={3}
+      >
+        <ScrollView keyboardShouldPersistTaps="handled">
+          <View style={styles.container}>
+            <View style={styles.mainContainer}>
+              <View style={styles.headerContainer}>
+                <View style={styles.headerComponent}>
+                  <ButtonComponent onPress={navigateToBack}>
+                    <Image source={icons.ic_back} style={styles.img} />
+                  </ButtonComponent>
 
-                <InterTightMedium fsize={18} fcolor="#2D2D2D">
-                  Profile Setup
-                </InterTightMedium>
-              </View>
-            </View>
-            <View style={styles.formContainer}>
-              <View style={styles.profilePic}>
-                <ButtonComponent>
-                  <Image
-                    source={images.img_profile}
-                    style={styles.profileImg}
-                  />
-                  <Image source={icons.ic_add} style={styles.icon} />
-                </ButtonComponent>
-              </View>
-              <View style={styles.inputContainer}>
-                <View style={styles.inp}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
-                    Name
-                  </InterTightRegular>
-                  <Input
-                    ref={nameRef}
-                    onSubmitEditing={() => phRef.current?.focus()}
-                    returnKeyType="next"
-                    placeholder="Enter your name"
-                    value={formData.name}
-                    onChangeText={(txt: string) => handleInput('name', txt)}
-                    keyboardType="name-phone-pad"
-                  />
+                  <InterTightMedium fsize={18} fcolor="#2D2D2D">
+                    Profile Setup
+                  </InterTightMedium>
+                  <View style={styles.emptyview} />
                 </View>
-                <View style={styles.inp}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
-                    Phone
-                  </InterTightRegular>
-                  <Input
-                    ref={phRef}
-                    returnKeyType="next"
-                    placeholder="Enter phone no."
-                    value={formData.phone}
-                    onChangeText={(txt: string) => handleInput('phone', txt)}
-                    keyboardType="numeric"
-                  />
+              </View>
+              <View style={styles.formContainer}>
+                <View style={styles.profilePic}>
+                  <ButtonComponent>
+                    <Image
+                      source={images.img_profile}
+                      style={styles.profileImg}
+                    />
+                    <Image source={icons.ic_add} style={styles.icon} />
+                  </ButtonComponent>
+                </View>
+                <View style={styles.inputContainer}>
+                  <View style={styles.inp}>
+                    <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                      Name
+                    </InterTightRegular>
+                    <Input
+                      ref={nameRef}
+                      onSubmitEditing={() => phRef.current?.focus()}
+                      returnKeyType="next"
+                      placeholder="Enter your name"
+                      value={formData.name}
+                      onChangeText={(txt: string) => handleInput('name', txt)}
+                      keyboardType="name-phone-pad"
+                    />
+                  </View>
+                  <View style={styles.inp}>
+                    <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                      Phone
+                    </InterTightRegular>
+                    <Input
+                      ref={phRef}
+                      returnKeyType="next"
+                      placeholder="Enter phone no."
+                      value={formData.phone}
+                      onChangeText={(txt: string) => handleInput('phone', txt)}
+                      keyboardType="numeric"
+                    />
+                  </View>
                 </View>
               </View>
             </View>
           </View>
-          <View style={styles.footer}>
-            <View style={styles.footerComponent}>
-              <ButtonComponent onPress={navigateToBusinessSetup} style={styles.bttn}>
-                <InterTightMedium fsize={16} fcolor="#FFFFFF">
-                  Continue
-                </InterTightMedium>
-              </ButtonComponent>
-            </View>
+        </ScrollView>
+        <View style={styles.footer}>
+          <View style={styles.footerComponent}>
+            <ButtonComponent
+              onPress={navigateToBusinessSetup}
+              style={styles.bttn}
+            >
+              <InterTightMedium fsize={16} fcolor="#FFFFFF">
+                Continue
+              </InterTightMedium>
+            </ButtonComponent>
           </View>
         </View>
-      </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 };
 

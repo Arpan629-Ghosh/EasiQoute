@@ -6,7 +6,8 @@ import RegisterScreen from '@screens/authScreens/registerScreen/RegisterScreen';
 import ResetPasswordScreen from '@/screens/authScreens/resetPasswordScreen/ResetPasswordScreen';
 import ProfileScreen from '@/screens/ProfileScreens/ProfileScreen/ProfileScreen';
 import IntroScreen from '@/screens/IntroScreens/IntroScreen/IntroScreen';
-import BusinessScreen from '@/screens/ProfileScreens/BusinessScreen/BusinessScreen';
+import BusinessScreen from '@/screens/ProfileScreens/businessSetupScreens/businessScreen/BusinessScreen';
+import BusinessAddressScreen from '@/screens/ProfileScreens/businessSetupScreens/businessAddressScren/BusinessAddressScreen';
 
 
 
@@ -69,6 +70,15 @@ const AuthStack = () => {
               component={BusinessScreen}
               options={{
                   title: 'Business Setup',
+                  headerShown: false
+              }}
+          />
+
+          <Stack.Screen
+              name='BusinessAddressScreen'
+              component={BusinessAddressScreen}
+              options={{
+                  title: "Business Address",
                   headerShown: false
               }}
           />

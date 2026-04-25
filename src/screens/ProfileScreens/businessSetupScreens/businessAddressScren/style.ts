@@ -1,11 +1,14 @@
-import { StyleSheet } from "react-native";
-
+import { StyleSheet } from 'react-native';
 
 export const styles = StyleSheet.create({
+  safeareaview: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
   container: {
     flex: 1,
   },
-  mainContainer: {
+  keyboardContainer: {
     flex: 1,
   },
   headerComponent: {
@@ -27,47 +30,47 @@ export const styles = StyleSheet.create({
     height: 28,
     width: 28,
   },
+  emptyview: {
+    width: 28,
+  },
   formContainer: {
-    height: 335,
-    width: '100%',
     paddingVertical: 20,
     paddingHorizontal: 12,
     gap: 24,
   },
-  profilePic: {
-    height: 100,
-    width: 100,
-    borderRadius: 100,
-    marginHorizontal: 137.5,
-  },
-  profileImg: {
-    height: 100,
-    width: 100,
-    resizeMode: 'cover',
-  },
-  icon: {
-    height: 28,
-    width: 28,
-    bottom: 0,
-    position: 'absolute',
-    left: 70,
-  },
   inputContainer: {
-    height: 166,
-    width: '100%',
     gap: 20,
-    marginTop: 24,
+  },
+  inputicon: {
+    height: 50,
+    borderWidth: 1,
+    borderColor: '#E4E6F4',
+    borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 12,
+    overflow: 'hidden',
+    gap: 12,
+  },
+  noBorderInput: {
+    flex: 1,
+    borderWidth: 0,
+    height: '100%',
+    paddingHorizontal: 0,
+  },
+  searchic: {
+    height: 18,
+    width: 18,
   },
   inp: {
-    height: 73,
-    width: '100%',
     gap: 8,
+   
   },
   footer: {
     paddingTop: 10,
     paddingBottom: 16,
   },
-  footerComponent: {
+  footerContainer: {
     paddingVertical: 12,
   },
   bttn: {
@@ -79,15 +82,8 @@ export const styles = StyleSheet.create({
     backgroundColor: '#082B60',
     alignItems: 'center',
   },
-  keyboardContainer: {
+  scrollview: {
+    paddingBottom: 120,
     flex: 1,
-    justifyContent: 'flex-end',
-  },
-  safeareaview: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  emptyview: {
-    width: 28,
   },
 });

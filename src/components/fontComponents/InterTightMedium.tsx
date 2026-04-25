@@ -4,16 +4,17 @@ import { fontFamily } from '@constants/fontFamily';
 
 interface Props extends TextProps {
   fcolor: string;
-  fsize: 12 | 14 | 16 | 18 | 20;
+  fsize: 10 | 12 | 14 | 16 | 18 | 20;
+  textAlign?: string;
 }
 
 const InterTightMedium: React.FC<Props> = ({
   fcolor = '#2c2c2c',
   fsize = 12,
   children,
+  textAlign = '',
   ...rest
 }) => {
-
   return (
     <Text
       {...rest}
@@ -21,6 +22,7 @@ const InterTightMedium: React.FC<Props> = ({
         fontFamily: fontFamily.INTER_TIGHT.medium,
         color: fcolor,
         fontSize: fsize,
+        textAlign: textAlign,
       }}
     >
       {children}

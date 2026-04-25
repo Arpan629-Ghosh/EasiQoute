@@ -1,4 +1,18 @@
 export const icons = {
     ic_back: require('@assets/icons/ic_back.png'),
-    ic_add: require('@assets/icons/ic_add.png')
+    ic_add: require('@assets/icons/ic_add.png'),
+    ic_search: require('@assets/icons/ic_search.png'),
+    ic_icon1: require('@assets/icons/ic_icon1.png'),
+    ic_icon2: require('@assets/icons/ic_icon2.png'),
+    ic_icon3: require('@assets/icons/ic_icon3.png'),
+    ic_icon4: require('@assets/icons/ic_icon4.png'),
+    ic_icon5: require('@assets/icons/ic_icon5.png'),
+    ic_icon6: require('@assets/icons/ic_icon6.png'),
+    ic_icon7: require('@assets/icons/ic_icon7.png'),
+    ic_icon8: require('@assets/icons/ic_icon8.png'),
+    ic_icon9: require('@assets/icons/ic_icon9.png'),
+    ic_icon10: require('@assets/icons/ic_icon10.png'),
+    ic_icon11: require('@assets/icons/ic_icon11.png'),
+    ic_icon12: require('@assets/icons/ic_icon12.png'),
+    ic_icon13: require('@assets/icons/ic_icon13.png'),
 }

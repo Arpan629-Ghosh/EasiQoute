@@ -6,6 +6,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     gap: 32,
     justifyContent: 'space-between',
+    backgroundColor: '#FFFFFF',
   },
   formContainer: {
     width: '100%',

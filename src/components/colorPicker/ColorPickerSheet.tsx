@@ -1,12 +1,14 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 
+import ColorPicker, {
 
-import ColorPicker, { HueSlider, Panel1 } from 'reanimated-color-picker';
+  HueSlider,
+  Panel1,
+} from 'reanimated-color-picker';
 import ModalComponent from './ModalComponent';
-import { runOnJS } from 'react-native-worklets';
-import Input from '../inputComponent/Input';
 
+import { runOnJS } from 'react-native-worklets';
 
 type Props = {
   visible: boolean;
@@ -15,27 +17,26 @@ type Props = {
 };
 
 const ColorPickerSheet = ({ visible, onClose, onSelect }: Props) => {
+
+
   return (
     <ModalComponent visible={visible} onClose={onClose}>
       <ColorPicker
-        style={{ width: '100%' }}
         onComplete={color => {
           'worklet';
-
           runOnJS(onSelect)(color.hex);
         }}
       >
         <Panel1 style={styles.panel} />
         <HueSlider style={styles.slider} />
-        <View style = {styles.view}>
-          <Input style={styles.inp } />
-        </View>
+
+     
       </ColorPicker>
     </ModalComponent>
   );
 };
 
-export default ColorPickerSheet;
+export default React.memo(ColorPickerSheet);
 
 const styles = StyleSheet.create({
   panel: {
@@ -46,10 +47,21 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   view: {
-    marginTop: 20
+    marginTop: 20,
+    gap: 20,
+    flexDirection: 'row',
   },
-  inp: {
-    width: 10,
-    height: 10
-  }
+
+  bttn2: {
+    height: 46,
+    width: 175,
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 12,
+    gap: 12,
+    backgroundColor: '#082B60',
+    borderColor: '#E4E6F4',
+    alignItems: 'center',
+  },
+  
 });

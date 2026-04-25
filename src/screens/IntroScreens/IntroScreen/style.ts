@@ -4,9 +4,10 @@ const { width } = Dimensions.get('window');
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
-    slide: {
-      width,
+  slide: {
+    width,
     height: 578,
     padding: 20,
     marginTop: 76,
@@ -22,7 +23,7 @@ export const styles = StyleSheet.create({
     width: '100%',
     paddingBottom: 16,
     gap: 24,
-    alignItems: "center"
+    alignItems: 'center',
   },
   skip: {
     fontSize: 16,

@@ -12,17 +12,17 @@ import { fontFamily } from '@constants/fontFamily';
 
 interface Props extends TextInputProps {
   containerStyle?: StyleProp<ViewStyle>;
-  textstyle?: StyleProp<TextStyle>;
+  style?: StyleProp<TextStyle>;
 }
 
 const Input = forwardRef<TextInput, Props>(
-  ({ containerStyle, textstyle, ...rest }, ref) => {
+  ({ containerStyle, style, ...rest }, ref) => {
     return (
       <View style={[styles.container, containerStyle]}>
         <TextInput
           {...rest}
           ref={ref}
-          style={[styles.input, textstyle]}
+          style={[styles.input, style]}
           placeholderTextColor="#ABABAB"
         />
       </View>
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     height: 48,
     width: "100%",
     borderRadius: 12,
-    borderWidth: 2,
+    borderWidth: 1,
     paddingHorizontal: 12,
     borderColor: '#E4E6F4',
   },

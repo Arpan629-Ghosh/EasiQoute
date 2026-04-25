@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 export const styles = StyleSheet.create({
   scrollView: {
     flexGrow: 1,
+    backgroundColor: '#FFFFFF',
   },
   container: {
     flex: 1,
@@ -65,9 +66,9 @@ export const styles = StyleSheet.create({
   keyboardContainer: {
     flex: 1,
     justifyContent: 'flex-end',
-    },
-    icon: {
-        height: 28,
-        width: 28
-  }
+  },
+  icon: {
+    height: 28,
+    width: 28,
+  },
 });

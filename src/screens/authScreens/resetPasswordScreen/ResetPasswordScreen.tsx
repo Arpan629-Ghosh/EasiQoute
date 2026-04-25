@@ -30,7 +30,7 @@ const ResetPasswordScreen = ({navigation} : ResetPasswordScreenProps) => {
   };
 
   const handleBack = () => {
-    navigation.navigate("LoginScreen")
+    navigation.goBack()
   }
   return (
     <KeyboardAvoidingView
