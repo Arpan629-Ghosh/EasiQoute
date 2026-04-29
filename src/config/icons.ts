@@ -30,5 +30,16 @@ export const icons = {
   ic_whiteclient: require('@assets/icons/ic_whiteclient.png'),
   ic_filter: require('@assets/icons/ic_filter.png'),
   ic_whitesearch: require('@assets/icons/ic_whitesearch.png'),
-  ic_searchwhite: require('@assets/icons/ic_searchwhite.png')
+  ic_searchwhite: require('@assets/icons/ic_searchwhite.png'),
+  ic_draft: require("@assets/icons/ic_draft.png"),
+  ic_completed: require("@assets/icons/ic_completed.png"),
+  ic_sent: require("@assets/icons/ic_sent.png"),
+  ic_approved: require("@assets/icons/ic_approved.png"),
+  ic_paid: require("@assets/icons/ic_paid.png"),
+  ic_rejected: require("@assets/icons/ic_rejected.png"),
+  ic_cancelled: require("@assets/icons/ic_cancelled.png"),
+  ic_htl: require("@assets/icons/ic_htl.png"),
+  ic_lth: require("@assets/icons/ic_lth.png"),
+  ic_cal: require("@assets/icons/ic_cal.png"),
+  ic_cross: require("@assets/icons/ic_cross.png")
 };

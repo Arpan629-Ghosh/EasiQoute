@@ -7,15 +7,13 @@ export const styles = StyleSheet.create({
     backgroundColor: '#F2EEEC',
   },
   mainContainer: {
-    height: 645,
+    flex: 1,
     gap: 16,
   },
   header: {
-    height: 149,
     gap: 12,
   },
   headerComponent: {
-    height: 93,
     gap: 16,
     marginTop: 56,
     paddingHorizontal: 12,
@@ -23,8 +21,7 @@ export const styles = StyleSheet.create({
   searchandfilter: {
     height: 48,
     gap: 8,
-      flexDirection: 'row',
- 
+    flexDirection: 'row',
   },
   imgView: {
     height: 48,
@@ -41,6 +38,7 @@ export const styles = StyleSheet.create({
     width: 325,
     borderWidth: 1,
     borderColor: '#FFFFFF',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
@@ -58,4 +56,32 @@ export const styles = StyleSheet.create({
     height: '100%',
     paddingHorizontal: 0,
   },
+
+  flatlist: {
+    flex: 1,
+    paddingHorizontal: 12,
+  
+    
+  },
+  add: {
+    height: 48,
+    width: 48,
+    borderRadius: 32,
+    marginRight: 12,
+    marginBottom: 12,
+    marginLeft: "auto"
+  },
+  ic: {
+    height: '100%',
+    width: '100%',
+    resizeMode: 'cover',
+  },
+  keyboardContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+  },
+  modal: {
+    height: 606,
+    gap: 16
+  }
 });
