@@ -11,11 +11,12 @@ import {
 
 type Props = {
   visible: boolean;
+  mheight: number;
   onClose: () => void;
   children: React.ReactNode;
 };
 
-const ModalComponent = ({ visible, onClose, children }: Props) => {
+const ModalComponent = ({ visible, mheight, onClose, children }: Props) => {
 
   return (
     <Modal transparent visible={visible} animationType="slide">
@@ -25,7 +26,7 @@ const ModalComponent = ({ visible, onClose, children }: Props) => {
       </TouchableWithoutFeedback>
 
      
-      <View style={[styles.sheet]}>
+      <View style={[styles.sheet, {height: mheight}]}>
         {children}
       </View>
     </Modal>
@@ -43,7 +44,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    height: 350,
     backgroundColor: '#fff',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,

@@ -48,12 +48,16 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
     navigation.navigate('BusinessAddressScreen');
   };
 
-  const updateField = (key: keyof BusinessForm, value: any) => {
+  const navigateToTabs = () => {
+    navigation.replace("MainTabs")
+  }
+
+  const updateField = useCallback((key: keyof BusinessForm, value: any) => {
     setForm(prev => ({
       ...prev,
       [key]: value,
     }));
-  };
+  },[]);
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -173,7 +177,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
                     Address
                   </InterTightMedium>
                 </View>
-                <ButtonComponent onPress={navigateToAddress}>
+                <ButtonComponent onPress={navigateToAddress} style = {styles.addimg}>
                   <Image source={images.img_address} style={styles.addimg} />
                 </ButtonComponent>
               </View>
@@ -214,7 +218,9 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
           </ScrollView>
           <View style={styles.footer}>
             <View style={styles.footerContainer}>
-              <ButtonComponent style={styles.bttn}>
+              <ButtonComponent
+                onPress={navigateToTabs}
+                style={styles.bttn}>
                 <InterTightMedium fsize={16} fcolor="#FFFFFF">
                   Continue
                 </InterTightMedium>

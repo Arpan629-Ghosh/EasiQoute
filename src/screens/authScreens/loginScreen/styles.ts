@@ -103,7 +103,7 @@ export const styles = StyleSheet.create({
     height: 0,
     width: '100%',
     borderWidth: 0.5,
-    backgroundColor: '#E4E6F4',
+    borderColor: '#E4E6F4',
   },
   privacyView: {
     flexDirection: 'row',

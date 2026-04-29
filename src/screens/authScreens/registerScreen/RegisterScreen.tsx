@@ -47,14 +47,18 @@ const RegisterScreen = ({navigation} : RegisterScreenProps) => {
       enabled={true}
       keyboardVerticalOffset={3}
     >
-      <ScrollView keyboardShouldPersistTaps="handled">
+      <ScrollView style={styles.scrollview} keyboardShouldPersistTaps="handled">
         <View style={styles.container}>
           <View style={styles.formContainer}>
             <GradientHeader />
 
             <View style={styles.form}>
               <View style={styles.textView}>
-                <InterTightSemiBold fsize={24} fcolor="#2D2D2D" textAlign='left'>
+                <InterTightSemiBold
+                  fsize={24}
+                  fcolor="#2D2D2D"
+                  textAlign="left"
+                >
                   Let’s Get Started 🚀
                 </InterTightSemiBold>
                 <InterTightRegular fsize={14} fcolor="#89909D">
@@ -115,9 +119,9 @@ const RegisterScreen = ({navigation} : RegisterScreenProps) => {
                   Already have an account?
                 </InterTightRegular>
                 <ButtonComponent onPress={goLoginScreen}>
-                  <InterTightRegular fsize={16} fcolor="#082B60">
+                  <InterTightMedium fsize={16} fcolor="#082B60">
                     Login
-                  </InterTightRegular>
+                  </InterTightMedium>
                 </ButtonComponent>
               </View>
               <View style={styles.borderLine} />

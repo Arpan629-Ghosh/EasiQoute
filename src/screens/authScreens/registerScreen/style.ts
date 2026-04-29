@@ -2,11 +2,14 @@ import { StyleSheet } from "react-native";
 
 
 export const styles = StyleSheet.create({
+  scrollview: {
+    flex: 1,
+    backgroundColor: '#FFFFFF',
+  },
   container: {
     flex: 1,
     gap: 32,
     justifyContent: 'space-between',
-    backgroundColor: '#FFFFFF',
   },
   formContainer: {
     width: '100%',
@@ -97,7 +100,6 @@ export const styles = StyleSheet.create({
     // width: "100%"
   },
   borderLine: {
-    height: 0,
     width: '100%',
     borderWidth: 0.5,
     backgroundColor: '#E4E6F4',

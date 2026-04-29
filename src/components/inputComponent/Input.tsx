@@ -13,16 +13,18 @@ import { fontFamily } from '@constants/fontFamily';
 interface Props extends TextInputProps {
   containerStyle?: StyleProp<ViewStyle>;
   style?: StyleProp<TextStyle>;
+  inputWidth?: number;
+  bg?: string
 }
 
 const Input = forwardRef<TextInput, Props>(
-  ({ containerStyle, style, ...rest }, ref) => {
+  ({ containerStyle, inputWidth, bg,  style, ...rest }, ref) => {
     return (
-      <View style={[styles.container, containerStyle]}>
+      <View style={[styles.container, containerStyle, {backgroundColor: bg}]}>
         <TextInput
           {...rest}
           ref={ref}
-          style={[styles.input, style]}
+          style={[styles.input, style, {width: inputWidth, backgroundColor: bg}]}
           placeholderTextColor="#ABABAB"
         />
       </View>

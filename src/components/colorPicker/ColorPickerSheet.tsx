@@ -20,7 +20,7 @@ const ColorPickerSheet = ({ visible, onClose, onSelect }: Props) => {
 
 
   return (
-    <ModalComponent visible={visible} onClose={onClose}>
+    <ModalComponent visible={visible} onClose={onClose} mheight={350}>
       <ColorPicker
         onComplete={color => {
           'worklet';

@@ -5,7 +5,7 @@ import { fontFamily } from '@constants/fontFamily';
 interface Props extends TextProps {
   fcolor: string;
   fsize: 12 | 14 | 16 | 18 | 20 | 22 | 24;
-  textAlign: string;
+  textAlign?: string;
 }
 
 const InterTightSemiBold: React.FC<Props> = ({

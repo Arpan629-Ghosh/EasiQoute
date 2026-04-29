@@ -3,6 +3,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  StatusBar,
   TextInput,
   View,
 } from 'react-native';
@@ -58,6 +59,11 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
         enabled={true}
         keyboardVerticalOffset={3}
       >
+        <StatusBar
+                barStyle="dark-content"
+                backgroundColor="transparent"
+                translucent
+              />
         <ScrollView keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
             <View style={styles.mainContainer}>

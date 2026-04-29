@@ -4,10 +4,10 @@ import { AuthStackParamList } from '@appTypes/navigation.types';
 import LoginScreen from '@screens/authScreens/loginScreen/LoginScreen';
 import RegisterScreen from '@screens/authScreens/registerScreen/RegisterScreen';
 import ResetPasswordScreen from '@/screens/authScreens/resetPasswordScreen/ResetPasswordScreen';
-import ProfileScreen from '@/screens/ProfileScreens/ProfileScreen/ProfileScreen';
-import IntroScreen from '@/screens/IntroScreens/IntroScreen/IntroScreen';
-import BusinessScreen from '@/screens/ProfileScreens/businessSetupScreens/businessScreen/BusinessScreen';
-import BusinessAddressScreen from '@/screens/ProfileScreens/businessSetupScreens/businessAddressScren/BusinessAddressScreen';
+import ProfileScreen from '@/screens/profileScreens/ProfileScreen/ProfileScreen';
+import IntroScreen from '@/screens/introScreens/IntroScreen/IntroScreen';
+import BusinessScreen from '@/screens/profileScreens/businessSetupScreens/businessScreen/BusinessScreen';
+import BusinessAddressScreen from '@/screens/profileScreens/businessSetupScreens/businessAddressScren/BusinessAddressScreen';
 
 
 

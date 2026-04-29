@@ -72,7 +72,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
             <View style={styles.form}>
               <View style={styles.textView}>
-                <InterTightSemiBold fsize={24} fcolor="#2D2D2D" textAlign='left'>
+                <InterTightSemiBold
+                  fsize={24}
+                  fcolor="#2D2D2D"
+                  textAlign="left"
+                >
                   Welcome Back 👋
                 </InterTightSemiBold>
                 <InterTightRegular fsize={14} fcolor="#89909D">
@@ -117,10 +121,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
                     </ButtonComponent>
                   </View>
                 </View>
-                <ButtonComponent
-                  onPress={handleLogin}
-                  style={styles.bttn}
-                >
+                <ButtonComponent onPress={handleLogin} style={styles.bttn}>
                   <InterTightMedium fsize={16} fcolor="#FFFFFF">
                     Login
                   </InterTightMedium>
@@ -131,9 +132,9 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
                     Forgot password?
                   </InterTightRegular>
                   <ButtonComponent onPress={resetPassword}>
-                    <InterTightRegular fsize={16} fcolor="#082B60">
+                    <InterTightMedium fsize={16} fcolor="#082B60">
                       Reset
-                    </InterTightRegular>
+                    </InterTightMedium>
                   </ButtonComponent>
                 </View>
               </View>
@@ -147,9 +148,9 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
                   Don't have an account?{' '}
                 </InterTightRegular>
                 <ButtonComponent onPress={createAccount}>
-                  <InterTightRegular fsize={16} fcolor="#082B60">
+                  <InterTightMedium fsize={16} fcolor="#082B60">
                     Create Account
-                  </InterTightRegular>
+                  </InterTightMedium>
                 </ButtonComponent>
               </View>
               <View style={styles.borderLine} />
