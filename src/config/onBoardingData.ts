@@ -1,5 +1,6 @@
 import { ImageSourcePropType } from "react-native";
 import { images } from "./images";
+import { useAppTheme } from "@/hooks/useAppTheme";
 
 type TextPart = {
   text: string;
@@ -12,7 +13,12 @@ export type OnboardingItem = {
   image: ImageSourcePropType;
 };
 
-export const DATA: OnboardingItem[] = [
+
+
+export const useOnBoardingData = (): OnboardingItem[] => {
+  const {isDark} = useAppTheme()
+  
+  return [
   {
     id: '1',
         textParts: [
@@ -21,7 +27,7 @@ export const DATA: OnboardingItem[] = [
             { text: "& ", highlight: false },
             {text: "Invoices", highlight: true}
     ],
-    image: images.img_intro
+    image: isDark? images.img_lightintro : images.img_intro
   },
   {
     id: '2',
@@ -30,6 +36,6 @@ export const DATA: OnboardingItem[] = [
           { text: "You Need to Win\nthe Job and ", highlight: false },
           {text: "Get Paid", highlight: true}
     ],
-    image: images.img_onboarding
+    image: isDark ? images.img_darklist :images.img_onboarding
   },
-];
+];}

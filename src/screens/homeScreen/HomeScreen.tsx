@@ -1,6 +1,6 @@
 import { FlatList, Image, StatusBar, View } from 'react-native';
-import React from 'react';
-import { styles } from './style';
+import React, { useMemo } from 'react';
+import { createStyles } from './style';
 import { images } from '@/config/images';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import { icons } from '@/config/icons';
@@ -9,15 +9,26 @@ import AppDetails from '@/components/appDetails/AppDetails';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import RenderActivities from '@/components/renderActivities/RenderActivities';
 import { DATA } from '@/config/activities';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 const HomeScreen = () => {
+  const { theme, isDark } = useAppTheme();
+    const styles = useMemo(() => createStyles(theme), [theme]);
   return (
     <View style={styles.safeareaview}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="transparent"
-        translucent
-      />
+      {isDark ? (
+               <StatusBar
+                 barStyle="light-content"
+                 backgroundColor="transparent"
+                 translucent
+               />
+             ) : (
+               <StatusBar
+                 barStyle="dark-content"
+                 backgroundColor="transparent"
+                 translucent
+               />
+             )}
       <View style={styles.bg}>
         <Image source={images.img_gradient} style={styles.bg} />
         <View style={styles.header}>

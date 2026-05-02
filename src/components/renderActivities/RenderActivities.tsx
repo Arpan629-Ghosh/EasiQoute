@@ -1,54 +1,73 @@
 import { StyleSheet, View } from 'react-native';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Activities } from '@/config/activities';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import InterTightRegular from '../fontComponents/InterTightRegular';
+import { useNavigation } from '@react-navigation/native';
+import ButtonComponent from '../buttonComponent/ButtonComponent';
+import {   RootStackParamList } from '@/types/navigation.types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useAppTheme } from '@/hooks/useAppTheme';
+import { Theme } from '@/types/theme.types';
 
 const RenderActivities = ({ item }: { item: Activities }) => {
+
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+    const { theme, isDark } = useAppTheme();
+      const styles = useMemo(() => createStyles(theme), [theme]);
+
   return (
     <View style={styles.container}>
-      <View style={styles.card}>
-        <View style={styles.header}>
-          <View style={styles.txtContainer}>
-            <InterTightMedium fsize={16} fcolor="#2D2D2D">
-              {item.title}
-            </InterTightMedium>
-            <InterTightRegular fsize={14} fcolor="#89909D">
-              {item.company}
-            </InterTightRegular>
+      <ButtonComponent
+        onPress={() =>
+          navigation.navigate('QouteDetailScreen', {
+            quoteId: item.id,
+          })
+        }
+      >
+        <View style={styles.card}>
+          <View style={styles.header}>
+            <View style={styles.txtContainer}>
+              <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
+                {item.title}
+              </InterTightMedium>
+              <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
+                {item.company}
+              </InterTightRegular>
+            </View>
+
+            <View style={[styles.status, { backgroundColor: item.viewColor }]}>
+              <InterTightMedium fsize={12} fcolor={item.textcolor}>
+                {item.paymentStatus}
+              </InterTightMedium>
+            </View>
           </View>
 
-          <View style={[styles.status, {backgroundColor: item.viewColor}]}>
-            <InterTightMedium fsize={12} fcolor={item.textcolor}>
-              {item.paymentStatus}
-            </InterTightMedium>
+          {!isDark && <View style={styles.empty} />}
+
+          <View style={styles.footer}>
+            <View style={styles.footerTxt}>
+              <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
+                {item.type}
+              </InterTightRegular>
+              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
+                {item.typeValue}
+              </InterTightRegular>
+            </View>
+
+            <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
+              {item.price}
+            </InterTightRegular>
           </View>
         </View>
-
-        <View style={styles.empty} />
-
-        <View style={styles.footer}>
-          <View style={styles.footerTxt}>
-            <InterTightRegular fsize={14} fcolor="#89909D">
-              {item.type}
-            </InterTightRegular>
-            <InterTightRegular fsize={14} fcolor="#2D2D2D">
-              {item.typeValue}
-            </InterTightRegular>
-          </View>
-
-          <InterTightRegular fsize={14} fcolor="#2D2D2D">
-            {item.price}
-          </InterTightRegular>
-        </View>
-      </View>
+      </ButtonComponent>
     </View>
   );
 };
 
 export default RenderActivities;
 
-const styles = StyleSheet.create({
+const createStyles = (theme: Theme) =>  StyleSheet.create({
   container: {
     flex: 1,
     marginVertical: 8,
@@ -58,7 +77,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     gap: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.card,
   },
   header: {
     justifyContent: 'space-between',

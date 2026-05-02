@@ -1,14 +1,15 @@
-import { Image, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
-import React, { useRef, useState } from 'react';
+import { Image, KeyboardAvoidingView, ScrollView, StatusBar, View } from 'react-native';
+import React, { useMemo, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import { icons } from '@/config/icons';
-import { styles } from './style';
+import { createStyles } from './style';
 import { BusinessAddressScreenProps } from '@/types/navigation.types';
 import Input from '@/components/inputComponent/Input';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import { TextInput } from 'react-native-gesture-handler';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface FormData{
   streetAddress: string;
@@ -29,7 +30,9 @@ const BusinessAddressScreen = ({ navigation }: BusinessAddressScreenProps) => {
   const addressRef = useRef<TextInput | null>(null);
   const cityRef = useRef<TextInput | null>(null);
   const postRef = useRef<TextInput | null>(null);
-  const countryRef = useRef < TextInput | null>(null)
+  const countryRef = useRef<TextInput | null>(null)
+  const { theme, isDark } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme])
 
 
   const handleInput = (name : string, value : string) => {
@@ -44,19 +47,31 @@ const BusinessAddressScreen = ({ navigation }: BusinessAddressScreenProps) => {
   return (
     <SafeAreaView style={styles.safeareaview} edges={['top']}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardContainer}
         enabled={true}
         keyboardVerticalOffset={3}
       >
+          {isDark ? (
+                  <StatusBar
+                    barStyle="light-content"
+                    backgroundColor="transparent"
+                    translucent
+                  />
+                ) : (
+                  <StatusBar
+                    barStyle="dark-content"
+                    backgroundColor="transparent"
+                    translucent
+                  />
+                )}
         <View style={styles.container}>
           <View style={styles.headerContainer}>
             <View style={styles.headerComponent}>
               <ButtonComponent onPress={navigateToBack}>
-                <Image source={icons.ic_back} style={styles.img} />
+                <Image source={isDark ? icons.ic_backwhite : icons.ic_back} style={styles.img} />
               </ButtonComponent>
 
-              <InterTightMedium fsize={18} fcolor="#2D2D2D" textAlign="center">
+              <InterTightMedium fsize={18} fcolor={theme.textPrimary} textAlign="center">
                 Business Address
               </InterTightMedium>
 
@@ -81,7 +96,7 @@ const BusinessAddressScreen = ({ navigation }: BusinessAddressScreenProps) => {
                 </View>
 
                 <View style={styles.inp}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Street Address
                   </InterTightRegular>
                   <Input
@@ -95,7 +110,7 @@ const BusinessAddressScreen = ({ navigation }: BusinessAddressScreenProps) => {
                 </View>
 
                 <View style={styles.inp}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     City
                   </InterTightRegular>
                   <Input
@@ -108,7 +123,7 @@ const BusinessAddressScreen = ({ navigation }: BusinessAddressScreenProps) => {
                   />
                 </View>
                 <View style={styles.inp}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Postcode
                   </InterTightRegular>
                   <Input
@@ -121,7 +136,7 @@ const BusinessAddressScreen = ({ navigation }: BusinessAddressScreenProps) => {
                   />
                 </View>
                 <View style={styles.inp}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Country
                   </InterTightRegular>
                   <Input
@@ -139,7 +154,7 @@ const BusinessAddressScreen = ({ navigation }: BusinessAddressScreenProps) => {
           <View style={styles.footer}>
             <View style={styles.footerContainer}>
               <ButtonComponent style={styles.bttn}>
-                <InterTightMedium fsize={16} fcolor="#FFFFFF">
+                <InterTightMedium fsize={16} fcolor={theme.primaryText}>
                   Continue
                 </InterTightMedium>
               </ButtonComponent>

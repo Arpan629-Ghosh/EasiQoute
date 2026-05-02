@@ -1,14 +1,13 @@
 import {
   Image,
   KeyboardAvoidingView,
-  Platform,
   ScrollView,
   StatusBar,
   TextInput,
   View,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { styles } from './style';
+import React, { useMemo, useRef, useState } from 'react';
+import { createStyles } from './style';
 import { icons } from '@/config/icons';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
@@ -17,34 +16,32 @@ import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Input from '@/components/inputComponent/Input';
 import { ProfileScreenProps } from '@/types/navigation.types';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface ProfileForm {
-    name: string,
-    phone: string
+  name: string;
+  phone: string;
 }
 
 const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
-    
-    
-    const [formData, setFormData] = useState<ProfileForm>({
-        name: "",
-        phone: ""
-    })
+  const [formData, setFormData] = useState<ProfileForm>({
+    name: '',
+    phone: '',
+  });
 
-    const nameRef = useRef<TextInput | null>(null);
-    const phRef = useRef<TextInput | null>(null);
+  const nameRef = useRef<TextInput | null>(null);
+  const phRef = useRef<TextInput | null>(null);
+  const { theme, isDark } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
-    useEffect(() => {
-        nameRef.current?.focus()
-    },[])
   const navigateToBack = () => {
-    navigation.goBack()
+    navigation.goBack();
   };
 
   const navigateToBusinessSetup = () => {
-    navigation.navigate('BusinessScreen')
-  }
-    
+    navigation.navigate('BusinessScreen');
+  };
+
   const handleInput = (name: string, value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -54,26 +51,37 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
   return (
     <SafeAreaView style={styles.safeareaview} edges={['top']}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardContainer}
         enabled={true}
         keyboardVerticalOffset={3}
       >
-        <StatusBar
-                barStyle="dark-content"
-                backgroundColor="transparent"
-                translucent
-              />
+        {isDark ? (
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent
+          />
+        ) : (
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor="transparent"
+            translucent
+          />
+        )}
         <ScrollView keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
             <View style={styles.mainContainer}>
               <View style={styles.headerContainer}>
                 <View style={styles.headerComponent}>
                   <ButtonComponent onPress={navigateToBack}>
-                    <Image source={icons.ic_back} style={styles.img} />
+                    {isDark ? (
+                      <Image source={icons.ic_backwhite} style={styles.img} />
+                    ) : (
+                      <Image source={icons.ic_back} style={styles.img} />
+                    )}
                   </ButtonComponent>
 
-                  <InterTightMedium fsize={18} fcolor="#2D2D2D">
+                  <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
                     Profile Setup
                   </InterTightMedium>
                   <View style={styles.emptyview} />
@@ -83,15 +91,15 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
                 <View style={styles.profilePic}>
                   <ButtonComponent>
                     <Image
-                      source={images.img_profile}
+                      source={isDark ? images.img_darkprofile : images.img_profile}
                       style={styles.profileImg}
                     />
-                    <Image source={icons.ic_add} style={styles.icon} />
+                    <Image source={isDark ? icons.ic_darkadd : icons.ic_add} style={styles.icon} />
                   </ButtonComponent>
                 </View>
                 <View style={styles.inputContainer}>
                   <View style={styles.inp}>
-                    <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                    <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                       Name
                     </InterTightRegular>
                     <Input
@@ -105,7 +113,7 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
                     />
                   </View>
                   <View style={styles.inp}>
-                    <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                    <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                       Phone
                     </InterTightRegular>
                     <Input

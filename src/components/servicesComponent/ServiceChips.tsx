@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Image, StyleSheet } from 'react-native';
 
 import { SERVICES } from '@/config/services';
 import ButtonComponent from '../buttonComponent/ButtonComponent';
 import InterTightRegular from '../fontComponents/InterTightRegular';
+import { useAppTheme } from '@/hooks/useAppTheme';
+import { Theme } from '@/types/theme.types';
 
 
 interface Props {
   selected: string[];
   onToggle: (type: string) => void
 }
-const ServiceChips = ({selected, onToggle} : Props) => {
+const ServiceChips = ({ selected, onToggle }: Props) => {
+  
+  const { theme } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
   return (
     <View style={styles.container}>
@@ -30,7 +35,7 @@ const ServiceChips = ({selected, onToggle} : Props) => {
           >
             <Image source={item.icon} style={styles.icon} />
 
-            <InterTightRegular fsize={14} fcolor="#2D2D2D">
+            <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
               {item.type}
             </InterTightRegular>
           </ButtonComponent>
@@ -41,7 +46,7 @@ const ServiceChips = ({selected, onToggle} : Props) => {
 };
 
 export default React.memo(ServiceChips);
-const styles = StyleSheet.create({
+const createStyles = (theme: Theme) => StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -55,17 +60,17 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#D6D8E7',
-    backgroundColor: '#F7F8FC',
+    borderColor: theme.border,
+    backgroundColor: theme.background,
   },
 
   selectedChip: {
-    backgroundColor: '#082B600A',
-    borderColor: '#082B60',
+    backgroundColor: theme.background,
+    borderColor: theme.chipBorder,
   },
 
   uploadChip: {
-    backgroundColor: '#fff',
+    backgroundColor: theme.background,
   },
 
   icon: {

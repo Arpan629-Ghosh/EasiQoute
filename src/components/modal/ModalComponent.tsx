@@ -1,4 +1,6 @@
-import React from 'react';
+import { useAppTheme } from '@/hooks/useAppTheme';
+import { Theme } from '@/types/theme.types';
+import React, { useMemo } from 'react';
 import {
   View,
   StyleSheet,
@@ -18,7 +20,8 @@ type Props = {
 };
 
 const ModalComponent = ({ visible, mheight, mpadding, onClose, children }: Props) => {
-
+  const { theme } = useAppTheme();
+   const styles = useMemo(() => createStyles(theme), [theme]);
   return (
     <Modal transparent visible={visible} animationType="slide">
      
@@ -36,7 +39,7 @@ const ModalComponent = ({ visible, mheight, mpadding, onClose, children }: Props
 
 export default React.memo(ModalComponent);
 
-const styles = StyleSheet.create({
+const createStyles = (theme: Theme) => StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFill,
     backgroundColor: 'rgba(0,0,0,0.4)',
@@ -45,10 +48,8 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: theme.background,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
-
   },
-  
 });

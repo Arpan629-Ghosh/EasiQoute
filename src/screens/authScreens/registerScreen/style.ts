@@ -1,10 +1,11 @@
+import { Theme } from "@/types/theme.types";
 import { StyleSheet } from "react-native";
 
 
-export const styles = StyleSheet.create({
+export const createStyles = (theme: Theme) => StyleSheet.create({
   scrollview: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.background,
   },
   container: {
     flex: 1,
@@ -42,7 +43,7 @@ export const styles = StyleSheet.create({
   inputicon: {
     height: 50,
     borderWidth: 1,
-    borderColor: '#E4E6F4',
+    borderColor: theme.border,
     borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
@@ -66,7 +67,7 @@ export const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     gap: 12,
-    backgroundColor: '#082B60',
+    backgroundColor: theme.primary,
     alignItems: 'center',
   },
   forgotpasswordView: {
@@ -102,7 +103,7 @@ export const styles = StyleSheet.create({
   borderLine: {
     width: '100%',
     borderWidth: 0.5,
-    backgroundColor: '#E4E6F4',
+    backgroundColor: theme.border,
   },
   privacyView: {
     flexDirection: 'row',

@@ -2,16 +2,18 @@ import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
 import { IntroScreenProps } from '@/types/navigation.types';
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import {
   View,
   FlatList,
   Image,
   Dimensions,
   Text,
+  StatusBar,
 } from 'react-native';
-import { styles } from './style';
-import { DATA, OnboardingItem } from '@/config/onBoardingData';
+import { createStyles } from './style';
+import { OnboardingItem, useOnBoardingData } from '@/config/onBoardingData';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 
 const { width } = Dimensions.get('window');
@@ -21,6 +23,10 @@ const { width } = Dimensions.get('window');
 const IntroScreen = ({navigation} : IntroScreenProps) => {
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const { theme, isDark } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme])
+
+  const DATA = useOnBoardingData();
 
   const handleNext = () => {
     if (currentIndex < DATA.length - 1) {
@@ -40,17 +46,17 @@ const IntroScreen = ({navigation} : IntroScreenProps) => {
         <Text>
           {item.textParts.map((part, index) =>
             part.highlight ? (
-              <InterTightSemiBold key={index} fsize={24} fcolor="#082B60" textAlign="center">
+              <InterTightSemiBold key={index} fsize={24} fcolor={theme.textMuted} textAlign="center">
                 {part.text}
               </InterTightSemiBold>
             ) : (
-              <InterTightSemiBold key={index} fsize={24} fcolor="#2D2D2" textAlign="center">
+              <InterTightSemiBold key={index} fsize={24} fcolor={theme.textPrimary} textAlign="center">
                 {part.text}
               </InterTightSemiBold>
             ),
           )}
         </Text>
-
+          
         <Image source={item.image} style={styles.image} />
       </View>
     );
@@ -58,6 +64,19 @@ const IntroScreen = ({navigation} : IntroScreenProps) => {
 
   return (
     <View style={styles.container}>
+       {isDark ? (
+                <StatusBar
+                  barStyle="light-content"
+                  backgroundColor="transparent"
+                  translucent
+                />
+              ) : (
+                <StatusBar
+                  barStyle="dark-content"
+                  backgroundColor="transparent"
+                  translucent
+                />
+              )}
       <FlatList
         ref={flatListRef}
         data={DATA}
@@ -83,17 +102,17 @@ const IntroScreen = ({navigation} : IntroScreenProps) => {
             <View style={styles.slide1} />
           </View>
         )}
-        <View style = {styles.bttnContainer}>
+        <View style={styles.bttnContainer}>
           {currentIndex === 0 ? (
             <>
               <ButtonComponent onPress={handleNext} style={styles.bttn1}>
-                <InterTightMedium fsize={16} fcolor="#2D2D2D">
+                <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
                   Skip
                 </InterTightMedium>
               </ButtonComponent>
 
               <ButtonComponent style={styles.bttn2} onPress={handleNext}>
-                <InterTightMedium fsize={16} fcolor="#FFFFFF">
+                <InterTightMedium fsize={16} fcolor={theme.primaryText}>
                   Next
                 </InterTightMedium>
               </ButtonComponent>

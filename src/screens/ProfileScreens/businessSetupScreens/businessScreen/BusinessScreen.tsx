@@ -1,20 +1,25 @@
-import { Image, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
-import React, { useCallback, useRef, useState } from 'react';
-import { styles } from './style';
+import {
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  StatusBar,
+  View,
+} from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { createStyles } from './style';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { icons } from '@/config/icons';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import { BusinessScreenProps } from '@/types/navigation.types';
 import { images } from '@/config/images';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import ColorPickerSheet from '@/components/colorPicker/ColorPickerSheet';
 import Input from '@/components/inputComponent/Input';
-import CountryPickerComponent from '@/components/countryPicker/CountryPickerComponent';
 import CustomToggle from '@/components/switch/CustomToggle';
 import ReactNativePhoneInput from 'react-native-phone-input';
 import ServiceChips from '@/components/servicesComponent/ServiceChips';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
+import ColorPickerSheet from '@/components/colorPicker/ColorPickerSheet';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface BusinessForm {
   name: string;
@@ -25,23 +30,23 @@ interface BusinessForm {
   profileImage: string | null;
 }
 
-
 const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
   const [form, setForm] = useState<BusinessForm>({
     name: '',
     phone: '',
     color: '#00AAFF',
-    vatNumber: "",
+    vatNumber: '',
     services: [],
     profileImage: null,
   });
   const [enabled, setEnabled] = useState(false);
   const [open, setOpen] = useState(false);
   const phoneRef = useRef<ReactNativePhoneInput>(null);
-
+  const { theme, isDark } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
   const navigateToBack = () => {
-    navigation.goBack()
+    navigation.goBack();
   };
 
   const navigateToAddress = () => {
@@ -49,19 +54,19 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
   };
 
   const navigateToTabs = () => {
-    navigation.replace("MainTabs")
-  }
+    navigation.replace('MainTabs');
+  };
 
   const updateField = useCallback((key: keyof BusinessForm, value: any) => {
     setForm(prev => ({
       ...prev,
       [key]: value,
     }));
-  },[]);
+  }, []);
 
   const handleClose = useCallback(() => {
     setOpen(false);
-  },[])
+  }, []);
 
   const toggleService = useCallback((type: string) => {
     if (type === 'Upload my own list') {
@@ -82,26 +87,43 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
       };
     });
   }, []);
-  
-  
-  
-  
+
   return (
     <SafeAreaView style={styles.safeareaview} edges={['top']}>
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardContainer}
         enabled={true}
         keyboardVerticalOffset={3}
       >
+        {isDark ? (
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent
+          />
+        ) : (
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor="transparent"
+            translucent
+          />
+        )}
         <View style={styles.container}>
           <View style={styles.headerContainer}>
             <View style={styles.headerComponent}>
               <ButtonComponent onPress={navigateToBack}>
-                <Image source={icons.ic_back} style={styles.img} />
+                {isDark ? (
+                  <Image source={icons.ic_backwhite} style={styles.img} />
+                ) : (
+                  <Image source={icons.ic_back} style={styles.img} />
+                )}
               </ButtonComponent>
 
-              <InterTightMedium fsize={18} fcolor="#2D2D2D" textAlign="center">
+              <InterTightMedium
+                fsize={18}
+                fcolor={theme.textPrimary}
+                textAlign="center"
+              >
                 Business Profile Setup
               </InterTightMedium>
 
@@ -118,13 +140,13 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
                 <View style={styles.profilePic}>
                   <ButtonComponent>
                     <Image
-                      source={images.img_camera}
+                      source={isDark ? images.img_darkcamera : images.img_camera}
                       style={styles.profileImg}
                     />
-                    <Image source={icons.ic_add} style={styles.icon} />
+                    <Image source={isDark ? icons.ic_darkadd : icons.ic_add} style={styles.icon} />
                   </ButtonComponent>
                 </View>
-                <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                   Your logo will appear on quotes, invoices, and client emails.
                 </InterTightRegular>
               </View>
@@ -144,7 +166,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
             <View style={styles.businessInpContainer}>
               <View style={styles.businessComponent}>
                 <View style={styles.businessInp}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Business Name
                   </InterTightRegular>
 
@@ -159,25 +181,28 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
                 </View>
 
                 <View style={styles.businessInp}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Business Phone number
                   </InterTightRegular>
-                  <CountryPickerComponent
+                  {/* <CountryPickerComponent
                     ref={phoneRef}
                     value={form.phone}
                     onChange={phone => updateField('phone', phone)}
-                  />
+                  /> */}
                 </View>
               </View>
             </View>
             <View style={styles.addressInpContainer}>
               <View style={styles.addressFormNavContainer}>
                 <View style={styles.txtContainer}>
-                  <InterTightMedium fsize={16} fcolor="#2D2D2D">
+                  <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
                     Address
                   </InterTightMedium>
                 </View>
-                <ButtonComponent onPress={navigateToAddress} style = {styles.addimg}>
+                <ButtonComponent
+                  onPress={navigateToAddress}
+                  style={styles.addimg}
+                >
                   <Image source={images.img_address} style={styles.addimg} />
                 </ButtonComponent>
               </View>
@@ -185,7 +210,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
 
             <View style={styles.vatContainer}>
               <View style={styles.toggleContainer}>
-                <InterTightRegular fsize={16} fcolor="#2D2D2D">
+                <InterTightRegular fsize={16} fcolor={theme.textPrimary}>
                   Are you VAT registered?
                 </InterTightRegular>
                 <CustomToggle value={enabled} onToggle={setEnabled} />
@@ -193,19 +218,20 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
 
               {enabled && (
                 <View style={styles.vatinpcontainer}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     VAT Number
                   </InterTightRegular>
                   <Input
                     value={form.vatNumber}
-                    onChangeText={(txt) => updateField("vatNumber", txt)}
-                    placeholder="Enter vat number" />
+                    onChangeText={txt => updateField('vatNumber', txt)}
+                    placeholder="Enter vat number"
+                  />
                 </View>
               )}
             </View>
 
             <View style={styles.serviceContainer}>
-              <InterTightMedium fsize={16} fcolor="#2D2D2D">
+              <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
                 What do you do?
               </InterTightMedium>
               <View style={styles.bttnContainer}>
@@ -218,10 +244,8 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
           </ScrollView>
           <View style={styles.footer}>
             <View style={styles.footerContainer}>
-              <ButtonComponent
-                onPress={navigateToTabs}
-                style={styles.bttn}>
-                <InterTightMedium fsize={16} fcolor="#FFFFFF">
+              <ButtonComponent onPress={navigateToTabs} style={styles.bttn}>
+                <InterTightMedium fsize={16} fcolor={theme.primaryText}>
                   Continue
                 </InterTightMedium>
               </ButtonComponent>
@@ -231,7 +255,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
           <ColorPickerSheet
             visible={open}
             onClose={handleClose}
-            onSelect={c => updateField("color", c)}
+            onSelect={c => updateField('color', c)}
           />
         </View>
       </KeyboardAvoidingView>

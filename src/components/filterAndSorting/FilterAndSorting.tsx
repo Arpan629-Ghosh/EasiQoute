@@ -1,5 +1,5 @@
 import { Image,StyleSheet, View } from 'react-native';
-import React, { SetStateAction } from 'react';
+import React, {useMemo, useState } from 'react';
 import ModalComponent from '../modal/ModalComponent';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import Input from '../inputComponent/Input';
@@ -8,6 +8,9 @@ import ButtonComponent from '../buttonComponent/ButtonComponent';
 import InterTightRegular from '../fontComponents/InterTightRegular';
 import { icons } from '@/config/icons';
 import DateTimePicker from 'react-native-modal-datetime-picker';
+import { useAppTheme } from '@/hooks/useAppTheme';
+import { Theme } from '@/types/theme.types';
+
 
 type Props = {
   visible: boolean;
@@ -15,16 +18,12 @@ type Props = {
   selectedAmount: string;
   startDate: string;
   endDate: string;
-  isDatePickerVisible: boolean;
-  setDatePickerVisible: React.Dispatch<SetStateAction<boolean>>
   onToggleStatus: (type: string) => void;
   onToggleAmount: (type: string) => void;
   fillEndInput: (endDate: string) => void;
   fillStartInput: (startDate: string) => void;
   onClose: () => void;
-  handleCalenderStartPicker: () => void;
-  handleCalenderEndPicker: () => void;
-  handleConfirm: (date: Date) => void;
+  onClear: () => void;
 };
 const FilterAndSorting = ({
   visible,
@@ -32,26 +31,60 @@ const FilterAndSorting = ({
   selectedAmount,
   startDate,
   endDate,
-  isDatePickerVisible,
-  setDatePickerVisible,
+  fillEndInput,
+  fillStartInput,
   onToggleStatus,
   onToggleAmount,
   onClose,
-  handleCalenderStartPicker,
-  handleCalenderEndPicker,
-  handleConfirm,
+  onClear,
 }: Props) => {
+
+  const [isDatePickerVisible, setDatePickerVisible] = useState(false);
+  const [activeField, setActiveField] = useState<'start' | 'end' | null>(null);
+    const { theme } = useAppTheme();
+    const styles = useMemo(() => createStyles(theme), [theme]);
+
+
+  
+   const handleCalenderStartPicker = () => {
+      setActiveField('start');
+      setDatePickerVisible(true);
+    };
+  
+    const handleCalenderEndPicker = () => {
+      setActiveField('end');
+      setDatePickerVisible(true);
+    };
+  
+    const formatDate = (date: Date) => {
+      const day = String(date.getDate()).padStart(2, '0');
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const year = date.getFullYear();
+  
+      return `${day}/${month}/${year}`;
+    };
+  const handleConfirm = (date: Date) => {
+      const formatted = formatDate(date);
+  
+      if (activeField === 'start') {
+        fillStartInput(formatted);
+      } else if (activeField === 'end') {
+        fillEndInput(formatted);
+      }
+  
+      setDatePickerVisible(false);
+    }
   
   return (
     <ModalComponent visible={visible} onClose={onClose} mheight={580}>
       <View style={styles.container}>
         <View style={styles.header}>
-          <InterTightMedium fsize={18} fcolor="#2D2D2D">
+          <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
             Filters & Sorting
           </InterTightMedium>
         </View>
         <View style={styles.header}>
-          <InterTightMedium fsize={16} fcolor="#2D2D2D">
+          <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
             Date Range
           </InterTightMedium>
           <View style={styles.inputContainer}>
@@ -80,7 +113,7 @@ const FilterAndSorting = ({
           </View>
         </View>
         <View style={styles.header}>
-          <InterTightMedium fsize={16} fcolor="#2D2D2D">
+          <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
             Status
           </InterTightMedium>
           <View style={styles.status}>
@@ -96,7 +129,7 @@ const FilterAndSorting = ({
                 >
                   <Image source={item.icon} style={styles.icon} />
 
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     {item.type}
                   </InterTightRegular>
 
@@ -109,7 +142,7 @@ const FilterAndSorting = ({
           </View>
         </View>
         <View style={styles.header}>
-          <InterTightMedium fsize={16} fcolor="#2D2D2D">
+          <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
             Sort by Amount
           </InterTightMedium>
           <View style={styles.status}>
@@ -121,7 +154,7 @@ const FilterAndSorting = ({
               ]}
             >
               <Image source={icons.ic_htl} style={styles.icon} />
-              <InterTightRegular fsize={14} fcolor="#2D2D2D">
+              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Low to High
               </InterTightRegular>
             </ButtonComponent>
@@ -133,14 +166,14 @@ const FilterAndSorting = ({
               ]}
             >
               <Image source={icons.ic_lth} style={styles.icon} />
-              <InterTightRegular fsize={14} fcolor="#2D2D2D">
+              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 High to Low
               </InterTightRegular>
             </ButtonComponent>
           </View>
         </View>
         <View style={styles.bttncontainer}>
-          <ButtonComponent style={styles.bttn1}>
+          <ButtonComponent onPress={onClear} style={styles.bttn1}>
             <InterTightMedium fsize={16} fcolor="#D23949">
               Clear All
             </InterTightMedium>
@@ -166,100 +199,100 @@ const FilterAndSorting = ({
 
 export default React.memo(FilterAndSorting);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  header: {
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    gap: 16,
-    borderBottomWidth: 1,
-    borderColor: '#E4E6F4',
-  },
-  inputContainer: {
-    gap: 8,
-    flexDirection: 'row',
-  },
-  inputicon: {
-    height: 48,
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#E4E6F4',
-    borderRadius: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingRight: 12,
-    overflow: 'hidden',
-    gap: 12,
-  },
-  noBorderInput: {
-    flex: 1,
-    borderWidth: 0,
-    paddingHorizontal: 12,
-    height: '100%',
-  },
-  chip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E4E6F4',
-    backgroundColor: '#FFFFFF',
-    justifyContent: "space-between"
-  },
-  icon: {
-    width: 16,
-    height: 16,
-    marginRight: 6,
-    resizeMode: 'contain',
-  },
-  status: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-  },
-  bttncontainer: {
-    padding: 12,
-    gap: 12,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  bttn1: {
-    height: 46,
-    width: 165.5,
-    borderRadius: 10,
-    padding: 10,
-    gap: 10,
-    alignItems: 'center',
-  },
-  bttn2: {
-    height: 46,
-    width: 165.5,
-    borderRadius: 10,
-    padding: 10,
-    gap: 1,
-    backgroundColor: '#082B60',
-    alignItems: 'center',
-  },
-  searchic: {
-    height: 18,
-    width: 18,
-  },
-  mainContainer: {
-    height: 606,
-    gap: 16,
-  },
-  selectedChip: {
-    backgroundColor: '#082B600A',
-    borderColor: '#082B60',
-  },
-  cross: {
-    height: 8,
-    width: 8,
-    marginLeft: 12
-  },
-  
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+    },
+    header: {
+      paddingVertical: 16,
+      paddingHorizontal: 12,
+      gap: 16,
+      borderBottomWidth: 1,
+      borderColor: theme.border,
+    },
+    inputContainer: {
+      gap: 8,
+      flexDirection: 'row',
+    },
+    inputicon: {
+      height: 48,
+      flex: 1,
+      borderWidth: 1,
+      borderColor: theme.border,
+      borderRadius: 12,
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingRight: 12,
+      overflow: 'hidden',
+      gap: 12,
+    },
+    noBorderInput: {
+      flex: 1,
+      borderWidth: 0,
+      paddingHorizontal: 12,
+      height: '100%',
+    },
+    chip: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: theme.border,
+      backgroundColor: theme.background,
+      justifyContent: 'space-between',
+    },
+    icon: {
+      width: 16,
+      height: 16,
+      marginRight: 6,
+      resizeMode: 'contain',
+    },
+    status: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: 12,
+    },
+    bttncontainer: {
+      padding: 12,
+      gap: 12,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    bttn1: {
+      height: 46,
+      width: 165.5,
+      borderRadius: 10,
+      padding: 10,
+      gap: 10,
+      alignItems: 'center',
+    },
+    bttn2: {
+      height: 46,
+      width: 165.5,
+      borderRadius: 10,
+      padding: 10,
+      gap: 1,
+      backgroundColor: theme.primary,
+      alignItems: 'center',
+    },
+    searchic: {
+      height: 18,
+      width: 18,
+    },
+    mainContainer: {
+      height: 606,
+      gap: 16,
+    },
+    selectedChip: {
+      backgroundColor: theme.background,
+      borderColor: theme.chipBorder,
+    },
+    cross: {
+      height: 8,
+      width: 8,
+      marginLeft: 12,
+    },
+  });

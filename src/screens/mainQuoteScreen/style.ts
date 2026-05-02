@@ -1,10 +1,11 @@
+import { Theme } from "@/types/theme.types";
 import { StyleSheet } from "react-native";
 
 
-export const styles = StyleSheet.create({
+export const createStyles = (theme: Theme) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F2EEEC',
+    backgroundColor: theme.background,
   },
   mainContainer: {
     flex: 1,
@@ -37,8 +38,8 @@ export const styles = StyleSheet.create({
   inputicon: {
     width: 325,
     borderWidth: 1,
-    borderColor: '#FFFFFF',
-    backgroundColor: '#FFFFFF',
+    borderColor: theme.searchInput,
+    backgroundColor: theme.searchInput,
     borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
@@ -60,16 +61,14 @@ export const styles = StyleSheet.create({
   flatlist: {
     flex: 1,
     paddingHorizontal: 12,
-  
-    
   },
   add: {
     height: 48,
     width: 48,
     borderRadius: 32,
-    marginRight: 12,
-    marginBottom: 12,
-    marginLeft: "auto"
+    right: 12,
+    bottom: 12,
+    position: 'absolute',
   },
   ic: {
     height: '100%',
@@ -82,6 +81,6 @@ export const styles = StyleSheet.create({
   },
   modal: {
     height: 606,
-    gap: 16
-  }
+    gap: 16,
+  },
 });

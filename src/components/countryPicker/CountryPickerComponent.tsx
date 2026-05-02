@@ -1,6 +1,5 @@
 import { StyleSheet, TextInput, View } from 'react-native';
 import React, { forwardRef, useEffect, useState } from 'react';
-import CountryPicker, { CountryCode } from 'react-native-country-picker-modal';
 import ReactNativePhoneInput from 'react-native-phone-input';
 import { fontFamily } from '@/constants/fontFamily';
 

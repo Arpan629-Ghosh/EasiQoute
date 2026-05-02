@@ -6,8 +6,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { styles } from './styles';
+import React, { useMemo, useRef, useState } from 'react';
+import { createStyles } from './styles';
 import GradientHeader from '@components/gradient/GradientHeader';
 import InterTightSemiBold from '@components/fontComponents/InterTightSemiBold';
 import InterTightRegular from '@components/fontComponents/InterTightRegular';
@@ -16,12 +16,16 @@ import { images } from '@config/images';
 import InterTightMedium from '@components/fontComponents/InterTightMedium';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { LoginScreenProps } from '@appTypes/navigation.types';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface LoginForm {
   email: string;
   password: string;
 }
 const LoginScreen = ({ navigation }: LoginScreenProps) => {
+
+  
+
   const [formData, setFormData] = useState<LoginForm>({
     email: '',
     password: '',
@@ -30,10 +34,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
   const emailRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
+  const { theme } = useAppTheme();
 
-  useEffect(() => {
-    emailRef.current?.focus();
-  }, []);
+ 
+
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
   const handleInput = (name: string, value: string) => {
     setFormData(prev => ({
@@ -74,19 +79,19 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
               <View style={styles.textView}>
                 <InterTightSemiBold
                   fsize={24}
-                  fcolor="#2D2D2D"
+                  fcolor={theme.textPrimary}
                   textAlign="left"
                 >
                   Welcome Back 👋
                 </InterTightSemiBold>
-                <InterTightRegular fsize={14} fcolor="#89909D">
+                <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                   Log in to manage your quotes and invoices with ease.
                 </InterTightRegular>
               </View>
 
               <View style={styles.formView}>
                 <View style={styles.inp}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Email
                   </InterTightRegular>
                   <Input
@@ -101,7 +106,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
                 </View>
 
                 <View style={styles.inp}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Password
                   </InterTightRegular>
                   <View style={styles.inputicon}>
@@ -122,17 +127,17 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
                   </View>
                 </View>
                 <ButtonComponent onPress={handleLogin} style={styles.bttn}>
-                  <InterTightMedium fsize={16} fcolor="#FFFFFF">
+                  <InterTightMedium fsize={16} fcolor={theme.primaryText}>
                     Login
                   </InterTightMedium>
                 </ButtonComponent>
 
                 <View style={styles.forgotpasswordView}>
-                  <InterTightRegular fsize={16} fcolor="#89909D">
-                    Forgot password?
+                  <InterTightRegular fsize={16} fcolor={theme.textSecondary}>
+                    Forgot password?{' '}
                   </InterTightRegular>
                   <ButtonComponent onPress={resetPassword}>
-                    <InterTightMedium fsize={16} fcolor="#082B60">
+                    <InterTightMedium fsize={16} fcolor={theme.textMuted}>
                       Reset
                     </InterTightMedium>
                   </ButtonComponent>
@@ -144,31 +149,31 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
           <View style={styles.footer}>
             <View style={styles.footerTxtView}>
               <View style={styles.createaccountView}>
-                <InterTightRegular fsize={16} fcolor="#89909D">
+                <InterTightRegular fsize={16} fcolor={theme.textSecondary}>
                   Don't have an account?{' '}
                 </InterTightRegular>
                 <ButtonComponent onPress={createAccount}>
-                  <InterTightMedium fsize={16} fcolor="#082B60">
+                  <InterTightMedium fsize={16} fcolor={theme.textMuted}>
                     Create Account
                   </InterTightMedium>
                 </ButtonComponent>
               </View>
               <View style={styles.borderLine} />
               <View style={styles.createaccountView}>
-                <InterTightRegular fsize={14} fcolor="#89909D">
+                <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                   By continuing, you agree to our{' '}
                 </InterTightRegular>
                 <ButtonComponent>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Terms of Service{' '}
                   </InterTightRegular>
                 </ButtonComponent>
 
-                <InterTightRegular fsize={14} fcolor="#89909D">
+                <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                   and{' '}
                 </InterTightRegular>
                 <ButtonComponent>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Privacy Policy
                   </InterTightRegular>
                 </ButtonComponent>

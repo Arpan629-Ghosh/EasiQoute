@@ -1,18 +1,13 @@
+import { Theme } from '@/types/theme.types';
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const createStyles = (theme: Theme) =>  StyleSheet.create({
   safeareaview: {
     flex: 1,
-  },
-  linearGradient: {
-    height: 381,
-    width: '100%',
-    backgroundColor: '#010507',
   },
   bg: {
     height: 381,
     width: '100%',
-
     position: 'relative',
   },
   header: {
@@ -88,7 +83,7 @@ export const styles = StyleSheet.create({
     paddingVertical: 16,
     paddingHorizontal: 12,
     gap: 16,
-    backgroundColor: '#F2EEEC',
+    backgroundColor: theme.surface,
   },
   activityTxt: {
     height: 22,
@@ -109,5 +104,4 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5F6FB',
   },
-  
 });

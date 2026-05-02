@@ -52,16 +52,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 
-  bttn2: {
-    height: 46,
-    width: 175,
-    borderRadius: 12,
-    borderWidth: 1,
-    padding: 12,
-    gap: 12,
-    backgroundColor: '#082B60',
-    borderColor: '#E4E6F4',
-    alignItems: 'center',
-  },
+  
   
 });

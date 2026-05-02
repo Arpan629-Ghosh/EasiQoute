@@ -1,10 +1,11 @@
+import { Theme } from "@/types/theme.types";
 import { Dimensions, StyleSheet } from "react-native";
 
 const { width } = Dimensions.get('window');
-export const styles = StyleSheet.create({
+export const createStyles = (theme: Theme) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.background,
   },
   slide: {
     width,
@@ -42,8 +43,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 12,
     gap: 12,
-    backgroundColor: '#FFFFFF',
-    borderColor: '#E4E6F4',
+    borderColor: theme.border,
     alignItems: 'center',
   },
   bttn2: {
@@ -53,8 +53,8 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 12,
     gap: 12,
-    backgroundColor: '#082B60',
-    borderColor: '#E4E6F4',
+    backgroundColor: theme.primary,
+   
     alignItems: 'center',
   },
   fullBtn: {

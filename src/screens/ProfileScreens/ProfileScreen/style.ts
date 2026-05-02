@@ -1,7 +1,8 @@
+import { Theme } from "@/types/theme.types";
 import { StyleSheet } from "react-native";
 
 
-export const styles = StyleSheet.create({
+export const createStyles = (theme: Theme) => StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -9,7 +10,6 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   headerComponent: {
-    height: 56,
     width: '100%',
     paddingHorizontal: 16,
     flexDirection: 'row',
@@ -21,14 +21,13 @@ export const styles = StyleSheet.create({
     gap: 12,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#E4E6F4',
+    borderBottomColor: theme.border,
   },
   img: {
     height: 28,
     width: 28,
   },
   formContainer: {
-    height: 335,
     width: '100%',
     paddingVertical: 20,
     paddingHorizontal: 12,
@@ -53,19 +52,17 @@ export const styles = StyleSheet.create({
     left: 70,
   },
   inputContainer: {
-    height: 166,
     width: '100%',
     gap: 20,
     marginTop: 24,
   },
   inp: {
-    height: 73,
     width: '100%',
     gap: 8,
   },
   footer: {
-    paddingTop: 10,
-    paddingBottom: 16,
+    width: '100%',
+    paddingBottom: 40,
   },
   footerComponent: {
     paddingVertical: 12,
@@ -76,7 +73,7 @@ export const styles = StyleSheet.create({
     padding: 12,
     marginHorizontal: 12,
     gap: 12,
-    backgroundColor: '#082B60',
+    backgroundColor: theme.primary,
     alignItems: 'center',
   },
   keyboardContainer: {
@@ -85,7 +82,7 @@ export const styles = StyleSheet.create({
   },
   safeareaview: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.background,
   },
   emptyview: {
     width: 28,

@@ -1,10 +1,12 @@
+
+import { Theme } from "@/types/theme.types";
 import { StyleSheet } from "react-native";
 
 
-export const styles = StyleSheet.create({
+export const createStyles = (theme: Theme) => StyleSheet.create({
   scrollView: {
     flexGrow: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.background,
   },
   container: {
     flex: 1,
@@ -59,7 +61,7 @@ export const styles = StyleSheet.create({
     padding: 12,
     gap: 12,
     borderRadius: 12,
-    backgroundColor: '#082B60',
+    backgroundColor: theme.primary,
     alignItems: 'center',
     marginTop: 48,
   },

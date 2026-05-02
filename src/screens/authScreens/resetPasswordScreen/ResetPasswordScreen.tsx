@@ -7,8 +7,8 @@ import {
   StatusBar,
   TextInput,
 } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { styles } from './style';
+import React, {  useMemo, useRef, useState } from 'react';
+import { createStyles } from './style';
 import { icons } from '@/config/icons';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
@@ -16,14 +16,16 @@ import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Input from '@/components/inputComponent/Input';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import { ResetPasswordScreenProps } from '@/types/navigation.types';
+import { useAppTheme } from '@/hooks/useAppTheme';
+
 
 const ResetPasswordScreen = ({navigation} : ResetPasswordScreenProps) => {
   const [input, setInput] = useState<string>('');
   const emailRef = useRef<TextInput | null>(null)
+  const { theme, isDark } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme])
 
-  useEffect(() => {
-    emailRef.current?.focus()
-  },[])
+
 
   const handleInput = (txt: string) => {
     setInput(txt);
@@ -40,30 +42,45 @@ const ResetPasswordScreen = ({navigation} : ResetPasswordScreenProps) => {
       keyboardVerticalOffset={3}
     >
       <ScrollView keyboardShouldPersistTaps="handled" style={styles.scrollView}>
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="transparent"
-          translucent
-        />
+        {isDark ? (
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent
+          />
+        ) : (
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor="transparent"
+            translucent
+          />
+        )}
+
         <View>
           <View style={styles.forgotPasswordContainer}>
             <View style={styles.headerView}>
               <View style={styles.arrowContainer}>
-                <ButtonComponent
-                  style = {styles.icon}
-                  onPress={handleBack}>
-                  <Image source={icons.ic_back} style={styles.img} />
+                <ButtonComponent style={styles.icon} onPress={handleBack}>
+                  {isDark ? (
+                    <Image source={icons.ic_backwhite} style={styles.img} />
+                  ) : (
+                    <Image source={icons.ic_back} style={styles.img} />
+                  )}
                 </ButtonComponent>
               </View>
             </View>
 
             <View style={styles.formContainer}>
               <View style={styles.txtView}>
-                <InterTightSemiBold fsize={24} fcolor="#2D2D2D" textAlign='left'>
+                <InterTightSemiBold
+                  fsize={24}
+                  fcolor={theme.textPrimary}
+                  textAlign="left"
+                >
                   Forgot Password?
                 </InterTightSemiBold>
 
-                <InterTightRegular fsize={14} fcolor="#89909D">
+                <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                   No worries! Just enter your email, and we’ll help you reset
                   your password.
                 </InterTightRegular>
@@ -71,7 +88,7 @@ const ResetPasswordScreen = ({navigation} : ResetPasswordScreenProps) => {
 
               <View style={styles.inpbttnView}>
                 <View style={styles.input}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Email
                   </InterTightRegular>
                   <Input

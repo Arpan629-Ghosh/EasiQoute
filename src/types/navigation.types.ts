@@ -3,6 +3,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 export type RootStackParamList = {
   AuthStack: undefined;
   MainTabs: undefined;
+  QouteDetailScreen: { quoteId: string };
 };
 
 export type AuthStackParamList = {
@@ -15,6 +16,10 @@ export type AuthStackParamList = {
   BusinessAddressScreen: undefined;
   MainTabs: undefined;
 };
+
+export type MainTabParamList = {
+  
+}
 
 export type QuoteStackParamList = {
   MainQuoteScreen: undefined;
@@ -44,3 +49,5 @@ export type BusinessScreenProps = NativeStackScreenProps<AuthStackParamList, 'Bu
 export type BusinessAddressScreenProps = NativeStackScreenProps<AuthStackParamList, 'BusinessAddressScreen'>
 
 export type MainQuoteScreenProps = NativeStackScreenProps<QuoteStackParamList, 'MainQuoteScreen'>
+
+export type QouteDetailScreenProps = NativeStackScreenProps<RootStackParamList, 'QouteDetailScreen'>
