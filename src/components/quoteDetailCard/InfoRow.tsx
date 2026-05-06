@@ -1,26 +1,28 @@
 import { StyleSheet, View } from 'react-native'
 import React from 'react'
 import InterTightRegular from '../fontComponents/InterTightRegular';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 
 interface InfoRowProps{
     label?: string;
     value?: string;
 }
-const InfoRow: React.FC<InfoRowProps> = ({label, value}) => {
+const InfoRow: React.FC<InfoRowProps> = ({ label, value }) => {
+  const { theme } = useAppTheme();
   return (
     <View style = {styles.inforow}>
-      <InterTightRegular fsize={14} fcolor="#89909D">
+      <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
         {label}
       </InterTightRegular>
-      <InterTightRegular fsize={14} fcolor="#2D2D2D">
+      <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
         {value}
       </InterTightRegular>
     </View>
   );
 }
 
-export default InfoRow
+export default React.memo(InfoRow);
 
 const styles = StyleSheet.create({
     inforow: {

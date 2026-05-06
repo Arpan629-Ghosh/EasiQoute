@@ -12,23 +12,16 @@ import { DATA } from '@/config/activities';
 import { useAppTheme } from '@/hooks/useAppTheme';
 
 const HomeScreen = () => {
-  const { theme, isDark } = useAppTheme();
-    const styles = useMemo(() => createStyles(theme), [theme]);
+  const { theme } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
   return (
     <View style={styles.safeareaview}>
-      {isDark ? (
-               <StatusBar
-                 barStyle="light-content"
-                 backgroundColor="transparent"
-                 translucent
-               />
-             ) : (
-               <StatusBar
-                 barStyle="dark-content"
-                 backgroundColor="transparent"
-                 translucent
-               />
-             )}
+      <StatusBar
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent
+      />
+
       <View style={styles.bg}>
         <Image source={images.img_gradient} style={styles.bg} />
         <View style={styles.header}>
@@ -77,19 +70,17 @@ const HomeScreen = () => {
       </View>
       <View style={styles.activityContainer}>
         <View style={styles.activityTxt}>
-          <InterTightMedium fsize={18} fcolor="#2D2D2D">
+          <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
             Recent Activity
           </InterTightMedium>
           <View style={styles.empty} />
         </View>
-        <View >
+        <View>
           <FlatList
-            
             data={DATA}
             renderItem={({ item }) => <RenderActivities item={item} />}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
-           
           />
         </View>
       </View>

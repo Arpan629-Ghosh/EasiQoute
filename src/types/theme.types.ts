@@ -4,6 +4,7 @@ export interface Theme {
   background: string;
   surface: string;
   card: string;
+  cardSecondary: string
 
   // text
   textPrimary: string;
@@ -12,7 +13,9 @@ export interface Theme {
 
   // borders
   border: string;
+  chip: string;
   chipBorder: string;
+  footerBg: string;
 
   // actions
   primary: string;
@@ -24,10 +27,6 @@ export interface Theme {
   inputBorder: string;
   placeholder: string;
   searchInput: string;
-
-  // status
-  success: string;
-  error: string;
 
   // gradients (based on your UI)
   gradientPrimary: string[];

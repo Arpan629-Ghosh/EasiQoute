@@ -21,6 +21,7 @@ const QoutesStack = () => {
           headerShown: false
         }}
       />
+     
       
     </Stack.Navigator>
   )

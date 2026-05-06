@@ -1,11 +1,13 @@
 import { Image, StyleSheet, View } from 'react-native';
-import React from 'react';
+import React, { useMemo } from 'react';
 import ModalComponent from '../modal/ModalComponent';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import ButtonComponent from '../buttonComponent/ButtonComponent';
 import InterTightRegular from '../fontComponents/InterTightRegular';
 import { StatusData } from '@/config/status';
 import { icons } from '@/config/icons';
+import { useAppTheme } from '@/hooks/useAppTheme';
+import { Theme } from '@/types/theme.types';
 
 type Props = {
     visible: boolean;
@@ -14,18 +16,21 @@ type Props = {
     onToggleStatus: (type: string) => void;
    
 };
-const StatusChanger = ({ visible,selectedStatus,  onClose, onToggleStatus }: Props) => {
+const StatusChanger = ({ visible, selectedStatus, onClose, onToggleStatus }: Props) => {
+  
+  const { theme, isDark } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme])
   return (
     <ModalComponent visible={visible} onClose={onClose} mheight={461}>
       <View style={styles.modal}>
         <View style={styles.header}>
-          <InterTightMedium fsize={18} fcolor="#2D2D2D">
+          <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
             Quote Status
           </InterTightMedium>
         </View>
 
         <View style={styles.status}>
-          {StatusData.map(item => {
+          {StatusData().map(item => {
             const isSelected = selectedStatus.includes(item.type);
 
             return (
@@ -40,13 +45,13 @@ const StatusChanger = ({ visible,selectedStatus,  onClose, onToggleStatus }: Pro
 
                   <InterTightRegular
                     fsize={16}
-                    fcolor={isSelected ? '#082B60' : '#89909D'}
+                    fcolor={isSelected ? theme.textMuted : theme.textSecondary}
                   >
                     {item.type}
                   </InterTightRegular>
 
                   {isSelected && (
-                    <Image source={icons.ic_tick} style={styles.cross} />
+                    <Image source={isDark ? icons.ic_darktick : icons.ic_tick} style={styles.cross} />
                   )}
                 </ButtonComponent>
                 {item.type !== 'Cancelled' && <View style={styles.empty} />}
@@ -59,9 +64,9 @@ const StatusChanger = ({ visible,selectedStatus,  onClose, onToggleStatus }: Pro
   );
 };
 
-export default StatusChanger;
+export default React.memo(StatusChanger);
 
-const styles = StyleSheet.create({
+const createStyles = (theme: Theme) =>  StyleSheet.create({
   modal: {
     gap: 16,
   },
@@ -71,30 +76,28 @@ const styles = StyleSheet.create({
   },
   empty: {
     borderWidth: 0.5,
-    borderColor: '#E4E6F4',
+    borderColor: theme.border,
   },
   icon: {
     width: 16,
     height: 16,
     marginRight: 6,
-      resizeMode: 'contain',
-    
+    resizeMode: 'contain',
   },
   statusBttn: {
     flexDirection: 'row',
     paddingVertical: 8,
-      gap: 8,
-      width: "100%",
+    gap: 8,
+    width: '100%',
 
-      alignItems: "center"
-  
+    alignItems: 'center',
   },
   header: {
     paddingVertical: 16,
     paddingHorizontal: 12,
     gap: 16,
     borderBottomWidth: 0.5,
-    borderBottomColor: '#E4E6F4',
+    borderBottomColor: theme.border,
   },
   statusView: {
     gap: 5,
@@ -102,7 +105,6 @@ const styles = StyleSheet.create({
   cross: {
     height: 16,
     width: 16,
-    marginLeft: "auto",
-
+    marginLeft: 'auto',
   },
 });

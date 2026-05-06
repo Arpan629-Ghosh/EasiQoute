@@ -41,7 +41,7 @@ const FilterAndSorting = ({
 
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [activeField, setActiveField] = useState<'start' | 'end' | null>(null);
-    const { theme } = useAppTheme();
+    const { theme, isDark } = useAppTheme();
     const styles = useMemo(() => createStyles(theme), [theme]);
 
 
@@ -117,7 +117,7 @@ const FilterAndSorting = ({
             Status
           </InterTightMedium>
           <View style={styles.status}>
-            {StatusData.map(item => {
+            {StatusData().map(item => {
               const isSelected = selectedStatus.includes(item.type);
 
               return (
@@ -134,7 +134,7 @@ const FilterAndSorting = ({
                   </InterTightRegular>
 
                   {isSelected && (
-                    <Image source={icons.ic_cross} style={styles.cross} />
+                    <Image source={isDark ? icons.ic_darkcross : icons.ic_cross} style={styles.cross} />
                   )}
                 </ButtonComponent>
               );
@@ -153,7 +153,7 @@ const FilterAndSorting = ({
                 selectedAmount === 'Low to High' && styles.selectedChip,
               ]}
             >
-              <Image source={icons.ic_htl} style={styles.icon} />
+              <Image source={isDark ? icons.ic_darkout : icons.ic_htl} style={styles.icon} />
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Low to High
               </InterTightRegular>
@@ -165,7 +165,7 @@ const FilterAndSorting = ({
                 selectedAmount === 'High to Low' && styles.selectedChip,
               ]}
             >
-              <Image source={icons.ic_lth} style={styles.icon} />
+              <Image source={isDark ? icons.ic_darkin : icons.ic_lth} style={styles.icon} />
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 High to Low
               </InterTightRegular>
@@ -287,7 +287,7 @@ const createStyles = (theme: Theme) =>
       gap: 16,
     },
     selectedChip: {
-      backgroundColor: theme.background,
+      backgroundColor: theme.chip,
       borderColor: theme.chipBorder,
     },
     cross: {

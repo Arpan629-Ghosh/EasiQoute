@@ -4,6 +4,8 @@ export type RootStackParamList = {
   AuthStack: undefined;
   MainTabs: undefined;
   QouteDetailScreen: { quoteId: string };
+  IntroductionScreen: undefined;
+  NewQuoteScreens: undefined;
 };
 
 export type AuthStackParamList = {
@@ -23,7 +25,8 @@ export type MainTabParamList = {
 
 export type QuoteStackParamList = {
   MainQuoteScreen: undefined;
-}
+
+};
 
 export type LoginScreenProps = NativeStackScreenProps<
   AuthStackParamList,
@@ -51,3 +54,7 @@ export type BusinessAddressScreenProps = NativeStackScreenProps<AuthStackParamLi
 export type MainQuoteScreenProps = NativeStackScreenProps<QuoteStackParamList, 'MainQuoteScreen'>
 
 export type QouteDetailScreenProps = NativeStackScreenProps<RootStackParamList, 'QouteDetailScreen'>
+
+export type IntroductionScreenProps = NativeStackScreenProps<RootStackParamList, 'IntroductionScreen'>
+
+export type NewQuoteScreensProps = NativeStackScreenProps<RootStackParamList, 'NewQuoteScreens'>

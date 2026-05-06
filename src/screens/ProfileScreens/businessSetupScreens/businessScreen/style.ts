@@ -162,6 +162,11 @@ export const createStyles = (theme: Theme) =>
     footer: {
       width: '100%',
       paddingBottom: 40,
+      position: "absolute",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      backgroundColor: theme.background
     },
     footerContainer: {
       paddingVertical: 12,

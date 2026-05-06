@@ -4,7 +4,9 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useMemo } from 'react';
+import { useAppTheme } from '@/hooks/useAppTheme';
+import { Theme } from '@/types/theme.types';
 
 type Props = {
   visible: boolean;
@@ -18,6 +20,9 @@ const MiddleModalComponent = ({
   onClose,
   children,
 }: Props) => {
+
+  const { theme } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme])
   return (
     <Modal transparent visible={visible} animationType="fade">
       <TouchableWithoutFeedback onPress={onClose}>
@@ -31,14 +36,14 @@ const MiddleModalComponent = ({
 
 export default MiddleModalComponent;
 
-const styles = StyleSheet.create({
+const createStyles = (theme: Theme) =>  StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFill,
     backgroundColor: 'rgba(0,0,0,0.4)',
   },
   sheet: {
     position: 'absolute',
-    backgroundColor: '#fff',
+    backgroundColor: theme.background,
     borderRadius: 15,
     paddingHorizontal: 16,
     paddingTop: 24,

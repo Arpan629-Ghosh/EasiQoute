@@ -5,13 +5,15 @@ export const darkTheme: Theme = {
   background: '#010407',
   surface: '#010407',
   card: '#202126',
+  cardSecondary: "#2F2F37",
 
   textPrimary: '#FFFFFF',
   textSecondary: '#A6ADB9',
   textMuted: '#0597FF',
+  footerBg: "#43434C",
 
   border: '#43434C',
-
+  chip: "#0597FF0D",
   chipBorder: '#0597FF',
 
   primary: '#082B60',
@@ -23,9 +25,6 @@ export const darkTheme: Theme = {
   placeholder: '#A6ADB9',
   searchInput: "#202126",
 
-
-  success: '#22C55E',
-  error: '#F87171',
 
   gradientPrimary: ['#0F172A', '#1E293B'],
 };

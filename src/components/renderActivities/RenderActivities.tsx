@@ -13,7 +13,7 @@ import { Theme } from '@/types/theme.types';
 const RenderActivities = ({ item }: { item: Activities }) => {
 
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-    const { theme, isDark } = useAppTheme();
+    const { theme } = useAppTheme();
       const styles = useMemo(() => createStyles(theme), [theme]);
 
   return (
@@ -43,7 +43,7 @@ const RenderActivities = ({ item }: { item: Activities }) => {
             </View>
           </View>
 
-          {!isDark && <View style={styles.empty} />}
+         <View style={styles.empty} />
 
           <View style={styles.footer}>
             <View style={styles.footerTxt}>
@@ -65,7 +65,7 @@ const RenderActivities = ({ item }: { item: Activities }) => {
   );
 };
 
-export default RenderActivities;
+export default React.memo(RenderActivities);
 
 const createStyles = (theme: Theme) =>  StyleSheet.create({
   container: {
@@ -99,7 +99,7 @@ const createStyles = (theme: Theme) =>  StyleSheet.create({
   empty: {
     width: '100%',
     borderWidth: 0.5,
-    borderColor: '#E4E6F4',
+    borderColor: theme.border,
   },
   footer: {
     height: 17,

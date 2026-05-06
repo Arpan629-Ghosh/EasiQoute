@@ -18,6 +18,8 @@ import FilterAndSorting from '@/components/filterAndSorting/FilterAndSorting';
 import NoSubscription from '@/components/noSubscription/NoSubscription';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useAppTheme } from '@/hooks/useAppTheme';
+import LinearGradient from 'react-native-linear-gradient';
+import { NewQuoteScreensProps } from '@/types/navigation.types';
 
 interface FilterAndSorting {
   startDate: string;
@@ -25,7 +27,7 @@ interface FilterAndSorting {
   statuses: string[];
   amount: string;
 }
-const MainQouteScreen = () => {
+const MainQouteScreen = ({navigation}: NewQuoteScreensProps) => {
   const [filterData, setFliterData] = useState<FilterAndSorting>({
     startDate: '',
     endDate: '',
@@ -40,6 +42,10 @@ const MainQouteScreen = () => {
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const debouncedSearch = useDebounce(search);
+
+  const navigateToNewQuote = () => {
+    navigation.navigate("NewQuoteScreens")
+  }
 
   const handleCloseFilterModal = useCallback(() => {
     setAppliedData(filterData);
@@ -176,7 +182,7 @@ const MainQouteScreen = () => {
       enabled={true}
       keyboardVerticalOffset={3}
     >
-      <View style={styles.container}>
+      <LinearGradient colors={ theme.gradientPrimary}  style={styles.container}>
         {isDark ? (
           <StatusBar
             barStyle="light-content"
@@ -214,7 +220,10 @@ const MainQouteScreen = () => {
 
                 <View style={styles.imgView}>
                   <ButtonComponent onPress={() => setOpenFilterModal(true)}>
-                    <Image source={isDark ? icons.ic_darksf : icons.ic_filter} style={styles.img} />
+                    <Image
+                      source={isDark ? icons.ic_darksf : icons.ic_filter}
+                      style={styles.img}
+                    />
                   </ButtonComponent>
                 </View>
               </View>
@@ -229,7 +238,7 @@ const MainQouteScreen = () => {
             />
           </View>
           <View style={styles.add}>
-            <ButtonComponent onPress={() => setOpenSubscriptionModal(true)}>
+            <ButtonComponent onPress={navigateToNewQuote}>
               <Image source={icons.ic_add} style={styles.ic} />
             </ButtonComponent>
           </View>
@@ -253,7 +262,7 @@ const MainQouteScreen = () => {
           visible={openSubscriptionModal}
           onClose={handleCloseSubscriptionModal}
         />
-      </View>
+      </LinearGradient>
     </KeyboardAvoidingView>
   );
 };

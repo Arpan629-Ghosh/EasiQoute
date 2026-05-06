@@ -1,6 +1,7 @@
 import {
   Image,
   KeyboardAvoidingView,
+  Platform,
   ScrollView,
   StatusBar,
   View,
@@ -90,60 +91,67 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
 
   return (
     <SafeAreaView style={styles.safeareaview} edges={['top']}>
-      <KeyboardAvoidingView
-        style={styles.keyboardContainer}
-        enabled={true}
-        keyboardVerticalOffset={3}
-      >
-        {isDark ? (
-          <StatusBar
-            barStyle="light-content"
-            backgroundColor="transparent"
-            translucent
-          />
-        ) : (
-          <StatusBar
-            barStyle="dark-content"
-            backgroundColor="transparent"
-            translucent
-          />
-        )}
-        <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <View style={styles.headerComponent}>
-              <ButtonComponent onPress={navigateToBack}>
-                {isDark ? (
-                  <Image source={icons.ic_backwhite} style={styles.img} />
-                ) : (
-                  <Image source={icons.ic_back} style={styles.img} />
-                )}
-              </ButtonComponent>
+      {isDark ? (
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+      ) : (
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="transparent"
+          translucent
+        />
+      )}
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <View style={styles.headerComponent}>
+            <ButtonComponent onPress={navigateToBack}>
+              {isDark ? (
+                <Image source={icons.ic_backwhite} style={styles.img} />
+              ) : (
+                <Image source={icons.ic_back} style={styles.img} />
+              )}
+            </ButtonComponent>
 
-              <InterTightMedium
-                fsize={18}
-                fcolor={theme.textPrimary}
-                textAlign="center"
-              >
-                Business Profile Setup
-              </InterTightMedium>
+            <InterTightMedium
+              fsize={18}
+              fcolor={theme.textPrimary}
+              textAlign="center"
+            >
+              Business Profile Setup
+            </InterTightMedium>
 
-              <View style={styles.emptyview} />
-            </View>
+            <View style={styles.emptyview} />
           </View>
+        </View>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          style={styles.keyboardContainer}
+          enabled={true}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
+        >
           <ScrollView
             keyboardShouldPersistTaps="handled"
             style={styles.scrollview}
             showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: 120 }}
           >
             <View style={styles.firstContainer}>
               <View style={styles.logoContainer}>
                 <View style={styles.profilePic}>
                   <ButtonComponent>
                     <Image
-                      source={isDark ? images.img_darkcamera : images.img_camera}
+                      source={
+                        isDark ? images.img_darkcamera : images.img_camera
+                      }
                       style={styles.profileImg}
                     />
-                    <Image source={isDark ? icons.ic_darkadd : icons.ic_add} style={styles.icon} />
+                    <Image
+                      source={isDark ? icons.ic_darkadd : icons.ic_add}
+                      style={styles.icon}
+                    />
                   </ButtonComponent>
                 </View>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
@@ -242,23 +250,23 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
               </View>
             </View>
           </ScrollView>
-          <View style={styles.footer}>
-            <View style={styles.footerContainer}>
-              <ButtonComponent onPress={navigateToTabs} style={styles.bttn}>
-                <InterTightMedium fsize={16} fcolor={theme.primaryText}>
-                  Continue
-                </InterTightMedium>
-              </ButtonComponent>
-            </View>
+        </KeyboardAvoidingView>
+        <View style={styles.footer}>
+          <View style={styles.footerContainer}>
+            <ButtonComponent onPress={navigateToTabs} style={styles.bttn}>
+              <InterTightMedium fsize={16} fcolor={theme.primaryText}>
+                Continue
+              </InterTightMedium>
+            </ButtonComponent>
           </View>
-
-          <ColorPickerSheet
-            visible={open}
-            onClose={handleClose}
-            onSelect={c => updateField('color', c)}
-          />
         </View>
-      </KeyboardAvoidingView>
+
+        <ColorPickerSheet
+          visible={open}
+          onClose={handleClose}
+          onSelect={c => updateField('color', c)}
+        />
+      </View>
     </SafeAreaView>
   );
 };

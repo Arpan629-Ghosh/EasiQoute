@@ -1,6 +1,6 @@
 import { Image, ScrollView, StatusBar, View } from 'react-native';
-import React, { useState } from 'react';
-import { styles } from './style';
+import React, { useCallback, useMemo, useState } from 'react';
+import { createStyles } from './style';
 import { icons } from '@/config/icons';
 import LinearGradient from 'react-native-linear-gradient';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
@@ -13,18 +13,27 @@ import ExpandableItem from '@/components/quoteDetailCard/ExpandableItem';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { QouteDetailScreenProps } from '@/types/navigation.types';
 import StatusChanger from '@/components/statusChanger/StatusChanger';
+import { useAppTheme } from '@/hooks/useAppTheme';
+import Items from '@/components/quoteDetailCard/Items';
 
 const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
 
   const [open, setOpen] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState<string>("")
+
+  const { theme, isDark } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme])
   const navigateToBack = () => {
     navigation.goBack();
   };
 
-  const handleClose = () => {
-    setOpen(false)
+  const navigateToIntroduction = () => {
+    navigation.navigate("IntroductionScreen")
   }
+
+  const handleClose = useCallback(() => {
+    setOpen(false)
+  },[])
 
   const toggleStatus = (type : string) => {
     setSelectedStatus((prev) => {
@@ -34,24 +43,38 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
     })
   }
   return (
-    <LinearGradient colors={['#F2EEEC', '#E8E8F2']} style={styles.container}>
-      <StatusBar
-        barStyle="dark-content"
-        backgroundColor="transparent"
-        translucent
-      />
+    <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
+      {isDark ? (
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+      ) : (
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="transparent"
+          translucent
+        />
+      )}
       <View style={styles.header}>
         <View style={styles.headerComponent}>
           <ButtonComponent onPress={navigateToBack}>
-            <Image source={icons.ic_back} style={styles.img} />
+            <Image
+              source={isDark ? icons.ic_backwhite : icons.ic_back}
+              style={styles.img}
+            />
           </ButtonComponent>
 
-          <Image source={icons.ic_dots} style={styles.img} />
+          <Image
+            source={isDark ? icons.ic_darkdots : icons.ic_dots}
+            style={styles.img}
+          />
         </View>
       </View>
       <View style={styles.mainContainer}>
-        <InterTightMedium fsize={20} fcolor="#2D2D2D">
-          Office Renovation Gold Package – {'      '} Acme Corp
+        <InterTightMedium fsize={20} fcolor={theme.textPrimary}>
+          Office Renovation Gold Package – {'       '} Acme Corp
         </InterTightMedium>
         <ScrollView
           style={styles.scrollview}
@@ -65,14 +88,20 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
                 </InterTightMedium>
               </View>
               <ButtonComponent onPress={() => setOpen(true)}>
-                <Image source={images.img_status} style={styles.statusimg} />
+                <Image
+                  source={isDark ? images.img_darkstatus : images.img_status}
+                  style={styles.statusimg}
+                />
               </ButtonComponent>
             </Card>
 
             <Card>
               <View style={styles.inforow}>
                 <View style={styles.infocard}>
-                  <Image source={icons.ic_badge1} style={styles.img} />
+                  <Image
+                    source={isDark ? icons.ic_darkbg1 : icons.ic_badge1}
+                    style={styles.img}
+                  />
                   <CardHeader title="Basic Information" />
                 </View>
 
@@ -83,14 +112,17 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
               <View style={styles.empty} />
               <View style={styles.inforow}>
                 <View style={styles.infocard}>
-                  <Image source={icons.ic_badge2} style={styles.img} />
+                  <Image
+                    source={isDark ? icons.ic_darkbg2 : icons.ic_badge2}
+                    style={styles.img}
+                  />
                   <CardHeader title="Job Description" />
                 </View>
-                <InterTightRegular fsize={14} fcolor="#89909D">
+                <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                   This quote covers the renovation of Acme Corp’s{'         '}{' '}
                   office space, including material supply, floor tiling, and
                   partition adjustments. It also includes labor for{' '}
-                  <InterTightMedium fsize={14} fcolor="#2D2D2D">
+                  <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
                     more...
                   </InterTightMedium>
                 </InterTightRegular>
@@ -100,14 +132,17 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
 
               <View style={styles.inforow}>
                 <View style={styles.infocard}>
-                  <Image source={icons.ic_badge2} style={styles.img} />
+                  <Image
+                    source={isDark ? icons.ic_darkbg2 : icons.ic_badge2}
+                    style={styles.img}
+                  />
                   <CardHeader title="Notes (Not visible on quote)" />
                 </View>
-                <InterTightRegular fsize={14} fcolor="#89909D">
+                <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                   This quote covers the renovation of Acme Corp’s{'         '}{' '}
                   office space, including material supply, floor tiling, and
                   partition adjustments. It also includes labor for{' '}
-                  <InterTightMedium fsize={14} fcolor="#2D2D2D">
+                  <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
                     more...
                   </InterTightMedium>
                 </InterTightRegular>
@@ -116,31 +151,46 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
 
             <Card style={styles.cardtwo}>
               <View style={styles.infocard}>
-                <Image source={icons.ic_badge3} style={styles.img} />
+                <Image
+                  source={isDark ? icons.ic_darkbg3 : icons.ic_badge3}
+                  style={styles.img}
+                />
                 <CardHeader title="Client Details" />
               </View>
               <View style={styles.contact}>
                 <View style={styles.contactdetail}>
-                  <Image source={icons.ic_logo} style={styles.img} />
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <Image
+                    source={isDark ? icons.ic_dark1 : icons.ic_logo}
+                    style={styles.img}
+                  />
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Acme Corp
                   </InterTightRegular>
                 </View>
                 <View style={styles.contactdetail}>
-                  <Image source={icons.ic_call} style={styles.img} />
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <Image
+                    source={isDark ? icons.ic_dark2 : icons.ic_call}
+                    style={styles.img}
+                  />
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     (+44) 489-7895-200{' '}
                   </InterTightRegular>
                 </View>
                 <View style={styles.contactdetail}>
-                  <Image source={icons.ic_gmail} style={styles.img} />
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <Image
+                    source={isDark ? icons.ic_dark3 : icons.ic_gmail}
+                    style={styles.img}
+                  />
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     acmegroup@gmail.com{' '}
                   </InterTightRegular>
                 </View>
                 <View style={styles.contactdetail}>
-                  <Image source={icons.ic_location} style={styles.img} />
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <Image
+                    source={isDark ? icons.ic_dark4 : icons.ic_location}
+                    style={styles.img}
+                  />
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     1600 Amphitheatre Driveway Parkway Standalone Mountain View,
                     CA 94043{' '}
                   </InterTightRegular>
@@ -150,7 +200,10 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
             <Card>
               <View style={styles.inforow}>
                 <View style={styles.infocard}>
-                  <Image source={icons.ic_badge4} style={styles.img} />
+                  <Image
+                    source={isDark ? icons.ic_darkbg5 : icons.ic_badge4}
+                    style={styles.img}
+                  />
                   <CardHeader title="Financial Summary" />
                 </View>
                 <InfoRow label="Sub-total" value="£2,050.00" />
@@ -158,7 +211,7 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
                   <InfoRow label="Margin (50%)" />
                   <InterTightRegular
                     fsize={14}
-                    fcolor="#082B60"
+                    fcolor={theme.primary}
                     textDecoration="underline"
                   >
                     Check Margin
@@ -174,65 +227,113 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
 
             <Card style={styles.cardtwo}>
               <View style={styles.infocard}>
-                <Image source={icons.ic_section} style={styles.img} />
+                <Image
+                  source={isDark ? icons.ic_darkbg4 : icons.ic_section}
+                  style={styles.img}
+                />
                 <CardHeader title="Items" />
               </View>
               <View style={styles.expand}>
                 <ExpandableItem title="Cement Bags">
-                  <View />
+                  <Items
+                    heading="Materials"
+                    subHeading1="Quantity"
+                    subHeading2="Rate/Unit"
+                    subHeading3="Total"
+                    value1="50"
+                    value2="£25.00"
+                    value3="£1,250.00"
+                  />
                 </ExpandableItem>
                 <View style={styles.empty} />
 
                 <ExpandableItem title="Floor Tiling">
-                  <View />
+                  <Items
+                    heading="Materials"
+                    subHeading1="Quantity"
+                    subHeading2="Rate/Unit"
+                    subHeading3="Total"
+                    value1="50"
+                    value2="£25.00"
+                    value3="£1,250.00"
+                  />
                 </ExpandableItem>
                 <View style={styles.empty} />
                 <ExpandableItem title="Labor Charges">
-                  <View />
+                  <Items
+                    heading="Materials"
+                    subHeading1="Quantity"
+                    subHeading2="Rate/Unit"
+                    subHeading3="Total"
+                    value1="50"
+                    value2="£25.00"
+                    value3="£1,250.00"
+                  />
                 </ExpandableItem>
               </View>
             </Card>
 
             <Card style={styles.cardtwo}>
               <View style={styles.infocard}>
-                <Image source={icons.ic_item} style={styles.img} />
+                <Image
+                  source={isDark ? icons.ic_darkbg4 : icons.ic_item}
+                  style={styles.img}
+                />
                 <CardHeader title="Sections" />
               </View>
               <View style={styles.expand}>
-                <View style={styles.intro}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
-                    Introduction
-                  </InterTightRegular>
-                  <Image source={icons.ic_rightarrow} style={styles.img} />
-                </View>
+                <ButtonComponent style={styles.intro} onPress={navigateToIntroduction}>
+               
+                    <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
+                      Introduction
+                    </InterTightRegular>
+
+                    <Image
+                      source={isDark ? icons.ic_darkarrow : icons.ic_rightarrow}
+                      style={styles.img}
+                    />
+                 
+                </ButtonComponent>
                 <View style={styles.empty} />
                 <View style={styles.intro}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     About Us
                   </InterTightRegular>
-                  <Image source={icons.ic_rightarrow} style={styles.img} />
+                  <Image
+                    source={isDark ? icons.ic_darkarrow : icons.ic_rightarrow}
+                    style={styles.img}
+                  />
                 </View>
               </View>
             </Card>
 
             <Card>
               <View style={styles.infocard}>
-                <Image source={icons.ic_attach} style={styles.img} />
+                <Image
+                  source={isDark ? icons.ic_darkbg6 : icons.ic_attach}
+                  style={styles.img}
+                />
                 <CardHeader title="Attachments" />
               </View>
               <View style={styles.expand}>
                 <View style={styles.intro}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     laborattachment.PDF
                   </InterTightRegular>
-                  <Image source={icons.ic_rightarrow} style={styles.img} />
+                  <Image
+                    source={isDark ? icons.ic_darkarrow : icons.ic_rightarrow}
+                    style={styles.img}
+                  />
                 </View>
                 <View style={styles.empty} />
                 <View style={styles.intro}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     IMGLeak.PNG{' '}
                   </InterTightRegular>
-                  <Image source={icons.ic_rightarrow} style={styles.img} />
+                  <Image
+                    source={isDark ? icons.ic_darkarrow : icons.ic_rightarrow}
+                    style={styles.img}
+                  />
                 </View>
               </View>
             </Card>
@@ -245,15 +346,15 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
 
               <View style={styles.invoice}>
                 <View style={styles.txt}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     INV-2025-101
                   </InterTightRegular>
-                  <InterTightRegular fsize={14} fcolor="#89909D">
+                  <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                     £4,500
                   </InterTightRegular>
                 </View>
                 <View style={styles.invst}>
-                  <InterTightMedium fsize={12} fcolor="#2D2D2D">
+                  <InterTightMedium fsize={12} fcolor={theme.textMuted}>
                     Overdue
                   </InterTightMedium>
                 </View>
@@ -261,16 +362,16 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
               <View style={styles.empty} />
               <View style={styles.invoice}>
                 <View style={styles.txt}>
-                  <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     INV-2025-101
                   </InterTightRegular>
-                  <InterTightRegular fsize={14} fcolor="#89909D">
+                  <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                     £4,500
                   </InterTightRegular>
                 </View>
                 <View style={styles.invst}>
-                  <InterTightMedium fsize={12} fcolor="#2D2D2D">
-                    Overdue
+                  <InterTightMedium fsize={12} fcolor={theme.textMuted}>
+                    Paid
                   </InterTightMedium>
                 </View>
               </View>
@@ -282,13 +383,13 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
         <View style={styles.footeritem}>
           <ButtonComponent style={styles.bttn}>
             <Image source={icons.ic_addicon} style={styles.addicon} />
-            <InterTightMedium fsize={16} fcolor="#082B60">
+            <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
               Invoice
             </InterTightMedium>
           </ButtonComponent>
           <ButtonComponent style={styles.bttn}>
             <Image source={icons.ic_duplicate} style={styles.addicon} />
-            <InterTightMedium fsize={16} fcolor="#082B60">
+            <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
               Duplicate
             </InterTightMedium>
           </ButtonComponent>
@@ -298,7 +399,7 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
         visible={open}
         onClose={handleClose}
         onToggleStatus={toggleStatus}
-        selectedStatus = {selectedStatus}
+        selectedStatus={selectedStatus}
       />
     </LinearGradient>
   );

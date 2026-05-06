@@ -16,20 +16,26 @@ interface Props extends TextInputProps {
   containerStyle?: StyleProp<ViewStyle>;
   style?: StyleProp<TextStyle>;
   inputWidth?: number;
-  bg?: string
+  bg?: string;
+  inputHeight?: number;
+  tv?: TextStyle['textAlignVertical'];
 }
 
 const Input = forwardRef<TextInput, Props>(
-  ({ containerStyle, inputWidth, bg, style, ...rest }, ref) => {
+  ({ containerStyle, inputWidth, bg, tv,  style, inputHeight=48, ...rest }, ref) => {
     const { theme } = useAppTheme();
-     const styles = useMemo(() => createStyles(theme), [theme]);
+    const styles = useMemo(() => createStyles(theme), [theme]);
     return (
-      <View style={[styles.container, containerStyle, {backgroundColor: bg}]}>
-      {/*<View style={{backgroundColor: bg, ...styles.container ,...containerStyle}}>*/}
+      <View style={[styles.container, containerStyle, { backgroundColor: bg }]}>
+     
         <TextInput
           {...rest}
           ref={ref}
-          style={[styles.input, style, {width: inputWidth, backgroundColor: bg}]}
+          style={[
+            styles.input,
+            style,
+            { width: inputWidth, backgroundColor: bg, height: inputHeight, textAlignVertical: tv },
+          ]}
           placeholderTextColor={theme.placeholder}
         />
       </View>
@@ -47,9 +53,9 @@ const createStyles = (theme : Theme) =>  StyleSheet.create({
   },
   input: {
     fontFamily: fontFamily.INTER_TIGHT.regular,
-    height: 48,
     width: '100%',
     borderRadius: 12,
+    // textAlignVertical: "top",
     borderWidth: 0.5,
     paddingHorizontal: 12,
     borderColor: theme.border,
