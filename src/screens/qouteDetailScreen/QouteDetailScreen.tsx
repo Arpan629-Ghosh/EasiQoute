@@ -1,4 +1,4 @@
-import { Image, ScrollView, StatusBar, View } from 'react-native';
+import { Image, ScrollView, StatusBar, TouchableOpacity, View } from 'react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { createStyles } from './style';
 import { icons } from '@/config/icons';
@@ -59,12 +59,12 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
       )}
       <View style={styles.header}>
         <View style={styles.headerComponent}>
-          <ButtonComponent onPress={navigateToBack}>
+          <TouchableOpacity onPress={navigateToBack}>
             <Image
               source={isDark ? icons.ic_backwhite : icons.ic_back}
               style={styles.img}
             />
-          </ButtonComponent>
+          </TouchableOpacity>
 
           <Image
             source={isDark ? icons.ic_darkdots : icons.ic_dots}
@@ -79,6 +79,7 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
         <ScrollView
           style={styles.scrollview}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollview}
         >
           <View style={styles.cardContainer}>
             <Card style={styles.cardone}>
@@ -87,12 +88,12 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
                   Draft
                 </InterTightMedium>
               </View>
-              <ButtonComponent onPress={() => setOpen(true)}>
+              <TouchableOpacity onPress={() => setOpen(true)}>
                 <Image
                   source={isDark ? images.img_darkstatus : images.img_status}
                   style={styles.statusimg}
                 />
-              </ButtonComponent>
+              </TouchableOpacity>
             </Card>
 
             <Card>
@@ -282,18 +283,19 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
                 <CardHeader title="Sections" />
               </View>
               <View style={styles.expand}>
-                <ButtonComponent style={styles.intro} onPress={navigateToIntroduction}>
-               
-                    <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                      Introduction
-                    </InterTightRegular>
+                <TouchableOpacity
+                  style={styles.intro}
+                  onPress={navigateToIntroduction}
+                >
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
+                    Introduction
+                  </InterTightRegular>
 
-                    <Image
-                      source={isDark ? icons.ic_darkarrow : icons.ic_rightarrow}
-                      style={styles.img}
-                    />
-                 
-                </ButtonComponent>
+                  <Image
+                    source={isDark ? icons.ic_darkarrow : icons.ic_rightarrow}
+                    style={styles.img}
+                  />
+                </TouchableOpacity>
                 <View style={styles.empty} />
                 <View style={styles.intro}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
@@ -381,17 +383,28 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
       </View>
       <View style={styles.footer}>
         <View style={styles.footeritem}>
-          <ButtonComponent style={styles.bttn}>
+          <ButtonComponent
+            bg={theme.background}
+            buttonWidth={169.5}
+            bttnTxt="Invoice"
+            borderwidth={1}
+            borderc="#082B60"
+            txtColor={theme.textPrimary}
+            gap={8}
+          >
             <Image source={icons.ic_addicon} style={styles.addicon} />
-            <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
-              Invoice
-            </InterTightMedium>
           </ButtonComponent>
-          <ButtonComponent style={styles.bttn}>
+          <ButtonComponent
+            bg={theme.background}
+            buttonWidth={169.5}
+            bttnTxt="Duplicate"
+            borderwidth={1}
+            borderc="#082B60"
+            txtColor={theme.textPrimary}
+            gap={8}
+          >
             <Image source={icons.ic_duplicate} style={styles.addicon} />
-            <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
-              Duplicate
-            </InterTightMedium>
+           
           </ButtonComponent>
         </View>
       </View>

@@ -4,6 +4,7 @@ import {
   ScrollView,
   StatusBar,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, { useMemo, useRef, useState } from 'react';
@@ -73,13 +74,13 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
             <View style={styles.mainContainer}>
               <View style={styles.headerContainer}>
                 <View style={styles.headerComponent}>
-                  <ButtonComponent onPress={navigateToBack}>
+                  <TouchableOpacity onPress={navigateToBack}>
                     {isDark ? (
                       <Image source={icons.ic_backwhite} style={styles.img} />
                     ) : (
                       <Image source={icons.ic_back} style={styles.img} />
                     )}
-                  </ButtonComponent>
+                  </TouchableOpacity>
 
                   <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
                     Profile Setup
@@ -89,13 +90,18 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
               </View>
               <View style={styles.formContainer}>
                 <View style={styles.profilePic}>
-                  <ButtonComponent>
+                  <TouchableOpacity>
                     <Image
-                      source={isDark ? images.img_darkprofile : images.img_profile}
+                      source={
+                        isDark ? images.img_darkprofile : images.img_profile
+                      }
                       style={styles.profileImg}
                     />
-                    <Image source={isDark ? icons.ic_darkadd : icons.ic_add} style={styles.icon} />
-                  </ButtonComponent>
+                    <Image
+                      source={isDark ? icons.ic_darkadd : icons.ic_add}
+                      style={styles.icon}
+                    />
+                  </TouchableOpacity>
                 </View>
                 <View style={styles.inputContainer}>
                   <View style={styles.inp}>
@@ -134,12 +140,10 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
           <View style={styles.footerComponent}>
             <ButtonComponent
               onPress={navigateToBusinessSetup}
-              style={styles.bttn}
-            >
-              <InterTightMedium fsize={16} fcolor="#FFFFFF">
-                Continue
-              </InterTightMedium>
-            </ButtonComponent>
+              bg={theme.primary}
+              bttnTxt="Continue"
+              txtColor={theme.primaryText}
+            />
           </View>
         </View>
       </KeyboardAvoidingView>

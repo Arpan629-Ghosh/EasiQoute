@@ -4,6 +4,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   StatusBar,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -13,7 +14,6 @@ import Input from '@/components/inputComponent/Input';
 import { icons } from '@/config/icons';
 import { DATA } from '@/config/activities';
 import RenderActivities from '@/components/renderActivities/RenderActivities';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import FilterAndSorting from '@/components/filterAndSorting/FilterAndSorting';
 import NoSubscription from '@/components/noSubscription/NoSubscription';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -182,7 +182,7 @@ const MainQouteScreen = ({navigation}: NewQuoteScreensProps) => {
       enabled={true}
       keyboardVerticalOffset={3}
     >
-      <LinearGradient colors={ theme.gradientPrimary}  style={styles.container}>
+      <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         {isDark ? (
           <StatusBar
             barStyle="light-content"
@@ -219,12 +219,12 @@ const MainQouteScreen = ({navigation}: NewQuoteScreensProps) => {
                 </View>
 
                 <View style={styles.imgView}>
-                  <ButtonComponent onPress={() => setOpenFilterModal(true)}>
+                  <TouchableOpacity onPress={() => setOpenFilterModal(true)}>
                     <Image
                       source={isDark ? icons.ic_darksf : icons.ic_filter}
                       style={styles.img}
                     />
-                  </ButtonComponent>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -238,9 +238,9 @@ const MainQouteScreen = ({navigation}: NewQuoteScreensProps) => {
             />
           </View>
           <View style={styles.add}>
-            <ButtonComponent onPress={navigateToNewQuote}>
+            <TouchableOpacity onPress={navigateToNewQuote}>
               <Image source={icons.ic_add} style={styles.ic} />
-            </ButtonComponent>
+            </TouchableOpacity>
           </View>
         </View>
 

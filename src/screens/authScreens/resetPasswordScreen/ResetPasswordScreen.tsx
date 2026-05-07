@@ -6,6 +6,7 @@ import {
   Platform,
   StatusBar,
   TextInput,
+  TouchableOpacity,
 } from 'react-native';
 import React, {  useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
@@ -14,7 +15,6 @@ import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Input from '@/components/inputComponent/Input';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import { ResetPasswordScreenProps } from '@/types/navigation.types';
 import { useAppTheme } from '@/hooks/useAppTheme';
 
@@ -60,13 +60,13 @@ const ResetPasswordScreen = ({navigation} : ResetPasswordScreenProps) => {
           <View style={styles.forgotPasswordContainer}>
             <View style={styles.headerView}>
               <View style={styles.arrowContainer}>
-                <ButtonComponent style={styles.icon} onPress={handleBack}>
+                <TouchableOpacity style={styles.icon} onPress={handleBack}>
                   {isDark ? (
                     <Image source={icons.ic_backwhite} style={styles.img} />
                   ) : (
                     <Image source={icons.ic_back} style={styles.img} />
                   )}
-                </ButtonComponent>
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -100,11 +100,12 @@ const ResetPasswordScreen = ({navigation} : ResetPasswordScreenProps) => {
                     keyboardType="email-address"
                   />
                 </View>
-                <ButtonComponent style={styles.bttn}>
-                  <InterTightMedium fsize={16} fcolor="#FFFFFF">
-                    Send Now
-                  </InterTightMedium>
-                </ButtonComponent>
+                <ButtonComponent
+                  bg={theme.primary}
+                  bttnTxt="  Send Now"
+                  txtColor={theme.primaryText}
+                />
+                  
               </View>
             </View>
           </View>

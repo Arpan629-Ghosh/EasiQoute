@@ -1,4 +1,4 @@
-import { View, TextInput, ScrollView, KeyboardAvoidingView, Platform, Image } from 'react-native'
+import { View, TextInput, ScrollView, KeyboardAvoidingView, Platform, Image, TouchableOpacity } from 'react-native'
 import React, {  useMemo, useRef, useState } from 'react'
 import GradientHeader from '@/components/gradient/GradientHeader';
 import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
@@ -100,16 +100,16 @@ const RegisterScreen = ({navigation} : RegisterScreenProps) => {
                       textContentType="password"
                       style={styles.noBorderInput}
                     />
-                    <ButtonComponent>
+                    <TouchableOpacity>
                       <Image source={images.img_vector} style={styles.img} />
-                    </ButtonComponent>
+                    </TouchableOpacity>
                   </View>
                 </View>
-                <ButtonComponent style={styles.bttn}>
-                  <InterTightMedium fsize={16} fcolor={theme.primaryText}>
-                    Create Account
-                  </InterTightMedium>
-                </ButtonComponent>
+                <ButtonComponent
+                  bg={theme.primary}
+                  bttnTxt="Create Account"
+                  txtColor={theme.primaryText}
+                />
               </View>
             </View>
           </View>
@@ -120,31 +120,31 @@ const RegisterScreen = ({navigation} : RegisterScreenProps) => {
                 <InterTightRegular fsize={16} fcolor={theme.textSecondary}>
                   Already have an account?{' '}
                 </InterTightRegular>
-                <ButtonComponent onPress={goLoginScreen}>
+                <TouchableOpacity onPress={goLoginScreen}>
                   <InterTightMedium fsize={16} fcolor={theme.textMuted}>
                     Login
                   </InterTightMedium>
-                </ButtonComponent>
+                </TouchableOpacity>
               </View>
               <View style={styles.borderLine} />
               <View style={styles.createaccountView}>
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                   By continuing, you agree to our{' '}
                 </InterTightRegular>
-                <ButtonComponent>
+                <TouchableOpacity>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Terms of Service{' '}
                   </InterTightRegular>
-                </ButtonComponent>
+                </TouchableOpacity>
 
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                   and{' '}
                 </InterTightRegular>
-                <ButtonComponent>
+                <TouchableOpacity>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Privacy Policy
                   </InterTightRegular>
-                </ButtonComponent>
+                </TouchableOpacity>
               </View>
             </View>
           </View>

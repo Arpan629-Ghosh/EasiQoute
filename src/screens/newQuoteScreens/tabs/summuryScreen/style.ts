@@ -1,6 +1,7 @@
+import { Theme } from '@/types/theme.types';
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const createStyles = (theme : Theme) =>  StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -12,9 +13,9 @@ export const styles = StyleSheet.create({
     paddingVertical: 20,
     paddingHorizontal: 12,
     gap: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.background,
     borderTopWidth: 1,
-    borderTopColor: '#E4E6F4',
+    borderTopColor: theme.border,
   },
   inputs: {
     gap: 8,
@@ -31,7 +32,7 @@ export const styles = StyleSheet.create({
     height: 48,
     flex: 1,
     borderWidth: 1,
-    borderColor: '#E4E6F4',
+    borderColor: theme.border,
     borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
@@ -57,7 +58,7 @@ export const styles = StyleSheet.create({
   input: {
     height: 50,
     borderWidth: 1,
-    borderColor: '#E4E6F4',
+    borderColor: theme.border,
     borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
@@ -86,7 +87,7 @@ export const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     justifyContent: 'space-between',
-    borderColor: '#E4E6F4',
+    borderColor: theme.border,
   },
   delete: {
     height: 24,
@@ -96,13 +97,14 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     width: '100%',
     paddingBottom: 40,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: theme.background,
     bottom: 0,
     left: 0,
     right: 0,
   },
   footerContainer: {
     paddingVertical: 12,
+    marginHorizontal: 16
   },
   bttn: {
     height: 46,
@@ -110,7 +112,7 @@ export const styles = StyleSheet.create({
     padding: 12,
     marginHorizontal: 12,
     gap: 12,
-    backgroundColor: '#082B60',
+    backgroundColor: theme.primary,
     alignItems: 'center',
   },
   keyboardContainer: {

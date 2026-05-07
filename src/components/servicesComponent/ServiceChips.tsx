@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { SERVICES } from '@/config/services';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
 import InterTightRegular from '../fontComponents/InterTightRegular';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
@@ -23,7 +22,7 @@ const ServiceChips = ({ selected, onToggle }: Props) => {
         const isSelected = selected.includes(item.type);
 
         return (
-          <ButtonComponent
+          <TouchableOpacity
             key={item.type}
             style={[
               styles.chip,
@@ -38,7 +37,7 @@ const ServiceChips = ({ selected, onToggle }: Props) => {
             <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
               {item.type}
             </InterTightRegular>
-          </ButtonComponent>
+          </TouchableOpacity>
         );
       })}
     </View>

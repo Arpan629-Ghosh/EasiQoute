@@ -6,6 +6,7 @@ import MainTabs from './mainTabs/MainTabs';
 import QouteDetailScreen from '@/screens/qouteDetailScreen/QouteDetailScreen';
 import IntroductionScreen from '@/screens/introductionScreen/IntroductionScreen';
 import NewQuoteScreens from '@/screens/newQuoteScreens/NewQuoteScreen';
+import TemplatesScreen from '@/screens/newQuoteScreens/templatesScreen/TemplatesScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStack = () => {
@@ -35,18 +36,26 @@ const RootStack = () => {
         }}
       />
       <Stack.Screen
-        name='IntroductionScreen'
+        name="IntroductionScreen"
         component={IntroductionScreen}
         options={{
-          title: "Introducton",
-          headerShown: false
+          title: 'Introducton',
+          headerShown: false,
         }}
       />
       <Stack.Screen
-        name='NewQuoteScreens'
+        name="NewQuoteScreens"
         component={NewQuoteScreens}
         options={{
-          title: "New Quote",
+          title: 'New Quote',
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="TemplatesScreen"
+        component={TemplatesScreen}
+        options={{
+          title: "Templates",
           headerShown: false
         }}
       />

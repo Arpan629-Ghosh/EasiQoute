@@ -17,5 +17,6 @@ export const images = {
   img_darkprofile: require('@assets/images/img_darkprofile.png'),
   img_darkcamera: require('@assets/images/img_darkcamera.png'),
   img_darkstatus: require('@assets/images/img_darkstatus.png'),
-  img_fileupload: require('@assets/images/img_fileupload.png')
+  img_fileupload: require('@assets/images/img_fileupload.png'),
+  img_quote: require('@assets/images/img_quote.png')
 };

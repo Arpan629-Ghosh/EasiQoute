@@ -81,6 +81,7 @@ const HomeScreen = () => {
             renderItem={({ item }) => <RenderActivities item={item} />}
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.flatlist}
           />
         </View>
       </View>

@@ -2,10 +2,8 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import React, { useMemo } from 'react';
 import { View, TouchableOpacity, StyleSheet, Image, StatusBar } from 'react-native';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
 import { icons } from '@/config/icons';
 import InterTightMedium from '../fontComponents/InterTightMedium';
-import LinearGradient from 'react-native-linear-gradient';
 
 const CustomTabBars = ({ state, descriptors, navigation }: any) => {
   const { theme, isDark } = useAppTheme();
@@ -15,34 +13,34 @@ const CustomTabBars = ({ state, descriptors, navigation }: any) => {
         navigation.goBack();
   };
   return (
-      <View style={styles.container}>
-           {isDark ? (
-                  <StatusBar
-                    barStyle="light-content"
-                    backgroundColor="transparent"
-                    translucent
-                  />
-                ) : (
-                  <StatusBar
-                    barStyle="dark-content"
-                    backgroundColor="transparent"
-                    translucent
-                  />
-                )}
+    <View style={styles.container}>
+      {isDark ? (
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+      ) : (
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="transparent"
+          translucent
+        />
+      )}
       <View style={styles.itemContainer}>
         <View style={styles.headerComponent}>
-          <ButtonComponent onPress={navigateToBack}>
+          <TouchableOpacity onPress={navigateToBack}>
             <Image
               source={isDark ? icons.ic_backwhite : icons.ic_back}
               style={styles.img}
             />
-          </ButtonComponent>
+          </TouchableOpacity>
           <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
             New Quote
           </InterTightMedium>
           <View style={styles.emptyview} />
         </View>
-        <View  style={styles.tabBarContainer}>
+        <View style={styles.tabBarContainer}>
           {state.routes.map((route: any, index: number) => {
             const isFocused = state.index === index;
 
@@ -96,7 +94,7 @@ const createStyles = (theme: Theme) =>
       padding: 4,
       marginHorizontal: 16,
       height: 41,
-      backgroundColor: '#E8E8F2',
+      backgroundColor: theme.topTab,
     },
 
     tab: {

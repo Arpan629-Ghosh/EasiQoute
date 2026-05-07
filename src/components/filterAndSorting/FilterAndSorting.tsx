@@ -1,4 +1,4 @@
-import { Image,StyleSheet, View } from 'react-native';
+import { Image,StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, {useMemo, useState } from 'react';
 import ModalComponent from '../modal/ModalComponent';
 import InterTightMedium from '../fontComponents/InterTightMedium';
@@ -95,9 +95,9 @@ const FilterAndSorting = ({
                 style={styles.noBorderInput}
                 editable={false}
               />
-              <ButtonComponent onPress={handleCalenderStartPicker}>
+              <TouchableOpacity onPress={handleCalenderStartPicker}>
                 <Image source={icons.ic_cal} style={styles.searchic} />
-              </ButtonComponent>
+              </TouchableOpacity>
             </View>
             <View style={styles.inputicon}>
               <Input
@@ -106,9 +106,9 @@ const FilterAndSorting = ({
                 style={styles.noBorderInput}
                 editable={false}
               />
-              <ButtonComponent onPress={handleCalenderEndPicker}>
+              <TouchableOpacity onPress={handleCalenderEndPicker}>
                 <Image source={icons.ic_cal} style={styles.searchic} />
-              </ButtonComponent>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -121,7 +121,7 @@ const FilterAndSorting = ({
               const isSelected = selectedStatus.includes(item.type);
 
               return (
-                <ButtonComponent
+                <TouchableOpacity
                   key={item.type}
                   style={[styles.chip, isSelected && styles.selectedChip]}
                   onPress={() => onToggleStatus(item.type)}
@@ -134,9 +134,12 @@ const FilterAndSorting = ({
                   </InterTightRegular>
 
                   {isSelected && (
-                    <Image source={isDark ? icons.ic_darkcross : icons.ic_cross} style={styles.cross} />
+                    <Image
+                      source={isDark ? icons.ic_darkcross : icons.ic_cross}
+                      style={styles.cross}
+                    />
                   )}
-                </ButtonComponent>
+                </TouchableOpacity>
               );
             })}
           </View>
@@ -146,43 +149,52 @@ const FilterAndSorting = ({
             Sort by Amount
           </InterTightMedium>
           <View style={styles.status}>
-            <ButtonComponent
+            <TouchableOpacity
               onPress={() => onToggleAmount('Low to High')}
               style={[
                 styles.chip,
                 selectedAmount === 'Low to High' && styles.selectedChip,
               ]}
             >
-              <Image source={isDark ? icons.ic_darkout : icons.ic_htl} style={styles.icon} />
+              <Image
+                source={isDark ? icons.ic_darkout : icons.ic_htl}
+                style={styles.icon}
+              />
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Low to High
               </InterTightRegular>
-            </ButtonComponent>
-            <ButtonComponent
+            </TouchableOpacity>
+            <TouchableOpacity
               onPress={() => onToggleAmount('High to Low')}
               style={[
                 styles.chip,
                 selectedAmount === 'High to Low' && styles.selectedChip,
               ]}
             >
-              <Image source={isDark ? icons.ic_darkin : icons.ic_lth} style={styles.icon} />
+              <Image
+                source={isDark ? icons.ic_darkin : icons.ic_lth}
+                style={styles.icon}
+              />
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 High to Low
               </InterTightRegular>
-            </ButtonComponent>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.bttncontainer}>
-          <ButtonComponent onPress={onClear} style={styles.bttn1}>
-            <InterTightMedium fsize={16} fcolor="#D23949">
-              Clear All
-            </InterTightMedium>
-          </ButtonComponent>
-          <ButtonComponent onPress={onClose} style={styles.bttn2}>
-            <InterTightMedium fsize={16} fcolor="#FFFFFF">
-              Apply
-            </InterTightMedium>
-          </ButtonComponent>
+          <ButtonComponent
+            onPress={onClear}
+            buttonWidth={165.5}
+            bttnTxt="Clear All"
+            txtColor="#D23949"
+          />
+          <ButtonComponent
+            onPress={onClose}
+            bg={theme.primary}
+            bttnTxt="Apply"
+            buttonWidth={165.5}
+            txtColor={theme.primaryText}
+          />
         </View>
       </View>
       <DateTimePicker

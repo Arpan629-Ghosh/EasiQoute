@@ -1,6 +1,6 @@
-import { Image, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
-import React, { useState } from 'react';
-import { styles } from './style';
+import { Image, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { createStyles } from './style';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Input from '@/components/inputComponent/Input';
@@ -9,6 +9,7 @@ import { icons } from '@/config/icons';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import CustomToggle from '@/components/switch/CustomToggle';
 import { images } from '@/config/images';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface NewQuoteForm {
   quoteTitle: string;
@@ -36,6 +37,8 @@ const SummuryScreen = () => {
     notes: "",
     file: ""
   })
+  const { theme } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme])
   const updateField = (key: keyof NewQuoteForm, value: string) => {
     setNewQuoteFormData(prev => ({
       ...prev,
@@ -106,11 +109,11 @@ const SummuryScreen = () => {
           contentContainerStyle={{ paddingBottom: 120 }}
         >
           <View style={styles.basicinfo}>
-            <InterTightMedium fsize={16} fcolor="#2D2D2D">
+            <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
               Basic Information
             </InterTightMedium>
             <View style={styles.inp}>
-              <InterTightRegular fsize={14} fcolor="#2D2D2D">
+              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Quote Title
               </InterTightRegular>
               <Input
@@ -122,7 +125,7 @@ const SummuryScreen = () => {
               />
             </View>
             <View style={styles.inp}>
-              <InterTightRegular fsize={14} fcolor="#2D2D2D">
+              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Reference Number
               </InterTightRegular>
               <Input
@@ -134,10 +137,10 @@ const SummuryScreen = () => {
             </View>
             <View style={styles.inputContainer}>
               <View style={styles.inputs}>
-                <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                   Quote Date
                 </InterTightRegular>
-                <ButtonComponent
+                <TouchableOpacity
                   style={styles.inputicon}
                   onPress={handleCalenderStartPicker}
                 >
@@ -150,14 +153,14 @@ const SummuryScreen = () => {
                   />
 
                   <Image source={icons.ic_cal} style={styles.searchic} />
-                </ButtonComponent>
+                </TouchableOpacity>
               </View>
 
               <View style={styles.inputs}>
-                <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                   Expiry Date
                 </InterTightRegular>
-                <ButtonComponent
+                <TouchableOpacity
                   style={styles.inputicon}
                   onPress={handleCalenderEndPicker}
                 >
@@ -168,12 +171,12 @@ const SummuryScreen = () => {
                     value={newQuoteFormData.expDate}
                     onChangeText={txt => updateField('expDate', txt)}
                   />
-                   <Image source={icons.ic_cal} style={styles.searchic} />
-                </ButtonComponent>
+                  <Image source={icons.ic_cal} style={styles.searchic} />
+                </TouchableOpacity>
               </View>
             </View>
             <View style={styles.switch}>
-              <InterTightRegular fsize={16} fcolor="#2D2D2D">
+              <InterTightRegular fsize={16} fcolor={theme.textPrimary}>
                 Hide your phone number
               </InterTightRegular>
               <CustomToggle value={enabled} onToggle={setEnabled} />
@@ -181,11 +184,11 @@ const SummuryScreen = () => {
           </View>
 
           <View style={styles.basicinfo}>
-            <InterTightMedium fsize={16} fcolor="#2D2D2D">
+            <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
               Client & Job Information
             </InterTightMedium>
             <View style={styles.inp}>
-              <InterTightRegular fsize={14} fcolor="#2D2D2D">
+              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Client
               </InterTightRegular>
               <View style={styles.input}>
@@ -195,16 +198,16 @@ const SummuryScreen = () => {
                   value={newQuoteFormData.client}
                   onChangeText={txt => updateField('client', txt)}
                 />
-                <ButtonComponent>
+                <TouchableOpacity>
                   <Image source={icons.ic_drop} style={styles.searchic} />
-                </ButtonComponent>
+                </TouchableOpacity>
               </View>
-              <ButtonComponent>
+              <TouchableOpacity>
                 <Image source={icons.ic_newclient} style={styles.newclient} />
-              </ButtonComponent>
+              </TouchableOpacity>
             </View>
             <View style={styles.inp}>
-              <InterTightRegular fsize={14} fcolor="#2D2D2D">
+              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Job Description
               </InterTightRegular>
               <Input
@@ -217,7 +220,7 @@ const SummuryScreen = () => {
               />
             </View>
             <View style={styles.inp}>
-              <InterTightRegular fsize={14} fcolor="#2D2D2D">
+              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Notes (Not visible on quote){' '}
               </InterTightRegular>
               <Input
@@ -231,30 +234,30 @@ const SummuryScreen = () => {
             </View>
           </View>
           <View style={styles.basicinfo}>
-            <InterTightMedium fsize={16} fcolor="#2D2D2D">
+            <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
               Attachments
             </InterTightMedium>
             <View style={styles.fileupload}>
-              <ButtonComponent>
+              <TouchableOpacity>
                 <Image source={images.img_fileupload} style={styles.upload} />
-              </ButtonComponent>
+              </TouchableOpacity>
             </View>
             <View style={styles.files}>
               <View style={styles.docs}>
-                <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                   laborattachment.PDF
                 </InterTightRegular>
-                <ButtonComponent>
+                <TouchableOpacity>
                   <Image source={icons.ic_delete} style={styles.delete} />
-                </ButtonComponent>
+                </TouchableOpacity>
               </View>
               <View style={styles.docs}>
-                <InterTightRegular fsize={14} fcolor="#2D2D2D">
+                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                   laborattachment.PDF
                 </InterTightRegular>
-                <ButtonComponent>
+                <TouchableOpacity>
                   <Image source={icons.ic_delete} style={styles.delete} />
-                </ButtonComponent>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -263,11 +266,13 @@ const SummuryScreen = () => {
 
       <View style={styles.footer}>
         <View style={styles.footerContainer}>
-          <ButtonComponent style={styles.bttn}>
-            <InterTightMedium fsize={16} fcolor="#FFFFFF">
-              Save
-            </InterTightMedium>
-          </ButtonComponent>
+          <ButtonComponent
+            bg={theme.primary}
+            style={styles.bttn}
+            bttnTxt="Save"
+            txtColor={theme.primaryText}
+          />
+           
         </View>
       </View>
       <DateTimePicker

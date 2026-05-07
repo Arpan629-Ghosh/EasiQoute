@@ -4,9 +4,10 @@ import {
   Platform,
   ScrollView,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { createStyles } from './styles';
 import GradientHeader from '@components/gradient/GradientHeader';
 import InterTightSemiBold from '@components/fontComponents/InterTightSemiBold';
@@ -59,9 +60,9 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     setSecureTextEntry(!secureTextEntry)
   }
 
-  const handleLogin = () => {
+  const handleLogin = useCallback(() => {
     navigation.replace('IntroScreen')
-  }
+  },[navigation])
 
   return (
     <KeyboardAvoidingView
@@ -121,26 +122,26 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
                       textContentType="password"
                       style={styles.noBorderInput}
                     />
-                    <ButtonComponent onPress={handleSecureTextEntry}>
+                    <TouchableOpacity onPress={handleSecureTextEntry}>
                       <Image source={images.img_vector} style={styles.img} />
-                    </ButtonComponent>
+                    </TouchableOpacity>
                   </View>
                 </View>
-                <ButtonComponent onPress={handleLogin} style={styles.bttn}>
-                  <InterTightMedium fsize={16} fcolor={theme.primaryText}>
-                    Login
-                  </InterTightMedium>
-                </ButtonComponent>
-
+                <ButtonComponent
+                  onPress={handleLogin}
+                  bg={theme.primary}
+                  bttnTxt="Login"
+                  txtColor={theme.primaryText}
+                />
                 <View style={styles.forgotpasswordView}>
                   <InterTightRegular fsize={16} fcolor={theme.textSecondary}>
                     Forgot password?{' '}
                   </InterTightRegular>
-                  <ButtonComponent onPress={resetPassword}>
+                  <TouchableOpacity onPress={resetPassword}>
                     <InterTightMedium fsize={16} fcolor={theme.textMuted}>
                       Reset
                     </InterTightMedium>
-                  </ButtonComponent>
+                  </TouchableOpacity>
                 </View>
               </View>
             </View>
@@ -152,31 +153,31 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
                 <InterTightRegular fsize={16} fcolor={theme.textSecondary}>
                   Don't have an account?{' '}
                 </InterTightRegular>
-                <ButtonComponent onPress={createAccount}>
+                <TouchableOpacity onPress={createAccount}>
                   <InterTightMedium fsize={16} fcolor={theme.textMuted}>
                     Create Account
                   </InterTightMedium>
-                </ButtonComponent>
+                </TouchableOpacity>
               </View>
               <View style={styles.borderLine} />
               <View style={styles.createaccountView}>
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                   By continuing, you agree to our{' '}
                 </InterTightRegular>
-                <ButtonComponent>
+                <TouchableOpacity>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Terms of Service{' '}
                   </InterTightRegular>
-                </ButtonComponent>
+                </TouchableOpacity>
 
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                   and{' '}
                 </InterTightRegular>
-                <ButtonComponent>
+                <TouchableOpacity>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Privacy Policy
                   </InterTightRegular>
-                </ButtonComponent>
+                </TouchableOpacity>
               </View>
             </View>
           </View>

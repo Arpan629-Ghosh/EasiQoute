@@ -1,8 +1,7 @@
-import { Image, StyleSheet, View } from 'react-native'
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import InterTightRegular from '../fontComponents/InterTightRegular';
 import { icons } from '@/config/icons';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
 import { useAppTheme } from '@/hooks/useAppTheme';
 
 
@@ -15,7 +14,7 @@ const ExpandableItem: React.FC<ExpandableItemProp> = ({ title, children }) => {
   const { theme , isDark} = useAppTheme();
   return (
     <View>
-      <ButtonComponent
+      <TouchableOpacity
         style={styles.expandableitem}
         onPress={() => setOpen(!open)}
       >
@@ -23,15 +22,17 @@ const ExpandableItem: React.FC<ExpandableItemProp> = ({ title, children }) => {
           {title}
         </InterTightRegular>
         {open ? (
-         
-            <Image source={isDark ? icons.ic_darkopen :icons.ic_close} style={styles.img1} />
-      
+          <Image
+            source={isDark ? icons.ic_darkopen : icons.ic_close}
+            style={styles.img1}
+          />
         ) : (
-       
-            <Image source={ isDark ? icons.ic_darkdown: icons.ic_open} style={styles.img2} />
-  
+          <Image
+            source={isDark ? icons.ic_darkdown : icons.ic_open}
+            style={styles.img2}
+          />
         )}
-      </ButtonComponent>
+      </TouchableOpacity>
       {open && children}
     </View>
   );

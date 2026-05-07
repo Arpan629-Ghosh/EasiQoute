@@ -170,6 +170,7 @@ export const createStyles = (theme: Theme) =>
     },
     footerContainer: {
       paddingVertical: 12,
+      marginHorizontal: 12
     },
     bttn: {
       height: 46,

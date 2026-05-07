@@ -63,19 +63,14 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
   footer: {
     width: '100%',
     paddingBottom: 40,
+
   },
   footerComponent: {
     paddingVertical: 12,
+  
+    marginHorizontal: 12
   },
-  bttn: {
-    height: 46,
-    borderRadius: 12,
-    padding: 12,
-    marginHorizontal: 12,
-    gap: 12,
-    backgroundColor: theme.primary,
-    alignItems: 'center',
-  },
+ 
   keyboardContainer: {
     flex: 1,
     justifyContent: 'flex-end',

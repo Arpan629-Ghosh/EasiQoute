@@ -1,10 +1,9 @@
-import { Image, View } from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
 import { IntroductionScreenProps } from '@/types/navigation.types';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import LinearGradient from 'react-native-linear-gradient';
 import { createStyles } from './style';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { icons } from '@/config/icons';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import Card from '@/components/quoteDetailCard/Card';
@@ -22,13 +21,13 @@ const IntroductionScreen = ({ navigation }: IntroductionScreenProps) => {
       <View style={styles.mainContainer}>
         <View style={styles.header}>
           <View style={styles.arrowContainer}>
-            <ButtonComponent style={styles.img} onPress={handleBack}>
+            <TouchableOpacity style={styles.img} onPress={handleBack}>
               {isDark ? (
                 <Image source={icons.ic_backwhite} style={styles.img} />
               ) : (
                 <Image source={icons.ic_back} style={styles.img} />
               )}
-            </ButtonComponent>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.txtContainer}>

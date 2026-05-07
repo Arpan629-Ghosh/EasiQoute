@@ -104,4 +104,7 @@ export const createStyles = (theme: Theme) =>  StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5F6FB',
   },
+  flatlist: {
+    paddingBottom: 20
+  }
 });

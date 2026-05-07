@@ -47,10 +47,12 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
     gap: 8,
   },
   inpbttnView: {
+    
     height: 143,
     width: '100%',
     gap: 24,
     marginTop: 32,
+    justifyContent: "space-between"
   },
   input: {
     gap: 8,

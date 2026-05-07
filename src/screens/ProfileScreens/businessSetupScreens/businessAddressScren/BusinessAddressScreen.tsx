@@ -1,4 +1,4 @@
-import { Image, KeyboardAvoidingView, ScrollView, StatusBar, View } from 'react-native';
+import { Image, KeyboardAvoidingView, ScrollView, StatusBar, TouchableOpacity, View } from 'react-native';
 import React, { useMemo, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
@@ -51,27 +51,34 @@ const BusinessAddressScreen = ({ navigation }: BusinessAddressScreenProps) => {
         enabled={true}
         keyboardVerticalOffset={3}
       >
-          {isDark ? (
-                  <StatusBar
-                    barStyle="light-content"
-                    backgroundColor="transparent"
-                    translucent
-                  />
-                ) : (
-                  <StatusBar
-                    barStyle="dark-content"
-                    backgroundColor="transparent"
-                    translucent
-                  />
-                )}
+        {isDark ? (
+          <StatusBar
+            barStyle="light-content"
+            backgroundColor="transparent"
+            translucent
+          />
+        ) : (
+          <StatusBar
+            barStyle="dark-content"
+            backgroundColor="transparent"
+            translucent
+          />
+        )}
         <View style={styles.container}>
           <View style={styles.headerContainer}>
             <View style={styles.headerComponent}>
-              <ButtonComponent onPress={navigateToBack}>
-                <Image source={isDark ? icons.ic_backwhite : icons.ic_back} style={styles.img} />
-              </ButtonComponent>
+              <TouchableOpacity onPress={navigateToBack}>
+                <Image
+                  source={isDark ? icons.ic_backwhite : icons.ic_back}
+                  style={styles.img}
+                />
+              </TouchableOpacity>
 
-              <InterTightMedium fsize={18} fcolor={theme.textPrimary} textAlign="center">
+              <InterTightMedium
+                fsize={18}
+                fcolor={theme.textPrimary}
+                textAlign="center"
+              >
                 Business Address
               </InterTightMedium>
 
@@ -144,7 +151,7 @@ const BusinessAddressScreen = ({ navigation }: BusinessAddressScreenProps) => {
                     value={formData.country}
                     placeholder="Enter country"
                     onChangeText={txt => handleInput('country', txt)}
-                    returnKeyType='done'
+                    returnKeyType="done"
                   />
                 </View>
               </View>
@@ -153,11 +160,11 @@ const BusinessAddressScreen = ({ navigation }: BusinessAddressScreenProps) => {
 
           <View style={styles.footer}>
             <View style={styles.footerContainer}>
-              <ButtonComponent style={styles.bttn}>
-                <InterTightMedium fsize={16} fcolor={theme.primaryText}>
-                  Continue
-                </InterTightMedium>
-              </ButtonComponent>
+              <ButtonComponent
+                bg={theme.primary}
+                bttnTxt="Continue"
+                txtColor={theme.primaryText}
+              />
             </View>
           </View>
         </View>

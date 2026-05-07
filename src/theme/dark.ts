@@ -11,6 +11,7 @@ export const darkTheme: Theme = {
   textSecondary: '#A6ADB9',
   textMuted: '#0597FF',
   footerBg: "#43434C",
+  topTab: "#010407",
 
   border: '#43434C',
   chip: "#0597FF0D",

@@ -4,6 +4,7 @@ import {
   Platform,
   ScrollView,
   StatusBar,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
@@ -107,13 +108,13 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
       <View style={styles.container}>
         <View style={styles.headerContainer}>
           <View style={styles.headerComponent}>
-            <ButtonComponent onPress={navigateToBack}>
+            <TouchableOpacity onPress={navigateToBack}>
               {isDark ? (
                 <Image source={icons.ic_backwhite} style={styles.img} />
               ) : (
                 <Image source={icons.ic_back} style={styles.img} />
               )}
-            </ButtonComponent>
+            </TouchableOpacity>
 
             <InterTightMedium
               fsize={18}
@@ -130,7 +131,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.keyboardContainer}
           enabled={true}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 80 : 0}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
         >
           <ScrollView
             keyboardShouldPersistTaps="handled"
@@ -141,7 +142,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
             <View style={styles.firstContainer}>
               <View style={styles.logoContainer}>
                 <View style={styles.profilePic}>
-                  <ButtonComponent>
+                  <TouchableOpacity>
                     <Image
                       source={
                         isDark ? images.img_darkcamera : images.img_camera
@@ -152,7 +153,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
                       source={isDark ? icons.ic_darkadd : icons.ic_add}
                       style={styles.icon}
                     />
-                  </ButtonComponent>
+                  </TouchableOpacity>
                 </View>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                   Your logo will appear on quotes, invoices, and client emails.
@@ -164,7 +165,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
                   style={styles.brandcolor}
                 />
                 <View style={styles.colorView}>
-                  <ButtonComponent
+                  <TouchableOpacity
                     style={[styles.colorBttn, { backgroundColor: form.color }]}
                     onPress={() => setOpen(true)}
                   />
@@ -207,12 +208,12 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
                     Address
                   </InterTightMedium>
                 </View>
-                <ButtonComponent
+                <TouchableOpacity
                   onPress={navigateToAddress}
                   style={styles.addimg}
                 >
                   <Image source={images.img_address} style={styles.addimg} />
-                </ButtonComponent>
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -253,11 +254,12 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
         </KeyboardAvoidingView>
         <View style={styles.footer}>
           <View style={styles.footerContainer}>
-            <ButtonComponent onPress={navigateToTabs} style={styles.bttn}>
-              <InterTightMedium fsize={16} fcolor={theme.primaryText}>
-                Continue
-              </InterTightMedium>
-            </ButtonComponent>
+            <ButtonComponent
+              onPress={navigateToTabs}
+              bg={theme.primary}
+              bttnTxt="Continue"
+              txtColor={theme.primaryText}
+            />
           </View>
         </View>
 

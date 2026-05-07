@@ -61,15 +61,7 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
     height: '100%',
     paddingHorizontal: 0,
   },
-  bttn: {
-    width: '100%',
-    height: 46,
-    borderRadius: 12,
-    padding: 12,
-    gap: 12,
-    backgroundColor: theme.primary,
-    alignItems: 'center',
-  },
+  
   forgotpasswordView: {
     flexDirection: 'row',
     justifyContent: 'center',

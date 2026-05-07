@@ -108,7 +108,7 @@ export const createStyles = (theme: Theme) =>
     footer: {
       width: '100%',
       paddingBottom: 40,
-      backgroundColor: theme.footerBg,
+      backgroundColor: theme.background,
     },
     footeritem: {
       flexDirection: 'row',
@@ -116,19 +116,7 @@ export const createStyles = (theme: Theme) =>
       gap: 12,
       justifyContent: 'center',
     },
-    bttn: {
-      height: 46,
-      width: 169.5,
-      borderRadius: 12,
-      borderWidth: 1,
-      padding: 12,
-      gap: 8,
-      backgroundColor: theme.background,
-      borderColor: '#082B60',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
+   
     addicon: {
       height: 16,
       width: 16,

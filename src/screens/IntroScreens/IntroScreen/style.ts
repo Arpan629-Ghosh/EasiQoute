@@ -36,34 +36,7 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 10,
   },
-  bttn1: {
-    height: 46,
-    width: 165.5,
-    borderRadius: 12,
-    borderWidth: 1,
-    padding: 12,
-    gap: 12,
-    borderColor: theme.border,
-    alignItems: 'center',
-  },
-  bttn2: {
-    height: 46,
-    width: 165.5,
-    borderRadius: 12,
-    borderWidth: 1,
-    padding: 12,
-    gap: 12,
-    backgroundColor: theme.primary,
-   
-    alignItems: 'center',
-  },
-  fullBtn: {
-    width: '100%',
-    backgroundColor: '#0A2A5E',
-    paddingVertical: 14,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
+ 
   slideContainer: {
     flexDirection: 'row',
     height: 6,
@@ -83,10 +56,12 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
     backgroundColor: '#E4E6F4',
   },
   bttnContainer: {
+  
     height: 46,
     width: 343,
     gap: 12,
     marginTop: 8,
     flexDirection: 'row',
+    
   },
 });

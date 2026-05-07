@@ -5,8 +5,9 @@ import ItemsScreen from './tabs/itemsScreen/ItemsScreen'
 import SectionsScreen from './tabs/sectionsScreen/SectionsScreen'
 import PreviewScreen from './tabs/previewScreen/PreviewScreen'
 import CustomTabBars from '@/components/customTopTabBar/CustomTopTabBars'
+import { NewQuoteTopTabParamList } from '@/types/navigation.types'
 
-const Tab = createMaterialTopTabNavigator()
+const Tab = createMaterialTopTabNavigator<NewQuoteTopTabParamList>();
 const NewQuoteScreens = () => {
   return (
       <Tab.Navigator tabBar={(props) => <CustomTabBars {...props} />}>

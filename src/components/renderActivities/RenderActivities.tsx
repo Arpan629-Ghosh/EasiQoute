@@ -1,10 +1,9 @@
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
 import { Activities } from '@/config/activities';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import InterTightRegular from '../fontComponents/InterTightRegular';
 import { useNavigation } from '@react-navigation/native';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
 import {   RootStackParamList } from '@/types/navigation.types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppTheme } from '@/hooks/useAppTheme';
@@ -18,7 +17,7 @@ const RenderActivities = ({ item }: { item: Activities }) => {
 
   return (
     <View style={styles.container}>
-      <ButtonComponent
+      <TouchableOpacity
         onPress={() =>
           navigation.navigate('QouteDetailScreen', {
             quoteId: item.id,
@@ -43,7 +42,7 @@ const RenderActivities = ({ item }: { item: Activities }) => {
             </View>
           </View>
 
-         <View style={styles.empty} />
+          <View style={styles.empty} />
 
           <View style={styles.footer}>
             <View style={styles.footerTxt}>
@@ -60,7 +59,7 @@ const RenderActivities = ({ item }: { item: Activities }) => {
             </InterTightRegular>
           </View>
         </View>
-      </ButtonComponent>
+      </TouchableOpacity>
     </View>
   );
 };

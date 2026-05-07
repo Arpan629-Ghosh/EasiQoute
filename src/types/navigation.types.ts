@@ -1,3 +1,5 @@
+import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
+import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
@@ -6,6 +8,7 @@ export type RootStackParamList = {
   QouteDetailScreen: { quoteId: string };
   IntroductionScreen: undefined;
   NewQuoteScreens: undefined;
+  TemplatesScreen: undefined;
 };
 
 export type AuthStackParamList = {
@@ -17,6 +20,13 @@ export type AuthStackParamList = {
   BusinessScreen: undefined;
   BusinessAddressScreen: undefined;
   MainTabs: undefined;
+};
+
+export type NewQuoteTopTabParamList = {
+  Summury: undefined;
+  Items: undefined;
+  Sections: undefined;
+  Preview: undefined;
 };
 
 export type MainTabParamList = {
@@ -58,3 +68,9 @@ export type QouteDetailScreenProps = NativeStackScreenProps<RootStackParamList, 
 export type IntroductionScreenProps = NativeStackScreenProps<RootStackParamList, 'IntroductionScreen'>
 
 export type NewQuoteScreensProps = NativeStackScreenProps<RootStackParamList, 'NewQuoteScreens'>
+export type TemplatesScreenProps = NativeStackScreenProps<RootStackParamList, 'TemplatesScreen'>
+
+export type PreviewScreenProps = CompositeScreenProps<
+  MaterialTopTabScreenProps<NewQuoteTopTabParamList, 'Preview'>,
+  NativeStackScreenProps<RootStackParamList>
+>;

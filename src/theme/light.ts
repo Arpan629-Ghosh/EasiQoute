@@ -11,6 +11,7 @@ export const lightTheme: Theme = {
   textSecondary: '#89909D',
   textMuted: '#082B60',
   footerBg: "FFFFFF",
+  topTab: "#E8E8F2",
 
   border: '#E4E6F4',
   chip: '#082B600A',

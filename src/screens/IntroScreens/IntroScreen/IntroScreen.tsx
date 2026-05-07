@@ -1,5 +1,4 @@
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
 import { IntroScreenProps } from '@/types/navigation.types';
 import React, { useMemo, useRef, useState } from 'react';
@@ -64,19 +63,19 @@ const IntroScreen = ({navigation} : IntroScreenProps) => {
 
   return (
     <View style={styles.container}>
-       {isDark ? (
-                <StatusBar
-                  barStyle="light-content"
-                  backgroundColor="transparent"
-                  translucent
-                />
-              ) : (
-                <StatusBar
-                  barStyle="dark-content"
-                  backgroundColor="transparent"
-                  translucent
-                />
-              )}
+      {isDark ? (
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+      ) : (
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="transparent"
+          translucent
+        />
+      )}
       <FlatList
         ref={flatListRef}
         data={DATA}
@@ -105,24 +104,33 @@ const IntroScreen = ({navigation} : IntroScreenProps) => {
         <View style={styles.bttnContainer}>
           {currentIndex === 0 ? (
             <>
-              <ButtonComponent onPress={handleNext} style={styles.bttn1}>
-                <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
-                  Skip
-                </InterTightMedium>
-              </ButtonComponent>
-
-              <ButtonComponent style={styles.bttn2} onPress={handleNext}>
-                <InterTightMedium fsize={16} fcolor={theme.primaryText}>
-                  Next
-                </InterTightMedium>
-              </ButtonComponent>
+              <ButtonComponent
+                onPress={handleNext}
+                borderc={theme.border}
+                bttnTxt="Skip"
+                borderwidth={1}
+                buttonWidth={165.5}
+                txtColor={theme.textPrimary}
+              />
+             
+              <ButtonComponent
+                onPress={handleNext}
+                bg={theme.primary}
+                bttnTxt='Next'
+                buttonWidth={165.5}
+                txtColor={theme.primaryText}
+              />
+           
             </>
           ) : (
-            <ButtonComponent onPress={handleNavigation} style={styles.fullBtn}>
-              <InterTightMedium fsize={16} fcolor="#FFFFFF">
-                Let's Go
-              </InterTightMedium>
-            </ButtonComponent>
+              <ButtonComponent
+                bg={theme.primary}
+                onPress={handleNavigation}
+                bttnTxt=" Let's Go"
+                buttonWidth={343}
+                txtColor={theme.primaryText}
+              />
+            
           )}
         </View>
       </View>

@@ -4,7 +4,7 @@ export interface Theme {
   background: string;
   surface: string;
   card: string;
-  cardSecondary: string
+  cardSecondary: string;
 
   // text
   textPrimary: string;
@@ -16,6 +16,7 @@ export interface Theme {
   chip: string;
   chipBorder: string;
   footerBg: string;
+  topTab: string;
 
   // actions
   primary: string;

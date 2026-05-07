@@ -87,5 +87,13 @@ export const icons = {
   ic_darkopen: require("@assets/icons/ic_darkopen.png"),
   ic_drop: require("@assets/icons/ic_drop.png"),
   ic_newclient: require("@assets/icons/ic_newclient.png"),
-  ic_delete: require("@assets/icons/ic_delete.png")
+  ic_delete: require("@assets/icons/ic_delete.png"),
+  ic_edit: require("@assets/icons/ic_edit.png"),
+  ic_minus: require("@assets/icons/ic_minus.png"),
+  ic_plus: require("@assets/icons/ic_plus.png"),
+  ic_whiteadd: require("@assets/icons/ic_whiteadd.png"),
+  ic_blueadd: require("@assets/icons/ic_blueadd.png"),
+  ic_down: require("@assets/icons/ic_down.png"),
+  ic_radio: require("@assets/icons/ic_radio.png"),
+  ic_share: require("@assets/icons/ic_share.png")
 };
