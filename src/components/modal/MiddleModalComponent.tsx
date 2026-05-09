@@ -40,8 +40,6 @@ const createStyles = (theme: Theme) =>  StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFill,
     backgroundColor: 'rgba(0,0,0,0.4)',
-    justifyContent: "center",
-    alignItems: "center"
   },
   sheet: {
     position: 'absolute',

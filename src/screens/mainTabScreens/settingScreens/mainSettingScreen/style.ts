@@ -1,6 +1,5 @@
-import { Theme } from "@/types/theme.types";
-import { StyleSheet } from "react-native";
-
+import { Theme } from '@/types/theme.types';
+import { StyleSheet } from 'react-native';
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
@@ -18,9 +17,9 @@ export const createStyles = (theme: Theme) =>
       flex: 1,
       gap: 12,
       paddingHorizontal: 12,
-      },
-      contentcontainer: {
-        paddingBottom: 48  
+    },
+    contentcontainer: {
+      paddingBottom: 48,
     },
     card: {
       gap: 16,
@@ -50,8 +49,8 @@ export const createStyles = (theme: Theme) =>
       borderWidth: 0.5,
       borderColor: theme.border,
     },
-      content: {
-          flex: 1,
-          gap: 12
-    }
+    content: {
+      flex: 1,
+      gap: 12,
+    },
   });

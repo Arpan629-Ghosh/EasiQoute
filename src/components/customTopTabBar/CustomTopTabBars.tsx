@@ -9,9 +9,8 @@ const CustomTabBars = ({ state, descriptors, navigation }: any) => {
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-    
   return (
-    <View style = {styles.container}>
+    <View style={styles.container}>
       <View style={styles.nestedcontainer}>
         <Header txt="New Quote" borderBottomEnabled={true}>
           <View style={styles.tabBarContainer}>
@@ -45,7 +44,7 @@ export default CustomTabBars;
 const createStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      backgroundColor:theme.background
+      backgroundColor: theme.background,
     },
     nestedcontainer: {
       marginTop: 56,

@@ -1,13 +1,13 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { AuthStackParamList } from '@appTypes/navigation.types';
-import LoginScreen from '@screens/authScreens/loginScreen/LoginScreen';
-import RegisterScreen from '@screens/authScreens/registerScreen/RegisterScreen';
-import ResetPasswordScreen from '@/screens/authScreens/resetPasswordScreen/ResetPasswordScreen';
-import ProfileScreen from '@/screens/profileScreens/ProfileScreen/ProfileScreen';
-import IntroScreen from '@/screens/introScreens/IntroScreen/IntroScreen';
-import BusinessScreen from '@/screens/profileScreens/businessSetupScreens/businessScreen/BusinessScreen';
-import BusinessAddressScreen from '@/screens/profileScreens/businessSetupScreens/businessAddressScren/BusinessAddressScreen';
+import LoginScreen from '@/screens/authAndProfileSetupScreens/authScreens/loginScreen/LoginScreen';
+import RegisterScreen from '@/screens/authAndProfileSetupScreens/authScreens/registerScreen/RegisterScreen';
+import ResetPasswordScreen from '@/screens/authAndProfileSetupScreens/authScreens/resetPasswordScreen/ResetPasswordScreen';
+import ProfileScreen from '@/screens/authAndProfileSetupScreens/profileScreens/ProfileScreen/ProfileScreen';
+import IntroScreen from '@/screens/authAndProfileSetupScreens/introScreens/IntroScreen/IntroScreen';
+import BusinessScreen from '@/screens/authAndProfileSetupScreens/profileScreens/businessSetupScreens/businessScreen/BusinessScreen';
+import BusinessAddressScreen from '@/screens/authAndProfileSetupScreens/profileScreens/businessSetupScreens/businessAddressScren/BusinessAddressScreen';
 
 
 

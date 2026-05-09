@@ -1,6 +1,5 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from '@/screens/homeScreen/HomeScreen';
 import QoutesStack from './mainStack/QoutesStack';
 import InvoicesStack from './mainStack/InvoicesStack';
 import ClientStack from './mainStack/ClientStack';
@@ -11,14 +10,16 @@ import InvoiceIcon from '@/components/tabBarIcons/invoiceIcon/InvoiceIcon';
 import ClientIcon from '@/components/tabBarIcons/clientIcon/ClientIcon';
 import SettingIcon from '@/components/tabBarIcons/settingIcon/SettingIcon';
 import { fontFamily } from '@/constants/fontFamily';
+import HomeStack from './mainStack/HomeStack';
+import { MainTabParamList } from '@/types/navigation.types';
 
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<MainTabParamList>();
 const MainTabs = () => {
   return (
     <Tab.Navigator>
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeStack}
         options={{
           headerShown: false,
           tabBarActiveTintColor: '#082B60',

@@ -1,4 +1,10 @@
-import { Image, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  View,
+} from 'react-native';
 import React, { useMemo, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
@@ -10,37 +16,35 @@ import { TextInput } from 'react-native-gesture-handler';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
 
-interface FormData{
+interface FormData {
   streetAddress: string;
   city: string;
-  postcode: string,
-  country: string
+  postcode: string;
+  country: string;
 }
 
 const BusinessAddressScreen = () => {
-
   const [formData, setFormData] = useState<FormData>({
-    streetAddress: "",
-    city: "",
-    postcode: "",
-    country: ""
-  })
+    streetAddress: '',
+    city: '',
+    postcode: '',
+    country: '',
+  });
 
   const addressRef = useRef<TextInput | null>(null);
   const cityRef = useRef<TextInput | null>(null);
   const postRef = useRef<TextInput | null>(null);
-  const countryRef = useRef<TextInput | null>(null)
+  const countryRef = useRef<TextInput | null>(null);
   const { theme } = useAppTheme();
-  const styles = useMemo(() => createStyles(theme), [theme])
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
-
-  const handleInput = (name : string, value : string) => {
-    setFormData((prev) => ({
+  const handleInput = (name: string, value: string) => {
+    setFormData(prev => ({
       ...prev,
-      [name] : value
-    }))
-  }
- 
+      [name]: value,
+    }));
+  };
+
   return (
     <SafeAreaView style={styles.safeareaview} edges={['top']}>
       <KeyboardAvoidingView

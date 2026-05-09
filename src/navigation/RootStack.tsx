@@ -3,10 +3,10 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@appTypes/navigation.types';
 import AuthStack from './authStack/AuthStack';
 import MainTabs from './mainTabs/MainTabs';
-import QouteDetailScreen from '@/screens/qouteDetailScreen/QouteDetailScreen';
-import IntroductionScreen from '@/screens/introductionScreen/IntroductionScreen';
-import NewQuoteScreens from '@/screens/newQuoteScreens/NewQuoteScreen';
-import TemplatesScreen from '@/screens/newQuoteScreens/templatesScreen/TemplatesScreen';
+import QouteDetailScreen from '@/screens/mainTabScreens/quoteScreens/qouteDetailScreen/QouteDetailScreen';
+import IntroductionScreen from '@/screens/mainTabScreens/quoteScreens/introductionScreen/IntroductionScreen';
+import NewQuoteScreens from '@/screens/mainTabScreens/quoteScreens/newQuoteScreens/NewQuoteScreen';
+import TemplatesScreen from '@/screens/mainTabScreens/quoteScreens/newQuoteScreens/templatesScreen/TemplatesScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStack = () => {

@@ -19,7 +19,7 @@ import NoSubscription from '@/components/noSubscription/NoSubscription';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import LinearGradient from 'react-native-linear-gradient';
-import { NewQuoteScreensProps } from '@/types/navigation.types';
+import { MainQuoteScreenProps } from '@/types/navigation.types';
 
 interface FilterAndSorting {
   startDate: string;
@@ -27,7 +27,7 @@ interface FilterAndSorting {
   statuses: string[];
   amount: string;
 }
-const MainQouteScreen = ({navigation}: NewQuoteScreensProps) => {
+const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
   const [filterData, setFliterData] = useState<FilterAndSorting>({
     startDate: '',
     endDate: '',
@@ -235,7 +235,6 @@ const MainQouteScreen = ({navigation}: NewQuoteScreensProps) => {
               renderItem={({ item }) => <RenderActivities item={item} />}
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.flat}
             />
           </View>
           <View style={styles.add}>

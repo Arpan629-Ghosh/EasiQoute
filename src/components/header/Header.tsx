@@ -14,8 +14,8 @@ import InterTightMedium from '../fontComponents/InterTightMedium';
 
 interface Props {
   txt?: React.ReactNode;
-    borderBottomEnabled: boolean;
-    children?: React.ReactNode;
+  borderBottomEnabled: boolean;
+  children?: React.ReactNode;
 }
 
 const Header: React.FC<Props> = ({ txt, borderBottomEnabled, children }) => {
@@ -52,12 +52,11 @@ const Header: React.FC<Props> = ({ txt, borderBottomEnabled, children }) => {
           )}
         </TouchableOpacity>
         <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
-      
           {txt}
-              </InterTightMedium>
-              <View style={styles.empty} />
-          </View>
-          {children}
+        </InterTightMedium>
+        <View style={styles.empty} />
+      </View>
+      {children}
     </View>
   );
 };
@@ -79,15 +78,13 @@ const createStyles = (theme: Theme) =>
       paddingHorizontal: 16,
       justifyContent: 'space-between',
       flexDirection: 'row',
-
-   
     },
     img: {
       height: 28,
       width: 28,
     },
-      empty: {
-          height: 28,
-          width: 28
-    }
+    empty: {
+      height: 28,
+      width: 28,
+    },
   });

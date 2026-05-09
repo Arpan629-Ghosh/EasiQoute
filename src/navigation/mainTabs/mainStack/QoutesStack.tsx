@@ -1,7 +1,7 @@
 import React from 'react'
 import { QuoteStackParamList } from '@/types/navigation.types'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import MainQouteScreen from '@/screens/mainQuoteScreen/MainQouteScreen'
+import MainQouteScreen from '@/screens/mainTabScreens/quoteScreens/mainQuoteScreen/MainQouteScreen';
 
 
 const Stack = createNativeStackNavigator<QuoteStackParamList>()

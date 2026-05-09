@@ -67,18 +67,17 @@ const AppearanceBottomSheet = ({ visible, onClose }: Prop) => {
             <InterTightRegular fsize={16} fcolor={theme.textPrimary}>
               Device theme{' '}
             </InterTightRegular>
-         
-              <Image
-                source={
-                  mode === 'Device'
-                    ? isDark
-                      ? icons.ic_darkselect
-                      : icons.ic_appdotcircle
-                    : icons.ic_appcircle
-                }
-                style={styles.icn}
-              />
-          
+
+            <Image
+              source={
+                mode === 'Device'
+                  ? isDark
+                    ? icons.ic_darkselect
+                    : icons.ic_appdotcircle
+                  : icons.ic_appcircle
+              }
+              style={styles.icn}
+            />
           </TouchableOpacity>
           <View style={styles.borderLine} />
         </View>

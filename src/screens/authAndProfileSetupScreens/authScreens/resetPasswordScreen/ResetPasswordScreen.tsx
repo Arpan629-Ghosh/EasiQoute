@@ -5,7 +5,7 @@ import {
   Platform,
   TextInput,
 } from 'react-native';
-import React, {  useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
@@ -15,20 +15,16 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-
 const ResetPasswordScreen = () => {
   const [input, setInput] = useState<string>('');
-  const emailRef = useRef<TextInput | null>(null)
+  const emailRef = useRef<TextInput | null>(null);
   const { theme } = useAppTheme();
-  const styles = useMemo(() => createStyles(theme), [theme])
-
-
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
   const handleInput = (txt: string) => {
     setInput(txt);
   };
 
-  
   return (
     <SafeAreaView style={styles.safeareaview} edges={['top']}>
       <KeyboardAvoidingView

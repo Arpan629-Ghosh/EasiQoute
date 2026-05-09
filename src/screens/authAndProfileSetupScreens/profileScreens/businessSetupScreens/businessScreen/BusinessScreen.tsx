@@ -47,8 +47,6 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
   const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  
-
   const navigateToAddress = () => {
     navigation.navigate('BusinessAddressScreen');
   };

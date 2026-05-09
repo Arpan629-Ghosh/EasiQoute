@@ -1,7 +1,8 @@
-import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import React, { useMemo } from 'react';
 import ModalComponent from '../modal/ModalComponent';
 import InterTightMedium from '../fontComponents/InterTightMedium';
+import ButtonComponent from '../buttonComponent/ButtonComponent';
 import InterTightRegular from '../fontComponents/InterTightRegular';
 import { StatusData } from '@/config/status';
 import { icons } from '@/config/icons';
@@ -34,7 +35,7 @@ const StatusChanger = ({ visible, selectedStatus, onClose, onToggleStatus }: Pro
 
             return (
               <View key={item.type} style={styles.statusView}>
-                <TouchableOpacity
+                <ButtonComponent
                   key={item.type}
                   onPress={() => onToggleStatus(item.type)}
                   activeOpacity={0.8}
@@ -50,12 +51,9 @@ const StatusChanger = ({ visible, selectedStatus, onClose, onToggleStatus }: Pro
                   </InterTightRegular>
 
                   {isSelected && (
-                    <Image
-                      source={isDark ? icons.ic_darktick : icons.ic_tick}
-                      style={styles.cross}
-                    />
+                    <Image source={isDark ? icons.ic_darktick : icons.ic_tick} style={styles.cross} />
                   )}
-                </TouchableOpacity>
+                </ButtonComponent>
                 {item.type !== 'Cancelled' && <View style={styles.empty} />}
               </View>
             );

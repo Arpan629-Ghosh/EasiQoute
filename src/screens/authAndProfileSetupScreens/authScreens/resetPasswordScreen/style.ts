@@ -1,7 +1,5 @@
-
-import { Theme } from "@/types/theme.types";
-import { StyleSheet } from "react-native";
-
+import { Theme } from '@/types/theme.types';
+import { StyleSheet } from 'react-native';
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
@@ -22,7 +20,6 @@ export const createStyles = (theme: Theme) =>
       gap: 12,
     },
     arrowContainer: {
-  
       width: '100%',
       justifyContent: 'space-between',
       paddingHorizontal: 16,
@@ -43,7 +40,6 @@ export const createStyles = (theme: Theme) =>
       gap: 8,
     },
     inpbttnView: {
-
       width: '100%',
       gap: 24,
       marginTop: 32,
@@ -52,7 +48,7 @@ export const createStyles = (theme: Theme) =>
     input: {
       gap: 8,
     },
-    
+
     keyboardContainer: {
       flex: 1,
       justifyContent: 'flex-end',

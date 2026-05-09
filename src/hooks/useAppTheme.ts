@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { useColorScheme } from 'react-native';
 
-
 export const useAppTheme = () => {
   const systemTheme = useColorScheme();
   const mode = useSelector((state: RootState) => state.theme.mode);
@@ -17,11 +16,11 @@ export const useAppTheme = () => {
     theme = mode === 'Dark' ? darkTheme : lightTheme;
   }
 
-  const isDark  = mode === 'Device' ? systemTheme === 'dark' : mode ==='Dark'
+  const isDark = mode === 'Device' ? systemTheme === 'dark' : mode === 'Dark';
 
   return {
     theme,
     isDark,
-    mode
+    mode,
   };
 };

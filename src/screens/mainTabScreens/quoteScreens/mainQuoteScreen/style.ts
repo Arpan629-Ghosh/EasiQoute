@@ -62,9 +62,6 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
     flex: 1,
     paddingHorizontal: 12,
   },
-  flat: {
-    paddingBottom: 120
-  },
   add: {
     height: 48,
     width: 48,

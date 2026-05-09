@@ -5,6 +5,7 @@ import { images } from '@/config/images';
 import InterTightSemiBold from '../fontComponents/InterTightSemiBold';
 import InterTightRegular from '../fontComponents/InterTightRegular';
 import ButtonComponent from '../buttonComponent/ButtonComponent';
+import InterTightMedium from '../fontComponents/InterTightMedium';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 
@@ -20,37 +21,25 @@ const NoSubscription = ({ visible, onClose }: Props) => {
     <MiddleModalComponent visible={visible} onClose={onClose}>
       <Image source={images.img_subscription} style={styles.img} />
       <View style={styles.txtView}>
-        <InterTightSemiBold
-          fsize={20}
-          fcolor={theme.textPrimary}
-          textAlign="center"
-        >
+        <InterTightSemiBold fsize={20} fcolor={theme.textPrimary} textAlign="center">
           Subscription Required
         </InterTightSemiBold>
-        <InterTightRegular
-          fsize={14}
-          fcolor={theme.textSecondary}
-          textAlign="center"
-        >
+        <InterTightRegular fsize={14} fcolor={theme.textSecondary} textAlign='center'>
           To continue using EaziQuote, please activate or renew your
           subscription.
         </InterTightRegular>
       </View>
       <View style={styles.bttnView}>
-        <ButtonComponent
-          bg={theme.primary}
-          bttnTxt="Activate Subscription"
-          txtColor={theme.primaryText}
-      
-        />
-       
-        <ButtonComponent
-          onPress={onClose}
-          bttnTxt="Not Now"
-          txtColor="#D23949"
-        />
-        
-        
+        <ButtonComponent style={styles.bttn1}>
+          <InterTightMedium fsize={16} fcolor={theme.primaryText}>
+            Activate Subscription
+          </InterTightMedium>
+        </ButtonComponent>
+        <ButtonComponent onPress={onClose} style= {styles.bttn2}>
+          <InterTightMedium fsize={16} fcolor="#D23949">
+            Not Now
+          </InterTightMedium>
+        </ButtonComponent>
       </View>
     </MiddleModalComponent>
   );

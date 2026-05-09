@@ -149,10 +149,10 @@ export const createStyles = (theme: Theme) =>
     chip: {
       paddingHorizontal: 12,
       paddingVertical: 8,
-      backgroundColor:  theme.background,
+      backgroundColor: theme.background,
       borderRadius: 20,
       borderWidth: 1,
-      borderColor: theme.border
+      borderColor: theme.border,
     },
     serviceImg: {
       height: 41,
@@ -162,15 +162,15 @@ export const createStyles = (theme: Theme) =>
     footer: {
       width: '100%',
       paddingBottom: 40,
-      position: "absolute",
+      position: 'absolute',
       bottom: 0,
       left: 0,
       right: 0,
-      backgroundColor: theme.background
+      backgroundColor: theme.background,
     },
     footerContainer: {
       paddingVertical: 12,
-      marginHorizontal: 12
+      marginHorizontal: 12,
     },
     bttn: {
       height: 46,

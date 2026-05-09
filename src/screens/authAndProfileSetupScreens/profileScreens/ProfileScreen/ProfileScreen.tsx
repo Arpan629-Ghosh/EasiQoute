@@ -34,7 +34,6 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
   const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-
   const navigateToBusinessSetup = () => {
     navigation.navigate('BusinessScreen');
   };

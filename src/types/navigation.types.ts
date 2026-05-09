@@ -30,46 +30,70 @@ export type NewQuoteTopTabParamList = {
 };
 
 export type MainTabParamList = {
-  
-}
-
+  Home: undefined;
+  Qoute: undefined;
+  Invoices: undefined;
+  Clients: undefined;
+  Settings: undefined;
+};
 export type QuoteStackParamList = {
   MainQuoteScreen: undefined;
 
 };
+export type HomeStackParamList = {
+  HomeScreen: undefined;
+}
 
+// login
 export type LoginScreenProps = NativeStackScreenProps<
   AuthStackParamList,
   'LoginScreen'
->;
+  >;
+
+// register
 export type RegisterScreenProps = NativeStackScreenProps<
   AuthStackParamList,
   'RegisterScreen'
->;
+  >;
+
+  //reset
 export type ResetPasswordScreenProps = NativeStackScreenProps<
   AuthStackParamList,
   'ResetPasswordScreen'
->;
+  >;
 
+  // onBoarding
 export type IntroScreenProps = NativeStackScreenProps<
   AuthStackParamList,
   'IntroScreen'
->;
+  >;
 
+  //Profile
 export type ProfileScreenProps = NativeStackScreenProps<AuthStackParamList, 'ProfileScreen'>
 
+// business
 export type BusinessScreenProps = NativeStackScreenProps<AuthStackParamList, 'BusinessScreen'>
 export type BusinessAddressScreenProps = NativeStackScreenProps<AuthStackParamList, 'BusinessAddressScreen'>
 
-export type MainQuoteScreenProps = NativeStackScreenProps<QuoteStackParamList, 'MainQuoteScreen'>
+//main quote
+export type MainQuoteScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<QuoteStackParamList, 'MainQuoteScreen'>,
+  NativeStackScreenProps<RootStackParamList>
+>;
 
+// quote detail
 export type QouteDetailScreenProps = NativeStackScreenProps<RootStackParamList, 'QouteDetailScreen'>
 
+// introduction
 export type IntroductionScreenProps = NativeStackScreenProps<RootStackParamList, 'IntroductionScreen'>
 
+// new quote
 export type NewQuoteScreensProps = NativeStackScreenProps<RootStackParamList, 'NewQuoteScreens'>
+
+// templates
 export type TemplatesScreenProps = NativeStackScreenProps<RootStackParamList, 'TemplatesScreen'>
 
+//preview
 export type PreviewScreenProps = CompositeScreenProps<
   MaterialTopTabScreenProps<NewQuoteTopTabParamList, 'Preview'>,
   NativeStackScreenProps<RootStackParamList>

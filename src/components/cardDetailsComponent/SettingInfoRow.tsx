@@ -8,8 +8,7 @@ interface Props {
   icon?: ImageSourcePropType;
   txt: string;
   children?: React.ReactNode;
-    arrowEnabled?: boolean;
-    
+  arrowEnabled?: boolean;
 }
 const SettingInfoRow: React.FC<Props> = ({
   icon,
@@ -17,7 +16,7 @@ const SettingInfoRow: React.FC<Props> = ({
   children,
   arrowEnabled = true,
 }) => {
-    const { theme } = useAppTheme();
+  const { theme } = useAppTheme();
 
   return (
     <View style={styles.container}>
@@ -27,7 +26,7 @@ const SettingInfoRow: React.FC<Props> = ({
           {txt}
         </InterTightRegular>
       </View>
-      <View style = {styles.appearance}>
+      <View style={styles.appearance}>
         {children}
         {arrowEnabled && (
           <Image source={icons.ic_arrowicn} style={styles.icn} />
@@ -39,7 +38,7 @@ const SettingInfoRow: React.FC<Props> = ({
 
 export default SettingInfoRow;
 
-const styles =   StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
