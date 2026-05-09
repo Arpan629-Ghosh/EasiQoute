@@ -6,7 +6,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import { createStyles } from './style';
 import { icons } from '@/config/icons';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
-import Card from '@/components/quoteDetailCard/Card';
+import Card from '@/components/cardDetailsComponent/Card';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 
 const IntroductionScreen = ({ navigation }: IntroductionScreenProps) => {

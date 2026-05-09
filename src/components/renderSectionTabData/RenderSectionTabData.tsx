@@ -1,7 +1,7 @@
 import { Image, StyleSheet, View } from 'react-native';
 import React, { useMemo } from 'react';
 import { SectionTabData } from '@/config/SectionData';
-import Card from '../quoteDetailCard/Card';
+import Card from '../cardDetailsComponent/Card';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import InterTightRegular from '../fontComponents/InterTightRegular';
 import { icons } from '@/config/icons';

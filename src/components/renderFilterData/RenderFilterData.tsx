@@ -1,7 +1,7 @@
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
 import { FilterData } from '@/config/NewQuoteScreenFilterData';
-import Card from '../quoteDetailCard/Card';
+import Card from '../cardDetailsComponent/Card';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import { icons } from '@/config/icons';
 import InterTightRegular from '../fontComponents/InterTightRegular';

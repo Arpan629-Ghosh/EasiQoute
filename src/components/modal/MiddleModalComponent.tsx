@@ -40,6 +40,8 @@ const createStyles = (theme: Theme) =>  StyleSheet.create({
   overlay: {
     ...StyleSheet.absoluteFill,
     backgroundColor: 'rgba(0,0,0,0.4)',
+    justifyContent: "center",
+    alignItems: "center"
   },
   sheet: {
     position: 'absolute',
@@ -49,7 +51,7 @@ const createStyles = (theme: Theme) =>  StyleSheet.create({
     paddingTop: 24,
     paddingBottom: 12,
     gap: 24,
-    bottom: 256,
+    bottom: "40%",
     left: 16,
       right: 16,
     alignItems: "center"

@@ -3,7 +3,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  StatusBar,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -22,6 +21,7 @@ import ServiceChips from '@/components/servicesComponent/ServiceChips';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ColorPickerSheet from '@/components/colorPicker/ColorPickerSheet';
 import { useAppTheme } from '@/hooks/useAppTheme';
+import Header from '@/components/header/Header';
 
 interface BusinessForm {
   name: string;
@@ -47,9 +47,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
   const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const navigateToBack = () => {
-    navigation.goBack();
-  };
+  
 
   const navigateToAddress = () => {
     navigation.navigate('BusinessAddressScreen');
@@ -92,41 +90,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
 
   return (
     <SafeAreaView style={styles.safeareaview} edges={['top']}>
-      {isDark ? (
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor="transparent"
-          translucent
-        />
-      ) : (
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="transparent"
-          translucent
-        />
-      )}
       <View style={styles.container}>
-        <View style={styles.headerContainer}>
-          <View style={styles.headerComponent}>
-            <TouchableOpacity onPress={navigateToBack}>
-              {isDark ? (
-                <Image source={icons.ic_backwhite} style={styles.img} />
-              ) : (
-                <Image source={icons.ic_back} style={styles.img} />
-              )}
-            </TouchableOpacity>
-
-            <InterTightMedium
-              fsize={18}
-              fcolor={theme.textPrimary}
-              textAlign="center"
-            >
-              Business Profile Setup
-            </InterTightMedium>
-
-            <View style={styles.emptyview} />
-          </View>
-        </View>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={styles.keyboardContainer}
@@ -139,6 +103,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{ paddingBottom: 120 }}
           >
+            <Header txt="Business Profile Setup" borderBottomEnabled={true} />
             <View style={styles.firstContainer}>
               <View style={styles.logoContainer}>
                 <View style={styles.profilePic}>

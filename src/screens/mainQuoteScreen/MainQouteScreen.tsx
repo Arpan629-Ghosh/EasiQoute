@@ -235,6 +235,7 @@ const MainQouteScreen = ({navigation}: NewQuoteScreensProps) => {
               renderItem={({ item }) => <RenderActivities item={item} />}
               keyExtractor={item => item.id}
               showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.flat}
             />
           </View>
           <View style={styles.add}>

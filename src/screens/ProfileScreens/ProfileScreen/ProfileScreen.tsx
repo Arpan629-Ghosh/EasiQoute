@@ -2,7 +2,6 @@ import {
   Image,
   KeyboardAvoidingView,
   ScrollView,
-  StatusBar,
   TextInput,
   TouchableOpacity,
   View,
@@ -10,7 +9,6 @@ import {
 import React, { useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
 import { icons } from '@/config/icons';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { images } from '@/config/images';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
@@ -18,6 +16,7 @@ import Input from '@/components/inputComponent/Input';
 import { ProfileScreenProps } from '@/types/navigation.types';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAppTheme } from '@/hooks/useAppTheme';
+import Header from '@/components/header/Header';
 
 interface ProfileForm {
   name: string;
@@ -35,9 +34,6 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
   const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const navigateToBack = () => {
-    navigation.goBack();
-  };
 
   const navigateToBusinessSetup = () => {
     navigation.navigate('BusinessScreen');
@@ -56,38 +52,10 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
         enabled={true}
         keyboardVerticalOffset={3}
       >
-        {isDark ? (
-          <StatusBar
-            barStyle="light-content"
-            backgroundColor="transparent"
-            translucent
-          />
-        ) : (
-          <StatusBar
-            barStyle="dark-content"
-            backgroundColor="transparent"
-            translucent
-          />
-        )}
         <ScrollView keyboardShouldPersistTaps="handled">
           <View style={styles.container}>
             <View style={styles.mainContainer}>
-              <View style={styles.headerContainer}>
-                <View style={styles.headerComponent}>
-                  <TouchableOpacity onPress={navigateToBack}>
-                    {isDark ? (
-                      <Image source={icons.ic_backwhite} style={styles.img} />
-                    ) : (
-                      <Image source={icons.ic_back} style={styles.img} />
-                    )}
-                  </TouchableOpacity>
-
-                  <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
-                    Profile Setup
-                  </InterTightMedium>
-                  <View style={styles.emptyview} />
-                </View>
-              </View>
+              <Header borderBottomEnabled={true} txt="Profile Setup" />
               <View style={styles.formContainer}>
                 <View style={styles.profilePic}>
                   <TouchableOpacity>

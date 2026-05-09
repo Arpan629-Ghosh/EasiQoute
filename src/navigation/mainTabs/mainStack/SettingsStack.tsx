@@ -1,11 +1,25 @@
-import { View, Text } from 'react-native'
 import React from 'react'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import SettingScreen from '@/screens/settingScreens/settingScreen/SettingScreen';
 
+const Stack = createNativeStackNavigator();
 const SettingsStack = () => {
   return (
-    <View>
-      <Text>SettingsStack</Text>
-    </View>
+    <Stack.Navigator
+      initialRouteName='SettingsScreen'
+      screenOptions={{
+        headerShown: false
+      }}
+    >
+      <Stack.Screen
+        name='SettingsScreen'
+        component={SettingScreen}
+        options={{
+          title: "Setting Screen",
+          headerShown: false
+        }}
+      />
+   </Stack.Navigator>
   )
 }
 

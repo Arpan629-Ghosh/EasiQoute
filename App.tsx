@@ -11,12 +11,11 @@ import { Provider } from 'react-redux';
 import { persistor, store } from '@/redux/store';
 
 import { useAppTheme } from '@/hooks/useAppTheme';
-import { useSyncAppTheme } from '@/hooks/useSyncAppTheme';
 import { PersistGate } from 'redux-persist/integration/react';
 
 
 const AppContent = () => {
-  useSyncAppTheme();
+
   const { theme, isDark } = useAppTheme();
 
   return (

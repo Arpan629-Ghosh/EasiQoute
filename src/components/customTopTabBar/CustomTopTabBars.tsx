@@ -1,65 +1,40 @@
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import React, { useMemo } from 'react';
-import { View, TouchableOpacity, StyleSheet, Image, StatusBar } from 'react-native';
-import { icons } from '@/config/icons';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import InterTightMedium from '../fontComponents/InterTightMedium';
+import Header from '../header/Header';
 
 const CustomTabBars = ({ state, descriptors, navigation }: any) => {
-  const { theme, isDark } = useAppTheme();
+  const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-    const navigateToBack = () => {
-        navigation.goBack();
-  };
+    
   return (
-    <View style={styles.container}>
-      {isDark ? (
-        <StatusBar
-          barStyle="light-content"
-          backgroundColor="transparent"
-          translucent
-        />
-      ) : (
-        <StatusBar
-          barStyle="dark-content"
-          backgroundColor="transparent"
-          translucent
-        />
-      )}
-      <View style={styles.itemContainer}>
-        <View style={styles.headerComponent}>
-          <TouchableOpacity onPress={navigateToBack}>
-            <Image
-              source={isDark ? icons.ic_backwhite : icons.ic_back}
-              style={styles.img}
-            />
-          </TouchableOpacity>
-          <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
-            New Quote
-          </InterTightMedium>
-          <View style={styles.emptyview} />
-        </View>
-        <View style={styles.tabBarContainer}>
-          {state.routes.map((route: any, index: number) => {
-            const isFocused = state.index === index;
+    <View style = {styles.container}>
+      <View style={styles.nestedcontainer}>
+        <Header txt="New Quote" borderBottomEnabled={true}>
+          <View style={styles.tabBarContainer}>
+            {state.routes.map((route: any, index: number) => {
+              const isFocused = state.index === index;
 
-            return (
-              <TouchableOpacity
-                key={route.key}
-                onPress={() => navigation.navigate(route.name)}
-                style={[styles.tab, isFocused && styles.activeTab]}
-              >
-                <InterTightMedium
-                  fsize={14}
-                  fcolor={isFocused ? theme.primaryText : theme.textPrimary}
+              return (
+                <TouchableOpacity
+                  key={route.key}
+                  onPress={() => navigation.navigate(route.name)}
+                  style={[styles.tab, isFocused && styles.activeTab]}
                 >
-                  {route.name}
-                </InterTightMedium>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
+                  <InterTightMedium
+                    fsize={14}
+                    fcolor={isFocused ? theme.primaryText : theme.textPrimary}
+                  >
+                    {route.name}
+                  </InterTightMedium>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </Header>
       </View>
     </View>
   );
@@ -70,10 +45,10 @@ export default CustomTabBars;
 const createStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
-      paddingBottom: 12,
-      borderBottomWidth: 0.5,
-      borderBottomColor: theme.border,
-      backgroundColor: theme.background,
+      backgroundColor:theme.background
+    },
+    nestedcontainer: {
+      marginTop: 56,
     },
 
     itemContainer: {

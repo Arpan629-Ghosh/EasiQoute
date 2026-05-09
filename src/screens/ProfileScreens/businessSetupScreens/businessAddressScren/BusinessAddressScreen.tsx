@@ -1,15 +1,14 @@
-import { Image, KeyboardAvoidingView, ScrollView, StatusBar, TouchableOpacity, View } from 'react-native';
+import { Image, KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
 import React, { useMemo, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import { icons } from '@/config/icons';
 import { createStyles } from './style';
-import { BusinessAddressScreenProps } from '@/types/navigation.types';
 import Input from '@/components/inputComponent/Input';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import { TextInput } from 'react-native-gesture-handler';
 import { useAppTheme } from '@/hooks/useAppTheme';
+import Header from '@/components/header/Header';
 
 interface FormData{
   streetAddress: string;
@@ -18,7 +17,7 @@ interface FormData{
   country: string
 }
 
-const BusinessAddressScreen = ({ navigation }: BusinessAddressScreenProps) => {
+const BusinessAddressScreen = () => {
 
   const [formData, setFormData] = useState<FormData>({
     streetAddress: "",
@@ -31,7 +30,7 @@ const BusinessAddressScreen = ({ navigation }: BusinessAddressScreenProps) => {
   const cityRef = useRef<TextInput | null>(null);
   const postRef = useRef<TextInput | null>(null);
   const countryRef = useRef<TextInput | null>(null)
-  const { theme, isDark } = useAppTheme();
+  const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme])
 
 
@@ -41,56 +40,22 @@ const BusinessAddressScreen = ({ navigation }: BusinessAddressScreenProps) => {
       [name] : value
     }))
   }
-  const navigateToBack = () => {
-    navigation.goBack()
-  };
+ 
   return (
     <SafeAreaView style={styles.safeareaview} edges={['top']}>
       <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardContainer}
         enabled={true}
         keyboardVerticalOffset={3}
       >
-        {isDark ? (
-          <StatusBar
-            barStyle="light-content"
-            backgroundColor="transparent"
-            translucent
-          />
-        ) : (
-          <StatusBar
-            barStyle="dark-content"
-            backgroundColor="transparent"
-            translucent
-          />
-        )}
         <View style={styles.container}>
-          <View style={styles.headerContainer}>
-            <View style={styles.headerComponent}>
-              <TouchableOpacity onPress={navigateToBack}>
-                <Image
-                  source={isDark ? icons.ic_backwhite : icons.ic_back}
-                  style={styles.img}
-                />
-              </TouchableOpacity>
-
-              <InterTightMedium
-                fsize={18}
-                fcolor={theme.textPrimary}
-                textAlign="center"
-              >
-                Business Address
-              </InterTightMedium>
-
-              <View style={styles.emptyview} />
-            </View>
-          </View>
-
           <ScrollView
             keyboardShouldPersistTaps="handled"
             style={styles.scrollview}
             showsVerticalScrollIndicator={false}
           >
+            <Header txt="Business Address" borderBottomEnabled={true} />
             <View style={styles.formContainer}>
               <View style={styles.inputContainer}>
                 <View style={styles.inputicon}>

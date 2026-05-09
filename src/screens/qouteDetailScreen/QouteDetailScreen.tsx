@@ -4,17 +4,17 @@ import { createStyles } from './style';
 import { icons } from '@/config/icons';
 import LinearGradient from 'react-native-linear-gradient';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
-import Card from '@/components/quoteDetailCard/Card';
+import Card from '@/components/cardDetailsComponent/Card';
 import { images } from '@/config/images';
-import CardHeader from '@/components/quoteDetailCard/CardHeader';
-import InfoRow from '@/components/quoteDetailCard/InfoRow';
+import CardHeader from '@/components/cardDetailsComponent/CardHeader';
+import InfoRow from '@/components/cardDetailsComponent/InfoRow';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import ExpandableItem from '@/components/quoteDetailCard/ExpandableItem';
+import ExpandableItem from '@/components/cardDetailsComponent/ExpandableItem';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { QouteDetailScreenProps } from '@/types/navigation.types';
 import StatusChanger from '@/components/statusChanger/StatusChanger';
 import { useAppTheme } from '@/hooks/useAppTheme';
-import Items from '@/components/quoteDetailCard/Items';
+import Items from '@/components/cardDetailsComponent/Items';
 
 const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
 

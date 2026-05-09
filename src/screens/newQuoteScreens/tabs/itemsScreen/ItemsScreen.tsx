@@ -8,7 +8,7 @@ import { icons } from '@/config/icons';
 import { DATA } from '@/config/NewQuoteScreenFilterData';
 import RenderFilterData from '@/components/renderFilterData/RenderFilterData';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
-import InfoRow from '@/components/quoteDetailCard/InfoRow';
+import InfoRow from '@/components/cardDetailsComponent/InfoRow';
 import MarginBottomSheet from '@/components/marginBottomSheet/MarginBottomSheet';
 import { useAppTheme } from '@/hooks/useAppTheme';
 
