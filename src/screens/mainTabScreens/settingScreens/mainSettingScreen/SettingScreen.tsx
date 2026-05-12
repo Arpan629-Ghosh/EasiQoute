@@ -19,8 +19,9 @@ import CardHeader from '@/components/cardDetailsComponent/CardHeader';
 import CustomToggle from '@/components/switch/CustomToggle';
 import AppearanceBottomSheet from '@/components/appearanceBottomSheet/AppearanceBottomSheet';
 import LogoutModal from '@/components/ logoutModal/LogoutModal';
+import { SettingScreenProps } from '@/types/navigation.types';
 
-const SettingScreen = () => {
+const SettingScreen = ({navigation} : SettingScreenProps) => {
   const [enabledStripe, setEnabledStripe] = useState<boolean>(false);
   const [pushNotification, setPushNotification] = useState<boolean>(true);
   const [emailUpdate, setEmailUpdate] = useState<boolean>(false);
@@ -29,6 +30,26 @@ const SettingScreen = () => {
   const { theme, isDark, mode } = useAppTheme();
 
   const styles = useMemo(() => createStyles(theme), [theme]);
+
+  const navigateToPaymentInfo = () => {
+    navigation.navigate("PaymentInfoScreen")
+  }
+
+  const navigateToBillingPreferences = () => {
+    navigation.navigate("BillingPreferencesScreen")
+  }
+
+  const navigateToTeamMember = () => {
+    navigation.navigate("TeamMembersScreen")
+  }
+
+  const navigateToChangePassword = () => {
+    navigation.navigate("ChangePasswordScreen");
+  }
+
+  const navigateToQIScreen = () => {
+    navigation.navigate("QuoteAndInvoicesSettingScreen")
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -103,7 +124,10 @@ const SettingScreen = () => {
             />
             <View style={styles.borderLine} />
 
-            <SettingInfoRow icon={icons.ic_teams} txt="Team Members" />
+            <TouchableOpacity onPress={navigateToTeamMember}>
+              <SettingInfoRow icon={icons.ic_teams} txt="Team Members" />
+            </TouchableOpacity>
+
             <View style={styles.borderLine} />
             <TouchableOpacity onPress={() => setOpen(true)}>
               <SettingInfoRow icon={icons.ic_appearance} txt="Appearance">
@@ -124,14 +148,25 @@ const SettingScreen = () => {
               <CustomToggle value={enabledStripe} onToggle={setEnabledStripe} />
             </SettingInfoRow>
             <View style={styles.borderLine} />
-            <SettingInfoRow icon={icons.ic_pinfo} txt="Payment Info" />
+            <TouchableOpacity onPress={navigateToPaymentInfo}>
+              <SettingInfoRow icon={icons.ic_pinfo} txt="Payment Info" />
+            </TouchableOpacity>
+
             <View style={styles.borderLine} />
-            <SettingInfoRow icon={icons.ic_billing} txt="Billing Preferences" />
+            <TouchableOpacity onPress={navigateToBillingPreferences}>
+              <SettingInfoRow
+                icon={icons.ic_billing}
+                txt="Billing Preferences"
+              />
+            </TouchableOpacity>
+
             <View style={styles.borderLine} />
-            <SettingInfoRow
-              icon={icons.ic_qtinv}
-              txt="Quote & Invoice Settings"
-            />
+            <TouchableOpacity onPress={navigateToQIScreen}>
+              <SettingInfoRow
+                icon={icons.ic_qtinv}
+                txt="Quote & Invoice Settings"
+              />
+            </TouchableOpacity>
           </Card>
           <Card style={styles.card}>
             <CardHeader title="Inventory Setup" />
@@ -179,7 +214,9 @@ const SettingScreen = () => {
           <Card style={styles.card}>
             <CardHeader title="Account Settings" />
             <View style={styles.borderLine} />
-            <SettingInfoRow icon={icons.ic_cp} txt="Change Password" />
+            <TouchableOpacity onPress={navigateToChangePassword}>
+              <SettingInfoRow icon={icons.ic_cp} txt="Change Password" />
+            </TouchableOpacity>
             <View style={styles.borderLine} />
             <SettingInfoRow icon={icons.ic_deleteicn} txt="Delete Account" />
             <View style={styles.borderLine} />

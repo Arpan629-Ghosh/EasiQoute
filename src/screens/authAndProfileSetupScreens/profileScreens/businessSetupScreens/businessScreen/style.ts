@@ -185,8 +185,8 @@ export const createStyles = (theme: Theme) =>
       flex: 1,
     },
     scrollview: {
-      paddingBottom: 40,
-      flex: 1,
+      paddingBottom: 140,
+      flexGrow: 1,
     },
     emptyview: {
       width: 28,

@@ -1,3 +1,4 @@
+
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -9,6 +10,12 @@ export type RootStackParamList = {
   IntroductionScreen: undefined;
   NewQuoteScreens: undefined;
   TemplatesScreen: undefined;
+  TeamMembersScreen: undefined;
+  AddMemberScreen: undefined;
+  ChangePasswordScreen: undefined;
+  QuoteAndInvoicesSettingScreen: undefined; 
+  BillingPreferencesScreen: undefined;
+  PaymentInfoScreen: undefined;
 };
 
 export type AuthStackParamList = {
@@ -42,6 +49,10 @@ export type QuoteStackParamList = {
 };
 export type HomeStackParamList = {
   HomeScreen: undefined;
+}
+
+export type SettingStackParamList = {
+  SettingScreen: undefined
 }
 
 // login
@@ -97,4 +108,17 @@ export type TemplatesScreenProps = NativeStackScreenProps<RootStackParamList, 'T
 export type PreviewScreenProps = CompositeScreenProps<
   MaterialTopTabScreenProps<NewQuoteTopTabParamList, 'Preview'>,
   NativeStackScreenProps<RootStackParamList>
->;
+  >;                           
+
+// setting
+export type SettingScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<SettingStackParamList, 'SettingScreen'>,
+  NativeStackScreenProps<RootStackParamList>
+  >;
+
+  export type TeamMembersScreenProps = NativeStackScreenProps<
+    RootStackParamList,
+    'TeamMembersScreen'
+    >;
+  
+    export type ChangePasswordScreenProps = NativeStackScreenProps<RootStackParamList, 'ChangePasswordScreen'>

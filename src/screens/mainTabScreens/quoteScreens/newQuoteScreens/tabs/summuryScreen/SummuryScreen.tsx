@@ -268,7 +268,6 @@ const SummuryScreen = () => {
         <View style={styles.footerContainer}>
           <ButtonComponent
             bg={theme.primary}
-            style={styles.bttn}
             bttnTxt="Save"
             txtColor={theme.primaryText}
           />

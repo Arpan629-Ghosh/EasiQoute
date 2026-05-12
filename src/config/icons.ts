@@ -120,4 +120,8 @@ export const icons = {
   ic_appcircle: require('@assets/icons/ic_appcircle.png'),
   ic_appdotcircle: require('@assets/icons/ic_appdotcircle.png'),
   ic_darkselect: require('@assets/icons/ic_darkselect.png'),
+  ic_addpeople: require('@assets/icons/ic_addpeople.png'),
+  ic_iicon: require("@assets/icons/ic_iicon.png"),
+  ic_addsign: require("@assets/icons/ic_addsign.png"),
+  ic_crossicn: require("@assets/icons/ic_cross.png")
 };

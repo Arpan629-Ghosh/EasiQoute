@@ -23,7 +23,7 @@ export const createStyles = (theme: Theme) =>
       width: '100%',
       justifyContent: 'space-between',
       paddingHorizontal: 16,
-      marginTop: 56,
+   
       marginBottom: 12,
     },
     img: {
@@ -60,5 +60,6 @@ export const createStyles = (theme: Theme) =>
     safeareaview: {
       flex: 1,
       backgroundColor: theme.background,
+      
     },
   });

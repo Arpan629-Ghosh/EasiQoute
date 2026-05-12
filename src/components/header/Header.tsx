@@ -15,10 +15,11 @@ import InterTightMedium from '../fontComponents/InterTightMedium';
 interface Props {
   txt?: React.ReactNode;
   borderBottomEnabled: boolean;
-  children?: React.ReactNode;
+    children?: React.ReactNode;
+    mTop?: number
 }
 
-const Header: React.FC<Props> = ({ txt, borderBottomEnabled, children }) => {
+const Header: React.FC<Props> = ({ txt, borderBottomEnabled, children, mTop }) => {
   const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const navigation = useNavigation();
@@ -28,7 +29,11 @@ const Header: React.FC<Props> = ({ txt, borderBottomEnabled, children }) => {
   };
   return (
     <View
-      style={[styles.container, borderBottomEnabled && styles.bottomBorder]}
+      style={[
+        styles.container,
+        borderBottomEnabled && styles.bottomBorder,
+        { marginTop: mTop }
+      ]}
     >
       {isDark ? (
         <StatusBar
@@ -77,7 +82,8 @@ const createStyles = (theme: Theme) =>
     headerComponent: {
       paddingHorizontal: 16,
       justifyContent: 'space-between',
-      flexDirection: 'row',
+        flexDirection: 'row',
+      
     },
     img: {
       height: 28,

@@ -11,8 +11,8 @@ const CustomTabBars = ({ state, descriptors, navigation }: any) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.nestedcontainer}>
-        <Header txt="New Quote" borderBottomEnabled={true}>
+
+        <Header txt="New Quote" borderBottomEnabled={true} mTop={56} >
           <View style={styles.tabBarContainer}>
             {state.routes.map((route: any, index: number) => {
               const isFocused = state.index === index;
@@ -34,7 +34,7 @@ const CustomTabBars = ({ state, descriptors, navigation }: any) => {
             })}
           </View>
         </Header>
-      </View>
+
     </View>
   );
 };
@@ -46,9 +46,7 @@ const createStyles = (theme: Theme) =>
     container: {
       backgroundColor: theme.background,
     },
-    nestedcontainer: {
-      marginTop: 56,
-    },
+  
 
     itemContainer: {
       gap: 16,
@@ -59,7 +57,7 @@ const createStyles = (theme: Theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: 16,
-      marginTop: 56,
+
     },
 
     tabBarContainer: {

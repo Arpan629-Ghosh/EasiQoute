@@ -95,13 +95,13 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
           enabled={true}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
         >
+          <Header txt="Business Profile Setup" borderBottomEnabled={true} />
           <ScrollView
             keyboardShouldPersistTaps="handled"
-            style={styles.scrollview}
+      
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 120 }}
+            contentContainerStyle={styles.scrollview}
           >
-            <Header txt="Business Profile Setup" borderBottomEnabled={true} />
             <View style={styles.firstContainer}>
               <View style={styles.logoContainer}>
                 <View style={styles.profilePic}>
