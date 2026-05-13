@@ -95,7 +95,7 @@ export const createStyles = (theme: Theme) =>
       left: 0,
       right: 0,
       width: '100%',
-      paddingBottom: 40,
+     paddingBottom: 40,
       backgroundColor: theme.background,
       borderTopWidth: 1,
       borderTopColor: theme.border,

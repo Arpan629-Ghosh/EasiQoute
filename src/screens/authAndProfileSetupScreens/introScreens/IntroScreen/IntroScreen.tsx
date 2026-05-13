@@ -13,6 +13,7 @@ import {
 import { createStyles } from './style';
 import { OnboardingItem, useOnBoardingData } from '@/config/onBoardingData';
 import { useAppTheme } from '@/hooks/useAppTheme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 const { width } = Dimensions.get('window');
@@ -23,6 +24,7 @@ const IntroScreen = ({navigation} : IntroScreenProps) => {
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { theme, isDark } = useAppTheme();
+  const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme])
 
   const DATA = useOnBoardingData();
@@ -62,7 +64,7 @@ const IntroScreen = ({navigation} : IntroScreenProps) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingBottom: insets.bottom + 12 }]}>
       {isDark ? (
         <StatusBar
           barStyle="light-content"
@@ -112,25 +114,23 @@ const IntroScreen = ({navigation} : IntroScreenProps) => {
                 buttonWidth={165.5}
                 txtColor={theme.textPrimary}
               />
-             
+
               <ButtonComponent
                 onPress={handleNext}
                 bg={theme.primary}
-                bttnTxt='Next'
+                bttnTxt="Next"
                 buttonWidth={165.5}
                 txtColor={theme.primaryText}
               />
-           
             </>
           ) : (
-              <ButtonComponent
-                bg={theme.primary}
-                onPress={handleNavigation}
-                bttnTxt=" Let's Go"
-                buttonWidth={343}
-                txtColor={theme.primaryText}
-              />
-            
+            <ButtonComponent
+              bg={theme.primary}
+              onPress={handleNavigation}
+              bttnTxt=" Let's Go"
+              buttonWidth={343}
+              txtColor={theme.primaryText}
+            />
           )}
         </View>
       </View>

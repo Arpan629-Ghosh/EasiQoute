@@ -48,7 +48,7 @@ export const createStyles =(theme: Theme) => StyleSheet.create({
     flexDirection: 'row',
     padding: 12,
     gap: 12,
-    marginBottom: 34,
+  
   },
   share: {
     height: 16,

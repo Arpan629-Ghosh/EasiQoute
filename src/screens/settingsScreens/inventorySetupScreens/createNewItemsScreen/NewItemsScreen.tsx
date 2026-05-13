@@ -9,12 +9,14 @@ import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import Input from '@/components/inputComponent/Input';
 import { icons } from '@/config/icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const FilterOptions = ['Materials', 'Labour', 'Services', 'Miscellaneous'];
 
 const NewItemsScreen = () => {
   const [selectedFilterOption, setSelectFilterOption] = useState<string>('');
 
+  const insets = useSafeAreaInsets();
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -31,7 +33,7 @@ const NewItemsScreen = () => {
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       <View style={styles.header}>
-        <Header txt="Create New Item" borderBottomEnabled={true} mTop={56} />
+        <Header txt="Create New Item" borderBottomEnabled={true}  />
       </View>
 
       <ScrollView
@@ -128,7 +130,7 @@ const NewItemsScreen = () => {
         </View>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, {paddingBottom: insets.bottom}]}>
         <View style={styles.footerContainer}>
           <ButtonComponent
             bg={theme.primary}

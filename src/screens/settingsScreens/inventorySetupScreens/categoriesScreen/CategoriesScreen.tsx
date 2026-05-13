@@ -8,9 +8,11 @@ import { icons } from '@/config/icons';
 import LinearGradient from 'react-native-linear-gradient';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { CategoriesScreenProps } from '@/types/navigation.types';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const CategoriesScreen = ({navigation}: CategoriesScreenProps) => {
   const { theme } = useAppTheme();
+  const insets = useSafeAreaInsets();
     const styles = useMemo(() => createStyles(theme), [theme]);
     
     const navigateToNewCategory = () => {
@@ -19,7 +21,7 @@ const CategoriesScreen = ({navigation}: CategoriesScreenProps) => {
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       <View style={styles.header}>
-        <Header txt="Categories" borderBottomEnabled={true} mTop={56} />
+        <Header txt="Categories" borderBottomEnabled={true} />
         <View style={styles.inpContainer}>
           <View style={styles.inputicon}>
             <Image source={icons.ic_search} style={styles.searchic} />
@@ -31,7 +33,7 @@ const CategoriesScreen = ({navigation}: CategoriesScreenProps) => {
           </View>
         </View>
       </View>
-      <View style={styles.footer}>
+      <View style={[styles.footer, {paddingBottom: insets.bottom}]}>
         <View style={styles.footerContainer}>
           <ButtonComponent
             bg={theme.primary}

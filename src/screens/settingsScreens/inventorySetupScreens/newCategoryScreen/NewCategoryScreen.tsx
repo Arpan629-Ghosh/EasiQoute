@@ -7,8 +7,10 @@ import Header from '@/components/header/Header';
 import Input from '@/components/inputComponent/Input';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const NewCategoryScreen = () => {
+  const insets = useSafeAreaInsets();
     const { theme } = useAppTheme();
     const styles  = useMemo(() => createStyles(theme), [theme])
   return (
@@ -17,7 +19,7 @@ const NewCategoryScreen = () => {
         <Header
           txt="Create New Category"
           borderBottomEnabled={true}
-          mTop={56}
+       
         />
         <View style={styles.inpContainer}>
           <View style = {styles.inp}>
@@ -28,7 +30,7 @@ const NewCategoryScreen = () => {
           </View>
         </View>
       </View>
-      <View style={styles.footer}>
+      <View style={[styles.footer, {paddingBottom: insets.bottom}]}>
         <View style={styles.footerContainer}>
           <ButtonComponent
             bg={theme.primary}

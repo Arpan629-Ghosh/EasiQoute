@@ -11,17 +11,14 @@ export const createStyles = (theme: Theme) =>
       gap: 4,
     },
     header: {
-      height: 96,
       width: '100%',
       paddingBottom: 12,
       gap: 12,
     },
     arrowContainer: {
-      height: 28,
       width: '100%',
       justifyContent: 'space-between',
       paddingHorizontal: 16,
-      marginTop: 56,
       marginBottom: 12,
     },
     img: {

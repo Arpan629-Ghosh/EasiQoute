@@ -20,6 +20,7 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import LinearGradient from 'react-native-linear-gradient';
 import { MainQuoteScreenProps } from '@/types/navigation.types';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface FilterAndSorting {
   startDate: string;
@@ -38,6 +39,8 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
   const [openFilterModal, setOpenFilterModal] = useState(false);
   const [openSubscriptionModal, setOpenSubscriptionModal] = useState(false);
   const [search, setSearch] = useState<string>('');
+
+  const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -198,7 +201,7 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
         )}
         <View style={styles.mainContainer}>
           <View style={styles.header}>
-            <View style={styles.headerComponent}>
+            <View style={[styles.headerComponent, {paddingTop: insets.top + 12}]}>
               <InterTightSemiBold fsize={24} fcolor={theme.textPrimary}>
                 Quotes
               </InterTightSemiBold>

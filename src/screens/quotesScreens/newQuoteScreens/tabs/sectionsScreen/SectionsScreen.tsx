@@ -6,9 +6,11 @@ import ButtonComponent from '@/components/buttonComponent/ButtonComponent'
 import { icons } from '@/config/icons'
 import { useAppTheme } from '@/hooks/useAppTheme'
 import {createStyles} from './style'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const SectionsScreen = () => {
   const { theme } = useAppTheme();
+  const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme])
   return (
     <View style={styles.container}>
@@ -19,7 +21,7 @@ const SectionsScreen = () => {
         showsVerticalScrollIndicator={false}
         style={styles.flatlist}
       />
-      <View style={styles.footer}>
+      <View style={[styles.footer, {paddingBottom: insets.bottom}]}>
         <View style={styles.footeritem}>
           <ButtonComponent
             borderwidth={1}

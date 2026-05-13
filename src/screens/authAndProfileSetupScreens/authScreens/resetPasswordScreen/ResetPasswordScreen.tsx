@@ -13,7 +13,6 @@ import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Input from '@/components/inputComponent/Input';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const ResetPasswordScreen = () => {
   const [input, setInput] = useState<string>('');
@@ -26,7 +25,7 @@ const ResetPasswordScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeareaview} edges={['top']}>
+    <View style={styles.safeareaview}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardContainer}
@@ -82,7 +81,7 @@ const ResetPasswordScreen = () => {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 

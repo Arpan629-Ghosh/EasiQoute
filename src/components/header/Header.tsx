@@ -11,15 +11,16 @@ import { Theme } from '@/types/theme.types';
 import { icons } from '@/config/icons';
 import { useNavigation } from '@react-navigation/native';
 import InterTightMedium from '../fontComponents/InterTightMedium';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Props {
   txt?: React.ReactNode;
   borderBottomEnabled: boolean;
     children?: React.ReactNode;
-    mTop?: number
 }
 
-const Header: React.FC<Props> = ({ txt, borderBottomEnabled, children, mTop }) => {
+const Header: React.FC<Props> = ({ txt, borderBottomEnabled, children }) => {
+  const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const navigation = useNavigation();
@@ -30,9 +31,10 @@ const Header: React.FC<Props> = ({ txt, borderBottomEnabled, children, mTop }) =
   return (
     <View
       style={[
+
         styles.container,
         borderBottomEnabled && styles.bottomBorder,
-        { marginTop: mTop }
+        { paddingTop: insets.top + 12}
       ]}
     >
       {isDark ? (

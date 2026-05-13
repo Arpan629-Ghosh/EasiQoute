@@ -12,6 +12,7 @@ import { persistor, store } from '@/redux/store';
 
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { PersistGate } from 'redux-persist/integration/react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 
 const AppContent = () => {
@@ -32,11 +33,13 @@ const AppContent = () => {
 
 function App() {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <AppContent />
-      </PersistGate>
-    </Provider>
+    <SafeAreaProvider>
+      <Provider store={store}>
+        <PersistGate loading={null} persistor={persistor}>
+          <AppContent />
+        </PersistGate>
+      </Provider>
+    </SafeAreaProvider>
   );
 }
 

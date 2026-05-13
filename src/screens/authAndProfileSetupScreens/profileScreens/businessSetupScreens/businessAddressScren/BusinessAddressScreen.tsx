@@ -6,7 +6,6 @@ import {
   View,
 } from 'react-native';
 import React, { useMemo, useRef, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { icons } from '@/config/icons';
 import { createStyles } from './style';
@@ -15,6 +14,7 @@ import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import { TextInput } from 'react-native-gesture-handler';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface FormData {
   streetAddress: string;
@@ -35,6 +35,7 @@ const BusinessAddressScreen = () => {
   const cityRef = useRef<TextInput | null>(null);
   const postRef = useRef<TextInput | null>(null);
   const countryRef = useRef<TextInput | null>(null);
+  const insets = useSafeAreaInsets();
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -46,7 +47,7 @@ const BusinessAddressScreen = () => {
   };
 
   return (
-    <SafeAreaView style={styles.safeareaview} edges={['top']}>
+    <View style={[styles.safeareaview, { paddingBottom: insets.bottom }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.keyboardContainer}
@@ -138,7 +139,7 @@ const BusinessAddressScreen = () => {
           </View>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 

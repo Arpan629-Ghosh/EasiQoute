@@ -14,26 +14,12 @@ export const createStyles = (theme: Theme) =>
       width: '100%',
       gap: 24,
     },
-    headerView: {
-      width: '100%',
-      paddingBottom: 12,
-      gap: 12,
-    },
-    arrowContainer: {
-      width: '100%',
-      justifyContent: 'space-between',
-      paddingHorizontal: 16,
    
-      marginBottom: 12,
-    },
-    img: {
-      height: 28,
-      width: 28,
-    },
+    
     formContainer: {
       gap: 32,
       marginHorizontal: 12,
-      marginTop: 24,
+   
     },
     txtView: {
       width: '100%',

@@ -5,6 +5,7 @@ export const createStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
+ 
     },
     scrollview: {
       flex: 1,
@@ -100,7 +101,6 @@ export const createStyles = (theme: Theme) =>
     footer: {
       position: 'absolute',
       width: '100%',
-      paddingBottom: 40,
       backgroundColor: theme.background,
       bottom: 0,
       left: 0,

@@ -8,13 +8,15 @@ import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import Input from '@/components/inputComponent/Input';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const PaymentInfoScreen = () => {
-    const { theme } = useAppTheme();
+  const { theme } = useAppTheme();
+  const insets = useSafeAreaInsets();
     const styles = useMemo(() => createStyles(theme), [theme])
   return (
-    <View style={styles.container}>
-      <Header txt="Payment Info" borderBottomEnabled={true} mTop={56} />
+    <View style={[styles.container, {paddingBottom: insets.bottom}]}>
+      <Header txt="Payment Info" borderBottomEnabled={true} />
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         <KeyboardAvoidingView
           style={styles.keyboard}

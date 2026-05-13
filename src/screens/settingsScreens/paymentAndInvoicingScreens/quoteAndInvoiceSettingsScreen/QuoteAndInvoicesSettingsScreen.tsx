@@ -16,13 +16,14 @@ import Input from '@/components/inputComponent/Input';
 import { icons } from '@/config/icons';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import Signature from '@/components/signature/Signature';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const QuoteAndInvoicesSettingsScreen = () => {
   const [open, setOpen] = useState(false);
-  const [signature, setSignature] = useState(null);
+  const [signature, setSignature] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-
+  const insets = useSafeAreaInsets();
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -30,7 +31,7 @@ const QuoteAndInvoicesSettingsScreen = () => {
     setOpen(false);
   }, []);
 
-  const handleSignature = useCallback(sign => {
+  const handleSignature = useCallback((sign: string) => {
 
     setSignature(sign);
     console.log(sign)
@@ -45,11 +46,10 @@ const QuoteAndInvoicesSettingsScreen = () => {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {paddingBottom: insets.bottom}]}>
       <Header
         txt="Quote & Invoice Settings"
         borderBottomEnabled={true}
-        mTop={56}
       />
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         <KeyboardAvoidingView

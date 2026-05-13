@@ -12,11 +12,23 @@ import SettingIcon from '@/components/tabBarIcons/settingIcon/SettingIcon';
 import { fontFamily } from '@/constants/fontFamily';
 import HomeStack from './mainStack/HomeStack';
 import { MainTabParamList } from '@/types/navigation.types';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 const MainTabs = () => {
+
+  const insets = useSafeAreaInsets();
+
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: {
+          paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
+          height: 50 + (insets.bottom > 0 ? insets.bottom : 0),
+        },
+        
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={HomeStack}

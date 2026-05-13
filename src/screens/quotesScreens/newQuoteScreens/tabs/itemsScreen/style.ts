@@ -56,8 +56,6 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
     borderTopColor: theme.border,
     backgroundColor: theme.background,
     width: '100%',
-    paddingBottom: 28,
-    gap: 24,
     alignItems: 'center',
   },
   footerComponent: {
@@ -66,6 +64,7 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
   txtContainer: {
     paddingVertical: 16,
     gap: 12,
+
   },
   txt: {
     flexDirection: 'row',
@@ -80,30 +79,9 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
     gap: 12,
     flexDirection: 'row',
     justifyContent: 'space-between',
+ 
   },
-  bttn1: {
-    height: 46,
-    width: 169.5,
-    borderRadius: 12,
-    borderWidth: 1,
-    padding: 12,
-    gap: 12,
-    borderColor: theme.primary,
-    alignItems: 'center',
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  bttn2: {
-    height: 46,
-    width: 169.5,
-    borderRadius: 12,
-    borderWidth: 1,
-    padding: 12,
-    gap: 12,
-    backgroundColor: theme.primary,
-
-    alignItems: 'center',
-  },
+ 
   icn: {
     height: 16,
     width: 16,

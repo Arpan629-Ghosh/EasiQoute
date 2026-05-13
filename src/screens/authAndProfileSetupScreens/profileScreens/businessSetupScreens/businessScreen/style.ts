@@ -13,20 +13,6 @@ export const createStyles = (theme: Theme) =>
     mainContainer: {
       flex: 1,
     },
-    headerComponent: {
-      width: '100%',
-      paddingHorizontal: 16,
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    headerContainer: {
-      width: '100%',
-      gap: 12,
-      paddingBottom: 12,
-      borderBottomWidth: 1,
-      borderBottomColor: theme.border,
-    },
     img: {
       height: 28,
       width: 28,
@@ -161,7 +147,7 @@ export const createStyles = (theme: Theme) =>
     },
     footer: {
       width: '100%',
-      paddingBottom: 40,
+   
       position: 'absolute',
       bottom: 0,
       left: 0,

@@ -11,6 +11,7 @@ import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import InfoRow from '@/components/cardDetailsComponent/InfoRow';
 import MarginBottomSheet from '@/components/marginBottomSheet/MarginBottomSheet';
 import { useAppTheme } from '@/hooks/useAppTheme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const FilterOptions = ['Materials', 'Labour', 'Services', 'Miscellaneous'];
 const ItemsScreen = () => {
@@ -18,6 +19,8 @@ const ItemsScreen = () => {
     useState<boolean>(false);
   const [selectedFilterOption, setSelectFilterOption] = useState<string>('');
   const [open, setOpen] = useState(false);
+
+  const insets = useSafeAreaInsets();
   
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -76,7 +79,7 @@ const ItemsScreen = () => {
           showsVerticalScrollIndicator={false}
         />
       </View>
-      <View style={styles.footer}>
+      <View style={[styles.footer, {paddingBottom: insets.bottom}]}>
         <View style={styles.footerComponent}>
           <View style={styles.txtContainer}>
             <TouchableOpacity
@@ -125,7 +128,7 @@ const ItemsScreen = () => {
               borderc={theme.primary}
               bttnTxt="New Item"
               txtColor={theme.textPrimary}
-              style={styles.bttn1}
+             
               borderwidth={1}
               buttonWidth={169.5}
               gap={8}
@@ -137,7 +140,7 @@ const ItemsScreen = () => {
               bg={theme.primary}
               bttnTxt="Save & Preview"
               txtColor={theme.primaryText}
-              style={styles.bttn2}
+             
               buttonWidth={169.5}
             />
           </View>

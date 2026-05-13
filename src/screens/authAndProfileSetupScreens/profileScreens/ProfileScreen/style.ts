@@ -16,13 +16,7 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  headerContainer: {
-    width: '100%',
-    gap: 12,
-    paddingBottom: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.border,
-  },
+
   img: {
     height: 28,
     width: 28,
@@ -62,12 +56,9 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
   },
   footer: {
     width: '100%',
-    paddingBottom: 40,
-
   },
   footerComponent: {
     paddingVertical: 12,
-  
     marginHorizontal: 12
   },
  
@@ -82,4 +73,7 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
   emptyview: {
     width: 28,
   },
+  scrollview: {
+    flex: 1
+  }
 });

@@ -44,7 +44,7 @@ const AddMemberScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header txt="Add Members" borderBottomEnabled={true} mTop={56} />
+      <Header txt="Add Members" borderBottomEnabled={true}  />
 
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         <KeyboardAvoidingView

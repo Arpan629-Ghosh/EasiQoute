@@ -16,6 +16,7 @@ import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Input from '@/components/inputComponent/Input';
 import { images } from '@/config/images';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface ChangePasswordForm {
   oldPassword: string;
@@ -32,6 +33,7 @@ const ChangePasswordScreen = () => {
   const oldRef = useRef<TextInput | null>(null);
   const newRef = useRef<TextInput | null>(null);
   const confirmRef = useRef<TextInput | null>(null);
+  const insets = useSafeAreaInsets();
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -42,8 +44,8 @@ const ChangePasswordScreen = () => {
     }));
   };
   return (
-    <View style={styles.container}>
-      <Header txt="Change Password" borderBottomEnabled={true} mTop={56} />
+    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+      <Header txt="Change Password" borderBottomEnabled={true} />
 
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         <KeyboardAvoidingView

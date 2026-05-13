@@ -19,7 +19,7 @@ const TeamMembersScreen = ({navigation} : TeamMembersScreenProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Header txt="Team Members" borderBottomEnabled={true} mTop={56}>
+        <Header txt="Team Members" borderBottomEnabled={true}>
           <View style={styles.input}>
             <View style={styles.inputicon}>
               <Image source={icons.ic_whitesearch} style={styles.searchic} />

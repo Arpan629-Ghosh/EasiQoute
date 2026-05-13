@@ -18,10 +18,10 @@ import Input from '@/components/inputComponent/Input';
 import CustomToggle from '@/components/switch/CustomToggle';
 import ReactNativePhoneInput from 'react-native-phone-input';
 import ServiceChips from '@/components/servicesComponent/ServiceChips';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import ColorPickerSheet from '@/components/colorPicker/ColorPickerSheet';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface BusinessForm {
   name: string;
@@ -44,6 +44,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
   const [enabled, setEnabled] = useState(false);
   const [open, setOpen] = useState(false);
   const phoneRef = useRef<ReactNativePhoneInput>(null);
+  const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -87,7 +88,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
   }, []);
 
   return (
-    <SafeAreaView style={styles.safeareaview} edges={['top']}>
+    <View style={[styles.safeareaview, {paddingBottom: insets.bottom}]} >
       <View style={styles.container}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -98,7 +99,6 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
           <Header txt="Business Profile Setup" borderBottomEnabled={true} />
           <ScrollView
             keyboardShouldPersistTaps="handled"
-      
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.scrollview}
           >
@@ -232,7 +232,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
           onSelect={c => updateField('color', c)}
         />
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 

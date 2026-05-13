@@ -12,7 +12,7 @@ const CustomTabBars = ({ state, navigation }: any) => {
   return (
     <View style={styles.container}>
 
-        <Header txt="New Quote" borderBottomEnabled={true} mTop={56} >
+        <Header txt="New Quote" borderBottomEnabled={true}>
           <View style={styles.tabBarContainer}>
             {state.routes.map((route: any, index: number) => {
               const isFocused = state.index === index;

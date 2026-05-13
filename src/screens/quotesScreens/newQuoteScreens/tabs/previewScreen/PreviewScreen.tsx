@@ -7,10 +7,12 @@ import { icons } from '@/config/icons'
 import { images } from '@/config/images'
 import { PreviewScreenProps } from '@/types/navigation.types'
 import { useAppTheme } from '@/hooks/useAppTheme'
+import {  useSafeAreaInsets } from 'react-native-safe-area-context'
 
 const PreviewScreen = ({ navigation }: PreviewScreenProps) => {
 
   const { theme } = useAppTheme();
+  const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme])
   const navigateToTemplatesScreen = () => {
     navigation.navigate('TemplatesScreen');
@@ -38,7 +40,7 @@ const PreviewScreen = ({ navigation }: PreviewScreenProps) => {
         </View>
       </ScrollView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, {paddingBottom: insets.bottom}]}>
         <View style={styles.firstBttnContainer}>
           <ButtonComponent
             onPress={navigateToTemplatesScreen}

@@ -14,7 +14,7 @@ export const createStyles = (theme: Theme) =>
       paddingHorizontal: 16,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginTop: 56,
+
     },
     img: {
       height: 28,

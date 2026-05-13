@@ -9,8 +9,7 @@ export const createStyles = (theme: Theme) =>
     },
     header: {
       flexDirection: 'row',
-      gap: 10,
-      marginTop: 56,
+   
       paddingHorizontal: 12,
     },
     scrollview: {

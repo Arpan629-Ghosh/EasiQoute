@@ -8,8 +8,10 @@ import { icons } from '@/config/icons';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import Card from '@/components/cardDetailsComponent/Card';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const IntroductionScreen = ({ navigation }: IntroductionScreenProps) => {
+  const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
     const styles = useMemo(() => createStyles(theme), [theme]);
     
@@ -19,7 +21,7 @@ const IntroductionScreen = ({ navigation }: IntroductionScreenProps) => {
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.contaner}>
       <View style={styles.mainContainer}>
-        <View style={styles.header}>
+        <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
           <View style={styles.arrowContainer}>
             <TouchableOpacity style={styles.img} onPress={handleBack}>
               {isDark ? (

@@ -8,10 +8,12 @@ import { icons } from '@/config/icons';
 import Input from '@/components/inputComponent/Input';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { SubCategoriesScreenProps } from '@/types/navigation.types';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const SubCategoriesScreen = ({navigation} : SubCategoriesScreenProps) => {
     const { theme } = useAppTheme();
-    const styles = useMemo(() => createStyles(theme), [theme]);
+  const styles = useMemo(() => createStyles(theme), [theme]);
+  const insets = useSafeAreaInsets();
 
     const navigateToNewSubCategory = () => {
         navigation.navigate("NewSubCategoryScreen")
@@ -19,7 +21,7 @@ const SubCategoriesScreen = ({navigation} : SubCategoriesScreenProps) => {
     return (
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         <View style={styles.header}>
-          <Header txt="Subcategories" borderBottomEnabled={true} mTop={56} />
+          <Header txt="Subcategories" borderBottomEnabled={true} />
           <View style={styles.inpContainer}>
             <View style={styles.inputicon}>
               <Image source={icons.ic_search} style={styles.searchic} />
@@ -31,7 +33,7 @@ const SubCategoriesScreen = ({navigation} : SubCategoriesScreenProps) => {
             </View>
           </View>
         </View>
-        <View style={styles.footer}>
+        <View style={[styles.footer, {paddingBottom: insets.bottom}]}>
           <View style={styles.footerContainer}>
             <ButtonComponent
               bg={theme.primary}

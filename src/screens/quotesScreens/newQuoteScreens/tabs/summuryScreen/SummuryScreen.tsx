@@ -10,6 +10,7 @@ import DateTimePicker from 'react-native-modal-datetime-picker';
 import CustomToggle from '@/components/switch/CustomToggle';
 import { images } from '@/config/images';
 import { useAppTheme } from '@/hooks/useAppTheme';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface NewQuoteForm {
   quoteTitle: string;
@@ -38,6 +39,7 @@ const SummuryScreen = () => {
     file: ""
   })
   const { theme } = useAppTheme();
+  const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme])
   const updateField = (key: keyof NewQuoteForm, value: string) => {
     setNewQuoteFormData(prev => ({
@@ -107,7 +109,6 @@ const SummuryScreen = () => {
           // bounces={false}
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={styles.content}
-         
         >
           <View style={styles.basicinfo}>
             <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
@@ -265,14 +266,13 @@ const SummuryScreen = () => {
         </ScrollView>
       </KeyboardAvoidingView>
 
-      <View style={styles.footer}>
+      <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footerContainer}>
           <ButtonComponent
             bg={theme.primary}
             bttnTxt="Save"
             txtColor={theme.primaryText}
           />
-           
         </View>
       </View>
       <DateTimePicker

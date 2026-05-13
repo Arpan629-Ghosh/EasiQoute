@@ -8,9 +8,11 @@ import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Input from '@/components/inputComponent/Input';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { icons } from '@/config/icons';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const NewSubCategoryScreen = () => {
   const { theme } = useAppTheme();
+  const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
@@ -18,7 +20,6 @@ const NewSubCategoryScreen = () => {
         <Header
           txt="Create New Subcategory"
           borderBottomEnabled={true}
-          mTop={56}
         />
         <View style={styles.inpContainer}>
           <View style={styles.inp}>
@@ -41,7 +42,7 @@ const NewSubCategoryScreen = () => {
           </View>
         </View>
       </View>
-      <View style={styles.footer}>
+      <View style={[styles.footer, {paddingBottom: insets.bottom}]}>
         <View style={styles.footerContainer}>
           <ButtonComponent
             bg={theme.primary}

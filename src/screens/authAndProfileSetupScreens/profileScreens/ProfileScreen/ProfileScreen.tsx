@@ -14,9 +14,9 @@ import { images } from '@/config/images';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Input from '@/components/inputComponent/Input';
 import { ProfileScreenProps } from '@/types/navigation.types';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface ProfileForm {
   name: string;
@@ -31,6 +31,7 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
 
   const nameRef = useRef<TextInput | null>(null);
   const phRef = useRef<TextInput | null>(null);
+  const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -45,16 +46,19 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
     }));
   };
   return (
-    <SafeAreaView style={styles.safeareaview} edges={['top']}>
+    <View style={[styles.safeareaview, { paddingBottom: insets.bottom}]}>
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
         enabled={true}
         keyboardVerticalOffset={3}
       >
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <View style={styles.container}>
-            <View style={styles.mainContainer}>
-              <Header borderBottomEnabled={true} txt="Profile Setup" />
+        <View style={styles.container}>
+          <View style={styles.mainContainer}>
+            <Header borderBottomEnabled={true} txt="Profile Setup" />
+            <ScrollView
+              keyboardShouldPersistTaps="handled"
+              style={styles.scrollview}
+            >
               <View style={styles.formContainer}>
                 <View style={styles.profilePic}>
                   <TouchableOpacity>
@@ -100,9 +104,10 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
                   </View>
                 </View>
               </View>
-            </View>
+            </ScrollView>
           </View>
-        </ScrollView>
+        </View>
+
         <View style={styles.footer}>
           <View style={styles.footerComponent}>
             <ButtonComponent
@@ -114,7 +119,7 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
           </View>
         </View>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -10,6 +10,7 @@ import { icons } from '@/config/icons';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 type Props = {
@@ -41,6 +42,7 @@ const FilterAndSorting = ({
 
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [activeField, setActiveField] = useState<'start' | 'end' | null>(null);
+  const insets = useSafeAreaInsets();
     const { theme, isDark } = useAppTheme();
     const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -77,7 +79,7 @@ const FilterAndSorting = ({
   
   return (
     <ModalComponent visible={visible} onClose={onClose} mheight={580}>
-      <View style={styles.container}>
+      <View style={[styles.container, { paddingBottom: insets.bottom  }]}>
         <View style={styles.header}>
           <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
             Filters & Sorting
@@ -215,6 +217,7 @@ const createStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
+
     },
     header: {
       paddingVertical: 16,

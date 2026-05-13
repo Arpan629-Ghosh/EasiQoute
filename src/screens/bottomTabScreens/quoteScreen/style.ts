@@ -16,7 +16,7 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
   },
   headerComponent: {
     gap: 16,
-    marginTop: 56,
+   
     paddingHorizontal: 12,
   },
   searchandfilter: {

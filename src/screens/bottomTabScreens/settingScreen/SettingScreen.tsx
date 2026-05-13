@@ -20,6 +20,7 @@ import CustomToggle from '@/components/switch/CustomToggle';
 import AppearanceBottomSheet from '@/components/appearanceBottomSheet/AppearanceBottomSheet';
 import LogoutModal from '@/components/ logoutModal/LogoutModal';
 import { SettingScreenProps } from '@/types/navigation.types';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const SettingScreen = ({navigation} : SettingScreenProps) => {
   const [enabledStripe, setEnabledStripe] = useState<boolean>(false);
@@ -28,7 +29,7 @@ const SettingScreen = ({navigation} : SettingScreenProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [openLogoutModal, setOpenLogoutModal] = useState<boolean>(false);
   const { theme, isDark, mode } = useAppTheme();
-
+  const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const navigateToPaymentInfo = () => {
@@ -84,7 +85,7 @@ const SettingScreen = ({navigation} : SettingScreenProps) => {
         />
       )}
 
-      <View style={styles.header}>
+      <View style={[styles.header, {paddingTop: insets.top}]}>
         <InterTightSemiBold fsize={24} fcolor={theme.textPrimary}>
           Settings
         </InterTightSemiBold>

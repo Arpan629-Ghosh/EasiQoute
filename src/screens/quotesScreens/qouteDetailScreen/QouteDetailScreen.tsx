@@ -15,11 +15,13 @@ import { QouteDetailScreenProps } from '@/types/navigation.types';
 import StatusChanger from '@/components/statusChanger/StatusChanger';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Items from '@/components/cardDetailsComponent/Items';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
 
   const [open, setOpen] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState<string>("")
+  const insets = useSafeAreaInsets();
 
   const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme])
@@ -57,7 +59,7 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
           translucent
         />
       )}
-      <View style={styles.header}>
+      <View style={[styles.header, {paddingTop: insets.top + 12}]}>
         <View style={styles.headerComponent}>
           <TouchableOpacity onPress={navigateToBack}>
             <Image

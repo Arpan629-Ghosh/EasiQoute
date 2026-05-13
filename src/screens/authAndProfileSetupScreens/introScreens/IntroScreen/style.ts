@@ -9,7 +9,6 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
   },
   slide: {
     width,
-    height: 578,
     padding: 20,
     marginTop: 76,
   },
@@ -20,27 +19,16 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
   },
 
   footer: {
-    bottom: 40,
     width: '100%',
-    paddingBottom: 16,
     gap: 24,
     alignItems: 'center',
+    
   },
-  skip: {
-    fontSize: 16,
-    color: '#999',
-  },
-  nextBtn: {
-    backgroundColor: '#0A2A5E',
-    paddingHorizontal: 30,
-    paddingVertical: 12,
-    borderRadius: 10,
-  },
+
+ 
  
   slideContainer: {
     flexDirection: 'row',
-    height: 6,
-    width: 40,
     gap: 4,
   },
   slide1: {

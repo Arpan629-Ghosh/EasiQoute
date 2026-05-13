@@ -14,7 +14,6 @@ export const createStyles = (theme: Theme) =>
     },
     footer: {
       width: '100%',
-      paddingBottom: 40,
       backgroundColor: theme.background,
     },
     footeritem: {

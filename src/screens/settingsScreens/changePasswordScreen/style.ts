@@ -53,8 +53,6 @@ export const createStyles = (theme: Theme) =>
 
       width: '100%',
 
-      paddingBottom: 40,
-
       backgroundColor: theme.background,
 
       borderTopWidth: 1,

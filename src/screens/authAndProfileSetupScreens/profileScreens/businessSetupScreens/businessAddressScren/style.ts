@@ -69,7 +69,6 @@ export const createStyles = (theme: Theme) =>
     },
     footer: {
       width: '100%',
-      paddingBottom: 40,
     },
     footerContainer: {
       paddingVertical: 12,
