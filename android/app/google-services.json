@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "242355839187",
+    "project_id": "eaziquote-55e0b",
+    "storage_bucket": "eaziquote-55e0b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:242355839187:android:e4aa860d2d3c6f5849f426",
+        "android_client_info": {
+          "package_name": "com.eaziqoute"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyArdGvMROeBW14b4GT0DiFLgCXU-EjuQb0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

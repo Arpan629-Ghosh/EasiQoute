@@ -14,7 +14,6 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-
 const AppContent = () => {
 
   const { theme, isDark } = useAppTheme();
