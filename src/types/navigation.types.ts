@@ -4,21 +4,6 @@ import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
-  AuthStack: undefined;
-  MainTabs: undefined;
-  QouteDetailScreen: { quoteId: string };
-  IntroductionScreen: undefined;
-  NewQuoteScreens: undefined;
-  TemplatesScreen: undefined;
-  TeamMembersScreen: undefined;
-  AddMemberScreen: undefined;
-  ChangePasswordScreen: undefined;
-  QuoteAndInvoicesSettingScreen: undefined; 
-  BillingPreferencesScreen: undefined;
-  PaymentInfoScreen: undefined;
-};
-
-export type AuthStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
   ResetPasswordScreen: undefined;
@@ -27,7 +12,25 @@ export type AuthStackParamList = {
   BusinessScreen: undefined;
   BusinessAddressScreen: undefined;
   MainTabs: undefined;
+  QouteDetailScreen: { quoteId: string };
+  IntroductionScreen: undefined;
+  NewQuoteScreens: undefined;
+  TemplatesScreen: undefined;
+  TeamMembersScreen: undefined;
+  AddMemberScreen: undefined;
+  ChangePasswordScreen: undefined;
+  QuoteAndInvoicesSettingScreen: undefined;
+  BillingPreferencesScreen: undefined;
+  PaymentInfoScreen: undefined;
+  CategoriesScreen: undefined;
+  NewCategoryScreen: undefined;
+  SubCategoriesScreen: undefined;
+  NewSubCategoryScreen: undefined;
+  ItemsScreen: undefined;
+  NewItemsScreen: undefined;
 };
+
+
 
 export type NewQuoteTopTabParamList = {
   Summury: undefined;
@@ -57,34 +60,34 @@ export type SettingStackParamList = {
 
 // login
 export type LoginScreenProps = NativeStackScreenProps<
-  AuthStackParamList,
+  RootStackParamList,
   'LoginScreen'
   >;
 
 // register
 export type RegisterScreenProps = NativeStackScreenProps<
-  AuthStackParamList,
+  RootStackParamList,
   'RegisterScreen'
   >;
 
   //reset
 export type ResetPasswordScreenProps = NativeStackScreenProps<
-  AuthStackParamList,
+  RootStackParamList,
   'ResetPasswordScreen'
   >;
 
   // onBoarding
 export type IntroScreenProps = NativeStackScreenProps<
-  AuthStackParamList,
+  RootStackParamList,
   'IntroScreen'
   >;
 
   //Profile
-export type ProfileScreenProps = NativeStackScreenProps<AuthStackParamList, 'ProfileScreen'>
+export type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, 'ProfileScreen'>
 
 // business
-export type BusinessScreenProps = NativeStackScreenProps<AuthStackParamList, 'BusinessScreen'>
-export type BusinessAddressScreenProps = NativeStackScreenProps<AuthStackParamList, 'BusinessAddressScreen'>
+export type BusinessScreenProps = NativeStackScreenProps<RootStackParamList, 'BusinessScreen'>
+export type BusinessAddressScreenProps = NativeStackScreenProps<RootStackParamList, 'BusinessAddressScreen'>
 
 //main quote
 export type MainQuoteScreenProps = CompositeScreenProps<
@@ -121,4 +124,13 @@ export type SettingScreenProps = CompositeScreenProps<
     'TeamMembersScreen'
     >;
   
-    export type ChangePasswordScreenProps = NativeStackScreenProps<RootStackParamList, 'ChangePasswordScreen'>
+export type ChangePasswordScreenProps = NativeStackScreenProps<RootStackParamList, 'ChangePasswordScreen'>
+    
+// CategoryScreen
+export type CategoriesScreenProps = NativeStackScreenProps<RootStackParamList, 'CategoriesScreen'>
+
+// SubCategoryScreen
+export type SubCategoriesScreenProps = NativeStackScreenProps<RootStackParamList, 'SubCategoriesScreen'>
+
+//ItemsScreen
+export type ItemsScreenProps = NativeStackScreenProps<RootStackParamList, 'ItemsScreen'>

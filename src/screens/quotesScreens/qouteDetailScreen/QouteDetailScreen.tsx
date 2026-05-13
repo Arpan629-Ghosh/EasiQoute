@@ -35,13 +35,13 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
     setOpen(false)
   },[])
 
-  const toggleStatus = (type : string) => {
+  const toggleStatus = useCallback((type : string) => {
     setSelectedStatus((prev) => {
        const isSelected = prev.includes(type)
       const updatedStatus = isSelected ? "" : type
       return updatedStatus
     })
-  }
+  },[])
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       {isDark ? (

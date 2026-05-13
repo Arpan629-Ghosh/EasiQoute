@@ -1,124 +1,102 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@appTypes/navigation.types';
-import AuthStack from './authStack/AuthStack';
 import MainTabs from './mainTabs/MainTabs';
-import QouteDetailScreen from '@/screens/mainTabScreens/quoteScreens/qouteDetailScreen/QouteDetailScreen';
-import IntroductionScreen from '@/screens/mainTabScreens/quoteScreens/introductionScreen/IntroductionScreen';
-import NewQuoteScreens from '@/screens/mainTabScreens/quoteScreens/newQuoteScreens/NewQuoteScreen';
-import TemplatesScreen from '@/screens/mainTabScreens/quoteScreens/newQuoteScreens/templatesScreen/TemplatesScreen';
-import AddMemberScreen from '@/screens/mainTabScreens/settingScreens/teamMemberScreens/addMemberScreen/AddMemberScreen';
-import ChangePasswordScreen from '@/screens/mainTabScreens/settingScreens/changePasswordScreen/ChangePasswordScreen';
-import TeamMembersScreen from '@/screens/mainTabScreens/settingScreens/teamMemberScreens/teamMemberScreen/TeamMembersScreen';
-import QuoteAndInvoiceSettingsScreen from '@/screens/mainTabScreens/settingScreens/paymentAndInvoicing/quoteAndInvoiceSettingsScreen/QuoteAndInvoicesSettingsScreen';
-import BillingPreferencesScreen from '@/screens/mainTabScreens/settingScreens/paymentAndInvoicing/billingPreferencesScreen/BillingPreferencesScreen';
-import PaymentInfoScreen from '@/screens/mainTabScreens/settingScreens/paymentAndInvoicing/paymentInfoScreen/PaymentInfoScreen';
+import QouteDetailScreen from '@/screens/quotesScreens/qouteDetailScreen/QouteDetailScreen';
+import IntroductionScreen from '@/screens/quotesScreens/introductionScreen/IntroductionScreen';
+import NewQuoteScreens from '@/screens/quotesScreens/newQuoteScreens/NewQuoteScreen';
+import TemplatesScreen from '@/screens/quotesScreens/newQuoteScreens/templatesScreen/TemplatesScreen';
+import AddMemberScreen from '@/screens/settingsScreens/teamMemberScreens/addMemberScreen/AddMemberScreen';
+import ChangePasswordScreen from '@/screens/settingsScreens/changePasswordScreen/ChangePasswordScreen';
+import TeamMembersScreen from '@/screens/settingsScreens/teamMemberScreens/teamMemberScreen/TeamMembersScreen';
+import QuoteAndInvoiceSettingsScreen from '@/screens/settingsScreens/paymentAndInvoicingScreens/quoteAndInvoiceSettingsScreen/QuoteAndInvoicesSettingsScreen';
+import BillingPreferencesScreen from '@/screens/settingsScreens/paymentAndInvoicingScreens/billingPreferencesScreen/BillingPreferencesScreen';
+import PaymentInfoScreen from '@/screens/settingsScreens/paymentAndInvoicingScreens/paymentInfoScreen/PaymentInfoScreen';
+import CategoriesScreen from '@/screens/settingsScreens/inventorySetupScreens/categoriesScreen/CategoriesScreen';
+import NewCategoryScreen from '@/screens/settingsScreens/inventorySetupScreens/newCategoryScreen/NewCategoryScreen';
+import SubCategoriesScreen from '@/screens/settingsScreens/inventorySetupScreens/subCategoriesScreen/SubCategoriesScreen';
+import NewSubCategoryScreen from '@/screens/settingsScreens/inventorySetupScreens/newSubCategoriesScreen/NewSubCategoryScreen';
+import ItemsScreen from '@/screens/settingsScreens/inventorySetupScreens/itemsScreen/ItemsScreen';
+import NewItemsScreen from '@/screens/settingsScreens/inventorySetupScreens/createNewItemsScreen/NewItemsScreen';
+import LoginScreen from '@/screens/authAndProfileSetupScreens/authScreens/loginScreen/LoginScreen';
+import RegisterScreen from '@/screens/authAndProfileSetupScreens/authScreens/registerScreen/RegisterScreen';
+import ResetPasswordScreen from '@/screens/authAndProfileSetupScreens/authScreens/resetPasswordScreen/ResetPasswordScreen';
+import IntroScreen from '@/screens/authAndProfileSetupScreens/introScreens/IntroScreen/IntroScreen';
+import ProfileScreen from '@/screens/authAndProfileSetupScreens/profileScreens/ProfileScreen/ProfileScreen';
+import BusinessScreen from '@/screens/authAndProfileSetupScreens/profileScreens/businessSetupScreens/businessScreen/BusinessScreen';
+import BusinessAddressScreen from '@/screens/authAndProfileSetupScreens/profileScreens/businessSetupScreens/businessAddressScren/BusinessAddressScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStack = () => {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      initialRouteName="LoginScreen"
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="LoginScreen" component={LoginScreen} />
+      <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
       <Stack.Screen
-        name="AuthStack"
-        component={AuthStack}
-        options={{
-          headerShown: false,
-        }}
+        name="ResetPasswordScreen"
+        component={ResetPasswordScreen}
       />
 
-      <Stack.Screen
-        name="MainTabs"
-        component={MainTabs}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="QouteDetailScreen"
-        component={QouteDetailScreen}
-        options={{
-          title: 'Quote Detail',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="IntroductionScreen"
-        component={IntroductionScreen}
-        options={{
-          title: 'Introducton',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="NewQuoteScreens"
-        component={NewQuoteScreens}
-        options={{
-          title: 'New Quote',
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="TemplatesScreen"
-        component={TemplatesScreen}
-        options={{
-          title: 'Templates',
-          headerShown: false,
-        }}
-      />
+      <Stack.Screen name="IntroScreen" component={IntroScreen} />
+
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+
+      <Stack.Screen name="BusinessScreen" component={BusinessScreen} />
 
       <Stack.Screen
-        name="TeamMembersScreen"
-        component={TeamMembersScreen}
-        options={{
-          title: 'Team Member',
-          headerShown: false,
-        }}
+        name="BusinessAddressScreen"
+        component={BusinessAddressScreen}
       />
 
-      <Stack.Screen
-        name="AddMemberScreen"
-        component={AddMemberScreen}
-        options={{
-          title: 'Add Member',
-          headerShown: false,
-        }}
-      />
+      <Stack.Screen name="MainTabs" component={MainTabs} />
+      <Stack.Screen name="QouteDetailScreen" component={QouteDetailScreen} />
+      <Stack.Screen name="IntroductionScreen" component={IntroductionScreen} />
+      <Stack.Screen name="NewQuoteScreens" component={NewQuoteScreens} />
+      <Stack.Screen name="TemplatesScreen" component={TemplatesScreen} />
+
+      <Stack.Screen name="TeamMembersScreen" component={TeamMembersScreen} />
+
+      <Stack.Screen name="AddMemberScreen" component={AddMemberScreen} />
 
       <Stack.Screen
         name="ChangePasswordScreen"
         component={ChangePasswordScreen}
-        options={{
-          title: 'Change Password',
-          headerShown: false,
-        }}
       />
 
       <Stack.Screen
         name="QuoteAndInvoicesSettingScreen"
         component={QuoteAndInvoiceSettingsScreen}
-        options={{
-          title: 'QI Settings',
-          headerShown: false,
-        }}
       />
 
       <Stack.Screen
         name="BillingPreferencesScreen"
         component={BillingPreferencesScreen}
-        options={{
-          title: "billing preferences",
-          headerShown: false
-        }}
+      />
+
+      <Stack.Screen name="PaymentInfoScreen" component={PaymentInfoScreen} />
+
+      <Stack.Screen name="CategoriesScreen" component={CategoriesScreen} />
+
+      <Stack.Screen name="NewCategoryScreen" component={NewCategoryScreen} />
+
+      <Stack.Screen
+        name="SubCategoriesScreen"
+        component={SubCategoriesScreen}
       />
 
       <Stack.Screen
-        name='PaymentInfoScreen'
-        component={PaymentInfoScreen}
-        options={{
-          title: "payment info",
-          headerShown: false
-        }}
+        name="NewSubCategoryScreen"
+        component={NewSubCategoryScreen}
       />
+
+      <Stack.Screen name="ItemsScreen" component={ItemsScreen} />
+
+      <Stack.Screen name="NewItemsScreen" component={NewItemsScreen} />
     </Stack.Navigator>
   );
 };

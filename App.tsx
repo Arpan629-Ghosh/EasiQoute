@@ -22,7 +22,7 @@ const AppContent = () => {
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
 
-      <NavigationContainer theme={isDark ? DarkTheme : DefaultTheme}>
+      <NavigationContainer  theme={isDark ? DarkTheme : DefaultTheme}>
         <RootStack />
       </NavigationContainer>
     </View>

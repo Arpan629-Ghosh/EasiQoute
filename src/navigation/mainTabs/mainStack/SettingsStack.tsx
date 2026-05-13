@@ -1,6 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import SettingScreen from '@/screens/mainTabScreens/settingScreens/mainSettingScreen/SettingScreen';
+import SettingScreen from '@/screens/bottomTabScreens/settingScreen/SettingScreen';
 import { SettingStackParamList } from '@/types/navigation.types';
 
 const Stack = createNativeStackNavigator<SettingStackParamList>();

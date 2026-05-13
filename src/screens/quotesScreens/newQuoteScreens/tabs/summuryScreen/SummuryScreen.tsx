@@ -106,7 +106,8 @@ const SummuryScreen = () => {
           showsVerticalScrollIndicator={false}
           // bounces={false}
           keyboardShouldPersistTaps="handled"
-          contentContainerStyle={{ paddingBottom: 120 }}
+          contentContainerStyle={styles.content}
+         
         >
           <View style={styles.basicinfo}>
             <InterTightMedium fsize={16} fcolor={theme.textPrimary}>

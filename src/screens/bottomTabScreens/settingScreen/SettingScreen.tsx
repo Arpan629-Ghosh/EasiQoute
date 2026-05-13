@@ -51,6 +51,16 @@ const SettingScreen = ({navigation} : SettingScreenProps) => {
     navigation.navigate("QuoteAndInvoicesSettingScreen")
   }
 
+  const navigateToCategories = () => {
+    navigation.navigate("CategoriesScreen")
+  }
+  const navigateToSubCategory = () => {
+    navigation.navigate("SubCategoriesScreen")
+  }
+  const navigateToItems = () => {
+    navigation.navigate("ItemsScreen")
+  }
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -171,11 +181,21 @@ const SettingScreen = ({navigation} : SettingScreenProps) => {
           <Card style={styles.card}>
             <CardHeader title="Inventory Setup" />
             <View style={styles.borderLine} />
-            <SettingInfoRow icon={icons.ic_categories} txt="Categories" />
+            <TouchableOpacity onPress={navigateToCategories}>
+              <SettingInfoRow icon={icons.ic_categories} txt="Categories" />
+            </TouchableOpacity>
             <View style={styles.borderLine} />
-            <SettingInfoRow icon={icons.ic_subcategories} txt="Subcategories" />
+            <TouchableOpacity onPress={navigateToSubCategory}>
+              <SettingInfoRow
+                icon={icons.ic_subcategories}
+                txt="Subcategories"
+              />
+            </TouchableOpacity>
+
             <View style={styles.borderLine} />
-            <SettingInfoRow icon={icons.ic_itemsicn} txt="Items" />
+            <TouchableOpacity onPress={navigateToItems}>
+              <SettingInfoRow icon={icons.ic_itemsicn} txt="Items" />
+            </TouchableOpacity>
           </Card>
           <Card style={styles.card}>
             <CardHeader title="Notifications" />

@@ -1,8 +1,7 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
 import ModalComponent from '../modal/ModalComponent';
 import InterTightMedium from '../fontComponents/InterTightMedium';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
 import InterTightRegular from '../fontComponents/InterTightRegular';
 import { StatusData } from '@/config/status';
 import { icons } from '@/config/icons';
@@ -10,16 +9,19 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 
 type Props = {
-    visible: boolean;
-    selectedStatus: string;
+  visible: boolean;
+  selectedStatus: string;
   onClose: () => void;
-    onToggleStatus: (type: string) => void;
-   
+  onToggleStatus: (type: string) => void;
 };
-const StatusChanger = ({ visible, selectedStatus, onClose, onToggleStatus }: Props) => {
-  
+const StatusChanger = ({
+  visible,
+  selectedStatus,
+  onClose,
+  onToggleStatus,
+}: Props) => {
   const { theme, isDark } = useAppTheme();
-  const styles = useMemo(() => createStyles(theme), [theme])
+  const styles = useMemo(() => createStyles(theme), [theme]);
   return (
     <ModalComponent visible={visible} onClose={onClose} mheight={461}>
       <View style={styles.modal}>
@@ -35,7 +37,7 @@ const StatusChanger = ({ visible, selectedStatus, onClose, onToggleStatus }: Pro
 
             return (
               <View key={item.type} style={styles.statusView}>
-                <ButtonComponent
+                <TouchableOpacity
                   key={item.type}
                   onPress={() => onToggleStatus(item.type)}
                   activeOpacity={0.8}
@@ -51,9 +53,12 @@ const StatusChanger = ({ visible, selectedStatus, onClose, onToggleStatus }: Pro
                   </InterTightRegular>
 
                   {isSelected && (
-                    <Image source={isDark ? icons.ic_darktick : icons.ic_tick} style={styles.cross} />
+                    <Image
+                      source={isDark ? icons.ic_darktick : icons.ic_tick}
+                      style={styles.cross}
+                    />
                   )}
-                </ButtonComponent>
+                </TouchableOpacity>
                 {item.type !== 'Cancelled' && <View style={styles.empty} />}
               </View>
             );
@@ -66,45 +71,46 @@ const StatusChanger = ({ visible, selectedStatus, onClose, onToggleStatus }: Pro
 
 export default React.memo(StatusChanger);
 
-const createStyles = (theme: Theme) =>  StyleSheet.create({
-  modal: {
-    gap: 16,
-  },
-  status: {
-    gap: 8,
-    paddingHorizontal: 12,
-  },
-  empty: {
-    borderWidth: 0.5,
-    borderColor: theme.border,
-  },
-  icon: {
-    width: 16,
-    height: 16,
-    marginRight: 6,
-    resizeMode: 'contain',
-  },
-  statusBttn: {
-    flexDirection: 'row',
-    paddingVertical: 8,
-    gap: 8,
-    width: '100%',
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    modal: {
+      gap: 16,
+    },
+    status: {
+      gap: 8,
+      paddingHorizontal: 12,
+    },
+    empty: {
+      borderWidth: 0.5,
+      borderColor: theme.border,
+    },
+    icon: {
+      width: 16,
+      height: 16,
+      marginRight: 6,
+      resizeMode: 'contain',
+    },
+    statusBttn: {
+      flexDirection: 'row',
+      paddingVertical: 8,
+      gap: 8,
+      width: '100%',
 
-    alignItems: 'center',
-  },
-  header: {
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    gap: 16,
-    borderBottomWidth: 0.5,
-    borderBottomColor: theme.border,
-  },
-  statusView: {
-    gap: 5,
-  },
-  cross: {
-    height: 16,
-    width: 16,
-    marginLeft: 'auto',
-  },
-});
+      alignItems: 'center',
+    },
+    header: {
+      paddingVertical: 16,
+      paddingHorizontal: 12,
+      gap: 16,
+      borderBottomWidth: 0.5,
+      borderBottomColor: theme.border,
+    },
+    statusView: {
+      gap: 5,
+    },
+    cross: {
+      height: 16,
+      width: 16,
+      marginLeft: 'auto',
+    },
+  });

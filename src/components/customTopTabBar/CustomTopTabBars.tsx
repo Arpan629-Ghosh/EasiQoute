@@ -5,7 +5,7 @@ import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import Header from '../header/Header';
 
-const CustomTabBars = ({ state, descriptors, navigation }: any) => {
+const CustomTabBars = ({ state, navigation }: any) => {
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 

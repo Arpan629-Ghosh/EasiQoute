@@ -18,6 +18,7 @@ const ItemsScreen = () => {
     useState<boolean>(false);
   const [selectedFilterOption, setSelectFilterOption] = useState<string>('');
   const [open, setOpen] = useState(false);
+  
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -31,6 +32,7 @@ const ItemsScreen = () => {
   const handleClose = useCallback(() => {
     setOpen(false);
   }, []);
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
