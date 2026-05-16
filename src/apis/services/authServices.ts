@@ -1,6 +1,7 @@
 import { apiClient } from '@/config/apis/client';
 import {
   AuthPayload,
+  Company,
   ForgotPasswordPayload,
   LoginPayload,
   ProfileSetupPayload,
@@ -25,7 +26,7 @@ export const authServices = {
       formData,
     );
 
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   },
 
@@ -41,12 +42,12 @@ export const authServices = {
     if (payload.push_token) {
       formData.append('push_token', payload.push_token);
     }
-    console.log(payload);
+    // console.log(payload);
     const response = await apiClient.post<ApiResponse<AuthPayload>>(
       ENDPOINTS.SIGNUP,
       formData,
     );
-    console.log(response);
+    // console.log(response);
     return response.data;
   },
 
@@ -57,7 +58,7 @@ export const authServices = {
       ENDPOINTS.FORGOTPASSWORD,
       formData,
     );
-    console.log(response.data);
+    // console.log(response.data);
     return response.data;
   },
     
@@ -103,6 +104,32 @@ export const authServices = {
       );
   
     return response.data;
+  },
+
+  companyProfileSetup: async (payload: Company) => {
+    const formData = new FormData();
+    formData.append('name', payload.name);
+    formData.append('phone', payload.phone_number);
+    formData.append('address', payload.address);
+    formData.append('city', payload.city);
+    formData.append('country', payload.country);
+    formData.append('postcode', payload.postcode)
+    if (payload.logo) {
+      formData.append('avatar', {
+        uri: payload.logo.uri,
+
+        name: payload.logo.fileName || 'profile.jpg',
+
+        type: payload.logo.type || 'image/jpeg',
+      });
+    }
+    formData.append('brand_color', payload.brand_color);
+    formData.append('vat_number', payload.vat_number);
+    const response = await apiClient.post<ApiResponse<User>>(ENDPOINTS.COMPANYPROFILESETUP, formData);
+
+    return response.data
   }
+
+ 
     
 };

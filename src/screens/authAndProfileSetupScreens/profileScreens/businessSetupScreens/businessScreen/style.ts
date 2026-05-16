@@ -96,6 +96,7 @@ export const createStyles = (theme: Theme) =>
       padding: 12,
       gap: 12,
       borderColor: theme.border,
+      // backgroundColor: "red"
     },
     txtContainer: {
       height: 20,
@@ -148,7 +149,7 @@ export const createStyles = (theme: Theme) =>
     },
     footer: {
       width: '100%',
-   
+
       position: 'absolute',
       bottom: 0,
       left: 0,
@@ -178,4 +179,12 @@ export const createStyles = (theme: Theme) =>
     emptyview: {
       width: 28,
     },
+    address: {
+      flexDirection: "row",
+      justifyContent: "space-between"
+    },
+    edit: {
+      height: 20,
+      width: 20
+    }
   });

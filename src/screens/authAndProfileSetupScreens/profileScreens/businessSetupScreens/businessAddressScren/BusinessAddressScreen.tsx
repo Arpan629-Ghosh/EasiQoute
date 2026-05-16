@@ -15,20 +15,22 @@ import { TextInput } from 'react-native-gesture-handler';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { BusinessAddressScreenProps } from '@/types/navigation.types';
 
-interface FormData {
-  streetAddress: string;
+export interface FormData {
+  address: string;
   city: string;
   postcode: string;
   country: string;
 }
 
-const BusinessAddressScreen = () => {
+const BusinessAddressScreen = ({ navigation, route }: BusinessAddressScreenProps) => {
+  const existingAddress = route.params?.address;
   const [formData, setFormData] = useState<FormData>({
-    streetAddress: '',
-    city: '',
-    postcode: '',
-    country: '',
+    address: existingAddress?.address || '',
+    city: existingAddress?.city || '',
+    postcode: existingAddress?.postcode || '',
+    country: existingAddress?.country || '',
   });
 
   const addressRef = useRef<TextInput | null>(null);
@@ -45,6 +47,12 @@ const BusinessAddressScreen = () => {
       [name]: value,
     }));
   };
+
+  const handleSave = () => {
+    route.params?.onGoBack(formData);
+
+    navigation.goBack()
+  }
 
   return (
     <View style={[styles.safeareaview, { paddingBottom: insets.bottom }]}>
@@ -79,8 +87,8 @@ const BusinessAddressScreen = () => {
                   <Input
                     ref={addressRef}
                     placeholder="Enter street address"
-                    value={formData.streetAddress}
-                    onChangeText={txt => handleInput('streetAddress', txt)}
+                    value={formData.address}
+                    onChangeText={txt => handleInput('address', txt)}
                     onSubmitEditing={() => cityRef.current?.focus()}
                     returnKeyType="next"
                   />
@@ -134,6 +142,7 @@ const BusinessAddressScreen = () => {
                 bg={theme.primary}
                 bttnTxt="Continue"
                 txtColor={theme.primaryText}
+                onPress={handleSave}
               />
             </View>
           </View>

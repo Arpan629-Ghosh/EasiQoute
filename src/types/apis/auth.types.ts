@@ -1,23 +1,39 @@
 export interface Address {
-  id: number;
+  id: number
   address_line_1: string;
-  address_line_2: string | null;
-  address_line_3: string | null;
-  address_line_4: string | null;
+  address_line_2?: string | null;
+  address_line_3?: string | null;
+  address_line_4?: string | null;
   city: string | null;
-  latitude: string | null;
-  longitude: string | null;
+  latitude?: string | null;
+  longitude?: string | null;
   postcode: string | null;
+  country: string 
 }
 
-export interface Company{
-    id: number;
-    name: string;
-    email: string | null;
-    logo: string | null;
-    address: Address;
-    createdAt?: string;
-    updatedAt?: string;
+export interface Company {
+  id?: number;
+  name: string;
+  email?: string | null;
+  phone_number: string;
+  logo: {
+    uri: string;
+    type: string;
+    fileName?: string;
+  } | null;
+  brand_color: string;
+  vat_number: string | null;
+  currency?: string;
+  is_company_name_show?: boolean;
+  address: string | undefined;
+  city?: string | null;
+  country?: string | null;
+  latitude?: string | null;
+  longitude?: string | null;
+  postcode?: string | null;
+  billing_details?: BillingDetails | null;
+  created_at?: string;
+  updated_at?: string;
 } 
 
 export interface User {
@@ -33,6 +49,18 @@ export interface User {
   is_company_profile_setup?: boolean;
   created_at?: string;
   updated_at?: string
+}
+
+export interface BillingDetails {
+  id: number
+  name?: string;
+  email?: string;
+  phone: string;
+  bank_name?: string | null;
+  sort_code?: string | null;
+  account_number?: string | null;
+  created_at?: string | null;
+  updated_at?: string | null;
 }
 
 export interface LoginPayload {
@@ -63,6 +91,7 @@ export interface ProfileSetupPayload {
     fileName?: string;
   } | null;
 }
+
 
 export interface AuthPayload extends User {
     access_token: string;

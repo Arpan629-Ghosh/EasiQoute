@@ -30,7 +30,7 @@ import { useAuth } from '@/hooks/apis/useAuth';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStack = () => {
   const { user } = useAuth();
-  console.log(user)
+  // console.log(user)
   const getInitialScreen = () => {
     if (!user || !user.is_email_verified) return "LoginScreen"
     if (!user?.is_profile_setup) return 'IntroScreen';

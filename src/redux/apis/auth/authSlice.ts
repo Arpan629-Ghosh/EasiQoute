@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { User } from '@/types/apis/auth.types';
-import { forgotPasswordThunk, loginThunk, profileSetupThunk, signupThunk } from './authThunks';
+import { companyProfileSetupThunk, forgotPasswordThunk, loginThunk, profileSetupThunk, signupThunk } from './authThunks';
 
 export interface AuthState {
   user: User | null;
@@ -86,6 +86,23 @@ const authSlice = createSlice({
         state.user = action.payload;
       })
       .addCase(profileSetupThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string
+      })
+    
+    //compan_profile_setup
+
+      .addCase(companyProfileSetupThunk.pending, state => {
+        state.loading = true;
+        state.error = null
+      })
+      .addCase(companyProfileSetupThunk.fulfilled, (state) => {
+        state.loading = false;
+        if (state.user) {
+          state.user.is_company_profile_setup = true;
+        }
+      })
+      .addCase(companyProfileSetupThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string
     })

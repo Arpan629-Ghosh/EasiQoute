@@ -24,6 +24,8 @@ import Header from '@/components/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ImagePicker from '@/components/imagePicker/ImagePicker';
 import CountryPickerComponent from '@/components/countryPicker/CountryPickerComponent';
+import { FormData } from '../businessAddressScren/BusinessAddressScreen';
+import { useAuth } from '@/hooks/apis/useAuth';
 
 interface BusinessForm {
   name: string;
@@ -31,13 +33,18 @@ interface BusinessForm {
   color: string;
   vatNumber: string;
   services: string[];
+  address: {
+    address: string;
+    city: string;
+    postcode: string;
+    country: string;
+  } | null;
   profileImage: {
     uri: string;
     type: string;
     fileName?: string;
   } | null;
 }
-
 
 const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
   const [form, setForm] = useState<BusinessForm>({
@@ -46,6 +53,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
     color: '#00AAFF',
     vatNumber: '',
     services: [],
+    address: null,
     profileImage: null,
   });
   const [enabled, setEnabled] = useState(false);
@@ -54,16 +62,34 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
   const phoneRef = useRef<ReactNativePhoneInput>(null);
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
+  const { companyProfileSetup } = useAuth();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const navigateToAddress = () => {
-    navigation.navigate('BusinessAddressScreen');
+    navigation.navigate('BusinessAddressScreen', {
+      onGoBack: fillAddressForm,
+      address: form.address,
+    });
   };
 
-  const navigateToTabs = () => {
-    navigation.replace('MainTabs');
+  const handleCompanyProfileSetup = async () => {
+    try {
+      await companyProfileSetup({
+        name: form.name,
+        logo: form.profileImage || null,
+        address: form.address?.address,
+        postcode: form.address?.postcode,
+        country: form.address?.country,
+        city: form.address?.city,
+        phone_number: form.phone,
+        vat_number: form.vatNumber || null,
+        brand_color: form.color,
+      });
+      navigation.replace('MainTabs');
+    } catch (error) {
+      console.log('COMPANY PROFILE SETUP ERROR', error);
+    }
   };
-
   const updateField = useCallback((key: keyof BusinessForm, value: any) => {
     setForm(prev => ({
       ...prev,
@@ -71,11 +97,23 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
     }));
   }, []);
 
+  const fillAddressForm = (data: FormData) => {
+    setForm(prev => ({
+      ...prev,
+      address: {
+        address: data.address,
+        city: data.city,
+        postcode: data.postcode,
+        country: data.country,
+      },
+    }));
+    // console.log(form);
+  };
+
   const handleClose = useCallback(() => {
     setOpen(false);
-    setOpenOptions(false)
+    setOpenOptions(false);
   }, []);
-
 
   const toggleService = useCallback((type: string) => {
     if (type === 'Upload my own list') {
@@ -98,25 +136,27 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
   }, []);
 
   const setImageUri = useCallback((uri: string) => {
-      setForm(prev => ({
-        ...prev,
-        profileImage: {
-          uri: uri,
-          type: 'image/jpeg',
-          profileImage: 'profile.jpg',
-        },
-      }));
-    },[]);
-  
-    const removeImageUri = useCallback(() => {
-      setForm(prev => ({
-        ...prev,
-        profileImage: null,
-      }));
-    }, []);
+    setForm(prev => ({
+      ...prev,
+      profileImage: {
+        uri: uri,
+        type: 'image/jpeg',
+        fileName: 'profile.jpg',
+      },
+    }));
+  }, []);
+
+  const removeImageUri = useCallback(() => {
+    setForm(prev => ({
+      ...prev,
+      profileImage: null,
+    }));
+  }, []);
+
+  // console.log(user)
 
   return (
-    <View style={[styles.safeareaview, {paddingBottom: insets.bottom}]} >
+    <View style={[styles.safeareaview, { paddingBottom: insets.bottom }]}>
       <View style={styles.container}>
         <KeyboardAvoidingView
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -136,8 +176,11 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
                   <TouchableOpacity onPress={() => setOpenOptions(true)}>
                     <Image
                       source={
-                        form.profileImage ? {uri : form.profileImage.uri} : 
-                        isDark ? images.img_darkcamera : images.img_camera
+                        form.profileImage
+                          ? { uri: form.profileImage.uri }
+                          : isDark
+                          ? images.img_darkcamera
+                          : images.img_camera
                       }
                       style={styles.profileImg}
                     />
@@ -195,17 +238,45 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
             </View>
             <View style={styles.addressInpContainer}>
               <View style={styles.addressFormNavContainer}>
-                <View style={styles.txtContainer}>
-                  <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
-                    Address
-                  </InterTightMedium>
-                </View>
-                <TouchableOpacity
-                  onPress={navigateToAddress}
-                  style={styles.addimg}
-                >
-                  <Image source={images.img_address} style={styles.addimg} />
-                </TouchableOpacity>
+                {form.address ? (
+                  <>
+                    <View style={styles.address}>
+                      <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
+                        Address
+                      </InterTightMedium>
+                      <TouchableOpacity onPress={navigateToAddress}>
+                        <Image source={icons.ic_edit} style={styles.edit} />
+                      </TouchableOpacity>
+                    </View>
+                    <View>
+                      <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
+                        {' '}
+                        {`${form.address.address} ${form.address.country}`}
+                      </InterTightRegular>
+                      <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
+                        {' '}
+                        {`${form.address.city} ${form.address.postcode}`}
+                      </InterTightRegular>
+                    </View>
+                  </>
+                ) : (
+                  <>
+                    <View style={styles.txtContainer}>
+                      <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
+                        Address
+                      </InterTightMedium>
+                    </View>
+                    <TouchableOpacity
+                      onPress={navigateToAddress}
+                      style={styles.addimg}
+                    >
+                      <Image
+                        source={images.img_address}
+                        style={styles.addimg}
+                      />
+                    </TouchableOpacity>
+                  </>
+                )}
               </View>
             </View>
 
@@ -247,7 +318,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
         <View style={styles.footer}>
           <View style={styles.footerContainer}>
             <ButtonComponent
-              onPress={navigateToTabs}
+              onPress={handleCompanyProfileSetup}
               bg={theme.primary}
               bttnTxt="Continue"
               txtColor={theme.primaryText}

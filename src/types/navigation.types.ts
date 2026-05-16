@@ -1,4 +1,5 @@
 
+import { FormData } from '@/screens/authAndProfileSetupScreens/profileScreens/businessSetupScreens/businessAddressScren/BusinessAddressScreen';
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import { CompositeScreenProps } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -10,7 +11,15 @@ export type RootStackParamList = {
   IntroScreen: undefined;
   ProfileScreen: undefined;
   BusinessScreen: undefined;
-  BusinessAddressScreen: undefined;
+  BusinessAddressScreen: {
+    onGoBack: (data: {
+      address: string;
+      city: string;
+      country: string;
+      postcode: string;
+    }) => void;
+    address: FormData | null;
+  };
   MainTabs: undefined;
   QouteDetailScreen: { quoteId: string };
   IntroductionScreen: undefined;

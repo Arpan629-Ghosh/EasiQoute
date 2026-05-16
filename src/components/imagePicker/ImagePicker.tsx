@@ -18,7 +18,7 @@ const ImagePicker = ({ visible, onClose, onImageUri, onRemoveUri }: props) => {
       mediaType: 'photo',
     });
 
-    console.log(result);
+    // console.log(result);
 
     if (result.didCancel) return;
     if (result.errorCode) {
@@ -27,7 +27,7 @@ const ImagePicker = ({ visible, onClose, onImageUri, onRemoveUri }: props) => {
 
     const uri = result.assets?.[0]?.uri;
     if (uri) {
-      console.log(uri);
+      // console.log(uri);
       onImageUri(uri);
       onClose();
     }
@@ -48,7 +48,7 @@ const ImagePicker = ({ visible, onClose, onImageUri, onRemoveUri }: props) => {
     const uri = result.assets?.[0]?.uri;
     if (uri) {
       onImageUri(uri);
-      console.log(uri);
+      // console.log(uri);
       onClose();
     }
   };

@@ -1,7 +1,7 @@
 
-import { forgotPasswordThunk, loginThunk, profileSetupThunk, signupThunk } from '@/redux/apis/auth/authThunks';
+import { companyProfileSetupThunk, forgotPasswordThunk, loginThunk, profileSetupThunk, signupThunk } from '@/redux/apis/auth/authThunks';
 import { AppDispatch, RootState } from '@/redux/store';
-import { ForgotPasswordPayload, LoginPayload, ProfileSetupPayload, SignupPayload } from '@/types/apis/auth.types';
+import {  Company, ForgotPasswordPayload, LoginPayload, ProfileSetupPayload, SignupPayload } from '@/types/apis/auth.types';
 import { useDispatch, useSelector } from 'react-redux';
 
 export const useAuth = () => {
@@ -12,7 +12,7 @@ export const useAuth = () => {
   };
 
     const signup = async (payload: SignupPayload) => {
-      console.log(payload)
+      // console.log(payload)
     return dispatch(signupThunk(payload)).unwrap();
   };
 
@@ -24,11 +24,16 @@ export const useAuth = () => {
     return dispatch(profileSetupThunk(payload)).unwrap();
   }
 
+  const companyProfileSetup = async (payload: Company) => {
+    return dispatch(companyProfileSetupThunk(payload)).unwrap();
+  }
+
   return {
     login,
     signup,
     forgotPassword,
     profileSetup,
+    companyProfileSetup,
     user: auth.user,
     loading: auth.loading,
     error: auth.error,

@@ -55,7 +55,7 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
   };
 
   const formatPhone = formData.phone.startsWith("+44") ? formData.phone : `${"+44"}${formData.phone}`
-  console.log(formatPhone)
+  // console.log(formatPhone)
 
   const handleClose = useCallback(() => {
     setOpenOptions(false);

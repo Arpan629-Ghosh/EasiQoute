@@ -1,8 +1,14 @@
 import { authServices } from '@/apis/services/authServices';
 import { storage } from '@/storage/asyncStorage';
-import { ForgotPasswordPayload, LoginPayload, ProfileSetupPayload, SignupPayload } from '@/types/apis/auth.types';
+import {
+  
+  Company,
+  ForgotPasswordPayload,
+  LoginPayload,
+  ProfileSetupPayload,
+  SignupPayload,
+} from '@/types/apis/auth.types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-
 
 export const loginThunk = createAsyncThunk(
   'api/auth/login',
@@ -22,7 +28,7 @@ export const loginThunk = createAsyncThunk(
 
       return authData;
     } catch (error) {
-        console.log(error)
+      console.log(error);
       return thunkAPI.rejectWithValue('Something went wrong');
     }
   },
@@ -32,15 +38,15 @@ export const signupThunk = createAsyncThunk(
   'api/auth/signup',
 
   async (payload: SignupPayload, thunkAPI) => {
-      try {
-          const response = await authServices.signup(payload); 
+    try {
+      const response = await authServices.signup(payload);
       if (!response.result) {
         return thunkAPI.rejectWithValue(response.message);
       }
       const authData = response.payload;
       return authData;
     } catch (error) {
-        console.log(error)
+      console.log(error);
       return thunkAPI.rejectWithValue('Something went wrong');
     }
   },
@@ -57,15 +63,14 @@ export const forgotPasswordThunk = createAsyncThunk(
       }
       return response.message;
     } catch (error) {
-        console.log(error)
+      console.log(error);
       return thunkAPI.rejectWithValue('Something went wrong');
     }
   },
-
-
 );
 
-export const profileSetupThunk = createAsyncThunk('/api/users/profile-setup', 
+export const profileSetupThunk = createAsyncThunk(
+  '/api/users/profile-setup',
   async (payload: ProfileSetupPayload, thunkAPI) => {
     try {
       const response = await authServices.profileSetup(payload);
@@ -74,8 +79,24 @@ export const profileSetupThunk = createAsyncThunk('/api/users/profile-setup',
       }
       return response.payload;
     } catch (error) {
-      console.log(error)
-      return thunkAPI.rejectWithValue("Something went wrong")
+      console.log(error);
+      return thunkAPI.rejectWithValue('Something went wrong');
     }
-  }
+  },
+);
+export const companyProfileSetupThunk = createAsyncThunk(
+  '/api/company',
+
+  async (payload: Company, thunkAPI) => {
+    try {
+      const response = await authServices.companyProfileSetup(payload);
+      if (!response.result) {
+        return thunkAPI.rejectWithValue(response.message);
+      }
+      return response.payload;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue('Something went wrong');
+    }
+  },
 );

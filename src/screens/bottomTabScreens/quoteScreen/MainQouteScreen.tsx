@@ -53,7 +53,7 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
   const handleCloseFilterModal = useCallback(() => {
     setAppliedData(filterData);
     setOpenFilterModal(false);
-    console.log('data', filterData);
+    // console.log('data', filterData);
   }, [filterData]);
 
   const handleCloseSubscriptionModal = useCallback(() => {
