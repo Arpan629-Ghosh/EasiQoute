@@ -10,6 +10,10 @@ import { createStyles } from './style';
 import { images } from '@/config/images';
 import { RegisterScreenProps } from '@/types/navigation.types';
 import { useAppTheme } from '@/hooks/useAppTheme';
+import { useAuth } from '@/hooks/apis/useAuth';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+
 
 
 interface LoginForm {
@@ -27,15 +31,29 @@ const RegisterScreen = ({navigation} : RegisterScreenProps) => {
   const passwordRef = useRef<TextInput | null>(null);
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
-  
-  
 
+  const { signup } = useAuth()
+  const pushToken = useSelector((state: RootState) => state.notification.fcmToken)
   
     const handleInput = (name: string, value: string) => {
       setFormData(prev => ({
         ...prev,
         [name]: value,
       }));
+    };
+  
+    const handleSignup = async () => {
+      try {
+        await signup({
+          email: formData.email,
+          password: formData.password,
+          device_type: Platform.OS === 'ios' ? 'ios' : 'android',
+          push_token: pushToken || undefined,
+        });
+        navigation.navigate('LoginScreen');
+      } catch (error) {
+        console.log('SIGNUP ERROR', error);
+      }
     };
   
   const goLoginScreen = () => {
@@ -109,6 +127,7 @@ const RegisterScreen = ({navigation} : RegisterScreenProps) => {
                   bg={theme.primary}
                   bttnTxt="Create Account"
                   txtColor={theme.primaryText}
+                  onPress={handleSignup}
                 />
               </View>
             </View>

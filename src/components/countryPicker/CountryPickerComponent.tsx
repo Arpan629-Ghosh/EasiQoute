@@ -2,7 +2,7 @@ import { StyleSheet, TextInput, View } from 'react-native';
 import React, { forwardRef, useEffect, useState } from 'react';
 import ReactNativePhoneInput from 'react-native-phone-input';
 import { fontFamily } from '@/constants/fontFamily';
-
+import CountryPicker, { CountryCode } from 'react-native-country-picker-modal'
 type Props = {
   value?: string;
   onChange?: (phone: string) => void;
@@ -46,7 +46,7 @@ const CountryPickerComponent = forwardRef<
       <ReactNativePhoneInput
         ref={ref}
         style={styles.input}
-        value={phoneNumber} 
+        initialValue={phoneNumber}
         initialCountry={phoneCountryCode.toLowerCase()}
         onPressFlag={() => setShowPhoneCountryPicker(true)}
         onChangePhoneNumber={text => {
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     height: 48,
     width: '100%',
     borderRadius: 12,
-    borderWidth: 2,
+    borderWidth: 1,
     paddingHorizontal: 12,
     borderColor: '#E4E6F4',
   },

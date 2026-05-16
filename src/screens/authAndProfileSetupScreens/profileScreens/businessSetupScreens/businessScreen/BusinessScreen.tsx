@@ -22,6 +22,8 @@ import ColorPickerSheet from '@/components/colorPicker/ColorPickerSheet';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import ImagePicker from '@/components/imagePicker/ImagePicker';
+import CountryPickerComponent from '@/components/countryPicker/CountryPickerComponent';
 
 interface BusinessForm {
   name: string;
@@ -29,8 +31,13 @@ interface BusinessForm {
   color: string;
   vatNumber: string;
   services: string[];
-  profileImage: string | null;
+  profileImage: {
+    uri: string;
+    type: string;
+    fileName?: string;
+  } | null;
 }
+
 
 const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
   const [form, setForm] = useState<BusinessForm>({
@@ -43,6 +50,7 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
   });
   const [enabled, setEnabled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [openOptions, setOpenOptions] = useState<boolean>(false);
   const phoneRef = useRef<ReactNativePhoneInput>(null);
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
@@ -65,7 +73,9 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
 
   const handleClose = useCallback(() => {
     setOpen(false);
+    setOpenOptions(false)
   }, []);
+
 
   const toggleService = useCallback((type: string) => {
     if (type === 'Upload my own list') {
@@ -87,6 +97,24 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
     });
   }, []);
 
+  const setImageUri = useCallback((uri: string) => {
+      setForm(prev => ({
+        ...prev,
+        profileImage: {
+          uri: uri,
+          type: 'image/jpeg',
+          profileImage: 'profile.jpg',
+        },
+      }));
+    },[]);
+  
+    const removeImageUri = useCallback(() => {
+      setForm(prev => ({
+        ...prev,
+        profileImage: null,
+      }));
+    }, []);
+
   return (
     <View style={[styles.safeareaview, {paddingBottom: insets.bottom}]} >
       <View style={styles.container}>
@@ -105,9 +133,10 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
             <View style={styles.firstContainer}>
               <View style={styles.logoContainer}>
                 <View style={styles.profilePic}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() => setOpenOptions(true)}>
                     <Image
                       source={
+                        form.profileImage ? {uri : form.profileImage.uri} : 
                         isDark ? images.img_darkcamera : images.img_camera
                       }
                       style={styles.profileImg}
@@ -156,11 +185,11 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Business Phone number
                   </InterTightRegular>
-                  {/* <CountryPickerComponent
+                  <CountryPickerComponent
                     ref={phoneRef}
                     value={form.phone}
                     onChange={phone => updateField('phone', phone)}
-                  /> */}
+                  />
                 </View>
               </View>
             </View>
@@ -225,6 +254,13 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
             />
           </View>
         </View>
+
+        <ImagePicker
+          visible={openOptions}
+          onClose={handleClose}
+          onImageUri={setImageUri}
+          onRemoveUri={removeImageUri}
+        />
 
         <ColorPickerSheet
           visible={open}

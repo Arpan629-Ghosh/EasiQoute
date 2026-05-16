@@ -13,17 +13,32 @@ import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Input from '@/components/inputComponent/Input';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
+import { useAuth } from '@/hooks/apis/useAuth';
+import { ResetPasswordScreenProps } from '@/types/navigation.types';
 
-const ResetPasswordScreen = () => {
+const ResetPasswordScreen = ({navigation} : ResetPasswordScreenProps) => {
   const [input, setInput] = useState<string>('');
   const emailRef = useRef<TextInput | null>(null);
   const { theme } = useAppTheme();
+  const { forgotPassword } = useAuth();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const handleInput = (txt: string) => {
     setInput(txt);
   };
+  
+  const handleResetPassword = async () => {
+    
+    try {
+      await forgotPassword({
+        email: input,
+      });
+      navigation.navigate("LoginScreen")
+    } catch (error) {
+      console.log("FORGOTPASSWORD ERROR", error)
+    }
 
+  }
   return (
     <View style={styles.safeareaview}>
       <KeyboardAvoidingView
@@ -74,6 +89,7 @@ const ResetPasswordScreen = () => {
                     bg={theme.primary}
                     bttnTxt="  Send Now"
                     txtColor={theme.primaryText}
+                    onPress={handleResetPassword}
                   />
                 </View>
               </View>

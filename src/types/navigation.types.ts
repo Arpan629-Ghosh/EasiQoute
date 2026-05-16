@@ -134,3 +134,6 @@ export type SubCategoriesScreenProps = NativeStackScreenProps<RootStackParamList
 
 //ItemsScreen
 export type ItemsScreenProps = NativeStackScreenProps<RootStackParamList, 'ItemsScreen'>
+
+// resetPassword
+

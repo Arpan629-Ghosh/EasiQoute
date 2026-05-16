@@ -30,13 +30,14 @@ export const createStyles = (theme: Theme) => StyleSheet.create({
   profilePic: {
     height: 100,
     width: 100,
-    borderRadius: 100,
+    borderRadius: 50,
     marginHorizontal: 137.5,
   },
   profileImg: {
     height: 100,
     width: 100,
     resizeMode: 'cover',
+    borderRadius: 50
   },
   icon: {
     height: 28,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   NavigationContainer,
   DarkTheme,
@@ -7,16 +7,51 @@ import {
 import { StatusBar, StyleSheet, View } from 'react-native';
 import RootStack from './src/navigation/RootStack';
 
-import { Provider } from 'react-redux';
-import { persistor, store } from '@/redux/store';
+import { Provider, useDispatch } from 'react-redux';
+import { AppDispatch, persistor, store } from '@/redux/store';
 
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { notificationService } from '@/firebase/notification';
+import { setFCMToken } from '@/redux/apis/notification/notificationSlice';
+// import { storage } from '@/storage/asyncStorage';
+import { useAuth } from '@/hooks/apis/useAuth';
 
 const AppContent = () => {
 
   const { theme, isDark } = useAppTheme();
+  const dispatch = useDispatch<AppDispatch>();
+  const { user } = useAuth();
+  console.log(user)
+  
+
+  useEffect(() => {
+    const setupFCM = async () => {
+      await notificationService.requestPermission();
+
+      const token = await notificationService.getFCMToken();
+
+      console.log('FCM TOKEN', token);
+      if (token) {
+        dispatch(setFCMToken(token));
+      }
+    };
+    
+    setupFCM();
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   const clear = async () => {
+  //     await storage.clearSession();
+
+  //     await persistor.purge();
+
+  //     console.log('SESSION CLEARED', user);
+  //   };
+
+  //   clear();
+  // }, []);
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>
@@ -31,6 +66,7 @@ const AppContent = () => {
 
 
 function App() {
+ 
   return (
     <SafeAreaProvider>
       <Provider store={store}>

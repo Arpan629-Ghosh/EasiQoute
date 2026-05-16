@@ -1,0 +1,100 @@
+import { StyleSheet, View } from 'react-native';
+import React from 'react';
+import ModalComponent from '../modal/ModalComponent';
+import ButtonComponent from '../buttonComponent/ButtonComponent';
+import { useAppTheme } from '@/hooks/useAppTheme';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+interface props {
+  visible: boolean;
+  onClose: () => void;
+  onImageUri: (uri: string) => void;
+  onRemoveUri: () => void;
+}
+const ImagePicker = ({ visible, onClose, onImageUri, onRemoveUri }: props) => {
+  const { theme } = useAppTheme();
+
+  const openGallery = async () => {
+    const result = await launchImageLibrary({
+      mediaType: 'photo',
+    });
+
+    console.log(result);
+
+    if (result.didCancel) return;
+    if (result.errorCode) {
+      console.log(result.errorMessage);
+    }
+
+    const uri = result.assets?.[0]?.uri;
+    if (uri) {
+      console.log(uri);
+      onImageUri(uri);
+      onClose();
+    }
+  };
+
+  const openCamera = async () => {
+    const result = await launchCamera({
+      mediaType: 'photo',
+    });
+
+    if (result.didCancel) return;
+
+    if (result.errorCode) {
+      console.log(result.errorMessage);
+      return;
+    }
+
+    const uri = result.assets?.[0]?.uri;
+    if (uri) {
+      onImageUri(uri);
+      console.log(uri);
+      onClose();
+    }
+  };
+
+  const removePhoto = () => {
+    onRemoveUri();
+    onClose();
+  };
+  return (
+    <ModalComponent visible={visible} onClose={onClose} mheight={240}>
+      <View style={styles.container}>
+        <View style={styles.bttnContainer}>
+          <ButtonComponent
+            bttnTxt="Choose from gallery"
+            bg={theme.primary}
+            txtColor={theme.primaryText}
+            onPress={openGallery}
+          />
+          <ButtonComponent
+            bttnTxt="Take photo"
+            bg={theme.primary}
+            txtColor={theme.primaryText}
+            onPress={openCamera}
+          />
+
+          <ButtonComponent
+            bttnTxt="Remove photo"
+            bg={theme.primary}
+            txtColor={theme.primaryText}
+            onPress={removePhoto}
+          />
+        </View>
+      </View>
+    </ModalComponent>
+  );
+};
+
+export default React.memo(ImagePicker);
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 16,
+  },
+  bttnContainer: {
+    gap: 12,
+  },
+});

@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { createStyles } from './styles';
 import GradientHeader from '@components/gradient/GradientHeader';
 import InterTightSemiBold from '@components/fontComponents/InterTightSemiBold';
@@ -18,6 +18,9 @@ import InterTightMedium from '@components/fontComponents/InterTightMedium';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { LoginScreenProps } from '@appTypes/navigation.types';
 import { useAppTheme } from '@/hooks/useAppTheme';
+import { useAuth } from '@/hooks/apis/useAuth';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
 
 interface LoginForm {
   email: string;
@@ -36,11 +39,9 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
   const emailRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
   const { theme } = useAppTheme();
-
- 
-
+  const { login } = useAuth();
+  const pushToken = useSelector((state: RootState) => state.notification.fcmToken)
   const styles = useMemo(() => createStyles(theme), [theme]);
-
   const handleInput = (name: string, value: string) => {
     setFormData(prev => ({
       ...prev,
@@ -60,9 +61,19 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
     setSecureTextEntry(!secureTextEntry)
   }
 
-  const handleLogin = useCallback(() => {
-    navigation.replace('IntroScreen')
-  },[navigation])
+  const handleLogin = async () => {
+    try {
+      await login({
+        email: formData.email,
+        password: formData.password,
+        device_type: Platform.OS === "ios" ? "ios" : "android",
+        push_token: pushToken || undefined
+      });
+      navigation.replace('IntroScreen');
+    } catch (error) {
+      console.log("LOGIN ERROR", error)
+    }
+  }
 
   return (
     <KeyboardAvoidingView

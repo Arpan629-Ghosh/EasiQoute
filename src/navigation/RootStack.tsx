@@ -25,12 +25,21 @@ import IntroScreen from '@/screens/authAndProfileSetupScreens/introScreens/Intro
 import ProfileScreen from '@/screens/authAndProfileSetupScreens/profileScreens/ProfileScreen/ProfileScreen';
 import BusinessScreen from '@/screens/authAndProfileSetupScreens/profileScreens/businessSetupScreens/businessScreen/BusinessScreen';
 import BusinessAddressScreen from '@/screens/authAndProfileSetupScreens/profileScreens/businessSetupScreens/businessAddressScren/BusinessAddressScreen';
+import { useAuth } from '@/hooks/apis/useAuth';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStack = () => {
+  const { user } = useAuth();
+  console.log(user)
+  const getInitialScreen = () => {
+    if (!user || !user.is_email_verified) return "LoginScreen"
+    if (!user?.is_profile_setup) return 'IntroScreen';
+    if (!user?.is_company_profile_setup) return 'BusinessScreen';
+    else return 'MainTabs';
+  }
   return (
     <Stack.Navigator
-      initialRouteName="LoginScreen"
+      initialRouteName={getInitialScreen()}
       screenOptions={{
         headerShown: false,
       }}

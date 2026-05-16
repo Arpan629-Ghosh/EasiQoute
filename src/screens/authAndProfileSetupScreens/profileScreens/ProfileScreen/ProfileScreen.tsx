@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
 import { icons } from '@/config/icons';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
@@ -17,27 +17,35 @@ import { ProfileScreenProps } from '@/types/navigation.types';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import ImagePicker from '@/components/imagePicker/ImagePicker';
+import { useAuth } from '@/hooks/apis/useAuth';
 
 interface ProfileForm {
   name: string;
   phone: string;
+  imageUri?: {
+    uri: string;
+    type: string;
+    fileName?: string;
+  } | null;
 }
 
 const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
   const [formData, setFormData] = useState<ProfileForm>({
     name: '',
     phone: '',
+    imageUri: null,
   });
+  const [openOptions, setOpenOptions] = useState<boolean>(false);
 
   const nameRef = useRef<TextInput | null>(null);
   const phRef = useRef<TextInput | null>(null);
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
+  const { profileSetup } = useAuth();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const navigateToBusinessSetup = () => {
-    navigation.navigate('BusinessScreen');
-  };
+ 
 
   const handleInput = (name: string, value: string) => {
     setFormData(prev => ({
@@ -45,8 +53,47 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
       [name]: value,
     }));
   };
+
+  const formatPhone = formData.phone.startsWith("+44") ? formData.phone : `${"+44"}${formData.phone}`
+  console.log(formatPhone)
+
+  const handleClose = useCallback(() => {
+    setOpenOptions(false);
+  }, []);
+
+  const setImageUri = useCallback((uri: string) => {
+    setFormData(prev => ({
+      ...prev,
+      imageUri: {
+        uri: uri,
+        type: 'image/jpeg',
+        fileName: 'profile.jpg',
+      },
+    }));
+  },[]);
+
+  const removeImageUri = useCallback(() => {
+    setFormData(prev => ({
+      ...prev,
+      imageUri: null,
+    }));
+  }, []);
+  
+  const handleProfleSetup = async() => {
+    try {
+      await profileSetup({
+        name: formData.name,
+        phone: formatPhone,
+        avatar: formData.imageUri || null
+      })
+      navigation.navigate("BusinessScreen")
+    } catch (error) {
+      console.log("PROFILE SETUP ERROR",error);
+    }
+  }
+
   return (
-    <View style={[styles.safeareaview, { paddingBottom: insets.bottom}]}>
+    <View style={[styles.safeareaview, { paddingBottom: insets.bottom }]}>
       <KeyboardAvoidingView
         style={styles.keyboardContainer}
         enabled={true}
@@ -61,10 +108,14 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
             >
               <View style={styles.formContainer}>
                 <View style={styles.profilePic}>
-                  <TouchableOpacity>
+                  <TouchableOpacity onPress={() => setOpenOptions(true)}>
                     <Image
                       source={
-                        isDark ? images.img_darkprofile : images.img_profile
+                        formData.imageUri
+                          ? { uri: formData.imageUri.uri }
+                        : isDark
+                        ? images.img_darkprofile
+                        : images.img_profile
                       }
                       style={styles.profileImg}
                     />
@@ -111,13 +162,19 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
         <View style={styles.footer}>
           <View style={styles.footerComponent}>
             <ButtonComponent
-              onPress={navigateToBusinessSetup}
+              onPress={handleProfleSetup}
               bg={theme.primary}
               bttnTxt="Continue"
               txtColor={theme.primaryText}
             />
           </View>
         </View>
+        <ImagePicker
+          visible={openOptions}
+          onClose={handleClose}
+          onImageUri={setImageUri}
+          onRemoveUri={removeImageUri}
+        />
       </KeyboardAvoidingView>
     </View>
   );
