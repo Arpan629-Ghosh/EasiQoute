@@ -15,12 +15,14 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { ResetPasswordScreenProps } from '@/types/navigation.types';
+import { useToast } from '@/hooks/useToast';
 
 const ResetPasswordScreen = ({navigation} : ResetPasswordScreenProps) => {
   const [input, setInput] = useState<string>('');
   const emailRef = useRef<TextInput | null>(null);
   const { theme } = useAppTheme();
-  const { forgotPassword } = useAuth();
+  const { forgotPassword, loading } = useAuth();
+  const { showToast } = useToast();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const handleInput = (txt: string) => {
@@ -33,9 +35,11 @@ const ResetPasswordScreen = ({navigation} : ResetPasswordScreenProps) => {
       await forgotPassword({
         email: input,
       });
+      showToast('Please check your email to reset your password.');
       navigation.navigate("LoginScreen")
     } catch (error) {
       console.log("FORGOTPASSWORD ERROR", error)
+      showToast(String(error), 'error')
     }
 
   }
@@ -89,6 +93,8 @@ const ResetPasswordScreen = ({navigation} : ResetPasswordScreenProps) => {
                     bg={theme.primary}
                     bttnTxt="  Send Now"
                     txtColor={theme.primaryText}
+                    showLoader={loading}
+                    gap={4}
                     onPress={handleResetPassword}
                   />
                 </View>

@@ -19,6 +19,7 @@ import Header from '@/components/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ImagePicker from '@/components/imagePicker/ImagePicker';
 import { useAuth } from '@/hooks/apis/useAuth';
+import { useToast } from '@/hooks/useToast';
 
 interface ProfileForm {
   name: string;
@@ -42,7 +43,8 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
   const phRef = useRef<TextInput | null>(null);
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
-  const { profileSetup } = useAuth();
+  const { profileSetup, loading } = useAuth();
+  const { showToast } = useToast();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
  
@@ -86,8 +88,10 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
         phone: formatPhone,
         avatar: formData.imageUri || null
       })
+      showToast('Profile updated successfully.');
       navigation.navigate("BusinessScreen")
     } catch (error) {
+      showToast(String(error), 'error')
       console.log("PROFILE SETUP ERROR",error);
     }
   }
@@ -165,6 +169,8 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
               onPress={handleProfleSetup}
               bg={theme.primary}
               bttnTxt="Continue"
+              showLoader={loading}
+              gap={4}
               txtColor={theme.primaryText}
             />
           </View>

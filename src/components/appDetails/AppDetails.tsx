@@ -9,7 +9,8 @@ interface Prop {
     type: string;
     numberDueActive: string
 }
-const AppDetails: React.FC<Prop> = ({price, type, numberDueActive} : Prop) => {
+const AppDetails: React.FC<Prop> = ({ price, type, numberDueActive }: Prop) => {
+  
   return (
     <View style={styles.invoice}>
       <View style={styles.invoicetxt}>

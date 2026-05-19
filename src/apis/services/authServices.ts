@@ -5,6 +5,7 @@ import {
   ForgotPasswordPayload,
   LoginPayload,
   ProfileSetupPayload,
+  SearchAddressPayload,
   SignupPayload,
   User,
 } from '@/types/apis/auth.types';
@@ -13,14 +14,14 @@ import { ENDPOINTS } from '../endPoints';
 
 export const authServices = {
   login: async (payload: LoginPayload) => {
-        const formData = new FormData();
-        formData.append('email', payload.email);
-        formData.append('password', payload.password);
-        formData.append('device_type', payload.device_type)
+    const formData = new FormData();
+    formData.append('email', payload.email);
+    formData.append('password', payload.password);
+    formData.append('device_type', payload.device_type);
 
-        if (payload.push_token) {
-            formData.append('push_token', payload.push_token)
-        }
+    if (payload.push_token) {
+      formData.append('push_token', payload.push_token);
+    }
     const response = await apiClient.post<ApiResponse<AuthPayload>>(
       ENDPOINTS.LOGIN,
       formData,
@@ -51,9 +52,9 @@ export const authServices = {
     return response.data;
   },
 
-    forgotPassword: async (payload: ForgotPasswordPayload) => {
+  forgotPassword: async (payload: ForgotPasswordPayload) => {
     const formData = new FormData();
-    formData.append('email', payload.email)
+    formData.append('email', payload.email);
     const response = await apiClient.post<ApiResponse<null>>(
       ENDPOINTS.FORGOTPASSWORD,
       formData,
@@ -61,48 +62,31 @@ export const authServices = {
     // console.log(response.data);
     return response.data;
   },
-    
-  profileSetup: async (
-    payload: ProfileSetupPayload,
-  ) => {
+
+  profileSetup: async (payload: ProfileSetupPayload) => {
     const formData = new FormData();
-  
-    formData.append(
-      'name',
-      payload.name,
-    );
-  
-    formData.append(
-      'phone',
-      payload.phone,
-    );
-  
-   
-  
+
+    formData.append('name', payload.name);
+
+    formData.append('phone', payload.phone);
+
     formData.append('_method', 'PUT');
-  
+
     if (payload.avatar) {
       formData.append('avatar', {
         uri: payload.avatar.uri,
-  
-        name:
-          payload.avatar.fileName ||
-          'profile.jpg',
-  
-        type:
-          payload.avatar.type ||
-          'image/jpeg',
+
+        name: payload.avatar.fileName || 'profile.jpg',
+
+        type: payload.avatar.type || 'image/jpeg',
       });
     }
-  
-    const response =
-      await apiClient.post<
-        ApiResponse<User>
-      >(
-        ENDPOINTS.PROFILESETUP,
-        formData,
-      );
-  
+
+    const response = await apiClient.post<ApiResponse<User>>(
+      ENDPOINTS.PROFILESETUP,
+      formData,
+    );
+
     return response.data;
   },
 
@@ -113,7 +97,7 @@ export const authServices = {
     formData.append('address', payload.address);
     formData.append('city', payload.city);
     formData.append('country', payload.country);
-    formData.append('postcode', payload.postcode)
+    formData.append('postcode', payload.postcode);
     if (payload.logo) {
       formData.append('avatar', {
         uri: payload.logo.uri,
@@ -125,11 +109,28 @@ export const authServices = {
     }
     formData.append('brand_color', payload.brand_color);
     formData.append('vat_number', payload.vat_number);
-    const response = await apiClient.post<ApiResponse<User>>(ENDPOINTS.COMPANYPROFILESETUP, formData);
+    const response = await apiClient.post<ApiResponse<User>>(
+      ENDPOINTS.COMPANYPROFILESETUP,
+      formData,
+    );
 
+    return response.data;
+  },
+
+  logout: async () => {
+    const response = await apiClient.post<ApiResponse<null>>(
+      ENDPOINTS.LOGOUT
+    )
     return response.data
-  }
+  },
 
- 
-    
+  searchAddress: async(payload: string) => {
+    const response = await apiClient.get<ApiResponse<SearchAddressPayload[]>>(
+      ENDPOINTS.SEARCHADDRESS, {
+        params: {postcode: payload}
+      }
+    )
+    return response.data;
+  }
+  
 };

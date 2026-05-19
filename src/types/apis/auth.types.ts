@@ -1,3 +1,4 @@
+
 export interface Address {
   id: number
   address_line_1: string;
@@ -90,6 +91,22 @@ export interface ProfileSetupPayload {
     type: string;
     fileName?: string;
   } | null;
+}
+
+export interface SearchAddressPayload {
+  postcode: string;
+  latitude: number;
+  longitude: number;
+  formatted_address: string;
+  address_line_1: string;
+  address_line_2: string;
+  address_line_3: string;
+  address_line_4: string;
+  city: string;
+  county: string;
+  district: string;
+  country: string;
+  manually: boolean;
 }
 
 

@@ -3,11 +3,11 @@ import React, { useMemo } from 'react';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import InterTightRegular from '../fontComponents/InterTightRegular';
 import { useNavigation } from '@react-navigation/native';
-import {   RootStackParamList } from '@/types/navigation.types';
+import { RootStackParamList } from '@/types/navigation.types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
-import { RecentActivity } from '@/types/apis/home.types';
+import { QuoteItem } from '@/types/apis/quote.types';
 
 const STATUS_COLORS = {
   overdue: {
@@ -56,7 +56,7 @@ const STATUS_COLORS = {
   },
 } as const;
 
-const RenderActivities = ({ item }: { item: RecentActivity }) => {
+const RenderQuotes = ({ item }: { item: QuoteItem }) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { theme } = useAppTheme();
@@ -87,7 +87,9 @@ const RenderActivities = ({ item }: { item: RecentActivity }) => {
               </InterTightRegular>
             </View>
 
-            <View style={[styles.status, { backgroundColor: statusColors.view }]}>
+            <View
+              style={[styles.status, { backgroundColor: statusColors.view }]}
+            >
               <InterTightMedium fsize={12} fcolor={statusColors.text}>
                 {item.status}
               </InterTightMedium>
@@ -116,50 +118,51 @@ const RenderActivities = ({ item }: { item: RecentActivity }) => {
   );
 };
 
-export default React.memo(RenderActivities);
+export default React.memo(RenderQuotes);
 
-const createStyles = (theme: Theme) =>  StyleSheet.create({
-  container: {
-    flex: 1,
-    marginVertical: 8,
-  },
-  card: {
-    width: '100%',
-    borderRadius: 12,
-    padding: 12,
-    gap: 16,
-    backgroundColor: theme.card,
-  },
-  header: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-  },
-  txtContainer: {
-    height: '100%',
-    gap: 5,
-  },
-  status: {
-    height: 21,
-    borderRadius: 5,
-    paddingVertical: 3,
-    paddingHorizontal: 6,
-    gap: 10,
-    backgroundColor: '#F0535312',
-    alignItems: 'center',
-  },
-  empty: {
-    width: '100%',
-    borderWidth: 0.5,
-    borderColor: theme.border,
-  },
-  footer: {
-    height: 17,
-    width: '100%',
-    gap: 16,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  footerTxt: {
-    flexDirection: 'row',
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      marginVertical: 8,
+    },
+    card: {
+      width: '100%',
+      borderRadius: 12,
+      padding: 12,
+      gap: 16,
+      backgroundColor: theme.card,
+    },
+    header: {
+      justifyContent: 'space-between',
+      flexDirection: 'row',
+    },
+    txtContainer: {
+      height: '100%',
+      gap: 5,
+    },
+    status: {
+      height: 21,
+      borderRadius: 5,
+      paddingVertical: 3,
+      paddingHorizontal: 6,
+      gap: 10,
+      backgroundColor: '#F0535312',
+      alignItems: 'center',
+    },
+    empty: {
+      width: '100%',
+      borderWidth: 0.5,
+      borderColor: theme.border,
+    },
+    footer: {
+      height: 17,
+      width: '100%',
+      gap: 16,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+    },
+    footerTxt: {
+      flexDirection: 'row',
+    },
+  });

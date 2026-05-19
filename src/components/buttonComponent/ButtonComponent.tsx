@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, TouchableOpacityProps } from 'react-native'
+import { ActivityIndicator, StyleSheet, TouchableOpacity, TouchableOpacityProps } from 'react-native'
 import InterTightMedium from '../fontComponents/InterTightMedium';
 
 
@@ -9,6 +9,7 @@ interface Props extends TouchableOpacityProps {
   gap?: number;
   borderwidth?: number;
   buttonWidth?: number; 
+  showLoader?: boolean;
   txtColor: string;
   bttnTxt: string;
  
@@ -20,6 +21,7 @@ const ButtonComponent: React.FC<Props> = ({
   borderc,
   gap,
   borderwidth,
+  showLoader=false,
   txtColor,
   bttnTxt,
   children,
@@ -44,6 +46,7 @@ const ButtonComponent: React.FC<Props> = ({
       <InterTightMedium fsize={16} fcolor={txtColor}>
         {bttnTxt}
       </InterTightMedium>
+      {showLoader && <ActivityIndicator color="#FFFFFF" />}
     </TouchableOpacity>
   );
 };
@@ -59,6 +62,6 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     padding: 12,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
 });

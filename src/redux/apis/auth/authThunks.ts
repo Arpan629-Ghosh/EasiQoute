@@ -28,8 +28,7 @@ export const loginThunk = createAsyncThunk(
 
       return authData;
     } catch (error) {
-      console.log(error);
-      return thunkAPI.rejectWithValue('Something went wrong');
+      return thunkAPI.rejectWithValue(error);
     }
   },
 );
@@ -46,8 +45,8 @@ export const signupThunk = createAsyncThunk(
       const authData = response.payload;
       return authData;
     } catch (error) {
-      console.log(error);
-      return thunkAPI.rejectWithValue('Something went wrong');
+   
+      return thunkAPI.rejectWithValue(error);
     }
   },
 );
@@ -63,8 +62,8 @@ export const forgotPasswordThunk = createAsyncThunk(
       }
       return response.message;
     } catch (error) {
-      console.log(error);
-      return thunkAPI.rejectWithValue('Something went wrong');
+     
+      return thunkAPI.rejectWithValue(error);
     }
   },
 );
@@ -79,8 +78,7 @@ export const profileSetupThunk = createAsyncThunk(
       }
       return response.payload;
     } catch (error) {
-      console.log(error);
-      return thunkAPI.rejectWithValue('Something went wrong');
+      return thunkAPI.rejectWithValue(error);
     }
   },
 );
@@ -96,7 +94,37 @@ export const companyProfileSetupThunk = createAsyncThunk(
       return response.payload;
     } catch (error) {
       console.log(error);
-      return thunkAPI.rejectWithValue('Something went wrong');
+      return thunkAPI.rejectWithValue(error);
     }
   },
+);
+
+export const logoutThunk = createAsyncThunk('/api/auth/logout', 
+
+  async (_:void, thunkAPI) => {
+    try {
+      const response = await authServices.logout();
+      if (!response.result) {
+        return thunkAPI.rejectWithValue(response.message);
+      }
+      return response.payload
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  }
+);
+
+export const searchAddressThunk = createAsyncThunk('/api/address/search',
+  async (payload: string, thunkAPI) => {
+    try {
+      const response = await authServices.searchAddress(payload);
+      if (!response.result) {
+        return thunkAPI.rejectWithValue(response.message);
+      }
+      return response.payload;
+    } catch (error) {
+      console.log(error)
+      return thunkAPI.rejectWithValue(error)
+    }
+  }
 );

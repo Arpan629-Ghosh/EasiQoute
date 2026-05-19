@@ -36,12 +36,15 @@ export const createStyles = (theme: Theme) =>
       width: 28,
     },
     formContainer: {
+      flex:1,
       paddingVertical: 20,
       paddingHorizontal: 12,
       gap: 24,
+      overflow: "visible"
     },
     inputContainer: {
-      gap: 20,
+      gap: 24,
+      overflow: "visible"
     },
     inputicon: {
       height: 50,
@@ -84,7 +87,13 @@ export const createStyles = (theme: Theme) =>
       alignItems: 'center',
     },
     scrollview: {
-      paddingBottom: 120,
       flex: 1,
+    },
+    scrollContent: {
+      paddingBottom: 140,
+    },
+    searchWrapper: {
+      position: 'relative',
+      zIndex: 999,
     },
   });

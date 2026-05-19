@@ -4,6 +4,7 @@ import ModalComponent from '../modal/ModalComponent';
 import ButtonComponent from '../buttonComponent/ButtonComponent';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import {Image} from 'react-native-compressor'
 interface props {
   visible: boolean;
   onClose: () => void;
@@ -18,7 +19,7 @@ const ImagePicker = ({ visible, onClose, onImageUri, onRemoveUri }: props) => {
       mediaType: 'photo',
     });
 
-    // console.log(result);
+    console.log(result);
 
     if (result.didCancel) return;
     if (result.errorCode) {
@@ -27,8 +28,12 @@ const ImagePicker = ({ visible, onClose, onImageUri, onRemoveUri }: props) => {
 
     const uri = result.assets?.[0]?.uri;
     if (uri) {
-      // console.log(uri);
-      onImageUri(uri);
+      console.log(uri);
+      const compressedImg = await Image.compress(uri, {
+        compressionMethod: 'auto'
+      })
+      console.log(compressedImg)
+      onImageUri(compressedImg);
       onClose();
     }
   };
@@ -47,7 +52,10 @@ const ImagePicker = ({ visible, onClose, onImageUri, onRemoveUri }: props) => {
 
     const uri = result.assets?.[0]?.uri;
     if (uri) {
-      onImageUri(uri);
+      const compressedImg = await Image.compress(uri, {
+        compressionMethod: 'auto'
+      })
+      onImageUri(compressedImg);
       // console.log(uri);
       onClose();
     }

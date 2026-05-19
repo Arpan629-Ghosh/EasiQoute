@@ -106,5 +106,10 @@ export const createStyles = (theme: Theme) =>  StyleSheet.create({
   },
   flatlist: {
     paddingBottom: 20
+  },
+  pic: {
+    height: 40,
+    width: 40,
+    borderRadius: 40
   }
 });

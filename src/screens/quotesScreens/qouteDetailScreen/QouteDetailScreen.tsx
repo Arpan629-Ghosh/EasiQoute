@@ -1,4 +1,4 @@
-import { Image, ScrollView, StatusBar, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { createStyles } from './style';
 import { icons } from '@/config/icons';
@@ -16,6 +16,7 @@ import StatusChanger from '@/components/statusChanger/StatusChanger';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Items from '@/components/cardDetailsComponent/Items';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useToast } from '@/hooks/useToast';
 
 const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
 
@@ -24,6 +25,7 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
   const insets = useSafeAreaInsets();
 
   const { theme, isDark } = useAppTheme();
+  const { showToast } = useToast();
   const styles = useMemo(() => createStyles(theme), [theme])
   const navigateToBack = () => {
     navigation.goBack();
@@ -59,7 +61,7 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
           translucent
         />
       )}
-      <View style={[styles.header, {paddingTop: insets.top + 12}]}>
+      <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
         <View style={styles.headerComponent}>
           <TouchableOpacity onPress={navigateToBack}>
             <Image
@@ -83,6 +85,11 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollview}
         >
+          <TouchableOpacity
+            onPress={() => showToast("Success! Custom toast triggered.'")}
+          >
+            <Text>Show custom toast</Text>
+          </TouchableOpacity>
           <View style={styles.cardContainer}>
             <Card style={styles.cardone}>
               <View style={styles.status}>
@@ -406,7 +413,6 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
             gap={8}
           >
             <Image source={icons.ic_duplicate} style={styles.addicon} />
-           
           </ButtonComponent>
         </View>
       </View>

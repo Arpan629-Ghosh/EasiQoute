@@ -26,6 +26,7 @@ import ImagePicker from '@/components/imagePicker/ImagePicker';
 import CountryPickerComponent from '@/components/countryPicker/CountryPickerComponent';
 import { FormData } from '../businessAddressScren/BusinessAddressScreen';
 import { useAuth } from '@/hooks/apis/useAuth';
+import { useToast } from '@/hooks/useToast';
 
 interface BusinessForm {
   name: string;
@@ -62,7 +63,8 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
   const phoneRef = useRef<ReactNativePhoneInput>(null);
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
-  const { companyProfileSetup } = useAuth();
+  const { showToast } = useToast();
+  const { companyProfileSetup, loading } = useAuth();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const navigateToAddress = () => {
@@ -85,8 +87,10 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
         vat_number: form.vatNumber || null,
         brand_color: form.color,
       });
+      showToast('Company profile setup successfully.');
       navigation.replace('MainTabs');
     } catch (error) {
+      showToast(String(error), 'error')
       console.log('COMPANY PROFILE SETUP ERROR', error);
     }
   };
@@ -321,6 +325,8 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
               onPress={handleCompanyProfileSetup}
               bg={theme.primary}
               bttnTxt="Continue"
+              showLoader={loading}
+              gap={4}
               txtColor={theme.primaryText}
             />
           </View>

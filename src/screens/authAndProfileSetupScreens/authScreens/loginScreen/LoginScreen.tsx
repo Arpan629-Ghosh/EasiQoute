@@ -21,6 +21,7 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import { useToast } from '@/hooks/useToast';
 
 interface LoginForm {
   email: string;
@@ -39,7 +40,8 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
   const emailRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
   const { theme } = useAppTheme();
-  const { login } = useAuth();
+  const { login, loading } = useAuth();
+  const { showToast } = useToast();
   const pushToken = useSelector((state: RootState) => state.notification.fcmToken)
   const styles = useMemo(() => createStyles(theme), [theme]);
   const handleInput = (name: string, value: string) => {
@@ -69,9 +71,11 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         device_type: Platform.OS === "ios" ? "ios" : "android",
         push_token: pushToken || undefined
       });
+      showToast('Login Successful');
       navigation.replace('IntroScreen');
     } catch (error) {
       console.log("LOGIN ERROR", error)
+      showToast(String(error), 'error')
     }
   }
 
@@ -142,6 +146,8 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
                   onPress={handleLogin}
                   bg={theme.primary}
                   bttnTxt="Login"
+                  showLoader={loading}
+                  gap={4}
                   txtColor={theme.primaryText}
                 />
                 <View style={styles.forgotpasswordView}>

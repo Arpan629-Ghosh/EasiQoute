@@ -1,5 +1,5 @@
-import { FlatList, Image, StatusBar, View } from 'react-native';
-import React, { useMemo } from 'react';
+import { FlatList, Image, StatusBar, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useMemo } from 'react';
 import { createStyles } from './style';
 import { images } from '@/config/images';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
@@ -8,12 +8,35 @@ import Icons from '@/components/icons/Icons';
 import AppDetails from '@/components/appDetails/AppDetails';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import RenderActivities from '@/components/renderActivities/RenderActivities';
-import { DATA } from '@/config/activities';
 import { useAppTheme } from '@/hooks/useAppTheme';
+import { useHomeScreenData } from '@/hooks/apis/useHomeScreenData';
+import HomeEmptyScreen from '@/components/emptyScreenComponents/HomeEmptyScreen';
+import { useAuth } from '@/hooks/apis/useAuth';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '@/types/navigation.types';
+import {NativeStackNavigationProp } from 'node_modules/@react-navigation/native-stack/lib/typescript/src/types';
+import Loader from '@/components/loader/Loader';
 
 const HomeScreen = () => {
   const { theme } = useAppTheme();
+  const { homeScreenData, homeData, loading } = useHomeScreenData();
+  const { user } = useAuth();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const styles = useMemo(() => createStyles(theme), [theme]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await homeScreenData();
+        console.log("home", data);
+     
+      } catch (error) {
+        console.log("HOME SCREEN DATA FETCH ERROR",error)
+      }
+    }
+    fetchData();
+  }, [])
+
+  console.log('Home', homeData?.recentActivities);
   return (
     <View style={styles.safeareaview}>
       <StatusBar
@@ -29,10 +52,20 @@ const HomeScreen = () => {
             <View style={styles.headerTxt}>
               <View style={styles.profile}>
                 <View style={styles.profilepic}>
-                  {/* profile image from response */}
+                  <Image
+                    source={
+                      user?.avatar
+                        ? {
+                            uri: user.avatar
+                          }
+                        : images.img_profile
+                    }
+                    style={styles.pic}
+                    resizeMode="cover"
+                  />
                 </View>
                 <InterTightMedium fsize={18} fcolor="#FFFFFF">
-                  Welcome, Emma!
+                  Welcome, {user?.name.split(' ')[0]}!
                 </InterTightMedium>
               </View>
               <Image source={images.img_pro} style={styles.pro} />
@@ -40,23 +73,26 @@ const HomeScreen = () => {
             <View style={styles.details}>
               <View style={styles.invoiceqoute}>
                 <AppDetails
-                  price="£12,500.00"
+                  price={`£${homeData?.invoiceDetails.outstanding_invoices_amount}`}
                   type="Outstanding Invoices"
-                  numberDueActive="3 Overdue"
+                  numberDueActive={`${homeData?.invoiceDetails.overdue_invoices} Overdue`}
                 />
 
                 <View style={styles.emptyView} />
 
                 <AppDetails
-                  price="£8,250.00"
+                  price={`£${homeData?.quoteDetails.pending_quotes_amount}`}
                   type="Pending Quotes"
-                  numberDueActive="5 Active"
+                  numberDueActive={`${homeData?.quoteDetails.active_quotes} Active`}
                 />
               </View>
               <View style={styles.icons}>
-                <Icons text="New Quote">
-                  <Image source={icons.ic_whiteqoute} style={styles.vector} />
-                </Icons>
+                <TouchableOpacity onPress={() => navigation.navigate("NewQuoteScreens")}>
+                  <Icons text="New Quote">
+                    <Image source={icons.ic_whiteqoute} style={styles.vector} />
+                  </Icons>
+                </TouchableOpacity>
+
                 <Icons text="New Invoice">
                   <Image source={icons.ic_whiteqoute} style={styles.vector} />
                 </Icons>
@@ -76,13 +112,17 @@ const HomeScreen = () => {
           <View style={styles.empty} />
         </View>
         <View>
-          <FlatList
-            data={DATA}
-            renderItem={({ item }) => <RenderActivities item={item} />}
-            keyExtractor={item => item.id}
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.flatlist}
-          />
+          {homeData?.recentActivities?.length === 0 ? (
+            <HomeEmptyScreen />
+          ) : (
+            <FlatList
+              data={homeData?.recentActivities || []}
+              renderItem={({ item }) => <RenderActivities item={item} />}
+              keyExtractor={item => item.id.toString()}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={styles.flatlist}
+            />
+          )}
         </View>
       </View>
       <View style={styles.footer}>
@@ -90,6 +130,7 @@ const HomeScreen = () => {
           Free trial ends on November 20, 2025
         </InterTightRegular>
       </View>
+      <Loader visible={ loading} />
     </View>
   );
 };

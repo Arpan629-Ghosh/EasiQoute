@@ -21,7 +21,7 @@ export type RootStackParamList = {
     address: FormData | null;
   };
   MainTabs: undefined;
-  QouteDetailScreen: { quoteId: string };
+  QouteDetailScreen: { quoteId: number };
   IntroductionScreen: undefined;
   NewQuoteScreens: undefined;
   TemplatesScreen: undefined;

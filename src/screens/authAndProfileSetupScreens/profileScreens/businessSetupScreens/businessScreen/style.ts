@@ -90,13 +90,13 @@ export const createStyles = (theme: Theme) =>
       borderBottomColor: theme.border,
     },
     addressFormNavContainer: {
-      height: 85,
+    
       borderRadius: 12,
       borderWidth: 2,
       padding: 12,
       gap: 12,
       borderColor: theme.border,
-      // backgroundColor: "red"
+    
     },
     txtContainer: {
       height: 20,

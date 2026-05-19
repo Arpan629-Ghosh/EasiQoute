@@ -13,6 +13,7 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
+import { useToast } from '@/hooks/useToast';
 
 
 
@@ -32,7 +33,8 @@ const RegisterScreen = ({navigation} : RegisterScreenProps) => {
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const { signup } = useAuth()
+  const { signup, loading } = useAuth();
+  const {showToast} = useToast()
   const pushToken = useSelector((state: RootState) => state.notification.fcmToken)
   
     const handleInput = (name: string, value: string) => {
@@ -50,9 +52,11 @@ const RegisterScreen = ({navigation} : RegisterScreenProps) => {
           device_type: Platform.OS === 'ios' ? 'ios' : 'android',
           push_token: pushToken || undefined,
         });
+        showToast('Signup Successful');
         navigation.navigate('LoginScreen');
       } catch (error) {
         console.log('SIGNUP ERROR', error);
+        showToast(String(error), 'error' )
       }
     };
   
@@ -127,6 +131,8 @@ const RegisterScreen = ({navigation} : RegisterScreenProps) => {
                   bg={theme.primary}
                   bttnTxt="Create Account"
                   txtColor={theme.primaryText}
+                  showLoader={loading}
+                  gap={4}
                   onPress={handleSignup}
                 />
               </View>

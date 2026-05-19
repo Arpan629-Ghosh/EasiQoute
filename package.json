@@ -24,6 +24,7 @@
     "axios": "^1.16.1",
     "react": "19.2.3",
     "react-native": "0.85.1",
+    "react-native-compressor": "^1.18.2",
     "react-native-country-picker-modal": "^2.0.0",
     "react-native-gesture-handler": "^2.31.1",
     "react-native-gradients": "^2.1.1",

@@ -15,6 +15,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { notificationService } from '@/firebase/notification';
 import { setFCMToken } from '@/redux/apis/notification/notificationSlice';
+import ToastProvider from '@/components/toast/ToastContext';
 
 
 const AppContent = () => {
@@ -70,7 +71,9 @@ function App() {
     <SafeAreaProvider>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <AppContent />
+          <ToastProvider>
+            <AppContent />
+          </ToastProvider>
         </PersistGate>
       </Provider>
     </SafeAreaProvider>

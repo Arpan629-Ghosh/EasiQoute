@@ -7,13 +7,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { createStyles } from './style';
 import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
 import Input from '@/components/inputComponent/Input';
 import { icons } from '@/config/icons';
-import { DATA } from '@/config/activities';
-import RenderActivities from '@/components/renderActivities/RenderActivities';
 import FilterAndSorting from '@/components/filterAndSorting/FilterAndSorting';
 import NoSubscription from '@/components/noSubscription/NoSubscription';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -21,6 +19,10 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import LinearGradient from 'react-native-linear-gradient';
 import { MainQuoteScreenProps } from '@/types/navigation.types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useQuotes } from '@/hooks/apis/useQuotes';
+import RenderQuotes from '@/components/renderQuotes/RenderQuotes';
+import QuoteEmptyScreen from '@/components/emptyScreenComponents/QuoteEmptyScreen';
+import Loader from '@/components/loader/Loader';
 
 interface FilterAndSorting {
   startDate: string;
@@ -42,9 +44,23 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
 
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
+  const { fetchQuotesScreenData, quoteList, loading } = useQuotes();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const debouncedSearch = useDebounce(search);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchQuotesScreenData();
+        console.log("quote", data)
+      } catch (error) {
+        console.log("QUOTE SCREEN DATA FETCH ERROR", error)
+      }
+    }
+    fetchData()
+  },[])
 
   const navigateToNewQuote = () => {
     navigation.navigate("NewQuoteScreens")
@@ -121,7 +137,8 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
   }, []);
 
   const processedData = useMemo(() => {
-    let result = [...DATA];
+    console.log("run")
+    let result = [...(quoteList?.data || [])];
 
     if (!appliedData && !debouncedSearch.trim()) return result;
 
@@ -133,19 +150,19 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
       result = result.filter(
         item =>
           item.title.toLowerCase().includes(lower) ||
-          item.company.toLowerCase().includes(lower) ||
-          item.typeValue.toLowerCase().includes(lower) ||
-          item.paymentStatus.toLowerCase().includes(lower),
+          item.name.toLowerCase().includes(lower) ||
+          item.reference_number.toLowerCase().includes(lower) ||
+          item.status.toLowerCase().includes(lower),
       );
     }
 
     if (statuses && statuses.length > 0) {
-      result = result.filter(item => statuses.includes(item.paymentStatus));
+      result = result.filter(item => statuses.includes(item.status));
     }
 
     if (startDate || endDate) {
       const parse = (d: string) => {
-        const [day, month, year] = d.split('/');
+        const [day, month, year] = d.split('-');
         return new Date(`${year}-${month}-${day}`);
       };
 
@@ -153,9 +170,9 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
       const end = endDate ? parse(endDate) : null;
 
       result = result.filter(item => {
-        if (!item.date) return true;
+        if (!item.expiry_date) return true;
 
-        const itemDate = parse(item.date);
+        const itemDate = parse(item.expiry_date);
 
         if (start && itemDate < start) return false;
         if (end && itemDate > end) return false;
@@ -166,15 +183,17 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
 
     if (amount) {
       result.sort((a, b) => {
-        const priceA = parseFloat(a.price.replace(/[^\d.]/g, ''));
-        const priceB = parseFloat(b.price.replace(/[^\d.]/g, ''));
+        const priceA = a.price
+        const priceB = b.price
 
         return amount === 'Low to High' ? priceA - priceB : priceB - priceA;
       });
     }
 
     return result;
-  }, [appliedData, debouncedSearch]);
+  }, [appliedData, debouncedSearch, quoteList?.data]);
+
+
 
   // console.log("processedData", processedData)
 
@@ -201,7 +220,9 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
         )}
         <View style={styles.mainContainer}>
           <View style={styles.header}>
-            <View style={[styles.headerComponent, {paddingTop: insets.top + 12}]}>
+            <View
+              style={[styles.headerComponent, { paddingTop: insets.top + 12 }]}
+            >
               <InterTightSemiBold fsize={24} fcolor={theme.textPrimary}>
                 Quotes
               </InterTightSemiBold>
@@ -233,13 +254,17 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
             </View>
           </View>
           <View style={styles.flatlist}>
-            <FlatList
-              data={processedData}
-              renderItem={({ item }) => <RenderActivities item={item} />}
-              keyExtractor={item => item.id}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.flat}
-            />
+            {quoteList?.data.length === 0 ? (
+              <QuoteEmptyScreen />
+            ) : (
+              <FlatList
+                data={processedData}
+                renderItem={({ item }) => <RenderQuotes item={item} />}
+                keyExtractor={item => item.id.toString()}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.flat}
+              />
+            )}
           </View>
           <View style={styles.add}>
             <TouchableOpacity onPress={navigateToNewQuote}>
@@ -266,6 +291,7 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
           visible={openSubscriptionModal}
           onClose={handleCloseSubscriptionModal}
         />
+        <Loader visible={loading } />
       </LinearGradient>
     </KeyboardAvoidingView>
   );

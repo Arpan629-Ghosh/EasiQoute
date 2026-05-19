@@ -123,5 +123,7 @@ export const icons = {
   ic_addpeople: require('@assets/icons/ic_addpeople.png'),
   ic_iicon: require("@assets/icons/ic_iicon.png"),
   ic_addsign: require("@assets/icons/ic_addsign.png"),
-  ic_crossicn: require("@assets/icons/ic_cross.png")
+  ic_crossicn: require("@assets/icons/ic_cross.png"),
+  ic_check: require("@assets/icons/ic_check.png"),
+  ic_error: require("@assets/icons/ic_error.png")
 };

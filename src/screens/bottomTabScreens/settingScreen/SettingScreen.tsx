@@ -21,46 +21,48 @@ import AppearanceBottomSheet from '@/components/appearanceBottomSheet/Appearance
 import LogoutModal from '@/components/ logoutModal/LogoutModal';
 import { SettingScreenProps } from '@/types/navigation.types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useAuth } from '@/hooks/apis/useAuth';
 
-const SettingScreen = ({navigation} : SettingScreenProps) => {
+const SettingScreen = ({ navigation }: SettingScreenProps) => {
   const [enabledStripe, setEnabledStripe] = useState<boolean>(false);
   const [pushNotification, setPushNotification] = useState<boolean>(true);
   const [emailUpdate, setEmailUpdate] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
   const [openLogoutModal, setOpenLogoutModal] = useState<boolean>(false);
   const { theme, isDark, mode } = useAppTheme();
+  const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const navigateToPaymentInfo = () => {
-    navigation.navigate("PaymentInfoScreen")
-  }
+    navigation.navigate('PaymentInfoScreen');
+  };
 
   const navigateToBillingPreferences = () => {
-    navigation.navigate("BillingPreferencesScreen")
-  }
+    navigation.navigate('BillingPreferencesScreen');
+  };
 
   const navigateToTeamMember = () => {
-    navigation.navigate("TeamMembersScreen")
-  }
+    navigation.navigate('TeamMembersScreen');
+  };
 
   const navigateToChangePassword = () => {
-    navigation.navigate("ChangePasswordScreen");
-  }
+    navigation.navigate('ChangePasswordScreen');
+  };
 
   const navigateToQIScreen = () => {
-    navigation.navigate("QuoteAndInvoicesSettingScreen")
-  }
+    navigation.navigate('QuoteAndInvoicesSettingScreen');
+  };
 
   const navigateToCategories = () => {
-    navigation.navigate("CategoriesScreen")
-  }
+    navigation.navigate('CategoriesScreen');
+  };
   const navigateToSubCategory = () => {
-    navigation.navigate("SubCategoriesScreen")
-  }
+    navigation.navigate('SubCategoriesScreen');
+  };
   const navigateToItems = () => {
-    navigation.navigate("ItemsScreen")
-  }
+    navigation.navigate('ItemsScreen');
+  };
 
   const handleClose = () => {
     setOpen(false);
@@ -85,7 +87,7 @@ const SettingScreen = ({navigation} : SettingScreenProps) => {
         />
       )}
 
-      <View style={[styles.header, {paddingTop: insets.top}]}>
+      <View style={[styles.header, { paddingTop: insets.top }]}>
         <InterTightSemiBold fsize={24} fcolor={theme.textPrimary}>
           Settings
         </InterTightSemiBold>
@@ -101,13 +103,19 @@ const SettingScreen = ({navigation} : SettingScreenProps) => {
             <View style={styles.profile}>
               <View style={styles.profilepic}>
                 <Image
-                  source={images.img_darkprofile}
+                  source={
+                    user?.avatar
+                      ? {
+                          uri: user.avatar,
+                        }
+                      : images.img_profile
+                  }
                   style={styles.profilepic}
                 />
               </View>
               <View style={styles.txt}>
                 <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
-                  Emma Wellington
+                  {user?.name}
                 </InterTightMedium>
                 <View style={styles.editproflie}>
                   <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
