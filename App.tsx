@@ -16,14 +16,16 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { notificationService } from '@/firebase/notification';
 import { setFCMToken } from '@/redux/apis/notification/notificationSlice';
 import ToastProvider from '@/components/toast/ToastContext';
+import { useAuth } from '@/hooks/apis/useAuth';
 
 
 const AppContent = () => {
 
   const { theme, isDark } = useAppTheme();
+  const { user } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
   // const { user } = useAuth();
-  // console.log(user)
+  console.log(user)
   
 
   useEffect(() => {

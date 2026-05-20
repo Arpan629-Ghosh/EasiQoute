@@ -26,7 +26,6 @@ const MainTabs = () => {
           paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
           height: 50 + (insets.bottom > 0 ? insets.bottom : 0),
         },
-        
       }}
     >
       <Tab.Screen

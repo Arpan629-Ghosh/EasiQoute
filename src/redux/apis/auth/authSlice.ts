@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { User } from '@/types/apis/auth.types';
-import { companyProfileSetupThunk, forgotPasswordThunk, loginThunk, profileSetupThunk, signupThunk } from './authThunks';
+import { companyProfileSetupThunk, forgotPasswordThunk, loginThunk, logoutThunk, profileSetupThunk, signupThunk } from './authThunks';
 
 export interface AuthState {
   user: User | null;
@@ -19,13 +19,7 @@ const initialState: AuthState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {
-    logout: state => {
-      state.user = null;
-      state.accessToken = null;
-      state.error = null;
-    },
-  },
+  reducers: {},
 
   // login
   extraReducers: builder => {
@@ -105,9 +99,24 @@ const authSlice = createSlice({
       .addCase(companyProfileSetupThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string
+      })
+    
+    //logout
+      .addCase(logoutThunk.pending, state => {
+        state.loading = true;
+        state.error = null
+      })
+      .addCase(logoutThunk.fulfilled, state => {
+        state.loading = false;
+        state.user = null;
+        state.accessToken = null;
+        state.error = null;
+      })
+      .addCase(logoutThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string
     })
   },
 });
 
-export const { logout } = authSlice.actions;
 export default authSlice.reducer;

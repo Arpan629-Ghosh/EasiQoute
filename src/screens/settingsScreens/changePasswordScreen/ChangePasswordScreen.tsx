@@ -17,23 +17,33 @@ import Input from '@/components/inputComponent/Input';
 import { images } from '@/config/images';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSettings } from '@/hooks/apis/useSettings';
+import { useToast } from '@/hooks/useToast';
+import { ChangePasswordScreenProps } from '@/types/navigation.types';
 
 interface ChangePasswordForm {
   oldPassword: string;
   newPassword: string;
   confirmPassword: string;
 }
-const ChangePasswordScreen = () => {
+const ChangePasswordScreen = ({navigation} : ChangePasswordScreenProps) => {
   const [changePasswordData, setChangePaswordData] =
     useState<ChangePasswordForm>({
       oldPassword: '',
       newPassword: '',
       confirmPassword: '',
     });
+  const [hidePassword, setHidePassword] = useState({
+    oldPassword: true,
+    newPassword: true,
+    confirmPassword: true
+  })
   const oldRef = useRef<TextInput | null>(null);
   const newRef = useRef<TextInput | null>(null);
   const confirmRef = useRef<TextInput | null>(null);
   const insets = useSafeAreaInsets();
+  const { changePassword, settingLoading } = useSettings();
+  const { showToast } = useToast();
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -43,6 +53,36 @@ const ChangePasswordScreen = () => {
       [name]: value,
     }));
   };
+
+  const togglePasswordVisibility = (
+    field: keyof typeof hidePassword,
+  ) => {
+    setHidePassword(prev => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+
+  const handleChangePassword = async () => {
+    try {
+      await changePassword({
+        old_password: changePasswordData.oldPassword,
+        new_password: changePasswordData.newPassword,
+      });
+      showToast('Password changed successfully.');
+      navigation.navigate('MainTabs', {
+        screen: "Settings",
+
+        params: {
+          screen: "SettingScreen"
+        }
+      })
+    } catch (error) {
+      showToast(String(error), 'error')
+    }
+    
+  }
+
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       <Header txt="Change Password" borderBottomEnabled={true} />
@@ -67,7 +107,7 @@ const ChangePasswordScreen = () => {
                   <Input
                     ref={oldRef}
                     placeholder="Enter old password"
-                    secureTextEntry
+                    secureTextEntry={hidePassword.oldPassword}
                     textContentType="password"
                     style={styles.noBorderInput}
                     value={changePasswordData.oldPassword}
@@ -75,7 +115,9 @@ const ChangePasswordScreen = () => {
                     onSubmitEditing={() => newRef.current?.focus()}
                     returnKeyType="next"
                   />
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => togglePasswordVisibility('oldPassword')}
+                  >
                     <Image source={images.img_vector} style={styles.img} />
                   </TouchableOpacity>
                 </View>
@@ -88,7 +130,7 @@ const ChangePasswordScreen = () => {
                   <Input
                     ref={newRef}
                     placeholder="Enter new password"
-                    secureTextEntry
+                    secureTextEntry={hidePassword.newPassword}
                     textContentType="password"
                     style={styles.noBorderInput}
                     value={changePasswordData.newPassword}
@@ -96,7 +138,9 @@ const ChangePasswordScreen = () => {
                     onSubmitEditing={() => confirmRef.current?.focus()}
                     returnKeyType="next"
                   />
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => togglePasswordVisibility('newPassword')}
+                  >
                     <Image source={images.img_vector} style={styles.img} />
                   </TouchableOpacity>
                 </View>
@@ -109,13 +153,15 @@ const ChangePasswordScreen = () => {
                   <Input
                     ref={confirmRef}
                     placeholder="Confirm password"
-                    secureTextEntry
+                    secureTextEntry={hidePassword.confirmPassword}
                     textContentType="password"
                     style={styles.noBorderInput}
                     value={changePasswordData.confirmPassword}
                     onChangeText={txt => handleInput('confirmPassword', txt)}
                   />
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => togglePasswordVisibility('confirmPassword')}
+                  >
                     <Image source={images.img_vector} style={styles.img} />
                   </TouchableOpacity>
                 </View>
@@ -130,6 +176,8 @@ const ChangePasswordScreen = () => {
               bg={theme.primary}
               bttnTxt="Change Password"
               txtColor={theme.primaryText}
+              onPress={handleChangePassword}
+              showLoader={settingLoading}
             />
           </View>
         </View>

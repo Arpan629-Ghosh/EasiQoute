@@ -7,5 +7,7 @@ export const ENDPOINTS = {
   LOGOUT: '/api/auth/logout',
   SEARCHADDRESS: '/api/address/search',
   HOMESCREEN: '/api/home',
-  QUOTELIST: '/api/quotes'
+  QUOTELIST: '/api/quotes',
+  CHANGEPASSWORD: '/api/auth/change-password',
+  CREATECATEGORIES: '/api/categories',
 };

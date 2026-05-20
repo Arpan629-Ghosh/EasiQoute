@@ -1,5 +1,5 @@
 import {  View, } from 'react-native'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useAppTheme } from '@/hooks/useAppTheme'
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -8,11 +8,31 @@ import Input from '@/components/inputComponent/Input';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSettings } from '@/hooks/apis/useSettings';
+import { useToast } from '@/hooks/useToast';
+import { NewCategoryScreenProps, } from '@/types/navigation.types';
 
-const NewCategoryScreen = () => {
+
+const NewCategoryScreen = ({navigation} : NewCategoryScreenProps) => {
+  const [input, setInput] = useState<string>("")
   const insets = useSafeAreaInsets();
-    const { theme } = useAppTheme();
-    const styles  = useMemo(() => createStyles(theme), [theme])
+  const { theme } = useAppTheme();
+  const { newCategories, settingLoading } = useSettings();
+  const { showToast } = useToast();
+  const styles = useMemo(() => createStyles(theme), [theme])
+  
+  const handleNewCategory = async () => {
+    try {
+      await newCategories({
+        name: input,
+      });
+      navigation.goBack();
+      showToast('Category updated successfully.');
+    } catch (error) {
+      showToast(String(error), 'error')
+    }
+    
+  }
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       <View style={styles.header}>
@@ -26,7 +46,13 @@ const NewCategoryScreen = () => {
             <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
               Category Name
             </InterTightRegular>
-            <Input placeholder="Category Name" />
+            <Input
+              value={input}
+              onChangeText={(txt) => setInput(txt)}
+              placeholder="Category Name"
+              keyboardType='name-phone-pad'
+              returnKeyLabel='done'
+            />
           </View>
         </View>
       </View>
@@ -35,6 +61,8 @@ const NewCategoryScreen = () => {
           <ButtonComponent
             bg={theme.primary}
             bttnTxt="Save"
+            showLoader={settingLoading}
+            onPress={handleNewCategory}
             txtColor={theme.primaryText}
           />
         </View>

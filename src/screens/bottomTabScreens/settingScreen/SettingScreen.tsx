@@ -63,6 +63,17 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
   const navigateToItems = () => {
     navigation.navigate('ItemsScreen');
   };
+  const navigateToProfile = () => {
+    navigation.navigate('ProfileScreen', {
+      isEdit: true
+    })
+  }
+
+  const navigateToBusiness = () => {
+    navigation.navigate('BusinessScreen', {
+      isEdit: true
+    })
+  }
 
   const handleClose = () => {
     setOpen(false);
@@ -117,20 +128,24 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
                 <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
                   {user?.name}
                 </InterTightMedium>
-                <View style={styles.editproflie}>
+                <TouchableOpacity
+                  style={styles.editproflie}
+                  onPress={navigateToProfile}
+                >
                   <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
                     Edit Profile
                   </InterTightMedium>
                   <Image source={icons.ic_arrowicn} style={styles.icn} />
-                </View>
+                </TouchableOpacity>
               </View>
             </View>
             <View style={styles.borderLine} />
-
-            <SettingInfoRow
-              icon={icons.ic_business}
-              txt="Business Information"
-            />
+            <TouchableOpacity onPress={navigateToBusiness}>
+              <SettingInfoRow
+                icon={icons.ic_business}
+                txt="Business Information"
+              />
+            </TouchableOpacity>
           </Card>
 
           <Card style={styles.card}>

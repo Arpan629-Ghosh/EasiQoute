@@ -27,6 +27,7 @@ import CountryPickerComponent from '@/components/countryPicker/CountryPickerComp
 import { FormData } from '../businessAddressScren/BusinessAddressScreen';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
+import { useSettings } from '@/hooks/apis/useSettings';
 
 interface BusinessForm {
   name: string;
@@ -47,7 +48,7 @@ interface BusinessForm {
   } | null;
 }
 
-const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
+const BusinessScreen = ({ navigation, route }: BusinessScreenProps) => {
   const [form, setForm] = useState<BusinessForm>({
     name: '',
     phone: '',
@@ -62,9 +63,11 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
   const [openOptions, setOpenOptions] = useState<boolean>(false);
   const phoneRef = useRef<ReactNativePhoneInput>(null);
   const insets = useSafeAreaInsets();
+  const {isEdit} = route.params || false
   const { theme, isDark } = useAppTheme();
   const { showToast } = useToast();
   const { companyProfileSetup, loading } = useAuth();
+  const { updateCompanyProfile, settingLoading } = useSettings();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const navigateToAddress = () => {
@@ -88,12 +91,45 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
         brand_color: form.color,
       });
       showToast('Company profile setup successfully.');
-      navigation.replace('MainTabs');
+      navigation.replace('MainTabs', {
+        screen: 'Home',
+
+        params: {
+          screen: 'HomeScreen',
+        },
+      });
     } catch (error) {
       showToast(String(error), 'error')
       console.log('COMPANY PROFILE SETUP ERROR', error);
     }
   };
+
+  const handleUpdateProfile = async () => {
+    try {
+      await updateCompanyProfile({
+        name: form.name,
+        logo: form.profileImage || null,
+        address: form.address?.address,
+        postcode: form.address?.postcode,
+        country: form.address?.country,
+        city: form.address?.city,
+        phone_number: form.phone,
+        vat_number: form.vatNumber || null,
+        brand_color: form.color,
+      });
+      showToast('Company profile updated successfully.');
+      navigation.navigate('MainTabs', {
+        screen: 'Settings',
+
+        params: {
+          screen: 'SettingScreen',
+        },
+      });
+    } catch (error) {
+      showToast(String(error), 'error');
+      console.log('COMPANY PROFILE SETUP ERROR', error);
+    }
+  }
   const updateField = useCallback((key: keyof BusinessForm, value: any) => {
     setForm(prev => ({
       ...prev,
@@ -168,7 +204,10 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
           enabled={true}
           keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
         >
-          <Header txt="Business Profile Setup" borderBottomEnabled={true} />
+          <Header
+            txt={isEdit ? 'Business Information' : 'Business Profile Setup'}
+            borderBottomEnabled={true}
+          />
           <ScrollView
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
@@ -322,10 +361,10 @@ const BusinessScreen = ({ navigation }: BusinessScreenProps) => {
         <View style={styles.footer}>
           <View style={styles.footerContainer}>
             <ButtonComponent
-              onPress={handleCompanyProfileSetup}
+              onPress={isEdit ? handleUpdateProfile :handleCompanyProfileSetup}
               bg={theme.primary}
-              bttnTxt="Continue"
-              showLoader={loading}
+              bttnTxt={isEdit ? 'Update Info' : 'Continue'}
+              showLoader={loading || settingLoading}
               gap={4}
               txtColor={theme.primaryText}
             />

@@ -27,7 +27,7 @@ interface LoginForm {
   email: string;
   password: string;
 }
-const LoginScreen = ({ navigation }: LoginScreenProps) => {
+const LoginScreen = ({ navigation, route }: LoginScreenProps) => {
 
   
 
@@ -39,6 +39,7 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
   const emailRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
+  const { isSessionExist } = route.params || false;
   const { theme } = useAppTheme();
   const { login, loading } = useAuth();
   const { showToast } = useToast();
@@ -72,7 +73,16 @@ const LoginScreen = ({ navigation }: LoginScreenProps) => {
         push_token: pushToken || undefined
       });
       showToast('Login Successful');
-      navigation.replace('IntroScreen');
+      if (isSessionExist)
+        navigation.replace('MainTabs', {
+          screen: "Home",
+          params: {
+            screen: "HomeScreen"
+          }
+        });
+   
+      else
+        navigation.replace('IntroScreen');
     } catch (error) {
       console.log("LOGIN ERROR", error)
       showToast(String(error), 'error')

@@ -1,4 +1,4 @@
-import { searchAddressThunk } from './../../redux/apis/auth/authThunks';
+import { logoutThunk, searchAddressThunk } from './../../redux/apis/auth/authThunks';
 
 import { companyProfileSetupThunk, forgotPasswordThunk, loginThunk, profileSetupThunk, signupThunk } from '@/redux/apis/auth/authThunks';
 import { AppDispatch, RootState } from '@/redux/store';
@@ -29,6 +29,10 @@ export const useAuth = () => {
     return dispatch(companyProfileSetupThunk(payload)).unwrap();
   }
 
+  const logout = async () => {
+    return dispatch(logoutThunk()).unwrap();
+  }
+
   const searchAddress = async (payload: string) => {
     return dispatch(searchAddressThunk(payload)).unwrap()
   }
@@ -39,6 +43,7 @@ export const useAuth = () => {
     forgotPassword,
     profileSetup,
     companyProfileSetup,
+    logout,
     searchAddress,
     user: auth.user,
     loading: auth.loading,

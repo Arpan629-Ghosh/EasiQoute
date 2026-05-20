@@ -1,0 +1,70 @@
+import { settingsServices } from '@/apis/services/settingsServices';
+import { Company } from '@/types/apis/auth.types';
+import { ChangePassword, CreateCategories } from '@/types/apis/settings.types';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+
+export const updateProfileThunk = createAsyncThunk(
+  '/api/company',
+
+  async (payload: Company, thunkAPI) => {
+    try {
+      const response = await settingsServices.companyProfileUpdate(payload);
+      if (!response.result) {
+        return thunkAPI.rejectWithValue(response.message);
+      }
+      console.log(response.payload);
+      return response.payload;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
+export const ChangePasswordThunk = createAsyncThunk(
+  '/api/auth/change-password',
+
+  async (payload: ChangePassword, thunkAPI) => {
+    try {
+      const response = await settingsServices.changePassword(payload);
+
+      if (!response.result) {
+        return thunkAPI.rejectWithValue(response.message);
+      }
+      return response.message;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);
+
+export const newCategoriesThunk = createAsyncThunk(
+    ' /api/categories',
+    
+    async (payload: CreateCategories, thunkAPI) => {
+        try {
+            const response = await settingsServices.newCategory(payload);
+            if (!response.result) {
+                return thunkAPI.rejectWithValue(response.message)
+            }
+            return response.payload;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error);
+        }
+    }
+)
+
+export const fetchCategoriesThunk = createAsyncThunk('/api/categories',
+
+    async (_: void, thunkAPI) => {
+        try {
+            const response = await settingsServices.fetchNewCategories();
+            if (!response.result) {
+                thunkAPI.rejectWithValue(response.message)
+            }
+            return response.payload
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+);

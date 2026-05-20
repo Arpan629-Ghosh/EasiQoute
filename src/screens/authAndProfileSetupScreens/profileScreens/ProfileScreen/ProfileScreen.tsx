@@ -31,7 +31,7 @@ interface ProfileForm {
   } | null;
 }
 
-const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
+const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
   const [formData, setFormData] = useState<ProfileForm>({
     name: '',
     phone: '',
@@ -42,12 +42,11 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
   const nameRef = useRef<TextInput | null>(null);
   const phRef = useRef<TextInput | null>(null);
   const insets = useSafeAreaInsets();
+  const { isEdit } = route.params || false;
   const { theme, isDark } = useAppTheme();
-  const { profileSetup, loading } = useAuth();
+  const { profileSetup, loading, user } = useAuth();
   const { showToast } = useToast();
   const styles = useMemo(() => createStyles(theme), [theme]);
-
- 
 
   const handleInput = (name: string, value: string) => {
     setFormData(prev => ({
@@ -56,7 +55,9 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
     }));
   };
 
-  const formatPhone = formData.phone.startsWith("+44") ? formData.phone : `${"+44"}${formData.phone}`
+  const formatPhone = formData.phone.startsWith('+44')
+    ? formData.phone
+    : `${'+44'}${formData.phone}`;
   // console.log(formatPhone)
 
   const handleClose = useCallback(() => {
@@ -72,7 +73,7 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
         fileName: 'profile.jpg',
       },
     }));
-  },[]);
+  }, []);
 
   const removeImageUri = useCallback(() => {
     setFormData(prev => ({
@@ -80,21 +81,40 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
       imageUri: null,
     }));
   }, []);
-  
-  const handleProfleSetup = async() => {
+
+  const handleProfleSetup = async () => {
     try {
       await profileSetup({
         name: formData.name,
         phone: formatPhone,
-        avatar: formData.imageUri || null
-      })
+        avatar: formData.imageUri || null,
+      });
       showToast('Profile updated successfully.');
-      navigation.navigate("BusinessScreen")
+      if (isEdit) {
+        navigation.navigate('MainTabs', {
+          screen: 'Settings',
+
+          params: {
+            screen: 'SettingScreen'
+          }
+        })
+      }
+      else if (user?.is_company_profile_setup) navigation.replace('MainTabs', {
+        screen: 'Home',
+
+        params: {
+          screen: 'HomeScreen',
+        },
+      });
+      else
+        navigation.navigate('BusinessScreen', {
+          isEdit: false,
+        });
     } catch (error) {
-      showToast(String(error), 'error')
-      console.log("PROFILE SETUP ERROR",error);
+      showToast(String(error), 'error');
+      console.log('PROFILE SETUP ERROR', error);
     }
-  }
+  };
 
   return (
     <View style={[styles.safeareaview, { paddingBottom: insets.bottom }]}>
@@ -105,7 +125,10 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
       >
         <View style={styles.container}>
           <View style={styles.mainContainer}>
-            <Header borderBottomEnabled={true} txt="Profile Setup" />
+            <Header
+              borderBottomEnabled={true}
+              txt={isEdit ? 'Edit Profile' : 'Profile Setup'}
+            />
             <ScrollView
               keyboardShouldPersistTaps="handled"
               style={styles.scrollview}
@@ -117,9 +140,9 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
                       source={
                         formData.imageUri
                           ? { uri: formData.imageUri.uri }
-                        : isDark
-                        ? images.img_darkprofile
-                        : images.img_profile
+                          : isDark
+                          ? images.img_darkprofile
+                          : images.img_profile
                       }
                       style={styles.profileImg}
                     />
@@ -168,7 +191,7 @@ const ProfileScreen = ({ navigation }: ProfileScreenProps) => {
             <ButtonComponent
               onPress={handleProfleSetup}
               bg={theme.primary}
-              bttnTxt="Continue"
+              bttnTxt={isEdit ? 'Update Profile' : 'Continue'}
               showLoader={loading}
               gap={4}
               txtColor={theme.primaryText}

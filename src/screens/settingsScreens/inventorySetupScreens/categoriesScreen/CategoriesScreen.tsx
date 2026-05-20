@@ -1,5 +1,5 @@
 import { View, Image } from 'react-native';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import Header from '@/components/header/Header';
@@ -9,15 +9,31 @@ import LinearGradient from 'react-native-linear-gradient';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { CategoriesScreenProps } from '@/types/navigation.types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSettings } from '@/hooks/apis/useSettings';
+import { useToast } from '@/hooks/useToast';
 
 const CategoriesScreen = ({navigation}: CategoriesScreenProps) => {
   const { theme } = useAppTheme();
+  const { fetchCategories } = useSettings();
+  const { showToast } = useToast();
   const insets = useSafeAreaInsets();
     const styles = useMemo(() => createStyles(theme), [theme]);
     
     const navigateToNewCategory = () => {
         navigation.navigate("NewCategoryScreen")
     }
+  useEffect(() => {
+    const handleFetchCategories = async () => {
+      try {
+        const data = await fetchCategories();
+        console.log("data", data)
+      } catch (error) {
+        showToast(String(error), 'error');
+      }
+    };
+    handleFetchCategories()
+  }, [])
+  
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       <View style={styles.header}>

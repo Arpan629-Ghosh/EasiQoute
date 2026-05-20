@@ -1,16 +1,17 @@
 
 import { FormData } from '@/screens/authAndProfileSetupScreens/profileScreens/businessSetupScreens/businessAddressScren/BusinessAddressScreen';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
-import { CompositeScreenProps } from '@react-navigation/native';
+import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
-  LoginScreen: undefined;
+  LoginScreen: { isSessionExist: boolean } 
   RegisterScreen: undefined;
   ResetPasswordScreen: undefined;
   IntroScreen: undefined;
-  ProfileScreen: undefined;
-  BusinessScreen: undefined;
+  ProfileScreen: { isEdit: boolean };
+  BusinessScreen: { isEdit: boolean };
   BusinessAddressScreen: {
     onGoBack: (data: {
       address: string;
@@ -20,7 +21,7 @@ export type RootStackParamList = {
     }) => void;
     address: FormData | null;
   };
-  MainTabs: undefined;
+  MainTabs: NavigatorScreenParams<MainTabParamList>;
   QouteDetailScreen: { quoteId: number };
   IntroductionScreen: undefined;
   NewQuoteScreens: undefined;
@@ -49,11 +50,11 @@ export type NewQuoteTopTabParamList = {
 };
 
 export type MainTabParamList = {
-  Home: undefined;
+  Home: NavigatorScreenParams<HomeStackParamList>;
   Qoute: undefined;
   Invoices: undefined;
   Clients: undefined;
-  Settings: undefined;
+  Settings: NavigatorScreenParams<SettingStackParamList>;
 };
 export type QuoteStackParamList = {
   MainQuoteScreen: undefined;
@@ -92,10 +93,17 @@ export type IntroScreenProps = NativeStackScreenProps<
   >;
 
   //Profile
-export type ProfileScreenProps = NativeStackScreenProps<RootStackParamList, 'ProfileScreen'>
+export type ProfileScreenProps = CompositeScreenProps<
+NativeStackScreenProps<RootStackParamList, 'ProfileScreen'>,
+BottomTabScreenProps<MainTabParamList>
+>
 
 // business
-export type BusinessScreenProps = NativeStackScreenProps<RootStackParamList, 'BusinessScreen'>
+export type BusinessScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<RootStackParamList, 'BusinessScreen'>,
+  BottomTabScreenProps<MainTabParamList>
+>;
+
 export type BusinessAddressScreenProps = NativeStackScreenProps<RootStackParamList, 'BusinessAddressScreen'>
 
 //main quote
@@ -133,7 +141,7 @@ export type SettingScreenProps = CompositeScreenProps<
     'TeamMembersScreen'
     >;
   
-export type ChangePasswordScreenProps = NativeStackScreenProps<RootStackParamList, 'ChangePasswordScreen'>
+
     
 // CategoryScreen
 export type CategoriesScreenProps = NativeStackScreenProps<RootStackParamList, 'CategoriesScreen'>
@@ -145,4 +153,12 @@ export type SubCategoriesScreenProps = NativeStackScreenProps<RootStackParamList
 export type ItemsScreenProps = NativeStackScreenProps<RootStackParamList, 'ItemsScreen'>
 
 // resetPassword
+export type ChangePasswordScreenProps = CompositeScreenProps<
+  NativeStackScreenProps<RootStackParamList, 'ChangePasswordScreen'>,
+  BottomTabScreenProps<MainTabParamList>
+>;
 
+export type NewCategoryScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'NewCategoryScreen'
+>;
