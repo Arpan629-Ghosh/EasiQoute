@@ -6,7 +6,7 @@ import { CompositeScreenProps, NavigatorScreenParams } from '@react-navigation/n
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
-  LoginScreen: { isSessionExist: boolean } 
+  LoginScreen: { isSessionExist: boolean };
   RegisterScreen: undefined;
   ResetPasswordScreen: undefined;
   IntroScreen: undefined;
@@ -33,9 +33,11 @@ export type RootStackParamList = {
   BillingPreferencesScreen: undefined;
   PaymentInfoScreen: undefined;
   CategoriesScreen: undefined;
-  NewCategoryScreen: undefined;
+  NewCategoryScreen: { editId?: number; name?: string } | undefined;
   SubCategoriesScreen: undefined;
-  NewSubCategoryScreen: undefined;
+  NewSubCategoryScreen:
+    | { editId?: number; catName?: string; name?: string }
+    | undefined;
   ItemsScreen: undefined;
   NewItemsScreen: undefined;
 };
@@ -161,4 +163,9 @@ export type ChangePasswordScreenProps = CompositeScreenProps<
 export type NewCategoryScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'NewCategoryScreen'
+>;
+
+export type NewSubCategoryScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'NewSubCategoryScreen'
 >;

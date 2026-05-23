@@ -5,9 +5,10 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface CardHeaderProps{
     title?: string;
-    rightComponent?: React.ReactNode;
+  rightComponent?: React.ReactNode;
+  children?: React.ReactNode;
 }
-const CardHeader: React.FC<CardHeaderProps> = ({ title, rightComponent }) => {
+const CardHeader: React.FC<CardHeaderProps> = ({ title, rightComponent, children }) => {
   const {theme} = useAppTheme()
   return (
     <View style = {styles.cardHeader}>
@@ -15,6 +16,7 @@ const CardHeader: React.FC<CardHeaderProps> = ({ title, rightComponent }) => {
         {title}
       </InterTightMedium>
       {rightComponent}
+      {children}
     </View>
   );
 };

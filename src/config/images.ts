@@ -19,5 +19,8 @@ export const images = {
   img_darkstatus: require('@assets/images/img_darkstatus.png'),
   img_fileupload: require('@assets/images/img_fileupload.png'),
   img_quote: require('@assets/images/img_quote.png'),
-  img_homeEmpty: require('@assets/images/img_homeEmpty.png')
+  img_homeEmpty: require('@assets/images/img_homeEmpty.png'),
+  img_delete: require('@assets/images/img_delete.png'),
+  img_categoryempty: require('@assets/images/img_categoryempty.png'),
+  img_subcatempty: require('@assets/images/img_subcatempty.png')
 };

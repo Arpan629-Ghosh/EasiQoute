@@ -64,4 +64,41 @@ export const createStyles = (theme: Theme) =>
       height: '100%',
       paddingHorizontal: 0,
     },
+    flatlist: {
+      flex: 1,
+      position: 'absolute',
+      top: 98,
+      left: 12,
+      right: 12,
+      maxHeight: 240,
+      backgroundColor: theme.background,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: theme.border,
+      zIndex: 999,
+      elevation: 8,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+      shadowOpacity: 0.12,
+      shadowRadius: 10,
+    },
+
+    contentContainer: {
+      flexGrow: 1,
+      paddingVertical: 6,
+    },
+    delete: {
+      height: 33,
+      width: 93,
+    },
+    main: {
+      gap: 24,
+    },
+    deleteView: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   });

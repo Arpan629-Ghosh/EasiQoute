@@ -1,6 +1,6 @@
 import { settingsServices } from '@/apis/services/settingsServices';
 import { Company } from '@/types/apis/auth.types';
-import { ChangePassword, CreateCategories } from '@/types/apis/settings.types';
+import { ChangePassword, CreateCategories, CreateSubCategories } from '@/types/apis/settings.types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const updateProfileThunk = createAsyncThunk(
@@ -56,9 +56,9 @@ export const newCategoriesThunk = createAsyncThunk(
 
 export const fetchCategoriesThunk = createAsyncThunk('/api/categories',
 
-    async (_: void, thunkAPI) => {
+    async (payload: number, thunkAPI) => {
         try {
-            const response = await settingsServices.fetchNewCategories();
+            const response = await settingsServices.fetchNewCategories(payload);
             if (!response.result) {
                 thunkAPI.rejectWithValue(response.message)
             }
@@ -67,4 +67,51 @@ export const fetchCategoriesThunk = createAsyncThunk('/api/categories',
             return thunkAPI.rejectWithValue(error)
         }
     }
+);
+
+export const deleteCategoryThunk = createAsyncThunk('/api/categories', 
+
+  async (payload: number, thunkAPI) => {
+    try {
+      const response = await settingsServices.deleteCategory(payload)
+      if (!response.result) {
+        thunkAPI.rejectWithValue(response.message);
+      }
+      return response.payload;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  }
+);
+
+export const newSubCategoriesThunk = createAsyncThunk('/api/sub-categories', 
+  async (payload: CreateSubCategories, thunkAPI) => {
+    try {
+      const response = await settingsServices.newSubCategory(payload);
+      if (!response.result) {
+        thunkAPI.rejectWithValue(response.message);
+      }
+      return response.payload;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+    
+  }
+);
+
+export const fetchSubCategoriesThunk = createAsyncThunk(
+  '/api/sub-categories/get',
+
+  async (payload: number, thunkAPI) => {
+    try {
+      const response = await settingsServices.fetchNewSubCategories(payload);
+      if (!response.result) {
+        thunkAPI.rejectWithValue(response.message);
+      }
+      return response.payload;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+  
 );

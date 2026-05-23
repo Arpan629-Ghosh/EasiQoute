@@ -10,4 +10,5 @@ export const ENDPOINTS = {
   QUOTELIST: '/api/quotes',
   CHANGEPASSWORD: '/api/auth/change-password',
   CREATECATEGORIES: '/api/categories',
+  CREATESUBCATEGORIES: '/api/sub-categories',
 };

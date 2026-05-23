@@ -54,9 +54,14 @@ export const createStyles = (theme: Theme) =>
     footerContainer: {
       paddingVertical: 12,
       marginHorizontal: 16,
-      },
-      icn: {
-          height: 12, 
-          width: 12
+    },
+    icn: {
+      height: 12,
+      width: 12,
+    },
+    flatlist: {
+      marginTop: 16,
+      paddingHorizontal: 12,
+      paddingBottom: 120
     }
   }); 

@@ -137,7 +137,7 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
   }, []);
 
   const processedData = useMemo(() => {
-    console.log("run")
+    // console.log("run")
     let result = [...(quoteList?.data || [])];
 
     if (!appliedData && !debouncedSearch.trim()) return result;

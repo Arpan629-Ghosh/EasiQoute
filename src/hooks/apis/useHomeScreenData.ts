@@ -7,7 +7,7 @@ export const useHomeScreenData = () => {
     const dispatch = useDispatch<AppDispatch>();
     const home = useSelector((state: RootState) => state.home);
     console.log(home);
-    const homeScreenData = async () => {
+    const homeScreenData = () => {
         return dispatch(homeScreenDataThunk()).unwrap();
     }
 

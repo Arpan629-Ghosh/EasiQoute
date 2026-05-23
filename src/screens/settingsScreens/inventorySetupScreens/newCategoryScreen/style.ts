@@ -13,11 +13,11 @@ export const createStyles = (theme: Theme) =>
       backgroundColor: theme.background,
     },
 
-      inpContainer: {
-        paddingVertical: 20,
-        paddingHorizontal: 12,
-        gap: 20,
-        height: 113
+    inpContainer: {
+      paddingVertical: 20,
+      paddingHorizontal: 12,
+      gap: 20,
+      height: 113,
     },
     footer: {
       position: 'absolute',
@@ -39,8 +39,19 @@ export const createStyles = (theme: Theme) =>
     icn: {
       height: 12,
       width: 12,
-      },
-      inp: {
-        gap: 8
+    },
+    inp: {
+      gap: 8,
+    },
+    delete: {
+      height: 33,
+      width: 93,
+    },
+    main: {
+      gap: 24,
+    },
+    deleteView: {
+      justifyContent: "center",
+      alignItems: "center"
     }
   });

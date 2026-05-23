@@ -34,7 +34,7 @@ const Input = forwardRef<TextInput, Props>(
           style={[
             styles.input,
             style,
-            { width: inputWidth, backgroundColor: bg, height: inputHeight, textAlignVertical: tv },
+            { width: inputWidth, backgroundColor: bg, height: inputHeight, textAlignVertical: tv ,color: theme.textPrimary},
           ]}
           placeholderTextColor={theme.placeholder}
         />
