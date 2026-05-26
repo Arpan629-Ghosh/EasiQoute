@@ -11,4 +11,6 @@ export const ENDPOINTS = {
   CHANGEPASSWORD: '/api/auth/change-password',
   CREATECATEGORIES: '/api/categories',
   CREATESUBCATEGORIES: '/api/sub-categories',
+  CREATEITEMS: '/api/item/create-or-update',
+  FETCHITEMS: '/api/items',
 };

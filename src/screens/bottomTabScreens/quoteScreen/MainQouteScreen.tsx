@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   FlatList,
   Image,
   KeyboardAvoidingView,
@@ -7,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
 import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
 import Input from '@/components/inputComponent/Input';
@@ -21,55 +22,71 @@ import { MainQuoteScreenProps } from '@/types/navigation.types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import RenderQuotes from '@/components/renderQuotes/RenderQuotes';
-import QuoteEmptyScreen from '@/components/emptyScreenComponents/QuoteEmptyScreen';
 import Loader from '@/components/loader/Loader';
+import { useFocusEffect } from '@react-navigation/native';
+import QuoteEmptyScreen from '@/components/emptyScreenComponents/QuoteEmptyScreen';
+import { QuoteItem } from '@/types/apis/quote.types';
 
-interface FilterAndSorting {
+interface FilterAndSortingType {
   startDate: string;
   endDate: string;
   statuses: string[];
   amount: string;
 }
-const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
-  const [filterData, setFliterData] = useState<FilterAndSorting>({
+
+const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
+  const [filterData, setFliterData] = useState<FilterAndSortingType>({
     startDate: '',
     endDate: '',
     statuses: [],
     amount: '',
   });
-  const [appliedData, setAppliedData] = useState<FilterAndSorting | null>(null);
+
+  const [appliedData, setAppliedData] = useState<FilterAndSortingType | null>(
+    null,
+  );
+
   const [openFilterModal, setOpenFilterModal] = useState(false);
   const [openSubscriptionModal, setOpenSubscriptionModal] = useState(false);
   const [search, setSearch] = useState<string>('');
+  const [paginationLoading, setPaginationLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const page = useRef(1);
+  const onEndReachedCalledDuringMomentum = useRef(false);
 
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
-  const { fetchQuotesScreenData, quoteList, loading } = useQuotes();
+
+  const {
+    fetchQuotesScreenData,
+    quoteList,
+    loading,
+    isFetchCall,
+    current_page,
+    last_page,
+  } = useQuotes();
+
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const debouncedSearch = useDebounce(search);
 
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetchQuotesScreenData();
-        console.log("quote", data)
-      } catch (error) {
-        console.log("QUOTE SCREEN DATA FETCH ERROR", error)
+  useFocusEffect(
+    useCallback(() => {
+      if (isFetchCall || !quoteList.length) {
+        page.current = 1;
+        fetchQuotesScreenData(1);
       }
-    }
-    fetchData()
-  },[])
+    }, [isFetchCall, quoteList.length, fetchQuotesScreenData]),
+  );
 
-  const navigateToNewQuote = () => {
-    navigation.navigate("NewQuoteScreens")
-  }
+  const navigateToNewQuote = useCallback(() => {
+    navigation.navigate('NewQuoteScreens');
+  }, [navigation]);
 
   const handleCloseFilterModal = useCallback(() => {
     setAppliedData(filterData);
     setOpenFilterModal(false);
-    // console.log('data', filterData);
   }, [filterData]);
 
   const handleCloseSubscriptionModal = useCallback(() => {
@@ -83,141 +100,190 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
       statuses: [],
       amount: '',
     });
+
     setAppliedData(null);
     setOpenFilterModal(false);
   }, []);
 
-  const handleSearchInput = (txt: string) => {
+  const handleSearchInput = useCallback((txt: string) => {
     setSearch(txt);
-  };
+  }, []);
 
   const togglestatuse = useCallback((type: string) => {
     setFliterData(prev => {
       const isSelected = prev.statuses.includes(type);
 
-      const updatedStatuses = isSelected
-        ? prev.statuses.filter(item => item !== type)
-        : [...prev.statuses, type];
-
       return {
         ...prev,
-        statuses: updatedStatuses,
+        statuses: isSelected
+          ? prev.statuses.filter(item => item !== type)
+          : [...prev.statuses, type],
       };
     });
   }, []);
 
   const toggleAmount = useCallback((type: string) => {
-    setFliterData(prev => {
-      const isSelected = prev.amount.includes(type);
-
-      const updatedAmount = isSelected ? '' : type;
-      return {
-        ...prev,
-        amount: updatedAmount,
-      };
-    });
+    setFliterData(prev => ({
+      ...prev,
+      amount: prev.amount === type ? '' : type,
+    }));
   }, []);
 
-  const fillStartInput = useCallback((stratDate: string) => {
-    setFliterData(prev => {
-      return {
-        ...prev,
-        startDate: stratDate,
-      };
-    });
+  const fillStartInput = useCallback((startDate: string) => {
+    setFliterData(prev => ({
+      ...prev,
+      startDate,
+    }));
   }, []);
 
   const fillEndInput = useCallback((endDate: string) => {
-    setFliterData(prev => {
-      return {
-        ...prev,
-        endDate: endDate,
-      };
-    });
+    setFliterData(prev => ({
+      ...prev,
+      endDate,
+    }));
+  }, []);
+
+  const hasMore = useMemo(() => {
+    return current_page < last_page;
+  }, [current_page, last_page]);
+
+  const handleRefresh = useCallback(async () => {
+    if (refreshing) {
+      return;
+    }
+
+    try {
+      setRefreshing(true);
+      page.current = 1;
+
+      await fetchQuotesScreenData(1);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [refreshing, fetchQuotesScreenData]);
+
+  const handleLoadMore = useCallback(async () => {
+    if (paginationLoading || refreshing || !hasMore) {
+      return;
+    }
+
+    try {
+      setPaginationLoading(true);
+
+      const nextPage = page.current + 1;
+
+      page.current = nextPage;
+
+      await fetchQuotesScreenData(nextPage);
+    } finally {
+      setPaginationLoading(false);
+    }
+  }, [paginationLoading, refreshing, hasMore, fetchQuotesScreenData]);
+
+  const renderFooter = useCallback(() => {
+    if (!paginationLoading) {
+      return null;
+    }
+
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="small" />
+      </View>
+    );
+  }, [paginationLoading, styles.loaderContainer]);
+
+  const renderEmpty = useCallback(() => {
+    if (loading) {
+      return null;
+    }
+
+    return <QuoteEmptyScreen />;
+  }, [loading]);
+
+  const keyExtractor = useCallback((item: QuoteItem) => item.id.toString(),
+ []);
+
+  const renderItem = useCallback(({ item }: { item: QuoteItem }) => {
+    return <RenderQuotes item={item} />;
   }, []);
 
   const processedData = useMemo(() => {
-    // console.log("run")
-    let result = [...(quoteList?.data || [])];
-
-    if (!appliedData && !debouncedSearch.trim()) return result;
-
+    let result = [...(quoteList || [])];
+    if (!appliedData && !debouncedSearch.trim()) {
+      return result;
+    }
     const { statuses, amount, startDate, endDate } = appliedData || {};
-
     if (debouncedSearch.trim()) {
       const lower = debouncedSearch.toLowerCase();
+      result = result.filter(item => {
+        const title = (item?.title || '').toLowerCase();
+        const name = (item?.name || '').toLowerCase();
+        const reference = (item?.reference_number || '').toLowerCase();
+        const status = (item?.status || '').toLowerCase();
 
-      result = result.filter(
-        item =>
-          item.title.toLowerCase().includes(lower) ||
-          item.name.toLowerCase().includes(lower) ||
-          item.reference_number.toLowerCase().includes(lower) ||
-          item.status.toLowerCase().includes(lower),
-      );
+        return (
+          title.includes(lower) ||
+          name.includes(lower) ||
+          reference.includes(lower) ||
+          status.includes(lower)
+        );
+      });
     }
-
     if (statuses && statuses.length > 0) {
-      result = result.filter(item => statuses.includes(item.status));
+      const normalizedStatuses = statuses.map(status =>
+        status.trim().toLowerCase(),
+      );
+      result = result.filter(item => {
+        const itemStatus = (item?.status || '').trim().toLowerCase();
+        return normalizedStatuses.includes(itemStatus);
+      });
     }
-
     if (startDate || endDate) {
-      const parse = (d: string) => {
-        const [day, month, year] = d.split('-');
+      const parseFilterDate = (date: string) => {
+        const [day, month, year] = date.split('-');
         return new Date(`${year}-${month}-${day}`);
       };
-
-      const start = startDate ? parse(startDate) : null;
-      const end = endDate ? parse(endDate) : null;
-
+      const start = startDate ? parseFilterDate(startDate) : null;
+      const end = endDate ? parseFilterDate(endDate) : null;
       result = result.filter(item => {
-        if (!item.expiry_date) return true;
-
-        const itemDate = parse(item.expiry_date);
-
-        if (start && itemDate < start) return false;
-        if (end && itemDate > end) return false;
-
+        if (!item?.expiry_date) {
+          return true;
+        }
+        const itemDate = new Date(item.expiry_date);
+        if (start && itemDate < start) {
+          return false;
+        }
+        if (end && itemDate > end) {
+          return false;
+        }
         return true;
       });
     }
-
     if (amount) {
-      result.sort((a, b) => {
-        const priceA = a.price
-        const priceB = b.price
+      result = [...result].sort((a, b) => {
+        const priceA = Number(a?.price || 0);
+        const priceB = Number(b?.price || 0);
 
         return amount === 'Low to High' ? priceA - priceB : priceB - priceA;
       });
     }
-
     return result;
-  }, [appliedData, debouncedSearch, quoteList?.data]);
-
-
-
-  // console.log("processedData", processedData)
+  }, [appliedData, debouncedSearch, quoteList]);
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.keyboardContainer}
-      enabled={true}
-      keyboardVerticalOffset={3}
+      enabled
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}
     >
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
-        {isDark ? (
-          <StatusBar
-            barStyle="light-content"
-            backgroundColor="transparent"
-            translucent
-          />
-        ) : (
-          <StatusBar
-            barStyle="dark-content"
-            backgroundColor="transparent"
-            translucent
-          />
-        )}
+        <StatusBar
+          barStyle={isDark ? 'light-content' : 'dark-content'}
+          backgroundColor="transparent"
+          translucent
+        />
+
         <View style={styles.mainContainer}>
           <View style={styles.header}>
             <View
@@ -226,24 +292,28 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
               <InterTightSemiBold fsize={24} fcolor={theme.textPrimary}>
                 Quotes
               </InterTightSemiBold>
+
               <View style={styles.searchandfilter}>
                 <View style={styles.inputicon}>
                   <Image
                     source={icons.ic_whitesearch}
                     style={styles.searchic}
                   />
+
                   <Input
-                    inputWidth={325}
                     bg={theme.searchInput}
                     style={styles.noBorderInput}
                     placeholder="Search here"
                     value={search}
-                    onChangeText={txt => handleSearchInput(txt)}
+                    onChangeText={handleSearchInput}
                   />
                 </View>
 
                 <View style={styles.imgView}>
-                  <TouchableOpacity onPress={() => setOpenFilterModal(true)}>
+                  <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => setOpenFilterModal(true)}
+                  >
                     <Image
                       source={isDark ? icons.ic_darksf : icons.ic_filter}
                       style={styles.img}
@@ -253,21 +323,41 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
               </View>
             </View>
           </View>
+
           <View style={styles.flatlist}>
-            {quoteList?.data.length === 0 ? (
-              <QuoteEmptyScreen />
+            {loading && !quoteList.length ? (
+              <Loader visible />
             ) : (
               <FlatList
                 data={processedData}
-                renderItem={({ item }) => <RenderQuotes item={item} />}
-                keyExtractor={item => item.id.toString()}
+                renderItem={renderItem}
+                keyExtractor={keyExtractor}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.flat}
+                refreshing={refreshing}
+                onRefresh={handleRefresh}
+                removeClippedSubviews
+                initialNumToRender={10}
+                maxToRenderPerBatch={10}
+                windowSize={5}
+                onEndReachedThreshold={0.2}
+                ListFooterComponent={renderFooter}
+                ListEmptyComponent={renderEmpty}
+                onMomentumScrollBegin={() => {
+                  onEndReachedCalledDuringMomentum.current = false;
+                }}
+                onEndReached={() => {
+                  if (!onEndReachedCalledDuringMomentum.current) {
+                    handleLoadMore();
+                    onEndReachedCalledDuringMomentum.current = true;
+                  }
+                }}
               />
             )}
           </View>
+
           <View style={styles.add}>
-            <TouchableOpacity onPress={navigateToNewQuote}>
+            <TouchableOpacity activeOpacity={0.8} onPress={navigateToNewQuote}>
               <Image source={icons.ic_add} style={styles.ic} />
             </TouchableOpacity>
           </View>
@@ -291,10 +381,9 @@ const MainQouteScreen = ({navigation}: MainQuoteScreenProps) => {
           visible={openSubscriptionModal}
           onClose={handleCloseSubscriptionModal}
         />
-        <Loader visible={loading } />
       </LinearGradient>
     </KeyboardAvoidingView>
   );
 };
 
-export default MainQouteScreen;
+export default MainQuoteScreen;

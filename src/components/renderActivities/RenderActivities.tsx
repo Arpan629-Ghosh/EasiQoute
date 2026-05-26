@@ -41,8 +41,8 @@ const STATUS_COLORS = {
   },
 
   draft: {
-    view: '#E8ECF4',
-    text: '#64748B',
+    view: '#FF7F2612',
+    text: '#FF7F26',
   },
 
   rejected: {

@@ -46,7 +46,7 @@ const RegisterScreen = ({navigation} : RegisterScreenProps) => {
   
     const handleSignup = async () => {
       try {
-        await signup({
+          await signup({
           email: formData.email,
           password: formData.password,
           device_type: Platform.OS === 'ios' ? 'ios' : 'android',

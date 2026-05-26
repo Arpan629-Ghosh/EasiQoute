@@ -22,5 +22,6 @@ export const images = {
   img_homeEmpty: require('@assets/images/img_homeEmpty.png'),
   img_delete: require('@assets/images/img_delete.png'),
   img_categoryempty: require('@assets/images/img_categoryempty.png'),
-  img_subcatempty: require('@assets/images/img_subcatempty.png')
+  img_subcatempty: require('@assets/images/img_subcatempty.png'),
+  img_itemempty: require('@assets/images/img_itemempty.png')
 };

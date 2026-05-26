@@ -1,144 +1,189 @@
-import { View, Image, FlatList, ActivityIndicator } from 'react-native';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useAppTheme } from '@/hooks/useAppTheme';
-import { createStyles } from './style';
+import React, {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  ListRenderItem,
+  View,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '@/components/header/Header';
 import Input from '@/components/inputComponent/Input';
-import { icons } from '@/config/icons';
-import LinearGradient from 'react-native-linear-gradient';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import { CategoriesScreenProps } from '@/types/navigation.types';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useSettings } from '@/hooks/apis/useSettings';
-import { useToast } from '@/hooks/useToast';
-import { CreateCategoriesPayload } from '@/types/apis/settings.types';
 import RenderCategories from '@/components/renderCategories/RenderCategories';
-import { useDebounce } from '@/hooks/useDebounce';
 import CategoryEmptyScreen from '@/components/emptyScreenComponents/CategoryEmptyScreen';
+import { icons } from '@/config/icons';
+import { useAppTheme } from '@/hooks/useAppTheme';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useSettings } from '@/hooks/apis/useSettings';
+import { createStyles } from './style';
+import { CategoriesScreenProps } from '@/types/navigation.types';
+import { CreateCategoriesPayload } from '@/types/apis/settings.types';
+import { useFocusEffect } from '@react-navigation/native';
 
 const CategoriesScreen = ({ navigation }: CategoriesScreenProps) => {
-  const [categories, setCategories] = useState<CreateCategoriesPayload[]>([]);
-  const [search, setSearch] = useState<string>('');
-  const [loading, setLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [hasMore, setHasMore] = useState(true);
-  const page = useRef(1);
-  const onEndReachedCalledDuringMomentum = useRef(false);
+  const [paginationLoading, setPaginationLoading] = useState(false);
   const { theme } = useAppTheme();
-  const { fetchCategories, data, current_page, last_page, error } = useSettings();
-  const { showToast } = useToast();
-
-  const debouncedSearch = useDebounce(search);
-
+  const styles = useMemo(() => createStyles(theme), [theme]);
   const insets = useSafeAreaInsets();
 
-  const styles = useMemo(() => createStyles(theme), [theme]);
+  const {
+    fetchCategories,
+    data,
+    current_page,
+    last_page,
+    settingLoading,
+    isStale
+  } = useSettings();
+  const [search, setSearch] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
+  const page = useRef(1);
+  const onEndReachedCalledDuringMomentum = useRef(false);
+  const debouncedSearch = useDebounce(search);
 
-  const navigateToNewCategory = () => {
-    navigation.navigate('NewCategoryScreen');
-  };
+  useFocusEffect(
+    useCallback(() => {
+      if (isStale || !data.length) {
+        page.current = 1;
+        fetchCategories(1);
+      }
+    }, [isStale, data.length, fetchCategories]),
+  );
 
-  const handleFetchCategories = useCallback((pageNumber = 1) => {
-    if (loading) return;
-    fetchCategories(pageNumber);
-  },[loading, fetchCategories]);
 
-  const handleLoadMore = () => {
-    if (!hasMore || loading) return;
-    setLoading(true);
-    page.current += 1;
-    handleFetchCategories(page.current);
-  };
-
-  const handleRefresh = () => {
+  const hasMore = useMemo(() => {
+    return current_page < last_page;
+  }, [current_page, last_page]);
+  
+  const handleRefresh = useCallback(async () => {
+    if (refreshing) {
+      return;
+    }
     page.current = 1;
     setRefreshing(true);
-    setHasMore(true);
-    handleFetchCategories(1);
-  };
-
-  useEffect(() => {
-    setLoading(true);
-    handleFetchCategories(1);
-  }, [handleFetchCategories]);
-
-  useEffect(() => {
-    if (!data) return;
-    setCategories(prev => (page.current === 1 ? data : [...prev, ...data]));
-    setHasMore(current_page < last_page);
-    setLoading(false);
+    await fetchCategories(1);
     setRefreshing(false);
-  }, [data, current_page, last_page]);
+  }, [refreshing, fetchCategories]);
 
-  useEffect(() => {
-    if (!error) return;
-    showToast(String(error), 'error');
-    setLoading(false);
-    setRefreshing(false);
-  }, [error, showToast]);
+  const handleLoadMore = useCallback(async () => {
+    if (paginationLoading || refreshing || !hasMore) {
+      return;
+    }
+    try {
+      setPaginationLoading(true);
+      const nextPage = page.current + 1;
+      page.current = nextPage;
+      await fetchCategories(nextPage);
+    } finally {
+      setPaginationLoading(false);
+    }
+  }, [paginationLoading, refreshing, hasMore, fetchCategories]);
 
   const processedData = useMemo(() => {
-    let result = [...categories];
+    const trimmedSearch = debouncedSearch?.trim()?.toLowerCase();
+    if (!trimmedSearch) {
+      return data ?? [];
+    }
+    return (data ?? []).filter(item =>
+      item?.name?.toLowerCase()?.includes(trimmedSearch),
+    );
+  }, [data, debouncedSearch]);
 
-    if (!debouncedSearch.trim()) {
-      return result;
+
+  const navigateToNewCategory = useCallback(() => {
+    navigation.navigate('NewCategoryScreen');
+  }, [navigation]);
+
+  const renderItem: ListRenderItem<CreateCategoriesPayload> = useCallback(
+    ({ item }) => {
+      return <RenderCategories item={item} />;
+    },
+    [],
+  );
+
+  const keyExtractor = useCallback(
+    (item: CreateCategoriesPayload) => item.id.toString(),
+    [],
+  );
+
+  const renderFooter = useMemo(() => {
+    if (!paginationLoading) {
+      return null;
     }
 
-    const lower = debouncedSearch.toLowerCase();
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="small" />
+      </View>
+    );
+  }, [paginationLoading, styles.loaderContainer]);
 
-    result = result.filter(item => item?.name?.toLowerCase()?.includes(lower));
-
-    return result;
-  }, [categories, debouncedSearch]);
+  const renderEmpty = useMemo(() => {
+    if (settingLoading) {
+      return null;
+    }
+    return <CategoryEmptyScreen />;
+  }, [settingLoading]);
 
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       <View style={styles.header}>
-        <Header txt="Categories" borderBottomEnabled={true} />
+        <Header txt="Categories" borderBottomEnabled />
 
         <View style={styles.inpContainer}>
           <View style={styles.inputicon}>
             <Image source={icons.ic_search} style={styles.searchic} />
-
             <Input
               style={styles.noBorderInput}
               placeholder="Search ‘Categories’"
               returnKeyType="search"
               value={search}
-              onChangeText={txt => setSearch(txt)}
+              onChangeText={setSearch}
             />
           </View>
         </View>
       </View>
+ 
+        <FlatList
+          data={processedData}
+          renderItem={renderItem}
+          keyExtractor={keyExtractor}
+          contentContainerStyle={styles.flatlist}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="on-drag"
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          removeClippedSubviews={false}
+          maxToRenderPerBatch={10}
+          updateCellsBatchingPeriod={50}
+          initialNumToRender={8}
+          windowSize={5}
+          maintainVisibleContentPosition={{
+            minIndexForVisible: 0,
+          }}
+          onMomentumScrollBegin={() => {
+            onEndReachedCalledDuringMomentum.current = false;
+          }}
+          onEndReached={() => {
+            if (!onEndReachedCalledDuringMomentum.current) {
+              handleLoadMore();
 
-      <FlatList
-        data={processedData}
-        renderItem={({ item }) => <RenderCategories item={item} />}
-        keyExtractor={item => item.id.toString()}
-        contentContainerStyle={styles.flatlist}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
-        refreshing={refreshing}
-        onRefresh={handleRefresh}
-        onMomentumScrollBegin={() => {
-          onEndReachedCalledDuringMomentum.current = false;
-        }}
-        onEndReached={() => {
-          if (!onEndReachedCalledDuringMomentum.current) {
-            handleLoadMore();
-
-            onEndReachedCalledDuringMomentum.current = true;
-          }
-        }}
-        onEndReachedThreshold={0.5}
-        ListFooterComponent={
-          loading && page.current > 1 ? (
-            <ActivityIndicator size="small" />
-          ) : null
-        }
-        ListEmptyComponent={<CategoryEmptyScreen/>}
-      />
-
+              onEndReachedCalledDuringMomentum.current = true;
+            }
+          }}
+          onEndReachedThreshold={0.2}
+          ListFooterComponent={renderFooter}
+          ListEmptyComponent={renderEmpty}
+        />
+      
       <View
         style={[
           styles.footer,

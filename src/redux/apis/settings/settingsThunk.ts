@@ -1,6 +1,6 @@
 import { settingsServices } from '@/apis/services/settingsServices';
 import { Company } from '@/types/apis/auth.types';
-import { ChangePassword, CreateCategories, CreateSubCategories } from '@/types/apis/settings.types';
+import { ChangePassword, CreateCategories, CreateItems, CreateSubCategories } from '@/types/apis/settings.types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const updateProfileThunk = createAsyncThunk(
@@ -69,7 +69,7 @@ export const fetchCategoriesThunk = createAsyncThunk('/api/categories',
     }
 );
 
-export const deleteCategoryThunk = createAsyncThunk('/api/categories', 
+export const deleteCategoryThunk = createAsyncThunk('/api/categories/delete', 
 
   async (payload: number, thunkAPI) => {
     try {
@@ -77,7 +77,7 @@ export const deleteCategoryThunk = createAsyncThunk('/api/categories',
       if (!response.result) {
         thunkAPI.rejectWithValue(response.message);
       }
-      return response.payload;
+      return response.message;
     } catch (error) {
       return thunkAPI.rejectWithValue(error)
     }
@@ -115,3 +115,68 @@ export const fetchSubCategoriesThunk = createAsyncThunk(
   },
   
 );
+
+export const deleteSubCategoryThunk = createAsyncThunk(
+  '/api/sub-categories/delete',
+  async (payload:CreateSubCategories, thunkAPI ) => {
+    try {
+      const response = await settingsServices.deleteSubCategory(payload);
+      if (!response.result) {
+        thunkAPI.rejectWithValue(response.message);
+      }
+     
+      return response.message;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+)
+
+export const createItemsThunk = createAsyncThunk('/api/item/create-or-update', 
+
+  async (payload: CreateItems, thunkAPI) => {
+    try {
+      const response = await settingsServices.createItems(payload);
+      if (!response.result) {
+        thunkAPI.rejectWithValue(response.message);
+      }
+
+      return response.payload
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  }
+);
+
+export const fetchItemsThunk = createAsyncThunk('/api/items',
+
+  async (payload: number, thunkAPI) => {
+    try {
+      const response = await settingsServices.fetchItems(payload)
+      if (!response.result) {
+        thunkAPI.rejectWithValue(response.message);
+      }
+      return response.payload;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+);
+
+export const deleteItemThunk = createAsyncThunk('api/items',
+
+  async (payload: number, thunkAPI) => {
+    try {
+      const response = await settingsServices.deleteItem(payload)
+      if (!response.result) {
+        thunkAPI.rejectWithValue(response.message);
+      }
+
+      return response.message;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  }
+);
+
+

@@ -1,8 +1,7 @@
-import { settingsServices } from "@/apis/services/settingsServices"
-import { ChangePasswordThunk, fetchCategoriesThunk, fetchSubCategoriesThunk, newCategoriesThunk, newSubCategoriesThunk, updateProfileThunk } from "@/redux/apis/settings/settingsThunk"
+import { ChangePasswordThunk, createItemsThunk, deleteCategoryThunk, deleteItemThunk, deleteSubCategoryThunk, fetchCategoriesThunk, fetchItemsThunk, fetchSubCategoriesThunk, newCategoriesThunk, newSubCategoriesThunk, updateProfileThunk } from "@/redux/apis/settings/settingsThunk"
 import { AppDispatch, RootState } from "@/redux/store"
 import { Company } from "@/types/apis/auth.types"
-import { ChangePassword, CreateCategories, CreateSubCategories } from "@/types/apis/settings.types"
+import { ChangePassword, CreateCategories, CreateItems, CreateSubCategories } from "@/types/apis/settings.types"
 import { useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
@@ -27,8 +26,8 @@ export const useSettings = () => {
         return dispatch(fetchCategoriesThunk(payload)).unwrap()
     }, [dispatch])
 
-    const deleteCategory = async (payload: number) => {
-        return await settingsServices.deleteCategory(payload)
+    const deleteCategory = (payload: number) => {
+        return dispatch(deleteCategoryThunk(payload)).unwrap();
     }
 
     const newSubCtaegories = (payload: CreateSubCategories) => {
@@ -41,9 +40,21 @@ export const useSettings = () => {
       [dispatch],
     );
 
-    const deleteSubCategory = async (payload: CreateSubCategories) => {
-      return await settingsServices.deleteSubCategory(payload);
+    const deleteSubCategory = (payload: CreateSubCategories) => {
+      return dispatch(deleteSubCategoryThunk(payload)).unwrap()
     };
+
+    const createItems = (payload: CreateItems) => {
+        return dispatch(createItemsThunk(payload)).unwrap()
+    }
+
+    const fetchItems = useCallback((payload: number) => {
+        return dispatch(fetchItemsThunk(payload)).unwrap()
+    },[dispatch])
+
+    const deleteItem = (payload: number) => {
+        return dispatch(deleteItemThunk(payload)).unwrap()
+    }
 
     return {
         updateCompanyProfile,
@@ -54,13 +65,22 @@ export const useSettings = () => {
         newSubCtaegories,
         fetchSubCategories,
         deleteSubCategory,
-        settingLoading : settings.loading,
+        createItems,
+        fetchItems,
+        deleteItem,
+
+        settingLoading: settings.loading,
+        isStale: settings.isStale,
+        isSubcatStale: settings.isSubCatStale,
         error: settings.error,
         data: settings.data,
         subcat_data: settings.subcat_data,
         current_page: settings.current_page,
         last_page: settings.last_page,
         subcat_current_page: settings.subcat_current_page,
-        subcat_last_page: settings.subcat_last_page
+        subcat_last_page: settings.subcat_last_page,
+        items_data: settings.items_data,
+        items_current_page: settings.items_current_page,
+        items_last_page: settings.items_last_page
     }
 }

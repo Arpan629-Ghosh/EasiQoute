@@ -77,4 +77,9 @@ export const createStyles = (theme: Theme) =>
       justifyContent: 'center',
       alignItems: 'center',
     },
+    loaderContainer: {
+      paddingVertical: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   }); 

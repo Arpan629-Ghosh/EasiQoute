@@ -1,8 +1,10 @@
 import { StyleSheet, TextInput, View } from 'react-native';
-import React, { forwardRef, useEffect, useState } from 'react';
+import React, { forwardRef, useEffect, useMemo, useState } from 'react';
 import ReactNativePhoneInput from 'react-native-phone-input';
 import { fontFamily } from '@/constants/fontFamily';
 import CountryPicker, { CountryCode } from 'react-native-country-picker-modal'
+import { useAppTheme } from '@/hooks/useAppTheme';
+import { Theme } from '@/types/theme.types';
 type Props = {
   value?: string;
   onChange?: (phone: string) => void;
@@ -17,6 +19,9 @@ const CountryPickerComponent = forwardRef<
   const [showPhoneCountryPicker, setShowPhoneCountryPicker] = useState(false);
 
   const [phoneNumber, setPhoneNumber] = useState(value || '');
+
+  const { theme } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme])
 
  
   useEffect(() => {
@@ -69,7 +74,7 @@ const CountryPickerComponent = forwardRef<
 
 export default CountryPickerComponent;
 
-const styles = StyleSheet.create({
+const createStyles = (theme: Theme) => StyleSheet.create({
   container: {
     flex: 1,
   },
@@ -81,5 +86,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     paddingHorizontal: 12,
     borderColor: '#E4E6F4',
+    color: theme.textPrimary,
   },
 });

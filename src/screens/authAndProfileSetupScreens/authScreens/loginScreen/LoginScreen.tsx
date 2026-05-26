@@ -27,7 +27,7 @@ interface LoginForm {
   email: string;
   password: string;
 }
-const LoginScreen = ({ navigation, route }: LoginScreenProps) => {
+const LoginScreen = ({ navigation }: LoginScreenProps) => {
 
   
 
@@ -39,7 +39,6 @@ const LoginScreen = ({ navigation, route }: LoginScreenProps) => {
 
   const emailRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
-  const { isSessionExist } = route.params || false;
   const { theme } = useAppTheme();
   const { login, loading } = useAuth();
   const { showToast } = useToast();
@@ -66,14 +65,14 @@ const LoginScreen = ({ navigation, route }: LoginScreenProps) => {
 
   const handleLogin = async () => {
     try {
-      await login({
+      const response = await login({
         email: formData.email,
         password: formData.password,
         device_type: Platform.OS === "ios" ? "ios" : "android",
         push_token: pushToken || undefined
       });
       showToast('Login Successful');
-      if (isSessionExist)
+      if (response.is_profile_setup && response.is_company_profile_setup)
         navigation.replace('MainTabs', {
           screen: "Home",
           params: {
@@ -81,8 +80,12 @@ const LoginScreen = ({ navigation, route }: LoginScreenProps) => {
           }
         });
    
-      else
-        navigation.replace('IntroScreen');
+      else if(response.is_profile_setup)
+        navigation.navigate('BusinessScreen', {
+          isEdit: false
+        });
+      else 
+        navigation.replace("IntroScreen")
     } catch (error) {
       console.log("LOGIN ERROR", error)
       showToast(String(error), 'error')

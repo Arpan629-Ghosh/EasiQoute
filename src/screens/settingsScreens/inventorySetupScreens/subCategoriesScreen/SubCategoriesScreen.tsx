@@ -1,143 +1,116 @@
-import { View, Image, FlatList } from 'react-native';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
-import { useAppTheme } from '@/hooks/useAppTheme';
-import { createStyles } from './style';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { View, Image, FlatList, ListRenderItem, ActivityIndicator } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '@/components/header/Header';
-import { icons } from '@/config/icons';
 import Input from '@/components/inputComponent/Input';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import { SubCategoriesScreenProps } from '@/types/navigation.types';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { SubCategoriesPayload } from '@/types/apis/settings.types';
-import { useDebounce } from '@/hooks/useDebounce';
-import { useSettings } from '@/hooks/apis/useSettings';
-import { useToast } from '@/hooks/useToast';
 import RenderSubCategories from '@/components/renderSubCategories/RenderSubCategories';
 import SubCategoryEmptyScreen from '@/components/emptyScreenComponents/SubCategoryEmptyScreen';
+import { icons } from '@/config/icons';
+import { useAppTheme } from '@/hooks/useAppTheme';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useSettings } from '@/hooks/apis/useSettings';
+import { createStyles } from './style';
+import { SubCategoriesScreenProps } from '@/types/navigation.types';
+import { SubCategoriesPayload } from '@/types/apis/settings.types';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 const SubCategoriesScreen = ({ navigation }: SubCategoriesScreenProps) => {
-  const [subCategories, setSubCategories] = useState<SubCategoriesPayload[]>(
-    [],
-  );
-  const [search, setSearch] = useState('');
-  const [initialLoading, setInitialLoading] = useState(false);
-  const [paginationLoading, setPaginationLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [hasMore, setHasMore] = useState(true)
-  const page = useRef(1);
-  const onEndReachedCalledDuringMomentum = useRef(false);
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const insets = useSafeAreaInsets();
-  const { showToast } = useToast();
-  const debouncedSearch = useDebounce(search)
-
   const {
     fetchSubCategories,
+    isSubcatStale,
     subcat_data,
-    subcat_last_page,
     subcat_current_page,
-    error,
-  } = useSettings()
-  const navigateToNewSubCategory = () => {
-    navigation.navigate('NewSubCategoryScreen');
-  };
+    subcat_last_page,
+  } = useSettings();
+  const [search, setSearch] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
+  const [paginationLoading, setPaginationLoading] = useState(false);
+  const page = useRef(1);
+  const onEndReachedCalledDuringMomentum = useRef(false);
+  const debouncedSearch = useDebounce(search);
 
-
-  const handleFetchSubCategories = useCallback(
-    async (pageNumber = 1) => {
-      try {
-        await fetchSubCategories(pageNumber);
-      } catch (err) {
-        showToast(String(err), 'error')
+  useFocusEffect(
+    useCallback(() => {
+      if (isSubcatStale || !subcat_data.length) {
+        page.current = 1;
+        fetchSubCategories(1);
       }
-    },
-    [fetchSubCategories,showToast],
+    }, [isSubcatStale, subcat_data.length, fetchSubCategories]),
   );
 
-  useEffect(() => {
-    const fetchInitialData = async () => {
-      setInitialLoading(true);
-      page.current = 1;
-      await handleFetchSubCategories(1);
-      setInitialLoading(false);
-    };
-    fetchInitialData();
-  }, [handleFetchSubCategories]);
 
-
-
-  useEffect(() => {
-    if (!subcat_data) return;
-    setSubCategories(prev => {
-      if (page.current === 1) {
-        return subcat_data;
-      }
-      const merged = [...prev, ...subcat_data];
-      const unique = merged.filter(
-        (item, index, self) => index === self.findIndex(t => t.id === item.id),
-      );
-      return unique;
-    });
-    setHasMore(subcat_current_page < subcat_last_page);
-    setInitialLoading(false);
-    setPaginationLoading(false);
-    setRefreshing(false);
-  }, [subcat_data, subcat_current_page, subcat_last_page]);
-
-  useEffect(() => {
-    if (!error) return;
-    showToast(String(error), 'error');
-    setInitialLoading(false);
-    setPaginationLoading(false);
-    setRefreshing(false);
-  }, [error, showToast]);
-
-  const handleLoadMore = async () => {
-    if (paginationLoading || refreshing || initialLoading || !hasMore) {
+  const handleLoadMore = useCallback(async () => {
+    if (
+      paginationLoading ||
+      refreshing ||
+      subcat_current_page >= subcat_last_page
+    ) {
       return;
     }
-    setPaginationLoading(true);
-    const nextPage = page.current + 1;
-    page.current = nextPage;
-    await handleFetchSubCategories(nextPage);
-  };
 
+    try {
+      setPaginationLoading(true);
+      const nextPage = page.current + 1;
+      page.current = nextPage;
 
-  const handleRefresh = async () => {
+      await fetchSubCategories(nextPage);
+    } finally {
+      setPaginationLoading(false);
+    }
+  }, [
+    paginationLoading,
+    refreshing,
+    subcat_current_page,
+    subcat_last_page,
+    fetchSubCategories,
+  ]);
+
+  const handleRefresh = useCallback(async () => {
+    if (refreshing) return;
+
     setRefreshing(true);
     page.current = 1;
-    setHasMore(true);
-    await handleFetchSubCategories(1);
-  };
+
+    await fetchSubCategories(1);
+
+    setRefreshing(false);
+  }, [refreshing, fetchSubCategories]);
 
   const processedData = useMemo(() => {
-    if (!debouncedSearch.trim()) {
-      return subCategories;
-    }
-    const lower = debouncedSearch.toLowerCase();
-    return subCategories.filter(item =>
-      item?.name?.toLowerCase()?.includes(lower),
-    );
-  }, [subCategories, debouncedSearch]);
+    const q = debouncedSearch?.trim()?.toLowerCase();
 
-  const renderItem = useCallback(({ item }: { item: SubCategoriesPayload }) => {
+    if (!q) return subcat_data ?? [];
+
+    return (subcat_data ?? []).filter((item) =>
+      item?.name?.toLowerCase()?.includes(q),
+    );
+  }, [subcat_data, debouncedSearch]);
+
+
+  const renderItem: ListRenderItem<SubCategoriesPayload> = useCallback(({ item }) => {
     return <RenderSubCategories item={item} />;
   }, []);
 
+  const renderFooter = useMemo(() => {
+    if (!paginationLoading) return null;
+
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="small" />
+      </View>
+    );
+  }, [paginationLoading, styles.loaderContainer]);
+
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
-  
-
       <View style={styles.header}>
-        <Header txt="Subcategories" borderBottomEnabled={true} />
+        <Header txt="Subcategories" borderBottomEnabled />
 
         <View style={styles.inpContainer}>
           <View style={styles.inputicon}>
@@ -146,7 +119,6 @@ const SubCategoriesScreen = ({ navigation }: SubCategoriesScreenProps) => {
             <Input
               style={styles.noBorderInput}
               placeholder="Search 'Subcategories'"
-              returnKeyType="search"
               value={search}
               onChangeText={setSearch}
             />
@@ -159,43 +131,32 @@ const SubCategoriesScreen = ({ navigation }: SubCategoriesScreenProps) => {
         renderItem={renderItem}
         keyExtractor={item => item.id.toString()}
         contentContainerStyle={styles.flatlist}
-        showsVerticalScrollIndicator={false}
-        keyboardShouldPersistTaps="handled"
         refreshing={refreshing}
         onRefresh={handleRefresh}
-        removeClippedSubviews
-        initialNumToRender={10}
-        maxToRenderPerBatch={10}
-        windowSize={5}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
         onMomentumScrollBegin={() => {
           onEndReachedCalledDuringMomentum.current = false;
         }}
         onEndReached={() => {
           if (!onEndReachedCalledDuringMomentum.current) {
-            onEndReachedCalledDuringMomentum.current = true;
-
             handleLoadMore();
+            onEndReachedCalledDuringMomentum.current = true;
           }
         }}
-        onEndReachedThreshold={0.5}
-        ListEmptyComponent={<SubCategoryEmptyScreen/>}
+        onEndReachedThreshold={0.2}
+        ListFooterComponent={renderFooter}
+        ListEmptyComponent={<SubCategoryEmptyScreen />}
       />
 
-      <View
-        style={[
-          styles.footer,
-          {
-            paddingBottom: insets.bottom,
-          },
-        ]}
-      >
+      <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footerContainer}>
           <ButtonComponent
             bg={theme.primary}
             bttnTxt="New Subcategory"
             txtColor={theme.primaryText}
             gap={8}
-            onPress={navigateToNewSubCategory}
+            onPress={() => navigation.navigate('NewSubCategoryScreen')}
           >
             <Image source={icons.ic_whiteadd} style={styles.icn} />
           </ButtonComponent>

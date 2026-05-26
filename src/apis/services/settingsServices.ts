@@ -2,7 +2,7 @@ import { apiClient } from "@/config/apis/client";
 import { Company } from "@/types/apis/auth.types";
 import { ApiResponse } from "@/types/apis/common.types";
 import { ENDPOINTS } from "../endPoints";
-import { ChangePassword, CreateCategories, CreateCategoriesPayload, FetchCategoriesPayload, CreateSubCategories, SubCategoriesPayload, FetchSubCategoriesPayload } from "@/types/apis/settings.types";
+import { ChangePassword, CreateCategories, CreateCategoriesPayload, FetchCategoriesPayload, CreateSubCategories, SubCategoriesPayload, FetchSubCategoriesPayload, CreateItems, CreateItemsPayload, FetchItemsPayload } from "@/types/apis/settings.types";
 
 
 export const settingsServices = {
@@ -118,4 +118,35 @@ export const settingsServices = {
     );
     return response.data;
   },
+    
+  createItems: async (payload: CreateItems) => {
+    const response = await apiClient.post<ApiResponse<CreateItemsPayload>>(
+      ENDPOINTS.CREATEITEMS,
+      payload,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    return response.data
+  },
+  
+  fetchItems: async (payload: number) => {
+    const response = await apiClient.get<ApiResponse<FetchItemsPayload>>(
+      ENDPOINTS.FETCHITEMS,
+      {
+        params: {page: payload}
+      }
+    )
+    return response.data
+  },
+
+  deleteItem: async (payload: number) => {
+    const response = await apiClient.delete<ApiResponse<null>>(
+      `${ENDPOINTS.FETCHITEMS}/${payload}`,
+    )
+
+    return response.data;
+  }
 };

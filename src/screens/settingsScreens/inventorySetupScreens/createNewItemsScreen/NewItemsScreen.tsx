@@ -1,5 +1,5 @@
-import { Image, TouchableOpacity, View, ScrollView } from 'react-native';
-import React, { useMemo, useState } from 'react';
+import { TouchableOpacity, View, ScrollView, Image } from 'react-native';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -8,32 +8,173 @@ import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import Input from '@/components/inputComponent/Input';
-import { icons } from '@/config/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-
+import CustomDropdown, { Item } from '@/components/dropdown/CustomDropdown';
+import { useSettings } from '@/hooks/apis/useSettings';
+import { useToast } from '@/hooks/useToast';
+import { NewItemsScreenProps } from '@/types/navigation.types';
+import { images } from '@/config/images';
+import { CreateItems } from '@/types/apis/settings.types';
 const FilterOptions = ['Materials', 'Labour', 'Services', 'Miscellaneous'];
+const unitOptions: Item[] = [
+  {
+    label: 'Item',
+    value: 'item',
+  },
+  {
+    label: 'Hour',
+    value: 'hour',
+  },
+  {
+    label: 'Kg',
+    value: 'kg',
+  },
+  {
+    label: 'Meter',
+    value: 'meter',
+  },
+];
 
-const NewItemsScreen = () => {
-  const [selectedFilterOption, setSelectFilterOption] = useState<string>('');
-
+interface ItemForm {
+  category: string;
+  subcategory: Item | null;
+  itemName: string;
+  unit: Item | null;
+  pricePerUnit: string;
+  unitCost: string;
+}
+const NewItemsScreen = ({ navigation, route }: NewItemsScreenProps) => {
+  const {
+    editId,
+    catName,
+    subcatName,
+    itemName,
+  } = route.params || {};
+  const [itemData, setItemData] = useState<ItemForm>({
+    category: catName || '',
+    subcategory: subcatName || null,
+    itemName: itemName || '',
+    unit: null,
+    pricePerUnit: route.params?.pricePerUnit
+      ? String(route.params.pricePerUnit)
+      : '',
+    unitCost: route.params?.unitCost ? String(route.params.unitCost) : '',
+  });
   const insets = useSafeAreaInsets();
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
+  const { showToast } = useToast();
+  const isEdit = !!editId
+  const { subcat_data, data, settingLoading, error, createItems, deleteItem } = useSettings();
 
-  const handleFilterOption = (option: string) => {
-    const isSelected = selectedFilterOption === option;
+  const updateField = useCallback(
+    <K extends keyof ItemForm>(key: K, value: ItemForm[K]) => {
+      setItemData(prev => ({
+        ...prev,
+        [key]: value,
+      }));
+    },
+    [],
+  );
 
-    if (isSelected) {
-      setSelectFilterOption('');
-    } else {
-      setSelectFilterOption(option);
+  const handleFilterOption = useCallback((option: string) => {
+    setItemData(prev => ({
+      ...prev,
+      category: prev.category === option ? '' : option,
+      subcategory: null,
+    }));
+  }, []);
+
+  const subCategoryOptions = useMemo(() => {
+    return (
+      subcat_data?.map(item => ({ label: item.name, value: item.id })) || []
+    );
+  }, [subcat_data]);
+
+  // const validateForm = () => {
+  //   if (!itemData.category) {
+  //     showToast('Please select category', 'error');
+  //     return false;
+  //   }
+
+  //   if (!itemData.subcategory) {
+  //     showToast('Please select subcategory', 'error');
+  //     return false;
+  //   }
+
+  //   if (!itemData.itemName.trim()) {
+  //     showToast('Please enter item name', 'error');
+  //     return false;
+  //   }
+
+  //   if (!itemData.unit) {
+  //     showToast('Please select unit', 'error');
+  //     return false;
+  //   }
+
+  //   if (!itemData.pricePerUnit.trim()) {
+  //     showToast('Please enter price per unit', 'error');
+  //     return false;
+  //   }
+
+  //   if (!itemData.unitCost.trim()) {
+  //     showToast('Please enter unit cost', 'error');
+  //     return false;
+  //   }
+
+  //   return true;
+  // };
+
+  const handleItem = async () => {
+    console.log(itemData);
+    try {
+      const category_from_input = itemData.category.toLowerCase();
+      const category_from_api = data.filter(
+        item => item.name.toLowerCase() === category_from_input,
+      );
+      console.log(data);
+      
+      const category_id = category_from_api[0].id;
+      const payload: CreateItems = {
+        category_id: category_id,
+        subcategory_id: Number(itemData.subcategory?.value),
+        name: itemData.itemName.trim(),
+        unit: String(itemData.unit?.value),
+        price: Number(itemData.pricePerUnit),
+        cost: Number(itemData.unitCost),
+        type: 'product',
+      };
+
+      if(isEdit) payload.id = editId
+      await createItems(payload);
+
+      showToast(isEdit ? "Item updated successfully" : 'Item created successfully');
+      navigation.goBack();
+    } catch (err) {
+      console.log('CREATE ITEM ERROR', err);
+      showToast(String(err), 'error');
     }
   };
 
+  const handleDeletetem = () => {
+    deleteItem(editId as number);
+
+    if (error) {
+      showToast(String(error), 'error')
+      navigation.goBack()
+    }
+    else {
+      showToast("Item deleted successfully!")
+      navigation.goBack()
+    }
+  }
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       <View style={styles.header}>
-        <Header txt="Create New Item" borderBottomEnabled={true}  />
+        <Header
+          txt={editId ? 'Edit Item' : 'Create New Item'}
+          borderBottomEnabled
+        />
       </View>
 
       <ScrollView
@@ -50,7 +191,7 @@ const NewItemsScreen = () => {
 
               <View style={styles.filter}>
                 {FilterOptions.map(item => {
-                  const isSelected = selectedFilterOption === item;
+                  const isSelected = itemData.category === item;
 
                   return (
                     <TouchableOpacity
@@ -73,20 +214,17 @@ const NewItemsScreen = () => {
                 })}
               </View>
             </View>
-
             <View style={styles.filterheading}>
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Subcategory
               </InterTightRegular>
 
-              <View style={styles.inputicon}>
-                <Input
-                  style={styles.noBorderInput}
-                  placeholder="Search or select category"
-                />
-
-                <Image source={icons.ic_down} style={styles.img} />
-              </View>
+              <CustomDropdown
+                data={subCategoryOptions}
+                value={itemData.subcategory?.label || ''}
+                placeholder="Select subcategory"
+                onChange={(item: Item) => updateField('subcategory', item)}
+              />
             </View>
           </View>
 
@@ -96,46 +234,75 @@ const NewItemsScreen = () => {
                 Item Name
               </InterTightRegular>
 
-              <Input placeholder="Item Name" />
+              <Input
+                placeholder="Item Name"
+                value={itemData.itemName}
+                onChangeText={txt => updateField('itemName', txt)}
+                textContentType="name"
+                returnKeyType="next"
+              />
             </View>
-
             <View style={styles.inp}>
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Unit
               </InterTightRegular>
 
-              <View style={styles.inputicon}>
-                <Input style={styles.noBorderInput} placeholder="Unit" />
-
-                <Image source={icons.ic_down} style={styles.img} />
-              </View>
+              <CustomDropdown
+                data={unitOptions}
+                value={itemData.unit?.label || ''}
+                placeholder="Select unit"
+                onChange={(item: Item) => updateField('unit', item)}
+              />
             </View>
-
             <View style={styles.inp}>
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Price per Unit
               </InterTightRegular>
 
-              <Input placeholder="e.g. 10" />
+              <Input
+                placeholder="e.g. 10"
+                value={itemData.pricePerUnit}
+                onChangeText={txt => updateField('pricePerUnit', txt)}
+                keyboardType="decimal-pad"
+              />
             </View>
-
             <View style={styles.inp}>
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Unit Cost
               </InterTightRegular>
 
-              <Input placeholder="e.g. 5" />
+              <Input
+                placeholder="e.g. 5"
+                value={itemData.unitCost}
+                onChangeText={txt => updateField('unitCost', txt)}
+                keyboardType="decimal-pad"
+              />
             </View>
           </View>
         </View>
+        <View style={styles.deleteView}>
+          {editId && (
+            <TouchableOpacity onPress={handleDeletetem}>
+              <Image source={images.img_delete} style={styles.delete} />
+            </TouchableOpacity>
+          )}
+        </View>
       </ScrollView>
-
-      <View style={[styles.footer, {paddingBottom: insets.bottom}]}>
+      <View
+        style={[
+          styles.footer,
+          {
+            paddingBottom: insets.bottom,
+          },
+        ]}
+      >
         <View style={styles.footerContainer}>
           <ButtonComponent
             bg={theme.primary}
-            bttnTxt="Save"
+            bttnTxt={isEdit ? 'Save Changes' : 'Save'}
             txtColor={theme.primaryText}
+            showLoader={settingLoading}
+            onPress={handleItem}
           />
         </View>
       </View>

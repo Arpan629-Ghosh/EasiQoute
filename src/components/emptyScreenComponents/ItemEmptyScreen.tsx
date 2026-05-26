@@ -5,16 +5,16 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import InterTightRegular from '../fontComponents/InterTightRegular';
 import { images } from '@/config/images';
 
-const CategoryEmptyScreen = () => {
+const ItemEmptyScreen = () => {
   const { theme } = useAppTheme();
 
   return (
     <View style={styles.container}>
       <View style={styles.components}>
-        <Image source={images.img_categoryempty} style={styles.img} />
+        <Image source={images.img_itemempty} style={styles.img} />
         <View style={styles.txtView}>
           <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
-            No Categories Found
+            No Items Found{' '}
           </InterTightMedium>
           <View>
             <InterTightRegular
@@ -22,7 +22,7 @@ const CategoryEmptyScreen = () => {
               fcolor={theme.textSecondary}
               textAlign="center"
             >
-              CClick on the “+ New Category”
+              Click on the “+ New Item” 
             </InterTightRegular>
             <InterTightRegular
               fsize={14}
@@ -38,7 +38,7 @@ const CategoryEmptyScreen = () => {
   );
 };
 
-export default CategoryEmptyScreen;
+export default ItemEmptyScreen;
 
 const styles = StyleSheet.create({
   container: {

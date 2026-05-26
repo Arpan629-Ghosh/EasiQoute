@@ -62,6 +62,17 @@ export const createStyles = (theme: Theme) =>
     flatlist: {
       marginTop: 16,
       paddingHorizontal: 12,
-      paddingBottom: 120
-    }
+      paddingBottom: 120,
+    },
+    loaderContainer: {
+      paddingVertical: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+
+    initialLoaderContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   }); 

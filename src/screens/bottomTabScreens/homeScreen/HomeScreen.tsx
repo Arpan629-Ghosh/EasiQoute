@@ -1,4 +1,10 @@
-import { FlatList, Image, StatusBar, TouchableOpacity, View } from 'react-native';
+import {
+  FlatList,
+  Image,
+  StatusBar,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, { useEffect, useMemo } from 'react';
 import { createStyles } from './style';
 import { images } from '@/config/images';
@@ -14,27 +20,27 @@ import HomeEmptyScreen from '@/components/emptyScreenComponents/HomeEmptyScreen'
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '@/types/navigation.types';
-import {NativeStackNavigationProp } from 'node_modules/@react-navigation/native-stack/lib/typescript/src/types';
+import { NativeStackNavigationProp } from 'node_modules/@react-navigation/native-stack/lib/typescript/src/types';
 import Loader from '@/components/loader/Loader';
 
 const HomeScreen = () => {
   const { theme } = useAppTheme();
   const { homeScreenData, homeData, loading } = useHomeScreenData();
   const { user } = useAuth();
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const styles = useMemo(() => createStyles(theme), [theme]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await homeScreenData();
-        console.log("home", data);
-     
+        console.log('home', data);
       } catch (error) {
-        console.log("HOME SCREEN DATA FETCH ERROR",error)
+        console.log('HOME SCREEN DATA FETCH ERROR', error);
       }
-    }
+    };
     fetchData();
-  }, [])
+  }, []);
 
   console.log('Home', homeData?.recentActivities);
   return (
@@ -56,7 +62,7 @@ const HomeScreen = () => {
                     source={
                       user?.avatar
                         ? {
-                            uri: user.avatar
+                            uri: user.avatar,
                           }
                         : images.img_profile
                     }
@@ -87,7 +93,9 @@ const HomeScreen = () => {
                 />
               </View>
               <View style={styles.icons}>
-                <TouchableOpacity onPress={() => navigation.navigate("NewQuoteScreens")}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('NewQuoteScreens')}
+                >
                   <Icons text="New Quote">
                     <Image source={icons.ic_whiteqoute} style={styles.vector} />
                   </Icons>
@@ -112,17 +120,14 @@ const HomeScreen = () => {
           <View style={styles.empty} />
         </View>
         <View>
-          {homeData?.recentActivities?.length === 0 ? (
-            <HomeEmptyScreen />
-          ) : (
-            <FlatList
-              data={homeData?.recentActivities || []}
-              renderItem={({ item }) => <RenderActivities item={item} />}
-              keyExtractor={item => item.id.toString()}
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.flatlist}
-            />
-          )}
+          <FlatList
+            data={homeData?.recentActivities || []}
+            renderItem={({ item }) => <RenderActivities item={item} />}
+            keyExtractor={item => item.id.toString()}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.flatlist}
+            ListEmptyComponent={<HomeEmptyScreen />}
+          />
         </View>
       </View>
       <View style={styles.footer}>
@@ -130,7 +135,7 @@ const HomeScreen = () => {
           Free trial ends on November 20, 2025
         </InterTightRegular>
       </View>
-      <Loader visible={ loading} />
+      <Loader visible={loading} />
     </View>
   );
 };

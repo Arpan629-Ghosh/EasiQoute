@@ -56,7 +56,7 @@ const NewCategoryScreen = ({ navigation, route }: NewCategoryScreenProps) => {
   const handleDeleteCategory = async () => {
     try {
       const response = await deleteCategory(editId as number)
-      showToast(response.message)
+      showToast(response)
       navigation.goBack()
     } catch (error) {
       showToast(String(error), 'error')

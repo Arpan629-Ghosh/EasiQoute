@@ -17,8 +17,8 @@ export const createStyles = (theme: Theme) =>
     },
 
     content: {
-        flex: 1,
-        backgroundColor: theme.background
+      flex: 1,
+      backgroundColor: theme.background,
     },
 
     filterandinput: {
@@ -28,9 +28,8 @@ export const createStyles = (theme: Theme) =>
       borderBottomColor: theme.border,
     },
 
-      filterheading: {
-        gap: 8,
-    
+    filterheading: {
+      gap: 8,
     },
 
     filter: {
@@ -58,8 +57,8 @@ export const createStyles = (theme: Theme) =>
       paddingHorizontal: 12,
     },
 
-      inp: {
-          gap: 8,
+    inp: {
+      gap: 8,
       marginBottom: 20,
     },
 
@@ -95,7 +94,7 @@ export const createStyles = (theme: Theme) =>
       left: 0,
       right: 0,
       width: '100%',
-     paddingBottom: 40,
+      paddingBottom: 40,
       backgroundColor: theme.background,
       borderTopWidth: 1,
       borderTopColor: theme.border,
@@ -104,5 +103,13 @@ export const createStyles = (theme: Theme) =>
     footerContainer: {
       paddingVertical: 12,
       marginHorizontal: 16,
+    },
+    deleteView: {
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    delete: {
+      height: 33,
+      width: 93,
     },
   });

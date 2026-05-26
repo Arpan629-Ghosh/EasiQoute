@@ -11,6 +11,8 @@ import CustomToggle from '@/components/switch/CustomToggle';
 import { images } from '@/config/images';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useQuotes } from '@/hooks/apis/useQuotes';
+import { useToast } from '@/hooks/useToast';
 
 interface NewQuoteForm {
   quoteTitle: string;
@@ -20,7 +22,7 @@ interface NewQuoteForm {
   client: string;
   jobDescription: string;
   notes: string;
-  file: string;
+  file: string[];
 }
 
 const SummuryScreen = () => {
@@ -36,9 +38,11 @@ const SummuryScreen = () => {
     client: "",
     jobDescription: "",
     notes: "",
-    file: ""
+    file: []
   })
   const { theme } = useAppTheme();
+  const { createQuote, loading } = useQuotes();
+  const {showToast} = useToast()
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme])
   const updateField = (key: keyof NewQuoteForm, value: string) => {
@@ -81,7 +85,7 @@ const SummuryScreen = () => {
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
 
-    return `${day}/${month}/${year}`;
+    return `${day}-${month}-${year}`;
   };
   const handleConfirm = (date: Date) => {
     const formatted = formatDate(date);
@@ -93,6 +97,34 @@ const SummuryScreen = () => {
     }
 
     setDatePickerVisible(false);
+  };
+
+  const handleCreateQuote = async () => {
+    console.log(newQuoteFormData);
+    try {
+      await createQuote({
+        title: newQuoteFormData.quoteTitle,
+        description: newQuoteFormData.jobDescription,
+        quote_date: newQuoteFormData.qtDate,
+        expiry_date: newQuoteFormData.expDate,
+        client_id: Number(newQuoteFormData.client),
+        notes: newQuoteFormData.notes,
+      });
+      showToast('Quote created successfully.');
+      setNewQuoteFormData({
+        quoteTitle: '',
+        refNumber: '',
+        qtDate: '',
+        expDate: '',
+        client: '',
+        jobDescription: '',
+        notes: '',
+        file: [],
+      });
+    } catch (error) {
+      showToast(String(error), 'error');
+    }
+   
   };
 
   return (
@@ -272,6 +304,8 @@ const SummuryScreen = () => {
             bg={theme.primary}
             bttnTxt="Save"
             txtColor={theme.primaryText}
+            showLoader={loading}
+            onPress={handleCreateQuote}
           />
         </View>
       </View>

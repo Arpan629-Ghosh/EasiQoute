@@ -52,19 +52,20 @@ const NewSubCategoryScreen = ({
   };
 
   const handleSubCategories = async () => {
-    const category_from_input = debouncedSearch.toLowerCase();
-    const category_from_api = data.filter(
-      item => item.name.toLowerCase() === category_from_input,
-    );
-    console.log(category_from_api)
-    const category_id = category_from_api[0].id;
-    console.log(category_id)
     try {
+      const category_from_input = debouncedSearch.trim().toLowerCase();
+      const category_from_api = data.filter(
+        item => item.name.toLowerCase() === category_from_input,
+      );
+      if (!category_from_api.length) {
+        showToast('Please select a valid category', 'error');
+        return;
+      }
+      const category_id = category_from_api[0].id;
       const payload: CreateSubCategories = {
-        category_id: category_id,
+        category_id,
         name: input,
       };
-
       if (isEdit) {
         payload.id = editId;
       }
@@ -83,8 +84,13 @@ const NewSubCategoryScreen = ({
   const handleDeleteSubCategories = async () => {
     const subcat_from_input = input.toLowerCase();
     const subcat_from_api = subcat_data.filter(
-      item => item.name.toLowerCase() === subcat_from_input,
+      (item) => item.name.toLowerCase() === subcat_from_input,
     );
+    if (!subcat_from_api.length) {
+      showToast('Please select a valid category', 'error');
+      return;
+
+    }
     const category_id = subcat_from_api[0].category.id;
     try {
       const reponse = await deleteSubCategory({
@@ -92,7 +98,7 @@ const NewSubCategoryScreen = ({
         category_id: category_id,
         name: input,
       });
-      showToast(reponse.message);
+      showToast(reponse);
       navigation.goBack();
     } catch (error) {
       showToast(String(error), 'error');

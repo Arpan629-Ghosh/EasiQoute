@@ -6,7 +6,7 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface InfoRowProps{
     label?: string;
-  value?: string;
+  value?: string | number;
   activeColor?: boolean;
 }
 const InfoRow: React.FC<InfoRowProps> = ({ label, value, activeColor=false }) => {

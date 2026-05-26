@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/useToast';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/navigation.types';
+import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface Props {
   visible: boolean;
@@ -17,6 +18,7 @@ const LogoutModal = ({ visible, onClose }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
   const { logout, loading } = useAuth();
   const { showToast } = useToast();
+  const { theme } = useAppTheme();
   const handleLogout = async () => {
     try {
       await logout();
@@ -38,14 +40,14 @@ const LogoutModal = ({ visible, onClose }: Props) => {
   };
   return (
     <MiddleModalComponent visible={visible} onClose={onClose}>
-      <InterTightSemiBold fsize={20} fcolor="#1D1E1D" textAlign="center">
+      <InterTightSemiBold fsize={20} fcolor={theme.textPrimary} textAlign="center">
         Are you sure you want to{'           '} Logout?
       </InterTightSemiBold>
       <View style={styles.buttonContainer}>
         <ButtonComponent
-          bg="#082B60"
+          bg={theme.primary}
           bttnTxt="Logout"
-          txtColor="#FFFFFF"
+          txtColor={theme.primaryText}
           showLoader={loading}
           onPress={handleLogout}
         />

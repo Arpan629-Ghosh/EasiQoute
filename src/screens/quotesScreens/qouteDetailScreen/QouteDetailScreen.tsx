@@ -1,4 +1,4 @@
-import { Image, ScrollView, StatusBar, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StatusBar, TouchableOpacity, View } from 'react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { createStyles } from './style';
 import { icons } from '@/config/icons';
@@ -16,16 +16,17 @@ import StatusChanger from '@/components/statusChanger/StatusChanger';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Items from '@/components/cardDetailsComponent/Items';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useToast } from '@/hooks/useToast';
+import { useQuotes } from '@/hooks/apis/useQuotes';
+import { useFocusEffect } from '@react-navigation/native';
+import Loader from '@/components/loader/Loader';
 
-const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
-
+const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
   const [open, setOpen] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState<string>("")
   const insets = useSafeAreaInsets();
-
   const { theme, isDark } = useAppTheme();
-  const { showToast } = useToast();
+  const { fetchQuoteDetails, quoteDetails , loading } = useQuotes();
+  const quoteId = route.params.quoteId; 
   const styles = useMemo(() => createStyles(theme), [theme])
   const navigateToBack = () => {
     navigation.goBack();
@@ -45,7 +46,15 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
       const updatedStatus = isSelected ? "" : type
       return updatedStatus
     })
-  },[])
+  }, [])
+  
+  useFocusEffect( 
+    useCallback(() => {
+      fetchQuoteDetails(quoteId)
+    }, [quoteId, fetchQuoteDetails])
+  )
+
+  
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       {isDark ? (
@@ -78,23 +87,18 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
       </View>
       <View style={styles.mainContainer}>
         <InterTightMedium fsize={20} fcolor={theme.textPrimary}>
-          Office Renovation Gold Package – {'       '} Acme Corp
+          {`${quoteDetails?.title} - ${quoteDetails?.client.name}`}
         </InterTightMedium>
         <ScrollView
           style={styles.scrollview}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollview}
         >
-          <TouchableOpacity
-            onPress={() => showToast("Success! Custom toast triggered.'")}
-          >
-            <Text>Show custom toast</Text>
-          </TouchableOpacity>
           <View style={styles.cardContainer}>
             <Card style={styles.cardone}>
               <View style={styles.status}>
                 <InterTightMedium fsize={14} fcolor="#F97315">
-                  Draft
+                  {quoteDetails?.status}
                 </InterTightMedium>
               </View>
               <TouchableOpacity onPress={() => setOpen(true)}>
@@ -115,9 +119,15 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
                   <CardHeader title="Basic Information" />
                 </View>
 
-                <InfoRow label="Quote Ref" value="QT-2025-0418-012" />
-                <InfoRow label="Created On" value="15 Apr 2025" />
-                <InfoRow label="Expiry Date" value="27 Oct 2025" />
+                <InfoRow
+                  label="Quote Ref"
+                  value={quoteDetails?.reference_number}
+                />
+                <InfoRow label="Created On" value={quoteDetails?.quote_date} />
+                <InfoRow
+                  label="Expiry Date"
+                  value={quoteDetails?.expiry_date}
+                />
               </View>
               <View style={styles.empty} />
               <View style={styles.inforow}>
@@ -129,12 +139,10 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
                   <CardHeader title="Job Description" />
                 </View>
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
-                  This quote covers the renovation of Acme Corp’s{'         '}{' '}
-                  office space, including material supply, floor tiling, and
-                  partition adjustments. It also includes labor for{' '}
-                  <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
+                  {quoteDetails?.job_description}
+                  {/* <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
                     more...
-                  </InterTightMedium>
+                  </InterTightMedium> */}
                 </InterTightRegular>
               </View>
 
@@ -149,12 +157,10 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
                   <CardHeader title="Notes (Not visible on quote)" />
                 </View>
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
-                  This quote covers the renovation of Acme Corp’s{'         '}{' '}
-                  office space, including material supply, floor tiling, and
-                  partition adjustments. It also includes labor for{' '}
-                  <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
+                  {quoteDetails?.notes}
+                  {/* <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
                     more...
-                  </InterTightMedium>
+                  </InterTightMedium> */}
                 </InterTightRegular>
               </View>
             </Card>
@@ -174,7 +180,7 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
                     style={styles.img}
                   />
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Acme Corp
+                    {quoteDetails?.client.name}
                   </InterTightRegular>
                 </View>
                 <View style={styles.contactdetail}>
@@ -183,7 +189,7 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
                     style={styles.img}
                   />
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    (+44) 489-7895-200{' '}
+                    {quoteDetails?.client.phone}
                   </InterTightRegular>
                 </View>
                 <View style={styles.contactdetail}>
@@ -192,7 +198,7 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
                     style={styles.img}
                   />
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    acmegroup@gmail.com{' '}
+                    {quoteDetails?.client.email}
                   </InterTightRegular>
                 </View>
                 <View style={styles.contactdetail}>
@@ -201,8 +207,7 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
                     style={styles.img}
                   />
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    1600 Amphitheatre Driveway Parkway Standalone Mountain View,
-                    CA 94043{' '}
+                    {quoteDetails?.client.address}
                   </InterTightRegular>
                 </View>
               </View>
@@ -216,7 +221,10 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
                   />
                   <CardHeader title="Financial Summary" />
                 </View>
-                <InfoRow label="Sub-total" value="£2,050.00" />
+                <InfoRow
+                  label="Sub-total"
+                  value={`£${quoteDetails?.financial_summary.sub_total}`}
+                />
                 <View style={styles.margin}>
                   <InfoRow label="Margin (50%)" />
                   <InterTightRegular
@@ -227,11 +235,17 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
                     Check Margin
                   </InterTightRegular>
                 </View>
-                <InfoRow label="Tax (18%)" value="£369.00" />
-                <InfoRow label="Discount (20%)" value="£100.00" />
+                <InfoRow
+                  label="Tax (18%)"
+                  value={`£${quoteDetails?.financial_summary.tax}`}
+                />
+                <InfoRow
+                  label="Discount (20%)"
+                  value={`£${quoteDetails?.financial_summary.discount}`}
+                />
 
                 <View style={styles.empty} />
-                <InfoRow label="Grand Total" value="£2,319.00" />
+                <InfoRow label="Grand Total" value={`£${quoteDetails?.financial_summary.grand_total}`} />
               </View>
             </Card>
 
@@ -422,6 +436,7 @@ const QouteDetailScreen = ({ navigation }: QouteDetailScreenProps) => {
         onToggleStatus={toggleStatus}
         selectedStatus={selectedStatus}
       />
+      <Loader visible={loading } />
     </LinearGradient>
   );
 };
