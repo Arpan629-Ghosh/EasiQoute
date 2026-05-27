@@ -7,11 +7,16 @@ import { icons } from '@/config/icons'
 import { useAppTheme } from '@/hooks/useAppTheme'
 import {createStyles} from './style'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { SectionsScreenProps } from '@/types/navigation.types'
 
-const SectionsScreen = () => {
+const SectionsScreen = ({navigation}: SectionsScreenProps) => {
   const { theme } = useAppTheme();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme])
+
+  const navigateToNewSection = () => {
+    navigation.navigate("NewSectionScreen");
+  }
   return (
     <View style={styles.container}>
       <FlatList
@@ -30,7 +35,7 @@ const SectionsScreen = () => {
             bttnTxt="New Section"
             txtColor={theme.textMuted}
             buttonWidth={169.5}
-        
+            onPress={navigateToNewSection}
           >
             <Image source={icons.ic_addicon} style={styles.addicon} />
           </ButtonComponent>
@@ -39,7 +44,6 @@ const SectionsScreen = () => {
             buttonWidth={169.5}
             bttnTxt="Save & Preview"
             txtColor={theme.primaryText}
-          
           />
    
         </View>

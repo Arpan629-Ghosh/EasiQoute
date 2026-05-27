@@ -1,6 +1,5 @@
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
-import { FilterData } from '@/config/NewQuoteScreenFilterData';
 import Card from '../cardDetailsComponent/Card';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import { icons } from '@/config/icons';
@@ -8,37 +7,76 @@ import InterTightRegular from '../fontComponents/InterTightRegular';
 import InterTightSemiBold from '../fontComponents/InterTightSemiBold';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
+import { FetchItemsData } from '@/types/apis/settings.types';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@/types/navigation.types';
 
-const RenderFilterData = ({ item }: { item: FilterData }) => {
-    const { theme } = useAppTheme();
-    const styles = useMemo (() => createStyles(theme), [theme])
+
+interface Props {
+  item: FetchItemsData;
+  count: number;
+  decreaseCount: () => void;
+  increaseCount: () => void;
+}
+const RenderFilterData: React.FC<Props> = ({
+  item,
+  count,
+  decreaseCount,
+  increaseCount,
+}) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { theme } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
+
+  const navigateToEdit = () => {
+    navigation.navigate('NewItemsScreen', {
+      editId: item.id,
+      catName: item.category_name,
+      subcatName: {
+        label: item?.subcategory_name ?? '',
+        value: item.subcategory_id ?? '',
+      },
+      itemName: item.name,
+      unit: item.unit,
+      pricePerUnit: item.price,
+      unitCost: item.cost,
+    });
+  };
   return (
     <Card style={styles.card}>
       <View style={styles.header}>
         <View style={styles.txtView}>
           <View style={styles.headerTxt}>
             <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
-              {item.categoryItem}
+              {item.name}
             </InterTightMedium>
-            <Image source={icons.ic_edit} style={styles.img} />
+            <TouchableOpacity onPress={navigateToEdit}>
+              <Image source={icons.ic_edit} style={styles.img} />
+            </TouchableOpacity>
           </View>
           <View style={styles.catView}>
             <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
-              {item.categoryName}
+              {item.category_name}
             </InterTightRegular>
             <View style={styles.empty} />
             <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
               {' '}
-              {item.subCategoryName}
+              {item.subcategory_name}
             </InterTightRegular>
           </View>
         </View>
         <View style={styles.counter}>
-          <Image source={icons.ic_minus} style={styles.img} />
+          <TouchableOpacity onPress={decreaseCount}>
+            <Image source={icons.ic_minus} style={styles.img} />
+          </TouchableOpacity>
           <InterTightSemiBold fsize={14} fcolor={theme.textMuted}>
-            {item.totalItem}
+            {count}
           </InterTightSemiBold>
-          <Image source={icons.ic_plus} style={styles.img} />
+          <TouchableOpacity onPress={increaseCount}>
+            <Image source={icons.ic_plus} style={styles.img} />
+          </TouchableOpacity>
         </View>
       </View>
       <View style={styles.line} />
@@ -50,11 +88,11 @@ const RenderFilterData = ({ item }: { item: FilterData }) => {
                 Unit: {''}
               </InterTightRegular>
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                {item.measurementUnit}
+                {item.unit}
               </InterTightRegular>
             </View>
             <InterTightRegular fsize={14} fcolor={theme.textMuted}>
-              £{item.pricePerUnit}
+              £{item.cost}
             </InterTightRegular>
           </View>
           <View style={styles.totalprice}>
@@ -62,7 +100,7 @@ const RenderFilterData = ({ item }: { item: FilterData }) => {
               Total
             </InterTightRegular>
             <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-              £{item.totalPrice}
+              £{item.price}
             </InterTightRegular>
           </View>
         </View>

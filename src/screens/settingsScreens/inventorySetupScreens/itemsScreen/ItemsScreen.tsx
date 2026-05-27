@@ -5,12 +5,7 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-import React, {
-  useCallback,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -33,8 +28,14 @@ const ItemsScreen = ({ navigation }: ItemsScreenProps) => {
   const [search, setSearch] = useState<string>('');
   const page = useRef(1);
   const { theme } = useAppTheme();
-  const { fetchItems, isStale, items_data, items_current_page, items_last_page, settingLoading } =
-    useSettings();
+  const {
+    fetchItems,
+    isStale,
+    items_data,
+    items_current_page,
+    items_last_page,
+    settingLoading,
+  } = useSettings();
   const insets = useSafeAreaInsets();
 
   const debouncedsearch = useDebounce(search);
@@ -46,11 +47,9 @@ const ItemsScreen = ({ navigation }: ItemsScreenProps) => {
       if (isStale || !items_data.length) {
         page.current = 1;
         fetchItems(1);
-
       }
     }, [isStale, items_data.length, fetchItems]),
   );
-
 
   const hasMore = useMemo(() => {
     return items_current_page < items_last_page;
@@ -61,7 +60,7 @@ const ItemsScreen = ({ navigation }: ItemsScreenProps) => {
     page.current = 1;
     setRefreshing(true);
     await fetchItems(1);
-    setRefreshing(false)
+    setRefreshing(false);
   }, [fetchItems, refreshing]);
 
   const handleLoadMore = useCallback(() => {

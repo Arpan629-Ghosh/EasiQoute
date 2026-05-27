@@ -33,6 +33,10 @@ const unitOptions: Item[] = [
     label: 'Meter',
     value: 'meter',
   },
+  {
+    label: 'Ft',
+    value: 'ft'
+  }
 ];
 
 interface ItemForm {
@@ -132,7 +136,7 @@ const NewItemsScreen = ({ navigation, route }: NewItemsScreenProps) => {
       const category_from_api = data.filter(
         item => item.name.toLowerCase() === category_from_input,
       );
-      console.log(data);
+      console.log(category_from_api);
       
       const category_id = category_from_api[0].id;
       const payload: CreateItems = {

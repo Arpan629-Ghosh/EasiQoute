@@ -73,11 +73,11 @@ const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
 
   useFocusEffect(
     useCallback(() => {
-      if (isFetchCall || !quoteList.length) {
+      if (isFetchCall || !(quoteList?.length ?? 0)) {
         page.current = 1;
         fetchQuotesScreenData(1);
       }
-    }, [isFetchCall, quoteList.length, fetchQuotesScreenData]),
+    }, [isFetchCall, quoteList, fetchQuotesScreenData]),
   );
 
   const navigateToNewQuote = useCallback(() => {
@@ -151,11 +151,9 @@ const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
     if (refreshing) {
       return;
     }
-
     try {
       setRefreshing(true);
       page.current = 1;
-
       await fetchQuotesScreenData(1);
     } finally {
       setRefreshing(false);
@@ -166,14 +164,10 @@ const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
     if (paginationLoading || refreshing || !hasMore) {
       return;
     }
-
     try {
       setPaginationLoading(true);
-
       const nextPage = page.current + 1;
-
       page.current = nextPage;
-
       await fetchQuotesScreenData(nextPage);
     } finally {
       setPaginationLoading(false);
@@ -184,7 +178,6 @@ const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
     if (!paginationLoading) {
       return null;
     }
-
     return (
       <View style={styles.loaderContainer}>
         <ActivityIndicator size="small" />

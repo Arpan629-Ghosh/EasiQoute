@@ -52,7 +52,8 @@ export type RootStackParamList = {
         pricePerUnit?: number;
         unitCost?: number;
       }
-    | undefined;
+  | undefined;
+  NewSectionScreen: undefined;
 };
 
 export type NewQuoteTopTabParamList = {
@@ -189,7 +190,9 @@ export type ItemsScreenProps = NativeStackScreenProps<
 export type NewItemsScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'NewItemsScreen'
->;
+  >;
+
+
 
 // resetPassword
 export type ChangePasswordScreenProps = CompositeScreenProps<
@@ -206,3 +209,18 @@ export type NewSubCategoryScreenProps = NativeStackScreenProps<
   RootStackParamList,
   'NewSubCategoryScreen'
 >;
+
+export type NewSectionScreenProps = NativeStackScreenProps<
+  RootStackParamList,
+  'NewSectionScreen'
+  >
+
+export type SectionsScreenProps = CompositeScreenProps<
+  MaterialTopTabScreenProps<NewQuoteTopTabParamList, 'Sections'>,
+  NativeStackScreenProps<RootStackParamList>
+  >;
+
+export type ItemScreenProps = CompositeScreenProps<
+  MaterialTopTabScreenProps<NewQuoteTopTabParamList, 'Items'>,
+  NativeStackScreenProps<RootStackParamList>
+  >
