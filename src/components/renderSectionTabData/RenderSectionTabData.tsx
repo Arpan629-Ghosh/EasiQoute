@@ -1,6 +1,5 @@
-import { Image, StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
-import { SectionTabData } from '@/config/SectionData';
 import Card from '../cardDetailsComponent/Card';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import InterTightRegular from '../fontComponents/InterTightRegular';
@@ -8,42 +7,52 @@ import { icons } from '@/config/icons';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import {  SectionsPayload } from '@/types/apis/quote.types';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@/types/navigation.types';
+import { useNavigation } from '@react-navigation/native';
 
-
-const RenderSectionTabData = ({ item }: { item: SectionTabData }) => {
+const RenderSectionTabData = ({ item }: { item: SectionsPayload }) => {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
     const { theme } = useAppTheme();
-    const styles = useMemo(() => createStyles(theme), [theme])
+  const styles = useMemo(() => createStyles(theme), [theme])
+  
+  const navigateToEditSection = () => {
+    navigation.navigate("NewSectionScreen", {
+      editId: item.id,
+      content: item.content,
+      title: item.title,
+      sort: Number(item.sort)
+    })
+  }
   return (
     <Card style={styles.card}>
       <View style={styles.header}>
         <View style={styles.txtView}>
           <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
-            {item.heading}
+            {item.title}
           </InterTightMedium>
           <View style={styles.nested}>
             <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
               Order:{' '}
             </InterTightRegular>
             <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-              {item.orderNumber}
+              {item.sort}
             </InterTightRegular>
           </View>
         </View>
         <View style={styles.icons}>
-          <Image source={icons.ic_edit} style={styles.icon} />
-
+          <TouchableOpacity onPress={navigateToEditSection}>
+            <Image source={icons.ic_edit} style={styles.icon} />
+          </TouchableOpacity>
           <View style={styles.checkbox}>
-            <BouncyCheckbox
-              size={24}
-              fillColor="#082B60"
-              
-            />
+            <BouncyCheckbox size={24} fillColor="#082B60" />
           </View>
         </View>
       </View>
       <View style={styles.empty} />
       <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
-        {item.summury}
+        {item.content}
       </InterTightRegular>
     </Card>
   );

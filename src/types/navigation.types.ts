@@ -53,7 +53,14 @@ export type RootStackParamList = {
         unitCost?: number;
       }
   | undefined;
-  NewSectionScreen: undefined;
+  NewSectionScreen:
+  | {
+    editId?: number;
+    title?: string;
+    content?: string;
+    sort?: number
+  }
+  | undefined;
 };
 
 export type NewQuoteTopTabParamList = {

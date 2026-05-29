@@ -40,9 +40,16 @@ const LogoutModal = ({ visible, onClose }: Props) => {
   };
   return (
     <MiddleModalComponent visible={visible} onClose={onClose}>
-      <InterTightSemiBold fsize={20} fcolor={theme.textPrimary} textAlign="center">
-        Are you sure you want to{'           '} Logout?
-      </InterTightSemiBold>
+      <View style = {styles.container}>
+        <InterTightSemiBold
+          fsize={20}
+          fcolor={theme.textPrimary}
+          textAlign="center"
+        >
+          Are you sure you want to{'            '} Logout?
+        </InterTightSemiBold>
+      </View>
+
       <View style={styles.buttonContainer}>
         <ButtonComponent
           bg={theme.primary}
@@ -64,9 +71,14 @@ const LogoutModal = ({ visible, onClose }: Props) => {
 export default LogoutModal;
 
 const styles = StyleSheet.create({
+  container: {
+    marginTop: 24,
+    paddingHorizontal: 12,
+  },
   buttonContainer: {
     flex: 1,
-
+    marginTop: 24,
     width: '100%',
+    paddingHorizontal: 12,
   },
 });

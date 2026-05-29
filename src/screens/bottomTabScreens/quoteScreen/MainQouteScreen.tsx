@@ -201,7 +201,7 @@ const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
   }, []);
 
   const processedData = useMemo(() => {
-    let result = [...(quoteList || [])];
+    let result = quoteList;
     if (!appliedData && !debouncedSearch.trim()) {
       return result;
     }

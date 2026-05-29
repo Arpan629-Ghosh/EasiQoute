@@ -13,6 +13,7 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
+import { pick, types } from '@react-native-documents/picker';
 
 interface NewQuoteForm {
   quoteTitle: string;
@@ -97,6 +98,23 @@ const SummuryScreen = () => {
     }
 
     setDatePickerVisible(false);
+  };
+
+  const openDocumentPicker = async () => {
+    try {
+      const result = await pick({
+        type: [types.pdf, types.docx, types.images],
+        allowMultiSelection: false,
+      });
+
+      console.log('Selected File:', result);
+    } catch (err: any) {
+      if (err?.code === 'DOCUMENT_PICKER_CANCELED') {
+        console.log('User cancelled picker');
+      } else {
+        console.log('Picker Error:', err);
+      }
+    }
   };
 
   const handleCreateQuote = async () => {
@@ -272,7 +290,7 @@ const SummuryScreen = () => {
               Attachments
             </InterTightMedium>
             <View style={styles.fileupload}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={openDocumentPicker}>
                 <Image source={images.img_fileupload} style={styles.upload} />
               </TouchableOpacity>
             </View>

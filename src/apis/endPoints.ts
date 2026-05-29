@@ -13,4 +13,6 @@ export const ENDPOINTS = {
   CREATESUBCATEGORIES: '/api/sub-categories',
   CREATEITEMS: '/api/item/create-or-update',
   FETCHITEMS: '/api/items',
+  SECTIONS: '/api/proposal-document/sections',
+  UPDATESTATUS: '/api/update-status',
 };

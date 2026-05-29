@@ -1,6 +1,5 @@
 import { FlatList, Image, View } from 'react-native'
-import React, { useMemo } from 'react'
-import { DATA } from '@/config/SectionData'
+import React, { useEffect, useMemo } from 'react'
 import RenderSectionTabData from '@/components/renderSectionTabData/RenderSectionTabData'
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent'
 import { icons } from '@/config/icons'
@@ -8,21 +7,28 @@ import { useAppTheme } from '@/hooks/useAppTheme'
 import {createStyles} from './style'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { SectionsScreenProps } from '@/types/navigation.types'
+import { useQuotes } from '@/hooks/apis/useQuotes'
 
 const SectionsScreen = ({navigation}: SectionsScreenProps) => {
   const { theme } = useAppTheme();
+  const { getSections, sections, isFetchCall } = useQuotes();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme])
 
   const navigateToNewSection = () => {
     navigation.navigate("NewSectionScreen");
   }
+
+  useEffect(() => {
+    getSections();
+  }, [getSections, isFetchCall])
+  
   return (
     <View style={styles.container}>
       <FlatList
-        data={DATA}
+        data={sections}
         renderItem={({ item }) => <RenderSectionTabData item={item} />}
-        keyExtractor={item => item.id}
+        keyExtractor={item => item.id.toString()}
         showsVerticalScrollIndicator={false}
         style={styles.flatlist}
       />

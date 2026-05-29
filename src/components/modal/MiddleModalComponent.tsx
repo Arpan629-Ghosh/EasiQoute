@@ -45,13 +45,9 @@ const createStyles = (theme: Theme) =>  StyleSheet.create({
     position: 'absolute',
     backgroundColor: theme.background,
     borderRadius: 15,
-    paddingHorizontal: 16,
-    paddingTop: 24,
-    paddingBottom: 12,
-    gap: 24,
     bottom: "40%",
     left: 16,
-      right: 16,
-    alignItems: "center"
+    right: 16,
+    // alignItems: "center"
   },
 });

@@ -1,5 +1,5 @@
-import { Image, ScrollView, StatusBar, TouchableOpacity, View } from 'react-native';
-import React, { useCallback, useMemo, useState } from 'react';
+import { Animated, Image, ScrollView, StatusBar, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
 import { icons } from '@/config/icons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -17,17 +17,44 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import Items from '@/components/cardDetailsComponent/Items';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuotes } from '@/hooks/apis/useQuotes';
-import { useFocusEffect } from '@react-navigation/native';
 import Loader from '@/components/loader/Loader';
+import { useToast } from '@/hooks/useToast';
 
 const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
   const [open, setOpen] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState<string>("")
+  const [openEdit, setOpenEdit] = useState(false);
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
-  const { fetchQuoteDetails, quoteDetails , loading } = useQuotes();
+  const { showToast } = useToast();
+  const { fetchQuoteDetails, updateStatus, quoteDetails , loading } = useQuotes();
   const quoteId = route.params.quoteId; 
   const styles = useMemo(() => createStyles(theme), [theme])
+
+  const animation = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(animation, {
+      toValue: openEdit ? 1 : 0,
+      duration: 220,
+      useNativeDriver: true,
+    }).start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openEdit]);
+
+  const translateY = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-10, 0],
+  });
+
+  const opacity = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
+  // const navigateToEdit = () => {
+  //   navigation.navigate("Summury")
+  // }
   const navigateToBack = () => {
     navigation.goBack();
   };
@@ -40,19 +67,33 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
     setOpen(false)
   },[])
 
-  const toggleStatus = useCallback((type : string) => {
-    setSelectedStatus((prev) => {
-       const isSelected = prev.includes(type)
-      const updatedStatus = isSelected ? "" : type
-      return updatedStatus
-    })
+  const toggleStatus = useCallback(async (type: string) => {
+    try {
+      await updateStatus({
+        quote_id: quoteId,
+        status: type.toLowerCase(),
+      });
+      fetchQuoteDetails(quoteId);
+      setSelectedStatus(prev => {
+        const isSelected = prev.includes(type);
+        const updatedStatus = isSelected ? '' : type;
+        return updatedStatus;
+      });
+    } catch (error) {
+      showToast(String(error), 'error');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
-  useFocusEffect( 
-    useCallback(() => {
-      fetchQuoteDetails(quoteId)
-    }, [quoteId, fetchQuoteDetails])
-  )
+  // useFocusEffect( 
+  //   useCallback(() => {
+  //     fetchQuoteDetails(quoteId)
+  //   }, [quoteId, fetchQuoteDetails])
+  // )
+
+  useEffect(() => {
+    fetchQuoteDetails(quoteId)
+  }, [quoteId, fetchQuoteDetails])
 
   
   return (
@@ -78,11 +119,31 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
               style={styles.img}
             />
           </TouchableOpacity>
+          <View style={styles.animation}>
+            <TouchableOpacity onPress={() => setOpenEdit(!openEdit)}>
+              <Image
+                source={isDark ? icons.ic_darkdots : icons.ic_dots}
+                style={styles.img}
+              />
+            </TouchableOpacity>
 
-          <Image
-            source={isDark ? icons.ic_darkdots : icons.ic_dots}
-            style={styles.img}
-          />
+            <Animated.View
+              pointerEvents={openEdit ? 'auto' : 'none'}
+              style={[
+                styles.update,
+                {
+                  opacity,
+                  transform: [{ translateY }],
+                },
+              ]}
+            >
+              <TouchableOpacity activeOpacity={0.8}>
+                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
+                  Update Quote
+                </InterTightRegular>
+              </TouchableOpacity>
+            </Animated.View>
+          </View>
         </View>
       </View>
       <View style={styles.mainContainer}>
@@ -245,7 +306,10 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
                 />
 
                 <View style={styles.empty} />
-                <InfoRow label="Grand Total" value={`£${quoteDetails?.financial_summary.grand_total}`} />
+                <InfoRow
+                  label="Grand Total"
+                  value={`£${quoteDetails?.financial_summary.grand_total}`}
+                />
               </View>
             </Card>
 
@@ -436,7 +500,7 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
         onToggleStatus={toggleStatus}
         selectedStatus={selectedStatus}
       />
-      <Loader visible={loading } />
+      <Loader visible={loading} />
     </LinearGradient>
   );
 };

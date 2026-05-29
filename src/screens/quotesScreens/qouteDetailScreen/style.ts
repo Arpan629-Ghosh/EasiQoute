@@ -14,7 +14,6 @@ export const createStyles = (theme: Theme) =>
       paddingHorizontal: 16,
       flexDirection: 'row',
       justifyContent: 'space-between',
-
     },
     img: {
       height: 28,
@@ -36,6 +35,7 @@ export const createStyles = (theme: Theme) =>
       paddingVertical: 4.5,
       gap: 10,
       alignItems: 'center',
+      justifyContent: "center",
       backgroundColor: '#F973151A',
     },
     statusimg: {
@@ -64,7 +64,7 @@ export const createStyles = (theme: Theme) =>
       flexWrap: 'wrap',
     },
     scrollview: {
-      paddingBottom: 40
+      paddingBottom: 40,
     },
     contact: {
       gap: 16,
@@ -116,9 +116,39 @@ export const createStyles = (theme: Theme) =>
       gap: 12,
       justifyContent: 'center',
     },
-   
+
     addicon: {
       height: 16,
       width: 16,
+    },
+    update: {
+      position: 'absolute',
+      top: 25,
+      right: 0,
+      backgroundColor: theme.background,
+      // paddingVertical: 10,
+      // paddingHorizontal: 14,
+      borderRadius: 12,
+      width: 100,
+      height: 30,
+
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 0.15,
+      shadowRadius: 6,
+      elevation: 5,
+      alignItems: "center",
+      justifyContent: "center"
+    },
+    animation: {
+      position: 'relative',
+    },
+    imganimation: {
+      width: 22,
+      height: 22,
+      resizeMode: 'contain',
     },
   });

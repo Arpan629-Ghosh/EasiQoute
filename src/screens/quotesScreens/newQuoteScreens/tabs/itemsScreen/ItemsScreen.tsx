@@ -1,5 +1,5 @@
-import { FlatList, Image, TouchableOpacity, View } from 'react-native';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { FlatList, Image, ListRenderItem, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
@@ -13,27 +13,44 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ItemScreenProps } from '@/types/navigation.types';
 import { useSettings } from '@/hooks/apis/useSettings';
-import { useFocusEffect } from '@react-navigation/native';
 import RenderSubCategoriesDropDown from '@/components/renderSubCategoriesDropdown/RenderSubCategoriesDropDown';
 import { useDebounce } from '@/hooks/useDebounce';
+import DiscountModal from '@/components/discountModal/DiscountModal';
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
+import { FetchItemsData } from '@/types/apis/settings.types';
+import { useQuotes } from '@/hooks/apis/useQuotes';
+import { useToast } from '@/hooks/useToast';
+
+interface FinancialBreakDown {
+  subtotal: string;
+  tax: string;
+  total: string;
+}
 
 const FilterOptions = ['Materials', 'Labour', 'Services', 'Miscellaneous'];
+
+
 const ItemsScreen = ({ navigation }: ItemScreenProps) => {
   const [openFinancialBreakdown, setOpenFinancialBreakdown] =
     useState<boolean>(false);
+  const [selectedItems, setSelectedItems] = useState<FetchItemsData[]>([])
   const [selectedFilterOption, setSelectFilterOption] = useState<string>('');
   const [open, setOpen] = useState(false);
   const [openDropDown, setOpenDropDown] = useState(false);
+  const [openDiscount, setOpenDiscount] = useState(false)
   const [search, setSearch] = useState('');
-  const [counts, setCounts] = useState<Record<number, number>>({});
   const [paginationLoading, setPaginationLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [discountPrice, setDiscountPrice] = useState(0)
   const page = useRef(1);
   const onEndReachedCalledDuringMomentum = useRef(false);
+  const height = useSharedValue(0);
+  const opacity = useSharedValue(0);
   const insets = useSafeAreaInsets();
   const debouncedSearch = useDebounce(search);
 
   const { theme } = useAppTheme();
+  const { showToast } = useToast();
   const {
     fetchItems,
     isStale,
@@ -42,16 +59,47 @@ const ItemsScreen = ({ navigation }: ItemScreenProps) => {
     items_current_page,
     items_last_page,
   } = useSettings();
+  const { updateQuote, loading } = useQuotes();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  useFocusEffect(
-    useCallback(() => {
-      if (isStale || !items_data.length) {
-        page.current = 1;
-        fetchItems(1);
-      }
-    }, [fetchItems, isStale, items_data]),
-  );
+  useEffect(() => {
+    height.value = withTiming(openFinancialBreakdown ? 500 : 0, {
+      duration: 300,
+    });
+
+    opacity.value = withTiming(openFinancialBreakdown ? 1 : 0, {
+      duration: 250,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openFinancialBreakdown]);
+
+  const animatedStyle = useAnimatedStyle(() => {
+    return {
+      maxHeight: height.value,
+      opacity: opacity.value,
+      overflow: 'hidden',
+    };
+  });
+
+  useEffect(() => {
+    if (isStale) {
+      page.current = 1;
+      fetchItems(1);
+    }
+  }, [fetchItems, isStale])
+
+  useEffect(() => {
+    fetchItems(1);
+  }, [fetchItems])
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     if (isStale || !items_data.length) {
+  //       page.current = 1;
+  //       fetchItems(1);
+  //     }
+  //   }, [fetchItems, isStale, items_data]),
+  // );
 
   const hasMore = useMemo(() => {
     return items_current_page < items_last_page;
@@ -102,22 +150,13 @@ const ItemsScreen = ({ navigation }: ItemScreenProps) => {
     if (txt.trim()) setOpenDropDown(true);
   }, []);
 
-  const increaseCount = useCallback((id: number) => {
-    setCounts(prev => ({
-      ...prev,
-      [id]: (prev[id] || 0) + 1,
-    }));
-  }, []);
 
-  const decreaseCount = useCallback((id: number) => {
-    setCounts(prev => ({
-      ...prev,
-      [id]: Math.max((prev[id] || 0) - 1, 0),
-    }));
-  }, []);
+  const handleCloseDiscount = useCallback(() => {
+    setOpenDiscount(false)
+  }, [])
 
   const processedData = useMemo(() => {
-    let result = [...items_data];
+    let result = items_data;
     if (selectedFilterOption) {
       result = result.filter(item =>
         item.category_name
@@ -142,6 +181,68 @@ const ItemsScreen = ({ navigation }: ItemScreenProps) => {
     result = result.filter(item => item.name.toLowerCase().includes(lower));
     return result;
   }, [subcat_data, debouncedSearch]);
+
+
+  const handleAddItem = useCallback((updatedItem: FetchItemsData) => {
+    setSelectedItems(prev => {
+      const alreadyExists = prev.find(item => item.id === updatedItem.id);
+
+      if (alreadyExists) {
+        return prev.map(item =>
+          item.id === updatedItem.id ? updatedItem : item,
+        );
+      }
+
+      return [...prev, updatedItem];
+    });
+  }, []);
+  
+  const discountValue = (discount: number) => {
+    setDiscountPrice(discount)
+  }
+  
+  console.log(selectedItems);
+
+  const renderItems: ListRenderItem<FetchItemsData> = useCallback(({ item }) => {
+    return (
+      <RenderFilterData
+        item={item}
+        onAddItem={handleAddItem}
+      />
+    );
+  }, [handleAddItem]);
+
+  const calculateFinancialBreakdown = useMemo(() => {
+    let result: FinancialBreakDown = {
+      subtotal: "",
+      tax: "",
+      total: ""
+    };
+    const subtotal = selectedItems.reduce(
+      (sum, item) => sum + Number(item.total_price || 0),
+      0,
+    );
+    const tax = subtotal * (8 / 100);
+    const total = subtotal + tax;
+    const grandTotal = total - (total * discountPrice/100)
+  
+    result.subtotal = subtotal.toFixed(2);
+    result.tax = tax.toFixed(2);
+    result.total = grandTotal.toFixed(2);
+    return result;
+  }, [selectedItems, discountPrice])
+
+  const handleUpdateQuote = async() => {
+    try {
+      await updateQuote({
+        quoteId: 3141,
+        items: selectedItems,
+      });
+      showToast('Quote updated successfully!')
+    } catch (error) {
+      showToast(String(error), 'error')
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -199,14 +300,7 @@ const ItemsScreen = ({ navigation }: ItemScreenProps) => {
       <View style={styles.flatlist}>
         <FlatList
           data={processedData}
-          renderItem={({ item }) => (
-            <RenderFilterData
-              item={item}
-              count={counts[item.id] || 0}
-              increaseCount={() => increaseCount(item.id)}
-              decreaseCount={() => decreaseCount(item.id)}
-            />
-          )}
+          renderItem={renderItems}
           keyExtractor={item => item.id.toString()}
           showsVerticalScrollIndicator={false}
           refreshing={refreshing}
@@ -244,9 +338,13 @@ const ItemsScreen = ({ navigation }: ItemScreenProps) => {
               />
             </TouchableOpacity>
           </View>
-          {openFinancialBreakdown && (
-            <View style={styles.inforow}>
-              <InfoRow label="Subtotal" value="£765.00" />
+          <Animated.View style={[styles.inforow, animatedStyle]}>
+            <>
+              <InfoRow
+                label="Subtotal"
+                value={`£${calculateFinancialBreakdown.subtotal}`}
+              />
+
               <TouchableOpacity onPress={() => setOpen(true)}>
                 <InfoRow
                   label="Margin (50%)"
@@ -255,22 +353,35 @@ const ItemsScreen = ({ navigation }: ItemScreenProps) => {
                 />
               </TouchableOpacity>
 
-              <InfoRow label="Tax(8%)" value="£61.20" />
               <InfoRow
-                label="Discount"
-                value="+ Add Discount"
-                activeColor={true}
+                label="Tax(8%)"
+                value={`£${calculateFinancialBreakdown.tax}`}
               />
+
+              <TouchableOpacity onPress={() => setOpenDiscount(true)}>
+                <InfoRow
+                  label="Discount"
+                  value={discountPrice ? discountPrice : '+ Add Discount'}
+                  activeColor={true}
+                />
+              </TouchableOpacity>
+
               <View style={styles.empty} />
-              <InfoRow label="Grand Total" value="£749.70" />
+
+              <InfoRow
+                label="Grand Total"
+                value={`£${calculateFinancialBreakdown.total}`}
+              />
+
               <InfoRow
                 label="Deposit"
                 value="+ Add Deposit"
                 activeColor={true}
               />
+
               <View style={styles.empty} />
-            </View>
-          )}
+            </>
+          </Animated.View>
           <View style={styles.bttnContainer}>
             <ButtonComponent
               borderc={theme.primary}
@@ -289,11 +400,22 @@ const ItemsScreen = ({ navigation }: ItemScreenProps) => {
               bttnTxt="Save & Preview"
               txtColor={theme.primaryText}
               buttonWidth={169.5}
+              showLoader={loading}
+              onPress={handleUpdateQuote}
             />
           </View>
         </View>
       </View>
-      <MarginBottomSheet visible={open} onClose={handleClose} />
+      <MarginBottomSheet
+        visible={open}
+        onClose={handleClose}
+        margin_data={selectedItems}
+      />
+      <DiscountModal
+        visible={openDiscount}
+        onClose={handleCloseDiscount}
+        onDiscount={discountValue}
+      />
     </View>
   );
 };

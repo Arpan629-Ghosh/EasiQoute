@@ -1,3 +1,5 @@
+import { FetchItemsData } from "./settings.types";
+
 export interface QuoteSummary {
   total_count: number;
   accepted_count: number;
@@ -135,4 +137,33 @@ export interface CreateQuote {
   notes: string;
 }
 
+export interface SectionsPayload {
+  id: number;
+  title: string;
+  content: string;
+  sort: string;
+  is_added: boolean;
+  created_at: string;
+  updated_at: string;
+}
 
+export interface GetSections{
+  data: SectionsPayload[]
+}
+
+export interface Sections {
+  id?: number;
+  title: string;
+  content: string;
+  sort: number
+}
+
+export interface UpdateQuote {
+  quoteId: number;
+  items: FetchItemsData[]
+}
+
+export interface UpdateStatus {
+  status: string
+  quote_id: number;
+}

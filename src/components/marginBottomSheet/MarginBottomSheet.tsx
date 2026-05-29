@@ -1,178 +1,203 @@
-import { StyleSheet, View } from 'react-native'
-import React, { useMemo } from 'react'
-import ModalComponent from '../modal/ModalComponent'
+import { FlatList, ListRenderItem, StyleSheet, View } from 'react-native';
+import React, { useCallback, useMemo } from 'react';
+import ModalComponent from '../modal/ModalComponent';
 import InterTightMedium from '../fontComponents/InterTightMedium';
-import InterTightRegular from '../fontComponents/InterTightRegular';
 import InterTightSemiBold from '../fontComponents/InterTightSemiBold';
 import ButtonComponent from '../buttonComponent/ButtonComponent';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
+import { FetchItemsData } from '@/types/apis/settings.types';
+import RenderMargin from '../renderMargin/RenderMargin';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {
-    visible: boolean;
-    onClose: () => void
-}
-const MarginBottomSheet = ({ visible, onClose }: Props) => {
-    const { theme } = useAppTheme();
-    const styles = useMemo(() => createStyles(theme), [theme])
+  visible: boolean;
+  onClose: () => void;
+  margin_data: FetchItemsData[];
+};
+
+const MarginBottomSheet = ({ visible, onClose, margin_data }: Props) => {
+  const { theme } = useAppTheme();
+  const insets = useSafeAreaInsets();
+  const styles = useMemo(() => createStyles(theme), [theme]);
+  const renderItems: ListRenderItem<FetchItemsData> = useCallback(
+    ({ item }) => {
+      return <RenderMargin item={item} />;
+    },
+    [],
+  );
+  const totalRevenue = useMemo(() => {
+    return margin_data.reduce(
+      (sum, item) => sum + Number(item.total_price || 0),
+      0,
+    );
+  }, [margin_data]);
+  const totalCost = useMemo(() => {
+    return margin_data.reduce(
+      (sum, item) => sum + Number(item.total_cost || 0),
+      0,
+    );
+  }, [margin_data]);
+
+  const totalMargin = totalRevenue - totalCost;
+
+  const totalPercentage = useMemo(() => {
+    if (totalRevenue <= 0) {
+      return '0';
+    }
+
+    return ((totalMargin / totalRevenue) * 100).toFixed(1);
+  }, [totalMargin, totalRevenue]);
+
   return (
-    <ModalComponent visible={visible} onClose={onClose} mheight={431}>
-      <View style={styles.header}>
-        <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
-          Margin
-        </InterTightMedium>
-      </View>
-      <View style={styles.marginDetail}>
-        <View style={styles.details}>
-          <View style={styles.heading}>
-            <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
-              Item Name{'        '}
-            </InterTightMedium>
-            <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
-              revenue{'           '}
-            </InterTightMedium>
-            <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
-              costs{'              '}
-            </InterTightMedium>
-            <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
-              margin{' '}
-            </InterTightMedium>
-          </View>
-          <View style={styles.rows}>
-            <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-              Item 1{'                '}
-            </InterTightRegular>
-            <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-              £50.00{'         '}
-            </InterTightRegular>
-            <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-              £25.00{'        '}
-            </InterTightRegular>
-            <View>
-              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                £25.00
-              </InterTightRegular>
-              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                (50%){' '}
-              </InterTightRegular>
-            </View>
-          </View>
-          <View style={styles.rows}>
-            <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-              Item 2{'               '}
-            </InterTightRegular>
-            <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-              £50.00{'         '}
-            </InterTightRegular>
-            <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-              £25.00{'        '}
-            </InterTightRegular>
-            <View>
-              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                £25.00
-              </InterTightRegular>
-              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                (50%){' '}
-              </InterTightRegular>
-            </View>
-          </View>
-          <View style={styles.rows}>
-            <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-              Item 3{'               '}
-            </InterTightRegular>
-            <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-              £50.00{'         '}
-            </InterTightRegular>
-            <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-              £25.00{'        '}
-            </InterTightRegular>
-            <View>
-              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                £25.00
-              </InterTightRegular>
-              <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                (50%){' '}
-              </InterTightRegular>
-            </View>
-          </View>
-          <View style={styles.empty} />
-          <View style={styles.rows}>
-            <InterTightSemiBold fsize={14} fcolor={theme.textPrimary}>
-              Total{'                   '}
-            </InterTightSemiBold>
-            <InterTightSemiBold fsize={14} fcolor={theme.textPrimary}>
-              £50.00{'         '}
-            </InterTightSemiBold>
-            <InterTightSemiBold fsize={14} fcolor={theme.textPrimary}>
-              £25.00{'        '}
-            </InterTightSemiBold>
-            <View>
-              <InterTightSemiBold fsize={14} fcolor={theme.textPrimary}>
-                £25.00
-              </InterTightSemiBold>
-              <InterTightSemiBold fsize={14} fcolor={theme.textPrimary}>
-                (50%){' '}
-              </InterTightSemiBold>
-            </View>
-          </View>
-          <View style={styles.empty} />
+    <ModalComponent visible={visible} onClose={onClose} mheight={500}>
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
+            Margin 
+          </InterTightMedium>
         </View>
-        <View style={styles.bttnContainer}>
+
+        <View style={styles.tableHeader}>
+          <View style={[styles.column, styles.nameColumn]}>
+            <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
+              Item Name
+            </InterTightMedium>
+          </View>
+
+          <View style={styles.column}>
+            <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
+              Revenue
+            </InterTightMedium>
+          </View>
+
+          <View style={styles.column}>
+            <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
+              Costs
+            </InterTightMedium>
+          </View>
+
+          <View style={styles.column}>
+            <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
+              Margin
+            </InterTightMedium>
+          </View>
+        </View>
+
+        <FlatList
+          data={margin_data}
+          renderItem={renderItems}
+          keyExtractor={item => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.listContainer}
+        />
+
+        <View style={styles.totalContainer}>
+          <View style={[styles.column, styles.nameColumn]}>
+            <InterTightSemiBold fsize={14} fcolor={theme.textPrimary}>
+              Total
+            </InterTightSemiBold>
+          </View>
+
+          <View style={styles.column}>
+            <InterTightSemiBold fsize={14} fcolor={theme.textPrimary}>
+              £{totalRevenue.toFixed(2)}
+            </InterTightSemiBold>
+          </View>
+
+          <View style={styles.column}>
+            <InterTightSemiBold fsize={14} fcolor={theme.textPrimary}>
+              £{totalCost.toFixed(2)}
+            </InterTightSemiBold>
+          </View>
+
+          <View style={styles.column}>
+            <InterTightSemiBold fsize={14} fcolor={theme.textPrimary}>
+              £{totalMargin.toFixed(2)}
+            </InterTightSemiBold>
+
+            <InterTightSemiBold fsize={14} fcolor={theme.textSecondary}>
+              ({totalPercentage}%)
+            </InterTightSemiBold>
+          </View>
+        </View>
+
+        <View style={[styles.buttonContainer, {paddingBottom: insets.bottom + 12}]}>
           <ButtonComponent
             bg={theme.primary}
             onPress={onClose}
             bttnTxt="Got It"
             txtColor={theme.primaryText}
-            style={styles.bttn}
+            style={styles.button}
           />
         </View>
       </View>
     </ModalComponent>
   );
-}
+};
 
-export default React.memo(MarginBottomSheet)
+export default React.memo(MarginBottomSheet);
 
-const createStyles = (theme: Theme) => StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    gap: 16,
-  },
-  marginDetail: {
-    gap: 1,
-  },
-  details: {
-    gap: 16,
-  },
-  heading: {
-    flexDirection: 'row',
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      borderTopEndRadius: 24,
+      borderTopLeftRadius: 24,
+      backgroundColor: theme.background,
+    },
 
-    padding: 12,
-    gap: 8,
-    backgroundColor: theme.cardSecondary,
-  },
-  rows: {
-    flexDirection: 'row',
-    paddingHorizontal: 12,
-    gap: 16,
-  },
-  bttnContainer: {
-    padding: 12,
-    gap: 12,
-  },
-  bttn: {
-    borderRadius: 12,
-    padding: 10,
-    gap: 10,
-    backgroundColor: theme.primary,
-    height: 44,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  empty: {
-    borderWidth: 0.5,
-    borderColor: theme.border,
-  },
-});
+    header: {
+      paddingHorizontal: 16,
+      paddingVertical: 16,
+      borderBottomWidth: 0.5,
+      borderBottomColor: theme.border,
+    },
+
+    tableHeader: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: 12,
+      paddingHorizontal: 16,
+      backgroundColor: theme.cardSecondary,
+      borderBottomWidth: 0.5,
+      borderBottomColor: theme.border,
+    },
+
+    listContainer: {
+      paddingBottom: 8,
+    },
+
+    column: {
+      flex: 1,
+      justifyContent: 'center',
+    },
+
+    nameColumn: {
+      flex: 1.7,
+      paddingRight: 10,
+    },
+
+    totalContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      paddingVertical: 6,
+      paddingHorizontal: 16,
+      backgroundColor: theme.cardSecondary,
+      borderTopWidth: 0.5,
+      borderTopColor: theme.border,
+    },
+
+    buttonContainer: {
+      paddingHorizontal: 16,
+      paddingTop: 16,
+      paddingBottom: 20,
+    },
+
+    button: {
+      height: 48,
+      borderRadius: 14,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });

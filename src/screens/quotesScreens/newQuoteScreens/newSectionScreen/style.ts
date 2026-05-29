@@ -62,4 +62,16 @@ export const createStyles = (theme: Theme) =>
       backgroundColor: theme.primary,
       alignItems: 'center',
     },
+    scrollview: {
+      flex: 1,
+    },
+    deleteView: {
+      marginTop: 10,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    delete: {
+      height: 33,
+      width: 93,
+    },
   });
