@@ -2,14 +2,17 @@ import { createSlice } from '@reduxjs/toolkit';
 import {
   CreateQuotePayload,
   QuoteItem,
+  QuoteSectionPayload,
   SectionsPayload,
 } from '@/types/apis/quote.types';
 import {
   createQuoteThunk,
   createSectionsThunk,
+  createSelectedSectionsThunk,
   deleteSectionsThunk,
   fetchQuoteDetailsThunk,
   getSectionsThunk,
+  getSelectedSectionsThunk,
   quoteListThunk,
   updateQuoteThunk,
   updateStatusThunk,
@@ -18,10 +21,14 @@ import {
 export interface QuotesState {
   quoteList: QuoteItem[];
   sections: SectionsPayload[];
+  selectedSections: QuoteSectionPayload[];
   quoteDetails: CreateQuotePayload | null;
   current_page: number;
   last_page: number;
-  loading: boolean;
+  loadingQuoteDetails: boolean;
+  loadingUpdateQuote: boolean;
+  loadingSections: boolean;
+  loadingQuoteList: boolean;
   error: string | null;
   isFetchCall: boolean;
 }
@@ -29,10 +36,14 @@ export interface QuotesState {
 const initialState: QuotesState = {
   quoteList: [],
   sections: [],
+  selectedSections: [],
   quoteDetails: null,
   current_page: 1,
   last_page: 1,
-  loading: false,
+  loadingQuoteDetails: false,
+  loadingUpdateQuote: false,
+  loadingSections: false,
+  loadingQuoteList: false,
   error: null,
   isFetchCall: false,
 };
@@ -46,11 +57,11 @@ const quotesSlice = createSlice({
   extraReducers: builder => {
     builder
       .addCase(quoteListThunk.pending, state => {
-        state.loading = true;
+        state.loadingQuoteList = true;
         state.error = null;
       })
       .addCase(quoteListThunk.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loadingQuoteList = false;
         state.error = null;
 
         const incomingData = action.payload.data;
@@ -71,99 +82,124 @@ const quotesSlice = createSlice({
         state.last_page = action.payload.meta.last_page;
       })
       .addCase(quoteListThunk.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingQuoteList = false;
         state.error = action.payload as string;
       })
       .addCase(createQuoteThunk.pending, state => {
-        state.loading = true;
+        state.loadingUpdateQuote = true;
         state.error = null;
       })
       .addCase(createQuoteThunk.fulfilled, state => {
-        state.loading = false;
+        state.loadingUpdateQuote = false;
         state.error = null;
         state.isFetchCall = true;
       })
       .addCase(createQuoteThunk.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingUpdateQuote = false;
         state.error = action.payload as string;
       })
       .addCase(fetchQuoteDetailsThunk.pending, state => {
-        state.loading = true;
+        state.loadingQuoteDetails = true;
         state.error = null;
       })
       .addCase(fetchQuoteDetailsThunk.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loadingQuoteDetails = false;
         state.error = null;
         state.quoteDetails = action.payload;
       })
       .addCase(fetchQuoteDetailsThunk.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingQuoteDetails = false;
         state.error = action.payload as string;
       })
       .addCase(createSectionsThunk.pending, state => {
-        state.loading = true;
+        state.loadingSections = true;
         state.error = null;
       })
       .addCase(createSectionsThunk.fulfilled, state => {
-        state.loading = false;
+        state.loadingSections = false;
         state.error = null;
         state.isFetchCall = true;
       })
       .addCase(createSectionsThunk.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingSections = false;
         state.error = action.payload as string;
       })
       .addCase(getSectionsThunk.pending, state => {
-        state.loading = true;
+        state.loadingSections = true;
         state.error = null;
       })
       .addCase(getSectionsThunk.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loadingSections = false;
         state.error = null;
         state.sections = action.payload.data;
         state.isFetchCall = false;
       })
       .addCase(getSectionsThunk.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingSections = false;
         state.error = action.payload as string;
       })
       .addCase(deleteSectionsThunk.pending, state => {
-        state.loading = true;
+        state.loadingSections = true;
         state.error = null;
       })
       .addCase(deleteSectionsThunk.fulfilled, state => {
-        state.loading = false;
+        state.loadingSections = false;
         state.error = null;
         state.isFetchCall = true;
       })
       .addCase(deleteSectionsThunk.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingSections = false;
         state.error = action.payload as string;
       })
       .addCase(updateQuoteThunk.pending, state => {
-        state.loading = true;
+        state.loadingUpdateQuote = true;
         state.error = null;
       })
       .addCase(updateQuoteThunk.fulfilled, state => {
-        state.loading = false;
+        state.loadingUpdateQuote = false;
         state.error = null;
       })
       .addCase(updateQuoteThunk.rejected, (state, action) => {
-        state.loading = false;
+        state.loadingUpdateQuote = false;
         state.error = action.payload as string;
       })
       .addCase(updateStatusThunk.pending, state => {
-        state.loading = true;
+        state.loadingUpdateQuote = true;
         state.error = null;
       })
       .addCase(updateStatusThunk.fulfilled, state => {
-        state.loading = false;
+        state.loadingUpdateQuote = false;
         state.error = null;
       })
       .addCase(updateStatusThunk.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error as string
-    })
+        state.loadingUpdateQuote = false;
+        state.error = action.payload as string;
+      })
+      .addCase(createSelectedSectionsThunk.pending, state => {
+        state.loadingSections = true;
+        state.error = null;
+      })
+      .addCase(createSelectedSectionsThunk.fulfilled, state => {
+        state.loadingSections = false;
+        state.error = null;
+      })
+      .addCase(createSelectedSectionsThunk.rejected, (state, action) => {
+        state.loadingSections = false;
+        state.error = action.payload as string;
+      })
+      .addCase(getSelectedSectionsThunk.pending, state => {
+        state.loadingSections = true;
+        state.error = null;
+      })
+      .addCase(getSelectedSectionsThunk.fulfilled, (state, action) => {
+        state.loadingSections = false;
+        state.error = null;
+        state.selectedSections = action.payload.data;
+      })
+      .addCase(getSelectedSectionsThunk.rejected, (state, action) => {
+        state.loadingSections = false;
+        state.error = action.payload as string;
+      });
   },
 });
 

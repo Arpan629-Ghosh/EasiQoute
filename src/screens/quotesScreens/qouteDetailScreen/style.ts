@@ -57,6 +57,7 @@ export const createStyles = (theme: Theme) =>
     empty: {
       borderWidth: 0.5,
       borderColor: theme.border,
+      marginTop: 12,
     },
     txtView: {
       flexDirection: 'row',

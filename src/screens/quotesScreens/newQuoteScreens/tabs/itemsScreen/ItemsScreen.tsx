@@ -30,7 +30,7 @@ interface FinancialBreakDown {
 const FilterOptions = ['Materials', 'Labour', 'Services', 'Miscellaneous'];
 
 
-const ItemsScreen = ({ navigation }: ItemScreenProps) => {
+const ItemsScreen = ({ navigation, route }: ItemScreenProps) => {
   const [openFinancialBreakdown, setOpenFinancialBreakdown] =
     useState<boolean>(false);
   const [selectedItems, setSelectedItems] = useState<FetchItemsData[]>([])
@@ -48,6 +48,7 @@ const ItemsScreen = ({ navigation }: ItemScreenProps) => {
   const opacity = useSharedValue(0);
   const insets = useSafeAreaInsets();
   const debouncedSearch = useDebounce(search);
+  const quoteId = route.params.quoteId;
 
   const { theme } = useAppTheme();
   const { showToast } = useToast();
@@ -59,7 +60,7 @@ const ItemsScreen = ({ navigation }: ItemScreenProps) => {
     items_current_page,
     items_last_page,
   } = useSettings();
-  const { updateQuote, loading } = useQuotes();
+  const { updateQuote, loadingUpdateQuote } = useQuotes();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   useEffect(() => {
@@ -201,7 +202,7 @@ const ItemsScreen = ({ navigation }: ItemScreenProps) => {
     setDiscountPrice(discount)
   }
   
-  console.log(selectedItems);
+  // console.log(selectedItems);
 
   const renderItems: ListRenderItem<FetchItemsData> = useCallback(({ item }) => {
     return (
@@ -233,9 +234,13 @@ const ItemsScreen = ({ navigation }: ItemScreenProps) => {
   }, [selectedItems, discountPrice])
 
   const handleUpdateQuote = async() => {
+    if (typeof quoteId !== 'number') {
+      showToast('Invalid quote ID', 'error');
+      return;
+    }
     try {
       await updateQuote({
-        quoteId: 3141,
+        quoteId: quoteId,
         items: selectedItems,
       });
       showToast('Quote updated successfully!')
@@ -400,7 +405,7 @@ const ItemsScreen = ({ navigation }: ItemScreenProps) => {
               bttnTxt="Save & Preview"
               txtColor={theme.primaryText}
               buttonWidth={169.5}
-              showLoader={loading}
+              showLoader={loadingUpdateQuote}
               onPress={handleUpdateQuote}
             />
           </View>

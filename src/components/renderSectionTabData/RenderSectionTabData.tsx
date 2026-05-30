@@ -12,19 +12,26 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/navigation.types';
 import { useNavigation } from '@react-navigation/native';
 
-const RenderSectionTabData = ({ item }: { item: SectionsPayload }) => {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-    const { theme } = useAppTheme();
-  const styles = useMemo(() => createStyles(theme), [theme])
-  
+interface Props {
+  item: SectionsPayload;
+  isSelected: boolean;
+  onToggle: () => void;
+}
+
+const RenderSectionTabData = ({ item, isSelected, onToggle }: Props) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const { theme } = useAppTheme();
+  const styles = useMemo(() => createStyles(theme), [theme]);
+
   const navigateToEditSection = () => {
-    navigation.navigate("NewSectionScreen", {
+    navigation.navigate('NewSectionScreen', {
       editId: item.id,
       content: item.content,
       title: item.title,
-      sort: Number(item.sort)
-    })
-  }
+      sort: Number(item.sort),
+    });
+  };
   return (
     <Card style={styles.card}>
       <View style={styles.header}>
@@ -46,7 +53,13 @@ const RenderSectionTabData = ({ item }: { item: SectionsPayload }) => {
             <Image source={icons.ic_edit} style={styles.icon} />
           </TouchableOpacity>
           <View style={styles.checkbox}>
-            <BouncyCheckbox size={24} fillColor="#082B60" />
+            <BouncyCheckbox
+              size={24}
+              fillColor="#082B60"
+              isChecked={isSelected}
+              useBuiltInState={false}
+              onPress={onToggle}
+            />
           </View>
         </View>
       </View>

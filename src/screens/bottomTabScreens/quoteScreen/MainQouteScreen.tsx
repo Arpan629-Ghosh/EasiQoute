@@ -61,8 +61,7 @@ const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
   const {
     fetchQuotesScreenData,
     quoteList,
-    loading,
-    isFetchCall,
+    loadingQuoteList,
     current_page,
     last_page,
   } = useQuotes();
@@ -73,11 +72,11 @@ const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
 
   useFocusEffect(
     useCallback(() => {
-      if (isFetchCall || !(quoteList?.length ?? 0)) {
+     
         page.current = 1;
         fetchQuotesScreenData(1);
-      }
-    }, [isFetchCall, quoteList, fetchQuotesScreenData]),
+      
+    }, [fetchQuotesScreenData]),
   );
 
   const navigateToNewQuote = useCallback(() => {
@@ -186,12 +185,12 @@ const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
   }, [paginationLoading, styles.loaderContainer]);
 
   const renderEmpty = useCallback(() => {
-    if (loading) {
+    if (loadingQuoteList) {
       return null;
     }
 
     return <QuoteEmptyScreen />;
-  }, [loading]);
+  }, [loadingQuoteList]);
 
   const keyExtractor = useCallback((item: QuoteItem) => item.id.toString(),
  []);
@@ -318,7 +317,7 @@ const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
           </View>
 
           <View style={styles.flatlist}>
-            {loading && !quoteList.length ? (
+            {loadingQuoteList && !quoteList.length ? (
               <Loader visible />
             ) : (
               <FlatList

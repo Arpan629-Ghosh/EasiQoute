@@ -1,5 +1,12 @@
-import { Image, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, View } from 'react-native';
-import React, { useMemo, useState } from 'react';
+import {
+  Image,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, { useCallback, useMemo, useState } from 'react';
 import { createStyles } from './style';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
@@ -15,6 +22,13 @@ import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
 import { pick, types } from '@react-native-documents/picker';
 
+export interface AttachmentFile {
+  uri: string;
+  name: string;
+  type: string;
+  size?: number;
+}
+
 interface NewQuoteForm {
   quoteTitle: string;
   refNumber: string;
@@ -23,53 +37,56 @@ interface NewQuoteForm {
   client: string;
   jobDescription: string;
   notes: string;
-  file: string[];
+  file: AttachmentFile[];
 }
 
 const SummuryScreen = () => {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [activeField, setActiveField] = useState<'start' | 'end' | null>(null);
-  const [enabled, setEnabled] = useState(false)
+  const [enabled, setEnabled] = useState(false);
 
   const [newQuoteFormData, setNewQuoteFormData] = useState<NewQuoteForm>({
-    quoteTitle: "",
-    refNumber: "",
-    qtDate: "",
-    expDate: "",
-    client: "",
-    jobDescription: "",
-    notes: "",
-    file: []
-  })
+    quoteTitle: '',
+    refNumber: '',
+    qtDate: '',
+    expDate: '',
+    client: '',
+    jobDescription: '',
+    notes: '',
+    file: [],
+  });
   const { theme } = useAppTheme();
-  const { createQuote, loading } = useQuotes();
-  const {showToast} = useToast()
+  const { createQuote, loadingUpdateQuote } = useQuotes();
+  const { showToast } = useToast();
   const insets = useSafeAreaInsets();
-  const styles = useMemo(() => createStyles(theme), [theme])
-  const updateField = (key: keyof NewQuoteForm, value: string) => {
+  const MAX_FILE_SIZE = 10 * 1024 * 1024;
+  const MAX_FILES = 10;
+  const styles = useMemo(() => createStyles(theme), [theme]);
+
+  const updateField = useCallback((key: keyof NewQuoteForm, value: string) => {
     setNewQuoteFormData(prev => ({
       ...prev,
       [key]: value,
     }));
-  };
+  }, []);
 
   const fillStartInput = (stratDate: string) => {
     setNewQuoteFormData(prev => {
-        return {
-          ...prev,
-          qtDate: stratDate,
-        };
-      });
-    };
-  
-    const fillEndInput = (endDate: string) => {
-      setNewQuoteFormData(prev => {
-        return {
-          ...prev,
-          expDate: endDate,
-        };
-      });
-    };
+      return {
+        ...prev,
+        qtDate: stratDate,
+      };
+    });
+  };
+
+  const fillEndInput = (endDate: string) => {
+    setNewQuoteFormData(prev => {
+      return {
+        ...prev,
+        expDate: endDate,
+      };
+    });
+  };
 
   const handleCalenderStartPicker = () => {
     setActiveField('start');
@@ -100,25 +117,69 @@ const SummuryScreen = () => {
     setDatePickerVisible(false);
   };
 
+  const removeFile = useCallback((index: number) => {
+    setNewQuoteFormData(prev => ({
+      ...prev,
+      file: prev.file.filter((_, i) => i !== index),
+    }));
+  }, []);
+
   const openDocumentPicker = async () => {
     try {
       const result = await pick({
         type: [types.pdf, types.docx, types.images],
-        allowMultiSelection: false,
+        allowMultiSelection: true,
       });
+      const selectedFiles = result
+        .map(file => ({
+          uri: file.uri,
+          name: file.name ?? 'attachment',
+          type: file.type ?? 'application/octet-stream',
+          size: typeof file.size === 'number' ? file.size : undefined,
+        }))
+        .filter(file => {
+          const isValidSize = (file.size ?? 0) <= MAX_FILE_SIZE;
+          if (!isValidSize) {
+            showToast(
+              `${file.name} exceeds the maximum size of 10 MB`,
+              'error',
+            );
+          }
+          return isValidSize;
+        });
+      if (!selectedFiles.length) {
+        return;
+      }
+      setNewQuoteFormData(prev => {
+        const merged = [...prev.file];
+        selectedFiles.forEach(newFile => {
+          const exists = merged.some(
+            file => file.name === newFile.name && file.size === newFile.size,
+          );
 
-      console.log('Selected File:', result);
-    } catch (err: any) {
-      if (err?.code === 'DOCUMENT_PICKER_CANCELED') {
-        console.log('User cancelled picker');
-      } else {
-        console.log('Picker Error:', err);
+          if (!exists) {
+            merged.push(newFile);
+          }
+        });
+        if (merged.length > MAX_FILES) {
+          showToast(`You can upload a maximum of ${MAX_FILES} files`, 'error');
+          return prev;
+        }
+        return {
+          ...prev,
+          file: merged,
+        };
+      });
+    } catch (error: any) {
+      if (error?.code !== 'DOCUMENT_PICKER_CANCELED') {
+        console.log(error);
+        showToast('Failed to select file', 'error');
       }
     }
   };
 
   const handleCreateQuote = async () => {
-    console.log(newQuoteFormData);
+    // console.log(newQuoteFormData);
     try {
       await createQuote({
         title: newQuoteFormData.quoteTitle,
@@ -127,6 +188,7 @@ const SummuryScreen = () => {
         expiry_date: newQuoteFormData.expDate,
         client_id: Number(newQuoteFormData.client),
         notes: newQuoteFormData.notes,
+        attachments: newQuoteFormData.file
       });
       showToast('Quote created successfully.');
       setNewQuoteFormData({
@@ -142,7 +204,6 @@ const SummuryScreen = () => {
     } catch (error) {
       showToast(String(error), 'error');
     }
-   
   };
 
   return (
@@ -295,22 +356,17 @@ const SummuryScreen = () => {
               </TouchableOpacity>
             </View>
             <View style={styles.files}>
-              <View style={styles.docs}>
-                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                  laborattachment.PDF
-                </InterTightRegular>
-                <TouchableOpacity>
-                  <Image source={icons.ic_delete} style={styles.delete} />
-                </TouchableOpacity>
-              </View>
-              <View style={styles.docs}>
-                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                  laborattachment.PDF
-                </InterTightRegular>
-                <TouchableOpacity>
-                  <Image source={icons.ic_delete} style={styles.delete} />
-                </TouchableOpacity>
-              </View>
+              {newQuoteFormData.file.map((file, index) => (
+                <View key={`${file.name}-${index}`} style={styles.docs}>
+                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
+                    {file.name}
+                  </InterTightRegular>
+
+                  <TouchableOpacity onPress={() => removeFile(index)}>
+                    <Image source={icons.ic_delete} style={styles.delete} />
+                  </TouchableOpacity>
+                </View>
+              ))}
             </View>
           </View>
         </ScrollView>
@@ -322,7 +378,7 @@ const SummuryScreen = () => {
             bg={theme.primary}
             bttnTxt="Save"
             txtColor={theme.primaryText}
-            showLoader={loading}
+            showLoader={loadingUpdateQuote}
             onPress={handleCreateQuote}
           />
         </View>

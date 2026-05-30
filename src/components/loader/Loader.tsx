@@ -1,39 +1,56 @@
-import { ActivityIndicator, Modal, StyleSheet, View } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { ActivityIndicator, Modal, StyleSheet, View } from 'react-native';
 
 type Props = {
-    visible: boolean
-}
-const Loader = ({visible} : Props) => {
-  return (
-      <Modal visible={visible} animationType='fade'>
-          <View style={styles.overlay} />
-          
-          <View style = {styles.loader}>
-              <ActivityIndicator color="#FFFFFF" size="large"/>
-          </View>
-   </Modal>
-  )
-}
+  visible: boolean;
+};
 
-export default Loader
+const Loader = ({ visible }: Props) => {
+  if (!visible) {
+    return null;
+  }
+
+  return (
+    <Modal
+      visible={visible}
+      transparent
+      animationType="fade"
+      statusBarTranslucent
+    >
+      <View style={styles.container}>
+        <View style={styles.overlay} />
+
+        <View style={styles.loaderBox}>
+          <ActivityIndicator size="large" color="#FFFFFF" />
+        </View>
+      </View>
+    </Modal>
+  );
+};
+
+export default Loader;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
   overlay: {
-    ...StyleSheet.absoluteFill,
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     backgroundColor: 'rgba(0,0,0,0.4)',
   },
-  loader: {
-    position: 'absolute',
-    // backgroundColor: 'rgba(0,0,0,0.4)',
-    // borderRadius: 15,
-    paddingHorizontal: 16,
-    paddingTop: 24,
-    paddingBottom: 12,
-    gap: 24,
-    bottom: '40%',
-    left: 16,
-    right: 16,
+
+  loaderBox: {
+    padding: 20,
+    borderRadius: 12,
+    backgroundColor: 'rgba(0,0,0,0.75)',
+    justifyContent: 'center',
     alignItems: 'center',
   },
 });

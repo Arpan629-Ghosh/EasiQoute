@@ -1,4 +1,4 @@
-import { UpdateQuote, UpdateStatus } from './../../../types/apis/quote.types';
+import { QuoteSection, UpdateQuote, UpdateStatus } from './../../../types/apis/quote.types';
 import { quoteServices } from "@/apis/services/quoteServices";
 import { CreateQuote, Sections } from "@/types/apis/quote.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -119,10 +119,41 @@ export const updateStatusThunk = createAsyncThunk('api/update-status',
             if (!response.result) {
                 return thunkAPI.rejectWithValue(response.message);
             }
-            console.log(response)
+           
             return response.message;
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
         }
     }
 )
+
+export const createSelectedSectionsThunk = createAsyncThunk('api/quotes/section',
+
+    async (payload: QuoteSection, thunkAPI) => {
+        try {
+            const response = await quoteServices.createSelectedSection(payload);
+            if (!response.result) {
+                return thunkAPI.rejectWithValue(response.message);
+            }
+            return response.payload;
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const getSelectedSectionsThunk = createAsyncThunk(
+  '/api/proposal-document/sections/fetch',
+
+  async (payload: number, thunkAPI) => {
+    try {
+      const response = await quoteServices.getSelectedSections(payload);
+      if (!response.result) {
+        return thunkAPI.rejectWithValue(response.message);
+      }
+      return response.payload;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+);

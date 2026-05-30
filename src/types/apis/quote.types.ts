@@ -1,3 +1,4 @@
+import { AttachmentFile } from "@/screens/quotesScreens/newQuoteScreens/tabs/summuryScreen/SummuryScreen";
 import { FetchItemsData } from "./settings.types";
 
 export interface QuoteSummary {
@@ -133,7 +134,7 @@ export interface CreateQuote {
   quote_date: string;
   expiry_date: string;
   client_id: number;
-  attachments?: string[] | [];
+  attachments?: AttachmentFile[]
   notes: string;
 }
 
@@ -166,4 +167,33 @@ export interface UpdateQuote {
 export interface UpdateStatus {
   status: string
   quote_id: number;
+}
+
+export interface QouteSectionRequest {
+  id?: number | undefined;
+  title: string;
+  content: string;
+  sort: number;
+  active?: number;
+}
+
+export interface QuoteSection {
+  quote_id: number;
+  sections: QouteSectionRequest[];
+}
+
+export interface QuoteSectionPayload {
+  id: number;
+  order_id: number;
+  document_section_id: number;
+  title: string;
+  content: string;
+  sort: number;
+  active: number;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface QuoteSectionData {
+  data: QuoteSectionPayload[];
 }

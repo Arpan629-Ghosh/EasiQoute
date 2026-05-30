@@ -1,5 +1,5 @@
 import { FlatList, Image, View } from 'react-native'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import RenderSectionTabData from '@/components/renderSectionTabData/RenderSectionTabData'
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent'
 import { icons } from '@/config/icons'
@@ -8,11 +8,16 @@ import {createStyles} from './style'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { SectionsScreenProps } from '@/types/navigation.types'
 import { useQuotes } from '@/hooks/apis/useQuotes'
+import { useToast } from '@/hooks/useToast'
+import { QuoteSection } from '@/types/apis/quote.types'
 
-const SectionsScreen = ({navigation}: SectionsScreenProps) => {
+const SectionsScreen = ({ navigation, route }: SectionsScreenProps) => {
+  const [selectedSections, setSelectedSections] = useState<number[]>([]);
   const { theme } = useAppTheme();
-  const { getSections, sections, isFetchCall } = useQuotes();
+  const { showToast } = useToast();
+  const { getSections, createSelectedSections,  sections, isFetchCall, loadingSections } = useQuotes();
   const insets = useSafeAreaInsets();
+  const quoteId = route.params.quoteId
   const styles = useMemo(() => createStyles(theme), [theme])
 
   const navigateToNewSection = () => {
@@ -22,17 +27,51 @@ const SectionsScreen = ({navigation}: SectionsScreenProps) => {
   useEffect(() => {
     getSections();
   }, [getSections, isFetchCall])
-  
+
+  const handleSection = async () => {
+    try {
+      if (!quoteId) {
+        showToast('Quote ID not found', 'error');
+        return;
+      }
+
+      const payload: QuoteSection = {
+        quote_id: quoteId,
+        sections: sections
+          .filter(section => selectedSections.includes(section.id))
+          .map(section => ({
+            title: section.title,
+            content: section.content,
+            sort: Number(section.sort),
+          })),
+      };
+
+      await createSelectedSections(payload);
+      showToast("Quote sections saved successfully.")
+    } catch (error) {
+      showToast(String(error), 'error');
+    }
+  };
   return (
     <View style={styles.container}>
       <FlatList
         data={sections}
-        renderItem={({ item }) => <RenderSectionTabData item={item} />}
+        renderItem={({ item }) => (
+          <RenderSectionTabData
+            item={item}
+            isSelected={selectedSections.includes(item.id)}
+            onToggle={() => {
+              setSelectedSections(prev =>
+                prev.includes(item.id)
+                  ? prev.filter(id => id !== item.id)
+                  : [...prev, item.id],
+              );
+            }}
+          />
+        )}
         keyExtractor={item => item.id.toString()}
-        showsVerticalScrollIndicator={false}
-        style={styles.flatlist}
       />
-      <View style={[styles.footer, {paddingBottom: insets.bottom}]}>
+      <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footeritem}>
           <ButtonComponent
             borderwidth={1}
@@ -50,8 +89,9 @@ const SectionsScreen = ({navigation}: SectionsScreenProps) => {
             buttonWidth={169.5}
             bttnTxt="Save & Preview"
             txtColor={theme.primaryText}
+            showLoader={loadingSections}
+            onPress={handleSection}
           />
-   
         </View>
       </View>
     </View>

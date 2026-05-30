@@ -15,4 +15,5 @@ export const ENDPOINTS = {
   FETCHITEMS: '/api/items',
   SECTIONS: '/api/proposal-document/sections',
   UPDATESTATUS: '/api/update-status',
+  GETSECTIONS: '/api/proposal-document/sections',
 };

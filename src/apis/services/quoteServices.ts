@@ -1,6 +1,6 @@
 import { apiClient } from "@/config/apis/client"
 import { ApiResponse } from "@/types/apis/common.types"
-import { CreateQuote, CreateQuotePayload, GetSections, QuotesPayload, Sections, SectionsPayload, UpdateQuote, UpdateStatus } from "@/types/apis/quote.types"
+import { CreateQuote, CreateQuotePayload, GetSections, QuoteSection, QuoteSectionData, QuoteSectionPayload, QuotesPayload, Sections, SectionsPayload, UpdateQuote, UpdateStatus } from "@/types/apis/quote.types"
 import { ENDPOINTS } from "../endPoints"
 
 
@@ -22,6 +22,13 @@ export const quoteServices = {
         formData.append('client_id', payload.client_id);
         // formData.append('attachments', []);
         formData.append('notes', payload.notes);
+        payload.attachments?.forEach(file => {
+          formData.append('attachments[]', {
+            uri: file.uri,
+            name: file.name,
+            type: file.type,
+          });
+        });
 
         const response = await apiClient.post<ApiResponse<CreateQuotePayload>>(ENDPOINTS.QUOTELIST, formData)
 
@@ -94,5 +101,31 @@ export const quoteServices = {
           },
         );
         return response.data;
+    },
+
+    createSelectedSection: async (payload: QuoteSection) => {
+        const response = await apiClient.post<
+          ApiResponse<QuoteSectionPayload[]>
+        >(
+          `${ENDPOINTS.QUOTELIST}/${payload.quote_id}/sections`,
+          { sections: payload.sections },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          },
+        );
+        return response.data
+    },
+    getSelectedSections: async (payload: number) => {
+        const response = await apiClient.get<
+          ApiResponse<QuoteSectionData>
+        >(ENDPOINTS.GETSECTIONS, {
+          params: {
+            quote_id: payload,
+          },
+        });
+
+        return response.data
     }
 }

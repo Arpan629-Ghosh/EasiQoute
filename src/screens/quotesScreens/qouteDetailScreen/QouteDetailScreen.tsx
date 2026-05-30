@@ -1,4 +1,4 @@
-import { Animated, Image, ScrollView, StatusBar, TouchableOpacity, View } from 'react-native';
+import { Animated, Image, Linking, ScrollView, StatusBar, TouchableOpacity, View } from 'react-native';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
 import { icons } from '@/config/icons';
@@ -17,8 +17,10 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import Items from '@/components/cardDetailsComponent/Items';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuotes } from '@/hooks/apis/useQuotes';
-import Loader from '@/components/loader/Loader';
 import { useToast } from '@/hooks/useToast';
+import { FetchItemsData } from '@/types/apis/settings.types';
+import { useFocusEffect } from '@react-navigation/native';
+import Loader from '@/components/loader/Loader';
 
 const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
   const [open, setOpen] = useState(false)
@@ -27,11 +29,31 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
   const { showToast } = useToast();
-  const { fetchQuoteDetails, updateStatus, quoteDetails , loading } = useQuotes();
+  const {
+    fetchQuoteDetails,
+    getSelectedSections,
+    updateStatus,
+    quoteDetails,
+    loadingQuoteDetails,
+    selectedSections,
+  } = useQuotes();
   const quoteId = route.params.quoteId; 
   const styles = useMemo(() => createStyles(theme), [theme])
 
   const animation = useRef(new Animated.Value(0)).current;
+
+  useFocusEffect(
+    useCallback(() => {
+      try {
+        fetchQuoteDetails(quoteId);
+        getSelectedSections(quoteId);
+      } catch (error) {
+        console.log('Focus effect error:', error);
+      }
+      
+    }, [quoteId, fetchQuoteDetails, getSelectedSections]),
+  );
+
 
   useEffect(() => {
     Animated.timing(animation, {
@@ -59,8 +81,10 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
     navigation.goBack();
   };
 
-  const navigateToIntroduction = () => {
-    navigation.navigate("IntroductionScreen")
+  const navigateToEdit = () => {
+    navigation.navigate("NewQuoteScreens", {
+      quoteId: quoteId
+    })
   }
 
   const handleClose = useCallback(() => {
@@ -84,6 +108,25 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  const getAttachmentName = (attachment: { type: string }, index: number) => {
+    return `Attachment ${index + 1}.${attachment.type}`;
+  };
+
+  const handleOpenAttachment = async (url: string) => {
+    try {
+      const supported = await Linking.canOpenURL(url);
+
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        showToast('Unable to open attachment', 'error');
+      }
+    } catch (error) {
+      console.log(error)
+      showToast('Failed to open attachment', 'error');
+    }
+  };
   
   // useFocusEffect( 
   //   useCallback(() => {
@@ -91,10 +134,7 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
   //   }, [quoteId, fetchQuoteDetails])
   // )
 
-  useEffect(() => {
-    fetchQuoteDetails(quoteId)
-  }, [quoteId, fetchQuoteDetails])
-
+  
   
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
@@ -137,7 +177,7 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
                 },
               ]}
             >
-              <TouchableOpacity activeOpacity={0.8}>
+              <TouchableOpacity activeOpacity={0.8} onPress={navigateToEdit}>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                   Update Quote
                 </InterTightRegular>
@@ -148,7 +188,7 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
       </View>
       <View style={styles.mainContainer}>
         <InterTightMedium fsize={20} fcolor={theme.textPrimary}>
-          {`${quoteDetails?.title} - ${quoteDetails?.client.name}`}
+          {`${quoteDetails?.title ?? ''} - ${quoteDetails?.client?.name ?? ''}`}
         </InterTightMedium>
         <ScrollView
           style={styles.scrollview}
@@ -241,7 +281,7 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
                     style={styles.img}
                   />
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    {quoteDetails?.client.name}
+                    {quoteDetails?.client?.name}
                   </InterTightRegular>
                 </View>
                 <View style={styles.contactdetail}>
@@ -250,7 +290,7 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
                     style={styles.img}
                   />
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    {quoteDetails?.client.phone}
+                    {quoteDetails?.client?.phone}
                   </InterTightRegular>
                 </View>
                 <View style={styles.contactdetail}>
@@ -259,7 +299,7 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
                     style={styles.img}
                   />
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    {quoteDetails?.client.email}
+                    {quoteDetails?.client?.email}
                   </InterTightRegular>
                 </View>
                 <View style={styles.contactdetail}>
@@ -268,7 +308,7 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
                     style={styles.img}
                   />
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    {quoteDetails?.client.address}
+                    {quoteDetails?.client?.address}
                   </InterTightRegular>
                 </View>
               </View>
@@ -322,42 +362,26 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
                 <CardHeader title="Items" />
               </View>
               <View style={styles.expand}>
-                <ExpandableItem title="Cement Bags">
-                  <Items
-                    heading="Materials"
-                    subHeading1="Quantity"
-                    subHeading2="Rate/Unit"
-                    subHeading3="Total"
-                    value1="50"
-                    value2="£25.00"
-                    value3="£1,250.00"
-                  />
-                </ExpandableItem>
-                <View style={styles.empty} />
-
-                <ExpandableItem title="Floor Tiling">
-                  <Items
-                    heading="Materials"
-                    subHeading1="Quantity"
-                    subHeading2="Rate/Unit"
-                    subHeading3="Total"
-                    value1="50"
-                    value2="£25.00"
-                    value3="£1,250.00"
-                  />
-                </ExpandableItem>
-                <View style={styles.empty} />
-                <ExpandableItem title="Labor Charges">
-                  <Items
-                    heading="Materials"
-                    subHeading1="Quantity"
-                    subHeading2="Rate/Unit"
-                    subHeading3="Total"
-                    value1="50"
-                    value2="£25.00"
-                    value3="£1,250.00"
-                  />
-                </ExpandableItem>
+                {quoteDetails?.items.map((item: FetchItemsData, index) => {
+                  return (
+                    <View key={item.id}>
+                      <ExpandableItem title={item.name}>
+                        <Items
+                          heading={item.category_name}
+                          subHeading1="Quantity"
+                          subHeading2="Rate/Unit"
+                          subHeading3="Total"
+                          value1={item.quantity.toString()}
+                          value2={`£${item.price.toString()}`}
+                          value3={`£${item.total_price.toString()}`}
+                        />
+                      </ExpandableItem>
+                      {index !== quoteDetails.items.length - 1 && (
+                        <View style={styles.empty} />
+                      )}
+                    </View>
+                  );
+                })}
               </View>
             </Card>
 
@@ -370,29 +394,45 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
                 <CardHeader title="Sections" />
               </View>
               <View style={styles.expand}>
-                <TouchableOpacity
-                  style={styles.intro}
-                  onPress={navigateToIntroduction}
-                >
-                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Introduction
-                  </InterTightRegular>
+                {selectedSections?.length > 0 ? (
+                  selectedSections.map((section, index) => (
+                    <View key={section.id}>
+                      <TouchableOpacity
+                        style={styles.intro}
+                        onPress={() =>
+                          navigation.navigate('IntroductionScreen', {
+                            order: section.sort,
+                            sectionId: section.id,
+                            title: section.title,
+                            content: section.content,
+                          })
+                        }
+                      >
+                        <InterTightRegular
+                          fsize={14}
+                          fcolor={theme.textPrimary}
+                        >
+                          {section.title}
+                        </InterTightRegular>
 
-                  <Image
-                    source={isDark ? icons.ic_darkarrow : icons.ic_rightarrow}
-                    style={styles.img}
-                  />
-                </TouchableOpacity>
-                <View style={styles.empty} />
-                <View style={styles.intro}>
-                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    About Us
+                        <Image
+                          source={
+                            isDark ? icons.ic_darkarrow : icons.ic_rightarrow
+                          }
+                          style={styles.img}
+                        />
+                      </TouchableOpacity>
+
+                      {index !== selectedSections.length - 1 && (
+                        <View style={styles.empty} />
+                      )}
+                    </View>
+                  ))
+                ) : (
+                  <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
+                    No sections available
                   </InterTightRegular>
-                  <Image
-                    source={isDark ? icons.ic_darkarrow : icons.ic_rightarrow}
-                    style={styles.img}
-                  />
-                </View>
+                )}
               </View>
             </Card>
 
@@ -404,26 +444,45 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
                 />
                 <CardHeader title="Attachments" />
               </View>
+
               <View style={styles.expand}>
-                <View style={styles.intro}>
-                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    laborattachment.PDF
+                {quoteDetails?.attachments?.length ? (
+                  quoteDetails.attachments.map(
+                    (
+                      attachment: { id: string; type: string; url: string },
+                      index: number,
+                    ) => (
+                      <View key={attachment.id}>
+                        <TouchableOpacity
+                          style={styles.intro}
+                          onPress={() => handleOpenAttachment(attachment.url)}
+                        >
+                          <InterTightRegular
+                            fsize={14}
+                            fcolor={theme.textPrimary}
+                          >
+                            {getAttachmentName(attachment, index)}
+                          </InterTightRegular>
+
+                          <Image
+                            source={
+                              isDark ? icons.ic_darkarrow : icons.ic_rightarrow
+                            }
+                            style={styles.img}
+                          />
+                        </TouchableOpacity>
+
+                        {index !== quoteDetails.attachments.length - 1 && (
+                          <View style={styles.empty} />
+                        )}
+                      </View>
+                    ),
+                  )
+                ) : (
+                  <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
+                    No attachments available
                   </InterTightRegular>
-                  <Image
-                    source={isDark ? icons.ic_darkarrow : icons.ic_rightarrow}
-                    style={styles.img}
-                  />
-                </View>
-                <View style={styles.empty} />
-                <View style={styles.intro}>
-                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    IMGLeak.PNG{' '}
-                  </InterTightRegular>
-                  <Image
-                    source={isDark ? icons.ic_darkarrow : icons.ic_rightarrow}
-                    style={styles.img}
-                  />
-                </View>
+                )}
               </View>
             </Card>
 
@@ -500,7 +559,7 @@ const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
         onToggleStatus={toggleStatus}
         selectedStatus={selectedStatus}
       />
-      <Loader visible={loading} />
+      <Loader visible={loadingQuoteDetails} />
     </LinearGradient>
   );
 };

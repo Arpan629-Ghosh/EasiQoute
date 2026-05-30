@@ -26,8 +26,13 @@ export type RootStackParamList = {
   };
   MainTabs: NavigatorScreenParams<MainTabParamList>;
   QouteDetailScreen: { quoteId: number };
-  IntroductionScreen: undefined;
-  NewQuoteScreens: undefined;
+  IntroductionScreen: {
+    order: number;
+    sectionId: number;
+    title: string;
+    content: string;
+  };
+  NewQuoteScreens: {quoteId?: number} |undefined;
   TemplatesScreen: undefined;
   TeamMembersScreen: undefined;
   AddMemberScreen: undefined;
@@ -64,10 +69,18 @@ export type RootStackParamList = {
 };
 
 export type NewQuoteTopTabParamList = {
-  Summury: undefined;
-  Items: undefined;
-  Sections: undefined;
-  Preview: undefined;
+  Summury: {
+    quoteId?: number;
+  };
+  Items: {
+    quoteId?: number;
+  };
+  Sections: {
+    quoteId?: number;
+  };
+  Preview: {
+    quoteId?: number;
+  };
 };
 
 export type MainTabParamList = {
