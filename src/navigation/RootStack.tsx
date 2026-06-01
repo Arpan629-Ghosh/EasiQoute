@@ -27,6 +27,7 @@ import BusinessScreen from '@/screens/authAndProfileSetupScreens/profileScreens/
 import BusinessAddressScreen from '@/screens/authAndProfileSetupScreens/profileScreens/businessSetupScreens/businessAddressScren/BusinessAddressScreen';
 import { useAuth } from '@/hooks/apis/useAuth';
 import NewSectionScreen from '@/screens/quotesScreens/newQuoteScreens/newSectionScreen/NewSectionScreen';
+import AddClientScreen from '@/screens/clientScreens/AddClientScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStack = () => {
@@ -107,7 +108,8 @@ const RootStack = () => {
       <Stack.Screen name="ItemsScreen" component={ItemsScreen} />
 
       <Stack.Screen name="NewItemsScreen" component={NewItemsScreen} />
-      <Stack.Screen name='NewSectionScreen' component={NewSectionScreen}/>
+      <Stack.Screen name='NewSectionScreen' component={NewSectionScreen} />
+      <Stack.Screen name="AddClientScreen" component={AddClientScreen}/>
     </Stack.Navigator>
   );
 };

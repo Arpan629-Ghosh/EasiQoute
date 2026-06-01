@@ -66,6 +66,7 @@ export type RootStackParamList = {
     sort?: number
   }
   | undefined;
+  AddClientScreen: undefined;
 };
 
 export type NewQuoteTopTabParamList = {
@@ -100,6 +101,10 @@ export type HomeStackParamList = {
 export type SettingStackParamList = {
   SettingScreen: undefined;
 };
+
+export type ClientStackParamList = {
+  ClientScreen: undefined;
+}
 
 // login
 export type LoginScreenProps = NativeStackScreenProps<
@@ -146,7 +151,12 @@ export type BusinessAddressScreenProps = NativeStackScreenProps<
 export type MainQuoteScreenProps = CompositeScreenProps<
   NativeStackScreenProps<QuoteStackParamList, 'MainQuoteScreen'>,
   NativeStackScreenProps<RootStackParamList>
->;
+  >;
+
+  export type ClientScreenProps = CompositeScreenProps<
+    NativeStackScreenProps<ClientStackParamList, 'ClientScreen'>,
+    NativeStackScreenProps<RootStackParamList>
+  >;
 
 // quote detail
 export type QouteDetailScreenProps = NativeStackScreenProps<
@@ -243,4 +253,8 @@ export type SectionsScreenProps = CompositeScreenProps<
 export type ItemScreenProps = CompositeScreenProps<
   MaterialTopTabScreenProps<NewQuoteTopTabParamList, 'Items'>,
   NativeStackScreenProps<RootStackParamList>
+  >
+
+export type AddClientScreenProps = NativeStackScreenProps<
+  RootStackParamList, 'AddClientScreen'
   >

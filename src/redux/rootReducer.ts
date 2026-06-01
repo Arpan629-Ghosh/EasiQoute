@@ -5,6 +5,7 @@ import notificationReducer from './apis/notification/notificationSlice'
 import homeReducer from './apis/home/homeSlice'
 import quotesReducer from './apis/quotes/quotesSlice'
 import settingsReducer from './apis/settings/settingsSlice'
+import clientsReducer from './apis/client/clientSlice'
 
 const rootReducer = combineReducers({
   theme: themeReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   home: homeReducer,
   quotes: quotesReducer,
   settings: settingsReducer,
+  clients: clientsReducer,
 });
 
 export default rootReducer;

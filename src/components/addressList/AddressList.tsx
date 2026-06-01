@@ -21,6 +21,7 @@ const AddressList: React.FC<AddressProp> = ({ response, onSelect }) => {
       keyExtractor={(item, index) => `${item.postcode}-${index}`}
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
+      nestedScrollEnabled={true}
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
     />

@@ -125,5 +125,10 @@ export const icons = {
   ic_addsign: require("@assets/icons/ic_addsign.png"),
   ic_crossicn: require("@assets/icons/ic_cross.png"),
   ic_check: require("@assets/icons/ic_check.png"),
-  ic_error: require("@assets/icons/ic_error.png")
+  ic_error: require("@assets/icons/ic_error.png"),
+  ic_clientsort: require("@assets/icons/ic_clientsort.png"),
+  ic_az: require("@assets/icons/ic_az.png"),
+  ic_radded: require("@assets/icons/ic_radded.png"),
+  ic_mactive: require("@assets/icons/ic_mactive.png"),
+  ic_redirect: require("@assets/icons/ic_redirect.png")
 };

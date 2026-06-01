@@ -13,7 +13,7 @@ import {
 
 type Props = {
   visible: boolean;
-  mheight: number;
+  mheight?: number;
   mpadding?: number;
   onClose: () => void;
   children: React.ReactNode;

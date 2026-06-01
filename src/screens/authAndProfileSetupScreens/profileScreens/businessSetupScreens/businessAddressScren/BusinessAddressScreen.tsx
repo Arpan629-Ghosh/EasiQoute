@@ -105,6 +105,7 @@ const BusinessAddressScreen = ({
     };
 
     fetchAddress();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
 
   const handleSelectAddress = (item: SearchAddressPayload) => {

@@ -16,4 +16,5 @@ export const ENDPOINTS = {
   SECTIONS: '/api/proposal-document/sections',
   UPDATESTATUS: '/api/update-status',
   GETSECTIONS: '/api/proposal-document/sections',
+  CRREATECLIENT: '/api/clients',
 };
