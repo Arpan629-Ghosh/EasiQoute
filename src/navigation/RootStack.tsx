@@ -27,18 +27,19 @@ import BusinessScreen from '@/screens/authAndProfileSetupScreens/profileScreens/
 import BusinessAddressScreen from '@/screens/authAndProfileSetupScreens/profileScreens/businessSetupScreens/businessAddressScren/BusinessAddressScreen';
 import { useAuth } from '@/hooks/apis/useAuth';
 import NewSectionScreen from '@/screens/quotesScreens/newQuoteScreens/newSectionScreen/NewSectionScreen';
-import AddClientScreen from '@/screens/clientScreens/AddClientScreen';
+import AddClientScreen from '@/screens/clientScreens/addClientScreen/AddClientScreen';
+import ClientDetailScreen from '@/screens/clientScreens/clientDetailScreen/ClientDetailScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStack = () => {
   const { user } = useAuth();
   // console.log(user)
   const getInitialScreen = () => {
-    if (!user || !user.is_email_verified) return "LoginScreen"
+    if (!user || !user.is_email_verified) return 'LoginScreen';
     if (!user?.is_profile_setup) return 'IntroScreen';
     if (!user?.is_company_profile_setup) return 'BusinessScreen';
     else return 'MainTabs';
-  }
+  };
   return (
     <Stack.Navigator
       initialRouteName={getInitialScreen()}
@@ -108,8 +109,9 @@ const RootStack = () => {
       <Stack.Screen name="ItemsScreen" component={ItemsScreen} />
 
       <Stack.Screen name="NewItemsScreen" component={NewItemsScreen} />
-      <Stack.Screen name='NewSectionScreen' component={NewSectionScreen} />
-      <Stack.Screen name="AddClientScreen" component={AddClientScreen}/>
+      <Stack.Screen name="NewSectionScreen" component={NewSectionScreen} />
+      <Stack.Screen name="AddClientScreen" component={AddClientScreen} />
+      <Stack.Screen name="ClientDetailScreen" component={ClientDetailScreen} />
     </Stack.Navigator>
   );
 };

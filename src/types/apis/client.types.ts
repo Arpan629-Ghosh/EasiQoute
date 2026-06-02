@@ -61,6 +61,13 @@ export interface GetClientsPayload {
     meta: Meta;
 }
 
+export type SORT_BY = "asc" | "desc" | "ma"
+
+export interface GetClients {
+  sort_by: SORT_BY;
+  page: number;
+}
+
 export interface CreateClient{
     email: string;
     phone: string;

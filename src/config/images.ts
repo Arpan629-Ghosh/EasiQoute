@@ -23,5 +23,6 @@ export const images = {
   img_delete: require('@assets/images/img_delete.png'),
   img_categoryempty: require('@assets/images/img_categoryempty.png'),
   img_subcatempty: require('@assets/images/img_subcatempty.png'),
-  img_itemempty: require('@assets/images/img_itemempty.png')
+  img_itemempty: require('@assets/images/img_itemempty.png'),
+  img_noclient: require('@assets/images/img_noclient.png')
 };

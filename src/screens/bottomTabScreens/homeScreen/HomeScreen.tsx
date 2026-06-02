@@ -18,17 +18,16 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { useHomeScreenData } from '@/hooks/apis/useHomeScreenData';
 import HomeEmptyScreen from '@/components/emptyScreenComponents/HomeEmptyScreen';
 import { useAuth } from '@/hooks/apis/useAuth';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '@/types/navigation.types';
-import { NativeStackNavigationProp } from 'node_modules/@react-navigation/native-stack/lib/typescript/src/types';
+import { useFocusEffect } from '@react-navigation/native';
+import { HomeScreenProps } from '@/types/navigation.types';
+
 import Loader from '@/components/loader/Loader';
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}: HomeScreenProps) => {
   const { theme } = useAppTheme();
   const { homeScreenData, homeData, loading } = useHomeScreenData();
   const { user } = useAuth();
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   useFocusEffect(
@@ -49,7 +48,7 @@ const HomeScreen = () => {
   //   fetchData();
   // }, []);
 
-  console.log('Home', homeData?.recentActivities);
+
   return (
     <View style={styles.safeareaview}>
       <StatusBar
@@ -111,9 +110,14 @@ const HomeScreen = () => {
                 <Icons text="New Invoice">
                   <Image source={icons.ic_whiteqoute} style={styles.vector} />
                 </Icons>
-                <Icons text="View Clients">
-                  <Image source={icons.ic_whiteclient} style={styles.vector} />
-                </Icons>
+                <TouchableOpacity onPress={() => navigation.navigate("Clients")}>
+                  <Icons text="View Clients">
+                    <Image
+                      source={icons.ic_whiteclient}
+                      style={styles.vector}
+                    />
+                  </Icons>
+                </TouchableOpacity>
               </View>
             </View>
           </View>

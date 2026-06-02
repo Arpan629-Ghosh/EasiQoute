@@ -34,7 +34,7 @@ const AppDetails: React.FC<Prop> = ({ price, type, numberDueActive }: Prop) => {
   );
 }
 
-export default AppDetails
+export default React.memo(AppDetails)
 
 const styles = StyleSheet.create({
   invoice: {

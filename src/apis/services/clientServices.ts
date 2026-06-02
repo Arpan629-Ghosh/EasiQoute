@@ -1,5 +1,5 @@
 import { apiClient } from "@/config/apis/client";
-import { CreateClient, GetClientsPayload } from "@/types/apis/client.types";
+import { Clients, CreateClient, GetClients, GetClientsPayload } from "@/types/apis/client.types";
 import { ApiResponse } from "@/types/apis/common.types";
 import { CreateCategoriesPayload } from "@/types/apis/settings.types";
 import { ENDPOINTS } from "../endPoints";
@@ -25,16 +25,25 @@ export const clientServices = {
         return response.data
     },
 
-    getClients: async (payload: string) => {
+    getClients: async (payload: GetClients) => {
         const response = await apiClient.get<ApiResponse<GetClientsPayload>>(
             ENDPOINTS.CRREATECLIENT,
             {
                 params: {
-                    sort_by: payload
+                    sort_by: payload.sort_by,
+                    page: payload.page
                 }
             }
         )
 
         return response.data
+    },
+    
+    showClientDetails: async (payload: number) => {
+        const response = await apiClient.get<ApiResponse<Clients>>(
+            `${ENDPOINTS.CRREATECLIENT}/${payload}`,
+        )
+
+        return response.data;
     }
 }

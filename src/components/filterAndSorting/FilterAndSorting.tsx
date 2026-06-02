@@ -78,7 +78,7 @@ const FilterAndSorting = ({
     }
   
   return (
-    <ModalComponent visible={visible} onClose={onClose} mheight={580}>
+    <ModalComponent visible={visible} onClose={onClose} >
       <View style={[styles.container, { paddingBottom: insets.bottom  }]}>
         <View style={styles.header}>
           <InterTightMedium fsize={18} fcolor={theme.textPrimary}>

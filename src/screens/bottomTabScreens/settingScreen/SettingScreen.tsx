@@ -5,7 +5,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
@@ -75,12 +75,12 @@ const SettingScreen = ({ navigation }: SettingScreenProps) => {
     })
   }
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpen(false);
-  };
-  const handleLogoutModalClose = () => {
+  },[]);
+  const handleLogoutModalClose = useCallback(() => {
     setOpenLogoutModal(false);
-  };
+  }, []);
 
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>

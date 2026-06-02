@@ -68,7 +68,7 @@ const LogoutModal = ({ visible, onClose }: Props) => {
   );
 };
 
-export default LogoutModal;
+export default React.memo(LogoutModal);
 
 const styles = StyleSheet.create({
   container: {

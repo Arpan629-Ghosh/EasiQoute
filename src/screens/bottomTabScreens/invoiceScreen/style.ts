@@ -1,8 +1,13 @@
-import { Theme } from '@/types/theme.types';
-import { StyleSheet } from 'react-native';
+import { Theme } from "@/types/theme.types";
+import { StyleSheet } from "react-native";
+
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
+    keyboardContainer: {
+      flex: 1,
+      justifyContent: 'flex-end',
+    },
     container: {
       flex: 1,
     },
@@ -15,9 +20,11 @@ export const createStyles = (theme: Theme) =>
     },
     headerComponent: {
       gap: 16,
+
       paddingHorizontal: 12,
     },
-    topComponent: {
+    searchandfilter: {
+      height: 48,
       gap: 8,
       flexDirection: 'row',
     },
@@ -43,9 +50,16 @@ export const createStyles = (theme: Theme) =>
       height: '100%',
       paddingHorizontal: 0,
     },
-    img: {
+    imgView: {
       height: 48,
       width: 48,
+      borderRadius: 12,
+      overflow: 'hidden',
+    },
+    img: {
+      resizeMode: 'cover',
+      height: '100%',
+      width: '100%',
     },
     add: {
       height: 48,
@@ -59,17 +73,5 @@ export const createStyles = (theme: Theme) =>
       height: '100%',
       width: '100%',
       resizeMode: 'cover',
-    },
-    flatlist: {
-      paddingBottom: 120,
-    },
-    card: {
-      flex: 1,
-      paddingHorizontal: 12,
-    },
-    loaderContainer: {
-      paddingVertical: 20,
-      justifyContent: 'center',
-      alignItems: 'center',
     },
   });

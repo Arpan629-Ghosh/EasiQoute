@@ -94,7 +94,7 @@ const ClientSortBottomSheet = ({
   );
 };
 
-export default ClientSortBottomSheet;
+export default React.memo(ClientSortBottomSheet);
 
 const createStyles = (theme: Theme) =>
   StyleSheet.create({

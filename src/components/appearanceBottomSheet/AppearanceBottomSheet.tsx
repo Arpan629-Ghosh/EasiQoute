@@ -96,7 +96,7 @@ const AppearanceBottomSheet = ({ visible, onClose }: Prop) => {
   );
 };
 
-export default AppearanceBottomSheet;
+export default React.memo(AppearanceBottomSheet);
 
 const createStyles = (theme: Theme) =>
   StyleSheet.create({

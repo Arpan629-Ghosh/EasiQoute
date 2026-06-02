@@ -130,5 +130,6 @@ export const icons = {
   ic_az: require("@assets/icons/ic_az.png"),
   ic_radded: require("@assets/icons/ic_radded.png"),
   ic_mactive: require("@assets/icons/ic_mactive.png"),
-  ic_redirect: require("@assets/icons/ic_redirect.png")
+  ic_redirect: require("@assets/icons/ic_redirect.png"),
+  ic_payment: require("@assets/icons/ic_payment.png")
 };

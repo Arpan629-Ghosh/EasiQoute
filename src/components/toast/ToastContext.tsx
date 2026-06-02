@@ -170,12 +170,12 @@ const ToastProvider: React.FC<{
               ]}
             >
               <View style={styles.toastContent}>
-                <View style = {styles.msg}>
+                <View style={styles.msg}>
                   <Image
                     source={
                       toastType === 'success' ? icons.ic_check : icons.ic_error
                     }
-                                      style={styles.img}
+                    style={styles.img}
                   />
                   <InterTightRegular fsize={16} fcolor={theme.textPrimary}>
                     {message}
@@ -241,14 +241,14 @@ const createStyles = (theme: Theme) =>
     },
     errorbg: {
       backgroundColor: '#EF4444',
-      },
-      msg: {
-          flexDirection: "row",
-          gap: 4,
-          alignItems: "center",
-      },
-      img: {
-          height: 15,
-          width: 15
-      }
+    },
+    msg: {
+      flexDirection: 'row',
+      gap: 4,
+      alignItems: 'center',
+    },
+    img: {
+      height: 15,
+      width: 15,
+    },
   });

@@ -84,7 +84,7 @@ const authSlice = createSlice({
         state.error = action.payload as string
       })
     
-    //compan_profile_setup
+    //company_profile_setup
 
       .addCase(companyProfileSetupThunk.pending, state => {
         state.loading = true;

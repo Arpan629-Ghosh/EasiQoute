@@ -1,9 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createClientThunk, getClientsThunk } from './clientThunk';
+import { createClientThunk, getClientsThunk, showClientDetailsThunk } from './clientThunk';
 import { Clients } from '@/types/apis/client.types';
 
 interface ClientState {
   clients: Clients[];
+  client_detail: Clients | null;
   loading: boolean;
   error: string | null;
   current_page: number;
@@ -12,6 +13,7 @@ interface ClientState {
 
 const initialState: ClientState = {
   clients: [],
+  client_detail: null,
   loading: false,
   error: null,
   current_page: 1,
@@ -65,7 +67,20 @@ const clientSlice = createSlice({
         .addCase(getClientsThunk.rejected, (state, action) => {
             state.loading = false;
             state.error = action.payload as string
+        })
+      .addCase(showClientDetailsThunk.pending, state => {
+        state.loading = true;
+        state.error = null;
       })
+      .addCase(showClientDetailsThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
+        state.client_detail = action.payload;
+      })
+      .addCase(showClientDetailsThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string
+    })
   },
 });
 

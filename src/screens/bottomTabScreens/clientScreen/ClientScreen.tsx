@@ -1,5 +1,12 @@
-import { View, StatusBar, Image, TouchableOpacity, FlatList } from 'react-native';
-import React, { useCallback, useMemo, useState } from 'react';
+import {
+  View,
+  StatusBar,
+  Image,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+} from 'react-native';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
@@ -15,20 +22,31 @@ import Loader from '@/components/loader/Loader';
 import { useToast } from '@/hooks/useToast';
 import RenderClients from '@/components/renderClients/RenderClients';
 import { useDebounce } from '@/hooks/useDebounce';
+import { Clients, GetClients, SORT_BY } from '@/types/apis/client.types';
+import ClientEmptyScreen from '@/components/emptyScreenComponents/ClientEmptyScreen';
 
-const ClientScreen = ({navigation} : ClientScreenProps) => {
+const ClientScreen = ({ navigation }: ClientScreenProps) => {
   const [open, setOpen] = useState(false);
-  const [selctedSortOption, setSelectedSortOptions] = useState<string>("");
-  const [search, setSearch] = useState<string>("")
+  const [selctedSortOption, setSelectedSortOptions] = useState<string>('');
+  const [search, setSearch] = useState<string>('');
+  const [refreshing, setRefreshing] = useState(false);
+  const [paginationLoading, setPaginationLoading] = useState(false);
+  const page = useRef(1);
+  const onEndReachedCalledDuringMomentum = useRef(false);
   const { theme, isDark } = useAppTheme();
   const { showToast } = useToast();
   const { getClients, loading, clients, current_page, last_page } = useClient();
-  const debouncedSearch = useDebounce(search, 500)
+  const debouncedSearch = useDebounce(search, 500);
   const insets = useSafeAreaInsets();
 
   useFocusEffect(
     useCallback(() => {
-      getClients('asc');
+      page.current = 1;
+      const payload: GetClients = {
+        sort_by: 'asc',
+        page: 1,
+      };
+      getClients(payload);
     }, [getClients]),
   );
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -38,8 +56,8 @@ const ClientScreen = ({navigation} : ClientScreenProps) => {
   }, []);
 
   const navigateToAddClient = () => {
-    navigation.navigate("AddClientScreen")
-  }
+    navigation.navigate('AddClientScreen');
+  };
 
   const toggleSort = useCallback(
     async (type: string) => {
@@ -48,7 +66,7 @@ const ClientScreen = ({navigation} : ClientScreenProps) => {
       setSelectedSortOptions(updatedStatus);
 
       try {
-        let sort = '';
+        let sort: SORT_BY = 'asc';
 
         switch (updatedStatus) {
           case 'Most Active':
@@ -63,7 +81,12 @@ const ClientScreen = ({navigation} : ClientScreenProps) => {
             sort = 'asc';
         }
 
-        await getClients(sort);
+        const payload: GetClients = {
+          sort_by: sort,
+          page: page.current,
+        };
+
+        await getClients(payload);
       } catch (error) {
         showToast(String(error), 'error');
       }
@@ -71,19 +94,80 @@ const ClientScreen = ({navigation} : ClientScreenProps) => {
     [selctedSortOption, getClients, showToast],
   );
 
+  const hasMore = useMemo(() => {
+    return current_page < last_page;
+  }, [current_page, last_page]);
+
+  const handleRefresh = useCallback(async () => {
+    if (refreshing) {
+      return;
+    }
+    try {
+      setRefreshing(true);
+      page.current = 1;
+      const payload: GetClients = {
+        page: 1,
+        sort_by: 'asc',
+      };
+      await getClients(payload);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [refreshing, getClients]);
+
+  const handleLoadMore = useCallback(async () => {
+    if (paginationLoading || refreshing || !hasMore) {
+      return;
+    }
+    try {
+      setPaginationLoading(true);
+      const nextPage = page.current + 1;
+      page.current = nextPage;
+      const payload: GetClients = {
+        page: nextPage,
+        sort_by: 'asc',
+      };
+      await getClients(payload);
+    } finally {
+      setPaginationLoading(false);
+    }
+  }, [paginationLoading, refreshing, hasMore, getClients]);
+
+  const renderFooter = useCallback(() => {
+    if (!paginationLoading) {
+      return null;
+    }
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="small" />
+      </View>
+    );
+  }, [paginationLoading, styles.loaderContainer]);
+
+  const renderItem = useCallback(({ item }: { item: Clients }) => {
+    return <RenderClients item={item} />;
+  }, []);
+
+  const renderEmpty = useCallback(() => {
+    if (loading) {
+      return null;
+    }
+
+    return <ClientEmptyScreen />;
+  }, [loading]);
+
   const processedData = useMemo(() => {
     let result = clients;
 
     if (!debouncedSearch.trim()) return result;
 
-    result = result.filter((item) => 
-      item.name.toLowerCase().includes(debouncedSearch.toLowerCase())
-    )
+    result = result.filter(item =>
+      item.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
+    );
 
     return result;
-  }, [clients, debouncedSearch])
+  }, [clients, debouncedSearch]);
 
-  
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       <StatusBar
@@ -120,9 +204,26 @@ const ClientScreen = ({navigation} : ClientScreenProps) => {
 
         <FlatList
           data={processedData}
-          renderItem={({ item }) => <RenderClients item={item} />}
-          keyExtractor={(item) => item.id.toString()}
+          renderItem={renderItem}
+          keyExtractor={item => item.id.toString()}
           showsVerticalScrollIndicator={false}
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          initialNumToRender={10}
+          maxToRenderPerBatch={10}
+          windowSize={5}
+          onEndReachedThreshold={0.2}
+          ListFooterComponent={renderFooter}
+          ListEmptyComponent={renderEmpty}
+          onMomentumScrollBegin={() => {
+            onEndReachedCalledDuringMomentum.current = false;
+          }}
+          onEndReached={() => {
+            if (!onEndReachedCalledDuringMomentum.current) {
+              handleLoadMore();
+              onEndReachedCalledDuringMomentum.current = true;
+            }
+          }}
           contentContainerStyle={styles.flatlist}
           style={styles.card}
         />
@@ -139,7 +240,7 @@ const ClientScreen = ({navigation} : ClientScreenProps) => {
         selectedSortOption={selctedSortOption}
         onToggleSort={toggleSort}
       />
-      <Loader visible={ loading } />
+      <Loader visible={loading} />
     </LinearGradient>
   );
 };

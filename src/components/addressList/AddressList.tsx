@@ -28,7 +28,7 @@ const AddressList: React.FC<AddressProp> = ({ response, onSelect }) => {
   );
 };
 
-export default AddressList;
+export default React.memo(AddressList);
 
 const createStyles = (theme: Theme) => StyleSheet.create({
   container: {

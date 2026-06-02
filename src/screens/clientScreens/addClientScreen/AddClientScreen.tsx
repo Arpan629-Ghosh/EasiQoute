@@ -100,7 +100,7 @@ const AddClientScreen = ({ navigation } : AddClientScreenProps) => {
     }));
   }, []);
 
-  const handleSelectAddress = (item: SearchAddressPayload) => {
+  const handleSelectAddress = useCallback((item: SearchAddressPayload) => {
     setClientFormData(prev => ({
       ...prev,
       streetAddress: item.address_line_1 || '',
@@ -110,7 +110,7 @@ const AddClientScreen = ({ navigation } : AddClientScreenProps) => {
     }));
     setSearchData([]);
     Keyboard.dismiss();
-  };
+  }, []);
 
   const handleAddClient = async () => {
     try {

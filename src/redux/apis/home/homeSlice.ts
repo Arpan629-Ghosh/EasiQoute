@@ -28,7 +28,6 @@ const homeSlice = createSlice({
       })
       .addCase(homeScreenDataThunk.fulfilled, (state, action) => {
           state.loading = false;
-          console.log("redux",action.payload)
         state.homeScreenData = action.payload;
       })
       .addCase(homeScreenDataThunk.rejected, (state, action) => {

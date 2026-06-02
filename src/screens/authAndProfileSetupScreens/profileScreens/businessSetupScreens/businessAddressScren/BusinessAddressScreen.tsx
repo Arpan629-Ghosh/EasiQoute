@@ -6,7 +6,7 @@ import {
   ScrollView,
   View,
 } from 'react-native';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { icons } from '@/config/icons';
@@ -108,7 +108,7 @@ const BusinessAddressScreen = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
 
-  const handleSelectAddress = (item: SearchAddressPayload) => {
+  const handleSelectAddress = useCallback((item: SearchAddressPayload) => {
     setFormData({
       address: item.address_line_1 || '',
       city: item.city || '',
@@ -117,7 +117,7 @@ const BusinessAddressScreen = ({
     });
     setSearchData([]);
     Keyboard.dismiss();
-  };
+  }, []);
 
   return (
     <View
