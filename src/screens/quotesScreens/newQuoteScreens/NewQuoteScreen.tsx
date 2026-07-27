@@ -14,7 +14,7 @@ const NewQuoteScreens = ({ route }: NewQuoteScreensProps) => {
 
   return (
     <Tab.Navigator
-      tabBar={(props) => <CustomTabBars {...props} />}
+      tabBar={(props) => <CustomTabBars {...props} headerText="New Quote" />}
       
     >
           <Tab.Screen name='Summury' component={SummuryScreen} initialParams={{quoteId}}/>

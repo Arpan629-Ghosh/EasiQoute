@@ -32,7 +32,7 @@ const NewSectionScreen = ({ navigation, route }: NewSectionScreenProps) => {
     description: content || '',
   });
   const { theme } = useAppTheme();
-  const { createSections, deleteSections, loading } = useQuotes();
+  const { createSections, deleteSections, loadingSections } = useQuotes();
   const { showToast } = useToast();
   const insets = useSafeAreaInsets();
   
@@ -155,7 +155,7 @@ const NewSectionScreen = ({ navigation, route }: NewSectionScreenProps) => {
             bg={theme.primary}
             bttnTxt={isEdit ? 'Save Changes' : 'Save'}
             txtColor={theme.primaryText}
-            showLoader={loading}
+            showLoader={loadingSections}
             onPress={handleSection}
           />
         </View>

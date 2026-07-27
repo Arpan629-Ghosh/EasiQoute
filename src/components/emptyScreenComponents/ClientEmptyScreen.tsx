@@ -44,12 +44,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     gap: 8,
+    marginTop: 224,
     alignItems: 'center',
     justifyContent: 'center',
   },
   components: {
     gap: 16,
     alignItems: 'center',
+  
   },
   img: {
     height: 48,

@@ -72,10 +72,8 @@ const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
 
   useFocusEffect(
     useCallback(() => {
-     
-        page.current = 1;
-        fetchQuotesScreenData(1);
-      
+      page.current = 1;
+      fetchQuotesScreenData(1);
     }, [fetchQuotesScreenData]),
   );
 
@@ -192,8 +190,7 @@ const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
     return <QuoteEmptyScreen />;
   }, [loadingQuoteList]);
 
-  const keyExtractor = useCallback((item: QuoteItem) => item.id.toString(),
- []);
+  const keyExtractor = useCallback((item: QuoteItem) => item.id.toString(), []);
 
   const renderItem = useCallback(({ item }: { item: QuoteItem }) => {
     return <RenderQuotes item={item} />;
@@ -316,37 +313,32 @@ const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
             </View>
           </View>
 
-          <View style={styles.flatlist}>
-            {loadingQuoteList && !quoteList.length ? (
-              <Loader visible />
-            ) : (
-              <FlatList
-                data={processedData}
-                renderItem={renderItem}
-                keyExtractor={keyExtractor}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={styles.flat}
-                refreshing={refreshing}
-                onRefresh={handleRefresh}
-                removeClippedSubviews
-                initialNumToRender={10}
-                maxToRenderPerBatch={10}
-                windowSize={5}
-                onEndReachedThreshold={0.2}
-                ListFooterComponent={renderFooter}
-                ListEmptyComponent={renderEmpty}
-                onMomentumScrollBegin={() => {
-                  onEndReachedCalledDuringMomentum.current = false;
-                }}
-                onEndReached={() => {
-                  if (!onEndReachedCalledDuringMomentum.current) {
-                    handleLoadMore();
-                    onEndReachedCalledDuringMomentum.current = true;
-                  }
-                }}
-              />
-            )}
-          </View>
+          <FlatList
+            data={processedData}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.flat}
+            style={styles.flatlist}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            removeClippedSubviews
+            initialNumToRender={10}
+            maxToRenderPerBatch={10}
+            windowSize={5}
+            onEndReachedThreshold={0.2}
+            ListFooterComponent={renderFooter}
+            ListEmptyComponent={renderEmpty}
+            onMomentumScrollBegin={() => {
+              onEndReachedCalledDuringMomentum.current = false;
+            }}
+            onEndReached={() => {
+              if (!onEndReachedCalledDuringMomentum.current) {
+                handleLoadMore();
+                onEndReachedCalledDuringMomentum.current = true;
+              }
+            }}
+          />
 
           <View style={styles.add}>
             <TouchableOpacity activeOpacity={0.8} onPress={navigateToNewQuote}>
@@ -373,6 +365,7 @@ const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
           visible={openSubscriptionModal}
           onClose={handleCloseSubscriptionModal}
         />
+        <Loader visible={ loadingQuoteList} />
       </LinearGradient>
     </KeyboardAvoidingView>
   );

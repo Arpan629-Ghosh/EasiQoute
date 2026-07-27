@@ -15,6 +15,7 @@ import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
 import Input from '@/components/inputComponent/Input';
 import { icons } from '@/config/icons';
 import FilterAndSorting from '@/components/filterAndSorting/FilterAndSorting';
+import { InvoiceScreenProps } from '@/types/navigation.types';
 
 interface FilterAndSortingType {
   startDate: string;
@@ -23,7 +24,7 @@ interface FilterAndSortingType {
   amount: string;
 }
 
-const InvoiceScreen = () => {
+const InvoiceScreen = ({navigation} : InvoiceScreenProps) => {
   const [search, setSearch] = useState<string>('');
   const [openFilterModal, setOpenFilterModal] = useState(false);
   const [filterData, setFliterData] = useState<FilterAndSortingType>({
@@ -39,6 +40,10 @@ const InvoiceScreen = () => {
   const { theme, isDark } = useAppTheme();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
+
+  const navigateToSelectQuoteScreen = () => {
+    navigation.navigate('SelectQuoteScreen')
+  }
 
   const handleSearchInput = useCallback((txt: string) => {
     setSearch(txt);
@@ -146,7 +151,7 @@ const InvoiceScreen = () => {
             </View>
           </View>
           <View style={styles.add}>
-            <TouchableOpacity activeOpacity={0.8}>
+            <TouchableOpacity activeOpacity={0.8} onPress={navigateToSelectQuoteScreen}>
               <Image source={icons.ic_add} style={styles.ic} />
             </TouchableOpacity>
           </View>

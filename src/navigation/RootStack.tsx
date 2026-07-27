@@ -29,6 +29,8 @@ import { useAuth } from '@/hooks/apis/useAuth';
 import NewSectionScreen from '@/screens/quotesScreens/newQuoteScreens/newSectionScreen/NewSectionScreen';
 import AddClientScreen from '@/screens/clientScreens/addClientScreen/AddClientScreen';
 import ClientDetailScreen from '@/screens/clientScreens/clientDetailScreen/ClientDetailScreen';
+import SelectQuoteScreen from '@/screens/invoiceScreens/selectQuoteScreen/SelectQuoteScreen';
+import NewInvoiceScreen from '@/screens/invoiceScreens/newInvoiceScreens/NewInvoiceScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStack = () => {
@@ -112,6 +114,8 @@ const RootStack = () => {
       <Stack.Screen name="NewSectionScreen" component={NewSectionScreen} />
       <Stack.Screen name="AddClientScreen" component={AddClientScreen} />
       <Stack.Screen name="ClientDetailScreen" component={ClientDetailScreen} />
+      <Stack.Screen name='SelectQuoteScreen' component={SelectQuoteScreen} />
+      <Stack.Screen name='NewInvoiceScreens' component={NewInvoiceScreen} />
     </Stack.Navigator>
   );
 };

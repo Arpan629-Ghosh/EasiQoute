@@ -5,14 +5,14 @@ import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import Header from '../header/Header';
 
-const CustomTabBars = ({ state, navigation }: any) => {
+const CustomTabBars = ({ state, navigation, headerText }: any) => {
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   return (
     <View style={styles.container}>
 
-        <Header txt="New Quote" borderBottomEnabled={true}>
+        <Header txt={headerText} borderBottomEnabled={true}>
           <View style={styles.tabBarContainer}>
             {state.routes.map((route: any, index: number) => {
               const isFocused = state.index === index;
