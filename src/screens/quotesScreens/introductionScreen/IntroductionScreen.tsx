@@ -1,6 +1,5 @@
 import { Image, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
-import { IntroductionScreenProps } from '@/types/navigation.types';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import LinearGradient from 'react-native-linear-gradient';
 import { createStyles } from './style';
@@ -9,8 +8,9 @@ import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import Card from '@/components/cardDetailsComponent/Card';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { RootScreenProps } from '@/types/navigation.types';
 
-const IntroductionScreen = ({ navigation, route }: IntroductionScreenProps) => {
+const IntroductionScreen = ({ navigation, route }: RootScreenProps<'IntroductionScreen'>) => {
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
 

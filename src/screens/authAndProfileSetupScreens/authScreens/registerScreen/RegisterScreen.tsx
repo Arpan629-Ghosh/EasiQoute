@@ -8,12 +8,12 @@ import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import { createStyles } from './style';
 import { images } from '@/config/images';
-import { RegisterScreenProps } from '@/types/navigation.types';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { useToast } from '@/hooks/useToast';
+import { RootScreenProps } from '@/types/navigation.types';
 
 
 
@@ -21,7 +21,7 @@ interface LoginForm {
   email: string;
   password: string;
 }
-const RegisterScreen = ({navigation} : RegisterScreenProps) => {
+const RegisterScreen = ({navigation} : RootScreenProps<'RegisterScreen'>) => {
 
   const [formData, setFormData] = useState<LoginForm>({
       email: '',

@@ -13,13 +13,13 @@ import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { images } from '@/config/images';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Input from '@/components/inputComponent/Input';
-import { ProfileScreenProps } from '@/types/navigation.types';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ImagePicker from '@/components/imagePicker/ImagePicker';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
+import { RootScreenProps } from '@/types/navigation.types';
 
 interface ProfileForm {
   name: string;
@@ -31,7 +31,7 @@ interface ProfileForm {
   } | null;
 }
 
-const ProfileScreen = ({ navigation, route }: ProfileScreenProps) => {
+const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) => {
   const [formData, setFormData] = useState<ProfileForm>({
     name: '',
     phone: '',

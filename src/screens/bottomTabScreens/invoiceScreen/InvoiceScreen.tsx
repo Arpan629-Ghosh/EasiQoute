@@ -15,7 +15,7 @@ import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
 import Input from '@/components/inputComponent/Input';
 import { icons } from '@/config/icons';
 import FilterAndSorting from '@/components/filterAndSorting/FilterAndSorting';
-import { InvoiceScreenProps } from '@/types/navigation.types';
+import { InvoiceStackProps } from '@/types/navigation.types';
 
 interface FilterAndSortingType {
   startDate: string;
@@ -24,7 +24,7 @@ interface FilterAndSortingType {
   amount: string;
 }
 
-const InvoiceScreen = ({navigation} : InvoiceScreenProps) => {
+const InvoiceScreen = ({navigation} : InvoiceStackProps<'InvoiceScreen'>) => {
   const [search, setSearch] = useState<string>('');
   const [openFilterModal, setOpenFilterModal] = useState(false);
   const [filterData, setFliterData] = useState<FilterAndSortingType>({

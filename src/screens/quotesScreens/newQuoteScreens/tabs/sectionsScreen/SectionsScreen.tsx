@@ -6,27 +6,33 @@ import { icons } from '@/config/icons'
 import { useAppTheme } from '@/hooks/useAppTheme'
 import {createStyles} from './style'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { SectionsScreenProps } from '@/types/navigation.types'
 import { useQuotes } from '@/hooks/apis/useQuotes'
 import { useToast } from '@/hooks/useToast'
 import { QuoteSection } from '@/types/apis/quote.types'
+import { QuoteTopTabWithRootProps } from '@/types/navigation.types'
 
-const SectionsScreen = ({ navigation, route }: SectionsScreenProps) => {
+const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Sections'>) => {
   const [selectedSections, setSelectedSections] = useState<number[]>([]);
   const { theme } = useAppTheme();
   const { showToast } = useToast();
-  const { getSections, createSelectedSections,  sections, isFetchCall, loadingSections } = useQuotes();
+  const {
+    getSections,
+    createSelectedSections,
+    sections,
+    isFetchCall,
+    loadingSections,
+  } = useQuotes();
   const insets = useSafeAreaInsets();
-  const quoteId = route.params.quoteId
-  const styles = useMemo(() => createStyles(theme), [theme])
+  const quoteId = route.params.quoteId;
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
   const navigateToNewSection = () => {
-    navigation.navigate("NewSectionScreen");
-  }
+    navigation.navigate('NewSectionScreen');
+  };
 
   useEffect(() => {
     getSections();
-  }, [getSections, isFetchCall])
+  }, [getSections, isFetchCall]);
 
   const handleSection = async () => {
     try {
@@ -47,7 +53,7 @@ const SectionsScreen = ({ navigation, route }: SectionsScreenProps) => {
       };
 
       await createSelectedSections(payload);
-      showToast("Quote sections saved successfully.")
+      showToast('Quote sections saved successfully.');
     } catch (error) {
       showToast(String(error), 'error');
     }
@@ -96,6 +102,6 @@ const SectionsScreen = ({ navigation, route }: SectionsScreenProps) => {
       </View>
     </View>
   );
-}
+};
 
 export default SectionsScreen

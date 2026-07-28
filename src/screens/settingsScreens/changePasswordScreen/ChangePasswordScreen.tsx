@@ -19,14 +19,14 @@ import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { useToast } from '@/hooks/useToast';
-import { ChangePasswordScreenProps } from '@/types/navigation.types';
+import { RootScreenProps } from '@/types/navigation.types';
 
 interface ChangePasswordForm {
   oldPassword: string;
   newPassword: string;
   confirmPassword: string;
 }
-const ChangePasswordScreen = ({navigation} : ChangePasswordScreenProps) => {
+const ChangePasswordScreen = ({navigation} : RootScreenProps<'ChangePasswordScreen'>) => {
   const [changePasswordData, setChangePaswordData] =
     useState<ChangePasswordForm>({
       oldPassword: '',

@@ -11,7 +11,6 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { icons } from '@/config/icons';
-import { ClientDetailScreenProps } from '@/types/navigation.types';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Card from '@/components/cardDetailsComponent/Card';
@@ -19,8 +18,9 @@ import SettingInfoRow from '@/components/cardDetailsComponent/SettingInfoRow';
 import CardHeader from '@/components/cardDetailsComponent/CardHeader';
 import { useClient } from '@/hooks/apis/useClient';
 import RecentClientActivity from '@/components/recentClientActivity/RecentClientActivity';
+import { RootScreenProps } from '@/types/navigation.types';
 
-const ClientDetailScreen = ({ navigation, route }: ClientDetailScreenProps) => {
+const ClientDetailScreen = ({ navigation, route }: RootScreenProps<'ClientDetailScreen'>) => {
   const clientId = route.params.clientId;
   const { theme, isDark } = useAppTheme();
   const { showClientDetail, client_detail } = useClient();

@@ -7,9 +7,9 @@ import { Image, View } from 'react-native';
 import { icons } from '@/config/icons';
 import Input from '@/components/inputComponent/Input';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import { TeamMembersScreenProps } from '@/types/navigation.types';
+import { RootScreenProps } from '@/types/navigation.types';
 
-const TeamMembersScreen = ({navigation} : TeamMembersScreenProps) => {
+const TeamMembersScreen = ({navigation} : RootScreenProps<'TeamMembersScreen'>) => {
   const { theme } = useAppTheme();
     const styles = useMemo(() => createStyles(theme), [theme]);
     

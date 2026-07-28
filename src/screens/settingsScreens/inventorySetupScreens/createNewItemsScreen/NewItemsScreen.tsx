@@ -12,9 +12,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomDropdown, { Item } from '@/components/dropdown/CustomDropdown';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { useToast } from '@/hooks/useToast';
-import { NewItemsScreenProps } from '@/types/navigation.types';
 import { images } from '@/config/images';
 import { CreateItems } from '@/types/apis/settings.types';
+import { RootScreenProps } from '@/types/navigation.types';
 const FilterOptions = ['Materials', 'Labour', 'Services', 'Miscellaneous'];
 const unitOptions: Item[] = [
   {
@@ -47,7 +47,7 @@ interface ItemForm {
   pricePerUnit: string;
   unitCost: string;
 }
-const NewItemsScreen = ({ navigation, route }: NewItemsScreenProps) => {
+const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>) => {
   const {
     editId,
     catName,

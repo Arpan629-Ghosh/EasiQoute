@@ -16,18 +16,18 @@ import Input from '@components/inputComponent/Input';
 import { images } from '@config/images';
 import InterTightMedium from '@components/fontComponents/InterTightMedium';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import { LoginScreenProps } from '@appTypes/navigation.types';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { useToast } from '@/hooks/useToast';
+import { RootScreenProps } from '@/types/navigation.types';
 
 interface LoginForm {
   email: string;
   password: string;
 }
-const LoginScreen = ({ navigation }: LoginScreenProps) => {
+const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
 
   
 

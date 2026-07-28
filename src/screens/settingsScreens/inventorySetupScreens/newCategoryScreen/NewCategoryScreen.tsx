@@ -10,12 +10,12 @@ import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { useToast } from '@/hooks/useToast';
-import { NewCategoryScreenProps, } from '@/types/navigation.types';
 import { images } from '@/config/images';
 import { CreateCategories } from '@/types/apis/settings.types';
+import { RootScreenProps } from '@/types/navigation.types';
 
 
-const NewCategoryScreen = ({ navigation, route }: NewCategoryScreenProps) => {
+const NewCategoryScreen = ({ navigation, route }: RootScreenProps<'NewCategoryScreen'>) => {
   const editId = route.params?.editId;
   const name = route.params?.name;
   const [input, setInput] = useState<string>(name || "")

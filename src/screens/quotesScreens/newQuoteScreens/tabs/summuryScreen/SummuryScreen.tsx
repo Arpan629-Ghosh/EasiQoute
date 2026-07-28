@@ -21,6 +21,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
 import { pick, types } from '@react-native-documents/picker';
+import { QuoteTopTabWithRootProps } from '@/types/navigation.types';
 
 export interface AttachmentFile {
   uri: string;
@@ -40,7 +41,7 @@ interface NewQuoteForm {
   file: AttachmentFile[];
 }
 
-const SummuryScreen = () => {
+const SummuryScreen = ({ navigation }: QuoteTopTabWithRootProps<'Summury'>) => {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [activeField, setActiveField] = useState<'start' | 'end' | null>(null);
   const [enabled, setEnabled] = useState(false);
@@ -63,6 +64,10 @@ const SummuryScreen = () => {
   const MAX_FILES = 10;
   const styles = useMemo(() => createStyles(theme), [theme]);
 
+  const navigateToAddClientScreen = () => {
+    console.log('Pressed');
+    navigation.navigate('AddClientScreen');
+  };
   const updateField = useCallback((key: keyof NewQuoteForm, value: string) => {
     setNewQuoteFormData(prev => ({
       ...prev,
@@ -188,7 +193,7 @@ const SummuryScreen = () => {
         expiry_date: newQuoteFormData.expDate,
         client_id: Number(newQuoteFormData.client),
         notes: newQuoteFormData.notes,
-        attachments: newQuoteFormData.file
+        attachments: newQuoteFormData.file,
       });
       showToast('Quote created successfully.');
       setNewQuoteFormData({
@@ -315,7 +320,7 @@ const SummuryScreen = () => {
                   <Image source={icons.ic_drop} style={styles.searchic} />
                 </TouchableOpacity>
               </View>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={navigateToAddClientScreen}>
                 <Image source={icons.ic_newclient} style={styles.newclient} />
               </TouchableOpacity>
             </View>

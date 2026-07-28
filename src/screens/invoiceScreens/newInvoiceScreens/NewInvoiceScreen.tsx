@@ -1,5 +1,5 @@
 import React from 'react'
-import { NewInvoiceScreensProps, NewInvoiceTopTabParamList } from '@/types/navigation.types'
+import { NewInvoiceTopTabParamList, RootScreenProps } from '@/types/navigation.types'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import CustomTabBars from '@/components/customTopTabBar/CustomTopTabBars';
 import SummuryScreen from '../tabs/summuryScreen/SummuryScreen';
@@ -8,7 +8,7 @@ import PreviewScreen from '../tabs/previewScreen/PreviewScreen';
 
 
 const Tab = createMaterialTopTabNavigator<NewInvoiceTopTabParamList>();
-const NewInvoiceScreen = ({ route }: NewInvoiceScreensProps) => {
+const NewInvoiceScreen = ({ route }: RootScreenProps<'NewInvoiceScreens'>) => {
     
    
     return (

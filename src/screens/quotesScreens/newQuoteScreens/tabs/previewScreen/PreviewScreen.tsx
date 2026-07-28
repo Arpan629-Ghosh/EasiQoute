@@ -5,15 +5,14 @@ import Input from '@/components/inputComponent/Input'
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent'
 import { icons } from '@/config/icons'
 import { images } from '@/config/images'
-import { PreviewScreenProps } from '@/types/navigation.types'
 import { useAppTheme } from '@/hooks/useAppTheme'
 import {  useSafeAreaInsets } from 'react-native-safe-area-context'
+import { QuoteTopTabWithRootProps } from '@/types/navigation.types'
 
-const PreviewScreen = ({ navigation }: PreviewScreenProps) => {
-
+const PreviewScreen = ({ navigation }: QuoteTopTabWithRootProps<'Preview'>) => {
   const { theme } = useAppTheme();
   const insets = useSafeAreaInsets();
-  const styles = useMemo(() => createStyles(theme), [theme])
+  const styles = useMemo(() => createStyles(theme), [theme]);
   const navigateToTemplatesScreen = () => {
     navigation.navigate('TemplatesScreen');
   };
@@ -40,7 +39,7 @@ const PreviewScreen = ({ navigation }: PreviewScreenProps) => {
         </View>
       </ScrollView>
 
-      <View style={[styles.footer, {paddingBottom: insets.bottom}]}>
+      <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.firstBttnContainer}>
           <ButtonComponent
             onPress={navigateToTemplatesScreen}
@@ -58,7 +57,6 @@ const PreviewScreen = ({ navigation }: PreviewScreenProps) => {
             buttonWidth={182}
             bttnTxt="Share"
             txtColor={theme.textMuted}
-     
           >
             <Image source={icons.ic_share} style={styles.share} />
           </ButtonComponent>
@@ -67,7 +65,6 @@ const PreviewScreen = ({ navigation }: PreviewScreenProps) => {
             buttonWidth={182}
             bttnTxt="Save"
             txtColor={theme.primaryText}
-    
           />
         </View>
       </View>

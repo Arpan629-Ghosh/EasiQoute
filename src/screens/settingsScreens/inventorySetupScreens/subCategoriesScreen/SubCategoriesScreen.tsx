@@ -12,12 +12,12 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { createStyles } from './style';
-import { SubCategoriesScreenProps } from '@/types/navigation.types';
 import { SubCategoriesPayload } from '@/types/apis/settings.types';
 import { useFocusEffect } from '@react-navigation/native';
+import { RootScreenProps } from '@/types/navigation.types';
 
 
-const SubCategoriesScreen = ({ navigation }: SubCategoriesScreenProps) => {
+const SubCategoriesScreen = ({ navigation }: RootScreenProps<'SubCategoriesScreen'>) => {
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const insets = useSafeAreaInsets();

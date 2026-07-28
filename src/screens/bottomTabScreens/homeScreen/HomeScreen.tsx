@@ -19,23 +19,23 @@ import { useHomeScreenData } from '@/hooks/apis/useHomeScreenData';
 import HomeEmptyScreen from '@/components/emptyScreenComponents/HomeEmptyScreen';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useFocusEffect } from '@react-navigation/native';
-import { HomeScreenProps } from '@/types/navigation.types';
 
 import Loader from '@/components/loader/Loader';
+import { HomeStackProps } from '@/types/navigation.types';
 
-const HomeScreen = ({navigation}: HomeScreenProps) => {
+const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
   const { theme } = useAppTheme();
   const { homeScreenData, homeData, loading } = useHomeScreenData();
   const { user } = useAuth();
-  
+
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   useFocusEffect(
     useCallback(() => {
       homeScreenData();
-    }, [homeScreenData])
-  )
-  
+    }, [homeScreenData]),
+  );
+
   // useEffect(() => {
   //   const fetchData = async () => {
   //     try {
@@ -47,7 +47,6 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
   //   };
   //   fetchData();
   // }, []);
-
 
   return (
     <View style={styles.safeareaview}>
@@ -110,7 +109,9 @@ const HomeScreen = ({navigation}: HomeScreenProps) => {
                 <Icons text="New Invoice">
                   <Image source={icons.ic_whiteqoute} style={styles.vector} />
                 </Icons>
-                <TouchableOpacity onPress={() => navigation.navigate("Clients")}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Clients')}
+                >
                   <Icons text="View Clients">
                     <Image
                       source={icons.ic_whiteclient}

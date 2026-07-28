@@ -14,10 +14,10 @@ import Input from '@/components/inputComponent/Input';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
 import { useAuth } from '@/hooks/apis/useAuth';
-import { ResetPasswordScreenProps } from '@/types/navigation.types';
 import { useToast } from '@/hooks/useToast';
+import { RootScreenProps } from '@/types/navigation.types';
 
-const ResetPasswordScreen = ({navigation} : ResetPasswordScreenProps) => {
+const ResetPasswordScreen = ({navigation} : RootScreenProps<'ResetPasswordScreen'>) => {
   const [input, setInput] = useState<string>('');
   const emailRef = useRef<TextInput | null>(null);
   const { theme } = useAppTheme();

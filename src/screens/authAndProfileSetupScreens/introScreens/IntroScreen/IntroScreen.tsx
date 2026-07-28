@@ -1,6 +1,5 @@
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
-import { IntroScreenProps } from '@/types/navigation.types';
 import React, { useMemo, useRef, useState } from 'react';
 import {
   View,
@@ -14,13 +13,14 @@ import { createStyles } from './style';
 import { OnboardingItem, useOnBoardingData } from '@/config/onBoardingData';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { RootScreenProps } from '@/types/navigation.types';
 
 
 const { width } = Dimensions.get('window');
 
 
 
-const IntroScreen = ({navigation} : IntroScreenProps) => {
+const IntroScreen = ({navigation} : RootScreenProps<'IntroScreen'>) => {
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { theme, isDark } = useAppTheme();
@@ -38,7 +38,9 @@ const IntroScreen = ({navigation} : IntroScreenProps) => {
   };
     
     const handleNavigation = () => {
-        navigation.navigate("ProfileScreen")
+      navigation.navigate("ProfileScreen", {
+          isEdit: false
+        })
     }
 
   const renderItem = ({ item }: { item: OnboardingItem }) => {

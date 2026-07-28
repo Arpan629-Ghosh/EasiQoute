@@ -18,7 +18,6 @@ import NoSubscription from '@/components/noSubscription/NoSubscription';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import LinearGradient from 'react-native-linear-gradient';
-import { MainQuoteScreenProps } from '@/types/navigation.types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import RenderQuotes from '@/components/renderQuotes/RenderQuotes';
@@ -26,6 +25,7 @@ import Loader from '@/components/loader/Loader';
 import { useFocusEffect } from '@react-navigation/native';
 import QuoteEmptyScreen from '@/components/emptyScreenComponents/QuoteEmptyScreen';
 import { QuoteItem } from '@/types/apis/quote.types';
+import { QuoteStackProps } from '@/types/navigation.types';
 
 interface FilterAndSortingType {
   startDate: string;
@@ -34,7 +34,7 @@ interface FilterAndSortingType {
   amount: string;
 }
 
-const MainQuoteScreen = ({ navigation }: MainQuoteScreenProps) => {
+const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => {
   const [filterData, setFliterData] = useState<FilterAndSortingType>({
     startDate: '',
     endDate: '',

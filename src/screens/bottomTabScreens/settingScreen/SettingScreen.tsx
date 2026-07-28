@@ -19,11 +19,11 @@ import CardHeader from '@/components/cardDetailsComponent/CardHeader';
 import CustomToggle from '@/components/switch/CustomToggle';
 import AppearanceBottomSheet from '@/components/appearanceBottomSheet/AppearanceBottomSheet';
 import LogoutModal from '@/components/ logoutModal/LogoutModal';
-import { SettingScreenProps } from '@/types/navigation.types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/hooks/apis/useAuth';
+import { SettingStackProps } from '@/types/navigation.types';
 
-const SettingScreen = ({ navigation }: SettingScreenProps) => {
+const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
   const [enabledStripe, setEnabledStripe] = useState<boolean>(false);
   const [pushNotification, setPushNotification] = useState<boolean>(true);
   const [emailUpdate, setEmailUpdate] = useState<boolean>(false);

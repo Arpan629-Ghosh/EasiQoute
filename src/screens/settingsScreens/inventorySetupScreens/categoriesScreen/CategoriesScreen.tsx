@@ -24,11 +24,11 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { createStyles } from './style';
-import { CategoriesScreenProps } from '@/types/navigation.types';
 import { CreateCategoriesPayload } from '@/types/apis/settings.types';
 import { useFocusEffect } from '@react-navigation/native';
+import { RootScreenProps } from '@/types/navigation.types';
 
-const CategoriesScreen = ({ navigation }: CategoriesScreenProps) => {
+const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) => {
   const [paginationLoading, setPaginationLoading] = useState(false);
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);

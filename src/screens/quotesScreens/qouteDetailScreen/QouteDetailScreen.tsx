@@ -11,7 +11,6 @@ import InfoRow from '@/components/cardDetailsComponent/InfoRow';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import ExpandableItem from '@/components/cardDetailsComponent/ExpandableItem';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import { QouteDetailScreenProps } from '@/types/navigation.types';
 import StatusChanger from '@/components/statusChanger/StatusChanger';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Items from '@/components/cardDetailsComponent/Items';
@@ -21,8 +20,9 @@ import { useToast } from '@/hooks/useToast';
 import { FetchItemsData } from '@/types/apis/settings.types';
 import { useFocusEffect } from '@react-navigation/native';
 import Loader from '@/components/loader/Loader';
+import { RootScreenProps } from '@/types/navigation.types';
 
-const QouteDetailScreen = ({ navigation, route }: QouteDetailScreenProps) => {
+const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailScreen'>) => {
   const [open, setOpen] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState<string>("")
   const [openEdit, setOpenEdit] = useState(false);

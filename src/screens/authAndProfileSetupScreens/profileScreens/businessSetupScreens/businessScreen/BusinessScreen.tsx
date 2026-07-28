@@ -11,7 +11,6 @@ import { createStyles } from './style';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { icons } from '@/config/icons';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
-import { BusinessScreenProps } from '@/types/navigation.types';
 import { images } from '@/config/images';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Input from '@/components/inputComponent/Input';
@@ -28,6 +27,7 @@ import { FormData } from '../businessAddressScren/BusinessAddressScreen';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { useSettings } from '@/hooks/apis/useSettings';
+import { RootScreenProps } from '@/types/navigation.types';
 
 interface BusinessForm {
   name: string;
@@ -48,7 +48,7 @@ interface BusinessForm {
   } | null;
 }
 
-const BusinessScreen = ({ navigation, route }: BusinessScreenProps) => {
+const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>) => {
   const [form, setForm] = useState<BusinessForm>({
     name: '',
     phone: '',

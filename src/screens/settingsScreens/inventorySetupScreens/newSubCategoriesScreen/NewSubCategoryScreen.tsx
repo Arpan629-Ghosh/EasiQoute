@@ -13,14 +13,14 @@ import { useSettings } from '@/hooks/apis/useSettings';
 import RenderCategoriesDropDown from '@/components/renderCategoriesDropDown/RenderCategoriesDropDown';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useToast } from '@/hooks/useToast';
-import { NewSubCategoryScreenProps } from '@/types/navigation.types';
 import { images } from '@/config/images';
 import { CreateSubCategories } from '@/types/apis/settings.types';
+import { RootScreenProps } from '@/types/navigation.types';
 
 const NewSubCategoryScreen = ({
   navigation,
   route,
-}: NewSubCategoryScreenProps) => {
+}: RootScreenProps<'NewSubCategoryScreen'>) => {
   const editId = route.params?.editId;
   const name = route.params?.name;
   const catName = route.params?.catName;

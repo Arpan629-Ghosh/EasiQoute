@@ -7,9 +7,9 @@ import Header from '@/components/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { View } from 'react-native';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import { SelectQuoteScreenProps } from '@/types/navigation.types';
+import { RootScreenProps } from '@/types/navigation.types';
 
-const SelectQuoteScreen = ({navigation}: SelectQuoteScreenProps) => {
+const SelectQuoteScreen = ({navigation}: RootScreenProps<'SelectQuoteScreen'>) => {
 
     const { theme } = useAppTheme();
     const insets = useSafeAreaInsets();

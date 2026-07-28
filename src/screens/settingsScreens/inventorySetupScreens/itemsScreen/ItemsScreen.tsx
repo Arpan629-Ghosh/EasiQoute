@@ -13,7 +13,6 @@ import Header from '@/components/header/Header';
 import { icons } from '@/config/icons';
 import Input from '@/components/inputComponent/Input';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import { ItemsScreenProps } from '@/types/navigation.types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -21,8 +20,9 @@ import { FetchItemsData } from '@/types/apis/settings.types';
 import RenderItems from '@/components/renderItems/RenderItems';
 import { useFocusEffect } from '@react-navigation/native';
 import ItemEmptyScreen from '@/components/emptyScreenComponents/ItemEmptyScreen';
+import { RootScreenProps } from '@/types/navigation.types';
 
-const ItemsScreen = ({ navigation }: ItemsScreenProps) => {
+const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
   const [paginationLoading, setPaginationLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState<string>('');

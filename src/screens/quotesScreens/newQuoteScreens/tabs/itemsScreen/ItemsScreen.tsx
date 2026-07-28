@@ -11,7 +11,6 @@ import InfoRow from '@/components/cardDetailsComponent/InfoRow';
 import MarginBottomSheet from '@/components/marginBottomSheet/MarginBottomSheet';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { ItemScreenProps } from '@/types/navigation.types';
 import { useSettings } from '@/hooks/apis/useSettings';
 import RenderSubCategoriesDropDown from '@/components/renderSubCategoriesDropdown/RenderSubCategoriesDropDown';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -20,6 +19,7 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-na
 import { FetchItemsData } from '@/types/apis/settings.types';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
+import { QuoteTopTabWithRootProps } from '@/types/navigation.types';
 
 interface FinancialBreakDown {
   subtotal: string;
@@ -30,18 +30,18 @@ interface FinancialBreakDown {
 const FilterOptions = ['Materials', 'Labour', 'Services', 'Miscellaneous'];
 
 
-const ItemsScreen = ({ navigation, route }: ItemScreenProps) => {
+const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) => {
   const [openFinancialBreakdown, setOpenFinancialBreakdown] =
     useState<boolean>(false);
-  const [selectedItems, setSelectedItems] = useState<FetchItemsData[]>([])
+  const [selectedItems, setSelectedItems] = useState<FetchItemsData[]>([]);
   const [selectedFilterOption, setSelectFilterOption] = useState<string>('');
   const [open, setOpen] = useState(false);
   const [openDropDown, setOpenDropDown] = useState(false);
-  const [openDiscount, setOpenDiscount] = useState(false)
+  const [openDiscount, setOpenDiscount] = useState(false);
   const [search, setSearch] = useState('');
   const [paginationLoading, setPaginationLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-  const [discountPrice, setDiscountPrice] = useState(0)
+  const [discountPrice, setDiscountPrice] = useState(0);
   const page = useRef(1);
   const onEndReachedCalledDuringMomentum = useRef(false);
   const height = useSharedValue(0);
@@ -87,11 +87,11 @@ const ItemsScreen = ({ navigation, route }: ItemScreenProps) => {
       page.current = 1;
       fetchItems(1);
     }
-  }, [fetchItems, isStale])
+  }, [fetchItems, isStale]);
 
   useEffect(() => {
     fetchItems(1);
-  }, [fetchItems])
+  }, [fetchItems]);
 
   // useFocusEffect(
   //   useCallback(() => {
@@ -151,10 +151,9 @@ const ItemsScreen = ({ navigation, route }: ItemScreenProps) => {
     if (txt.trim()) setOpenDropDown(true);
   }, []);
 
-
   const handleCloseDiscount = useCallback(() => {
-    setOpenDiscount(false)
-  }, [])
+    setOpenDiscount(false);
+  }, []);
 
   const processedData = useMemo(() => {
     let result = items_data;
@@ -183,7 +182,6 @@ const ItemsScreen = ({ navigation, route }: ItemScreenProps) => {
     return result;
   }, [subcat_data, debouncedSearch]);
 
-
   const handleAddItem = useCallback((updatedItem: FetchItemsData) => {
     setSelectedItems(prev => {
       const alreadyExists = prev.find(item => item.id === updatedItem.id);
@@ -197,27 +195,25 @@ const ItemsScreen = ({ navigation, route }: ItemScreenProps) => {
       return [...prev, updatedItem];
     });
   }, []);
-  
+
   const discountValue = (discount: number) => {
-    setDiscountPrice(discount)
-  }
-  
+    setDiscountPrice(discount);
+  };
+
   // console.log(selectedItems);
 
-  const renderItems: ListRenderItem<FetchItemsData> = useCallback(({ item }) => {
-    return (
-      <RenderFilterData
-        item={item}
-        onAddItem={handleAddItem}
-      />
-    );
-  }, [handleAddItem]);
+  const renderItems: ListRenderItem<FetchItemsData> = useCallback(
+    ({ item }) => {
+      return <RenderFilterData item={item} onAddItem={handleAddItem} />;
+    },
+    [handleAddItem],
+  );
 
   const calculateFinancialBreakdown = useMemo(() => {
     let result: FinancialBreakDown = {
-      subtotal: "",
-      tax: "",
-      total: ""
+      subtotal: '',
+      tax: '',
+      total: '',
     };
     const subtotal = selectedItems.reduce(
       (sum, item) => sum + Number(item.total_price || 0),
@@ -225,15 +221,15 @@ const ItemsScreen = ({ navigation, route }: ItemScreenProps) => {
     );
     const tax = subtotal * (8 / 100);
     const total = subtotal + tax;
-    const grandTotal = total - (total * discountPrice/100)
-  
+    const grandTotal = total - (total * discountPrice) / 100;
+
     result.subtotal = subtotal.toFixed(2);
     result.tax = tax.toFixed(2);
     result.total = grandTotal.toFixed(2);
     return result;
-  }, [selectedItems, discountPrice])
+  }, [selectedItems, discountPrice]);
 
-  const handleUpdateQuote = async() => {
+  const handleUpdateQuote = async () => {
     if (typeof quoteId !== 'number') {
       showToast('Invalid quote ID', 'error');
       return;
@@ -243,11 +239,11 @@ const ItemsScreen = ({ navigation, route }: ItemScreenProps) => {
         quoteId: quoteId,
         items: selectedItems,
       });
-      showToast('Quote updated successfully!')
+      showToast('Quote updated successfully!');
     } catch (error) {
-      showToast(String(error), 'error')
+      showToast(String(error), 'error');
     }
-  }
+  };
 
   return (
     <View style={styles.container}>

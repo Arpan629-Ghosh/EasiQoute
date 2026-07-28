@@ -23,7 +23,7 @@ import AddressList from '@/components/addressList/AddressList';
 import { useToast } from '@/hooks/useToast';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useClient } from '@/hooks/apis/useClient';
-import { AddClientScreenProps } from '@/types/navigation.types';
+import { RootScreenProps } from '@/types/navigation.types';
 
 interface ClientForm {
   clientName: string;
@@ -37,7 +37,7 @@ interface ClientForm {
   country: string;
 }
 
-const AddClientScreen = ({ navigation } : AddClientScreenProps) => {
+const AddClientScreen = ({ navigation } : RootScreenProps<'AddClientScreen'>) => {
   const [clientFormData, setClientFormData] = useState<ClientForm>({
     clientName: '',
     companyName: '',

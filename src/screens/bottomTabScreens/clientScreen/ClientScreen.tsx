@@ -15,7 +15,6 @@ import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
 import Input from '@/components/inputComponent/Input';
 import { icons } from '@/config/icons';
 import ClientSortBottomSheet from '@/components/clientSortBottomSheet/ClientSortBottomSheet';
-import { ClientScreenProps } from '@/types/navigation.types';
 import { useClient } from '@/hooks/apis/useClient';
 import { useFocusEffect } from '@react-navigation/native';
 import Loader from '@/components/loader/Loader';
@@ -24,8 +23,9 @@ import RenderClients from '@/components/renderClients/RenderClients';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Clients, GetClients, SORT_BY } from '@/types/apis/client.types';
 import ClientEmptyScreen from '@/components/emptyScreenComponents/ClientEmptyScreen';
+import { ClientStackProps } from '@/types/navigation.types';
 
-const ClientScreen = ({ navigation }: ClientScreenProps) => {
+const ClientScreen = ({ navigation }: ClientStackProps<'ClientScreen'>) => {
   const [open, setOpen] = useState(false);
   const [selctedSortOption, setSelectedSortOptions] = useState<string>('');
   const [search, setSearch] = useState<string>('');

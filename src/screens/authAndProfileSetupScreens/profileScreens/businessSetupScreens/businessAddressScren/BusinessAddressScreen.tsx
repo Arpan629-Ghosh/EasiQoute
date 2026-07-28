@@ -17,12 +17,12 @@ import { TextInput } from 'react-native-gesture-handler';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BusinessAddressScreenProps } from '@/types/navigation.types';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { SearchAddressPayload } from '@/types/apis/auth.types';
 import AddressList from '@/components/addressList/AddressList';
+import { RootScreenProps } from '@/types/navigation.types';
 
 export interface FormData {
   address: string;
@@ -34,7 +34,7 @@ export interface FormData {
 const BusinessAddressScreen = ({
   navigation,
   route,
-}: BusinessAddressScreenProps) => {
+}: RootScreenProps<'BusinessAddressScreen'>) => {
   const existingAddress = route.params?.address;
 
   const [formData, setFormData] = useState<FormData>({

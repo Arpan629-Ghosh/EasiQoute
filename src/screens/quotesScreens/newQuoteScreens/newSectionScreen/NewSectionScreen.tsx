@@ -11,9 +11,9 @@ import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
-import { NewSectionScreenProps } from '@/types/navigation.types';
 import { images } from '@/config/images';
 import { Sections } from '@/types/apis/quote.types';
+import { RootScreenProps } from '@/types/navigation.types';
 
 interface SectionForm {
   order: string;
@@ -21,7 +21,7 @@ interface SectionForm {
   description: string;
 }
 
-const NewSectionScreen = ({ navigation, route }: NewSectionScreenProps) => {
+const NewSectionScreen = ({ navigation, route }: RootScreenProps<'NewSectionScreen'>) => {
   const editId = route.params?.editId;
   const content = route.params?.content;
   const title = route.params?.title;

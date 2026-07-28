@@ -5,10 +5,10 @@ import ItemsScreen from './tabs/itemsScreen/ItemsScreen'
 import SectionsScreen from './tabs/sectionsScreen/SectionsScreen'
 import PreviewScreen from './tabs/previewScreen/PreviewScreen'
 import CustomTabBars from '@/components/customTopTabBar/CustomTopTabBars'
-import { NewQuoteScreensProps, NewQuoteTopTabParamList } from '@/types/navigation.types'
+import { NewQuoteTopTabParamList, RootScreenProps } from '@/types/navigation.types'
 
 const Tab = createMaterialTopTabNavigator<NewQuoteTopTabParamList>();
-const NewQuoteScreens = ({ route }: NewQuoteScreensProps) => {
+const NewQuoteScreens = ({ route }: RootScreenProps<'NewQuoteScreens'>) => {
   
   const quoteId = route.params?.quoteId
 
