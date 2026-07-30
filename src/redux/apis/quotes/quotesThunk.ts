@@ -1,5 +1,6 @@
 import { QuoteSection, UpdateQuote, UpdateStatus } from './../../../types/apis/quote.types';
 import { quoteServices } from "@/apis/services/quoteServices";
+import { UpdateInvoiceStatus } from '@/types/apis/invoice.types';
 import { CreateQuote, Sections } from "@/types/apis/quote.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
@@ -113,7 +114,7 @@ export const updateQuoteThunk = createAsyncThunk('api/quotes/update',
 
 export const updateStatusThunk = createAsyncThunk('api/update-status',
 
-    async (payload: UpdateStatus, thunkAPI) => {
+    async (payload: UpdateStatus | UpdateInvoiceStatus, thunkAPI) => {
         try {
             const response = await quoteServices.updateStatus(payload);
             if (!response.result) {

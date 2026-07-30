@@ -114,4 +114,20 @@ export const createStyles = (theme: Theme) =>
       paddingVertical: 12,
       marginHorizontal: 16,
     },
+    files: {
+      gap: 8,
+    },
+    docs: {
+      flexDirection: 'row',
+      borderWidth: 1,
+      borderRadius: 12,
+      padding: 12,
+      alignItems: 'center',
+    },
+    delete: {
+      justifyContent: 'space-between',
+      borderColor: theme.border,
+      height: 24,
+      width: 24,
+    },
   });

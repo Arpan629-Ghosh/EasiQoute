@@ -1,5 +1,5 @@
 import { View, ScrollView, TouchableOpacity, Image } from 'react-native';
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
@@ -15,19 +15,69 @@ import { pick, types } from '@react-native-documents/picker';
 import { useToast } from '@/hooks/useToast';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import { InvoiceTopTabWithRootProps } from '@/types/navigation.types';
+import { useQuotes } from '@/hooks/apis/useQuotes';
+import { useInvoice } from '@/hooks/apis/useInvoice';
 
-const SummuryScreen = () => {
+export interface AttachmentFile {
+  uri: string;
+  name: string;
+  type: string;
+  size?: number;
+}
+interface NewInvoiceProp {
+  quoteId: number | undefined;
+  issueDate: string;
+  expiryDate: string;
+  serviceNotes: string;
+  notes: string;
+  file: AttachmentFile[];
+}
+const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [activeField, setActiveField] = useState<'start' | 'end' | null>(null);
   const [enabled, setEnabled] = useState(false);
-
+  const [newInvoiceFormData, setNewInvoiceFormData] = useState<NewInvoiceProp>({
+    quoteId: route.params.quoteId,
+    issueDate: '',
+    expiryDate: '',
+    serviceNotes: '',
+    notes: '',
+    file: []
+  })
+  const { quoteList } = useQuotes();
   const { theme } = useAppTheme();
   const { showToast } = useToast();
+  const { createInvoice, loadingCreateInvoice } = useInvoice();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
   const MAX_FILES = 10;
+
+  console.log(route.params.quoteId)
+
+  const extractQuote = useMemo(() => {
+    const extractedQuote = quoteList.filter((quote) => quote.id === route.params.quoteId)
+    return extractedQuote;
+  }, [quoteList, route.params.quoteId])
+
+  const updateField = useCallback(
+    (key: keyof NewInvoiceProp, value: string) => {
+      setNewInvoiceFormData(prev => ({
+        ...prev,
+        [key]: value,
+      }));
+    },
+    [],
+  );
+
+  const removeFile = useCallback((index: number) => {
+      setNewInvoiceFormData(prev => ({
+        ...prev,
+        file: prev.file.filter((_, i) => i !== index),
+      }));
+    }, []);
 
   const handleCalenderStartPicker = () => {
     setActiveField('start');
@@ -48,21 +98,21 @@ const SummuryScreen = () => {
   };
 
   const fillStartInput = (stratDate: string) => {
-    // setNewQuoteFormData(prev => {
-    //   return {
-    //     ...prev,
-    //     qtDate: stratDate,
-    //   };
-    // });
+    setNewInvoiceFormData(prev => {
+      return {
+        ...prev,
+        issueDate: stratDate,
+      };
+    });
   };
 
   const fillEndInput = (endDate: string) => {
-    // setNewQuoteFormData(prev => {
-    //   return {
-    //     ...prev,
-    //     expDate: endDate,
-    //   };
-    // });
+    setNewInvoiceFormData(prev => {
+      return {
+        ...prev,
+        expiryDate: endDate,
+      };
+    });
   };
 
   const handleConfirm = (date: Date) => {
@@ -103,33 +153,56 @@ const SummuryScreen = () => {
         if (!selectedFiles.length) {
           return;
         }
-        // setNewQuoteFormData(prev => {
-        //   const merged = [...prev.file];
-        //   selectedFiles.forEach(newFile => {
-        //     const exists = merged.some(
-        //       file => file.name === newFile.name && file.size === newFile.size,
-        //     );
+        setNewInvoiceFormData(prev => {
+          const merged = [...prev.file];
+          selectedFiles.forEach(newFile => {
+            const exists = merged.some(
+              file => file.name === newFile.name && file.size === newFile.size,
+            );
   
-        //     if (!exists) {
-        //       merged.push(newFile);
-        //     }
-        //   });
-        //   if (merged.length > MAX_FILES) {
-        //     showToast(`You can upload a maximum of ${MAX_FILES} files`, 'error');
-        //     return prev;
-        //   }
-        //   return {
-        //     ...prev,
-        //     file: merged,
-        //   };
-        // });
+            if (!exists) {
+              merged.push(newFile);
+            }
+          });
+          if (merged.length > MAX_FILES) {
+            showToast(`You can upload a maximum of ${MAX_FILES} files`, 'error');
+            return prev;
+          }
+          return {
+            ...prev,
+            file: merged,
+          };
+        });
       } catch (error: any) {
         if (error?.code !== 'DOCUMENT_PICKER_CANCELED') {
           console.log(error);
           showToast('Failed to select file', 'error');
         }
       }
-    };
+  };
+  
+  const handleCreateInvoice = async () => {
+    // console.log(newQuoteFormData);
+    try {
+      await createInvoice({
+        quote_id: route.params.quoteId,
+        invoice_date: newInvoiceFormData.issueDate,
+        due_date: newInvoiceFormData.expiryDate,
+        message: newInvoiceFormData.serviceNotes
+      });
+      showToast('Invoice created successfully.');
+      setNewInvoiceFormData({
+        quoteId: route.params.quoteId,
+        issueDate: '',
+        expiryDate: '',
+        serviceNotes: '',
+        notes: '',
+        file: [],
+      });
+    } catch (error) {
+      showToast(String(error), 'error');
+    }
+  };
 
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
@@ -146,10 +219,10 @@ const SummuryScreen = () => {
           >
             <View style={styles.txtView}>
               <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
-                Cabin Restoration
+                {extractQuote[0]?.title}
               </InterTightMedium>
               <InterTightLight fsize={14} fcolor={theme.textPrimary}>
-                Bryan Johnson
+                {extractQuote[0]?.name}
               </InterTightLight>
             </View>
             <View style={styles.border} />
@@ -157,7 +230,7 @@ const SummuryScreen = () => {
             <InterTightLight fsize={14} fcolor={theme.textPrimary}>
               Linked Quote:{' '}
               <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
-                QT-2025-201
+                {extractQuote[0]?.reference_number}
               </InterTightMedium>{' '}
             </InterTightLight>
           </LinearGradient>
@@ -185,7 +258,7 @@ const SummuryScreen = () => {
             <View style={styles.inputContainer}>
               <View style={styles.inputs}>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                  Quote Date
+                  Issue Date
                 </InterTightRegular>
                 <TouchableOpacity
                   style={styles.inputicon}
@@ -195,8 +268,8 @@ const SummuryScreen = () => {
                     placeholder="DD-MM-YYYY"
                     style={styles.noBorderInput}
                     editable={false}
-                    // value={newQuoteFormData.qtDate}
-                    // onChangeText={txt => updateField('qtDate', txt)}
+                    value={newInvoiceFormData.issueDate}
+                    onChangeText={txt => updateField('issueDate', txt)}
                   />
 
                   <Image source={icons.ic_cal} style={styles.searchic} />
@@ -215,8 +288,8 @@ const SummuryScreen = () => {
                     placeholder="DD-MM-YYYY"
                     style={styles.noBorderInput}
                     editable={false}
-                    // value={newQuoteFormData.expDate}
-                    // onChangeText={txt => updateField('expDate', txt)}
+                    value={newInvoiceFormData.expiryDate}
+                    onChangeText={txt => updateField('expiryDate', txt)}
                   />
                   <Image source={icons.ic_cal} style={styles.searchic} />
                 </TouchableOpacity>
@@ -230,11 +303,11 @@ const SummuryScreen = () => {
 
               <Input
                 inputHeight={100}
-                placeholder="Enter job details..."
+                placeholder="Explain what the invoice covers"
                 multiline={true}
                 tv="top"
-                // value={newQuoteFormData.jobDescription}
-                // onChangeText={txt => updateField('jobDescription', txt)}
+                value={newInvoiceFormData.serviceNotes}
+                onChangeText={txt => updateField('serviceNotes', txt)}
               />
             </View>
             <View style={styles.note}>
@@ -244,11 +317,11 @@ const SummuryScreen = () => {
 
               <Input
                 inputHeight={100}
-                placeholder="Enter job details..."
+                placeholder="Add private notes"
                 multiline={true}
                 tv="top"
-                // value={newQuoteFormData.jobDescription}
-                // onChangeText={txt => updateField('jobDescription', txt)}
+                value={newInvoiceFormData.notes}
+                onChangeText={txt => updateField('notes', txt)}
               />
             </View>
           </View>
@@ -260,23 +333,36 @@ const SummuryScreen = () => {
           </InterTightMedium>
 
           <View style={styles.fileupload}>
-                        <TouchableOpacity onPress={openDocumentPicker}>
-                          <Image source={images.img_fileupload} style={styles.upload} />
-                        </TouchableOpacity>
-                      </View>
+            <TouchableOpacity onPress={openDocumentPicker}>
+              <Image source={images.img_fileupload} style={styles.upload} />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.files}>
+            {newInvoiceFormData.file.map((file, index) => (
+              <View key={`${file.name}-${index}`} style={styles.docs}>
+                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
+                  {file.name}
+                </InterTightRegular>
+
+                <TouchableOpacity onPress={() => removeFile(index)}>
+                  <Image source={icons.ic_delete} style={styles.delete} />
+                </TouchableOpacity>
+              </View>
+            ))}
+          </View>
         </View>
       </ScrollView>
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
-              <View style={styles.footerContainer}>
-                <ButtonComponent
-                  bg={theme.primary}
-                  bttnTxt="Save"
-                  txtColor={theme.primaryText}
-                  // showLoader={loadingUpdateQuote}
-                  // onPress={handleCreateQuote}
-                />
-              </View>
-            </View>
+        <View style={styles.footerContainer}>
+          <ButtonComponent
+            bg={theme.primary}
+            bttnTxt="Save"
+            txtColor={theme.primaryText}
+            showLoader={loadingCreateInvoice}
+            onPress={handleCreateInvoice}
+          />
+        </View>
+      </View>
       <DateTimePicker
         isVisible={isDatePickerVisible}
         mode="date"

@@ -90,12 +90,12 @@ export const createStyles = (theme: Theme) =>
       borderWidth: 1,
       borderRadius: 12,
       padding: 12,
-      justifyContent: 'space-between',
-      borderColor: theme.border,
       alignItems: "center"
     },
     delete: {
-      height: 24,
+       justifyContent: 'space-between',
+      borderColor: theme.border,
+     height: 24,
       width: 24,
     },
     footer: {

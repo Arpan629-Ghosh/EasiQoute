@@ -17,10 +17,10 @@ import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DiscountModal from '@/components/discountModal/DiscountModal';
 import InvoiceMargin from '@/components/invoiceMargin/InvoiceMargin';
-import { RootScreenProps } from '@/types/navigation.types';
+import { InvoiceTopTabWithRootProps } from '@/types/navigation.types';
 
 const FilterOptions = ['Materials', 'Labour', 'Services', 'Miscellaneous'];
-const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
+const ItemsScreen = ({ navigation }: InvoiceTopTabWithRootProps<'Items'>) => {
   const [selectedFilterOption, setSelectFilterOption] = useState<string>('');
   // const [selectedItems, setSelectedItems] = useState<FetchItemsData[]>([]);
   const [openDropDown, setOpenDropDown] = useState(false);

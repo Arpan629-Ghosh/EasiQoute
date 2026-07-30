@@ -24,9 +24,19 @@ export const createStyles = (theme: Theme) =>
     footerContainer: {
       paddingVertical: 12,
       marginHorizontal: 16,
-      },
-    
-      content: {
-        flex: 1
-    }
+    },
+
+    content: {
+      flex: 1,
+      paddingHorizontal: 12,
+      marginTop: 16,
+    },
+    flat: {
+      paddingBottom: 120,
+    },
+    loaderContainer: {
+      paddingVertical: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   });

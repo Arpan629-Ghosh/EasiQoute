@@ -12,6 +12,7 @@ import {
 } from '@/redux/apis/quotes/quotesThunk';
 
 import { AppDispatch, RootState } from '@/redux/store';
+import { UpdateInvoiceStatus } from '@/types/apis/invoice.types';
 import {
   CreateQuote,
   QuoteSection,
@@ -75,7 +76,7 @@ export const useQuotes = () => {
   );
 
   const updateStatus = useCallback(
-    (payload: UpdateStatus) => {
+    (payload: UpdateStatus | UpdateInvoiceStatus) => {
       return dispatch(updateStatusThunk(payload)).unwrap();
     },
     [dispatch],

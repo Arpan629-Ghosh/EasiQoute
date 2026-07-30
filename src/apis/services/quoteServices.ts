@@ -2,6 +2,7 @@ import { apiClient } from "@/config/apis/client"
 import { ApiResponse } from "@/types/apis/common.types"
 import { CreateQuote, CreateQuotePayload, GetSections, QuoteSection, QuoteSectionData, QuoteSectionPayload, QuotesPayload, Sections, SectionsPayload, UpdateQuote, UpdateStatus } from "@/types/apis/quote.types"
 import { ENDPOINTS } from "../endPoints"
+import { UpdateInvoiceStatus } from "@/types/apis/invoice.types"
 
 
 export const quoteServices = {
@@ -90,7 +91,7 @@ export const quoteServices = {
         return response.data;
     },
 
-    updateStatus: async (payload: UpdateStatus) => {
+    updateStatus: async (payload: UpdateStatus | UpdateInvoiceStatus) => {
         const response = await apiClient.patch<ApiResponse<null>>(
           ENDPOINTS.UPDATESTATUS,
           payload,

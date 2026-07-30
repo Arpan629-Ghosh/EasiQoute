@@ -5,8 +5,10 @@ import {
   StatusBar,
   Image,
   TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
 } from 'react-native';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -16,6 +18,12 @@ import Input from '@/components/inputComponent/Input';
 import { icons } from '@/config/icons';
 import FilterAndSorting from '@/components/filterAndSorting/FilterAndSorting';
 import { InvoiceStackProps } from '@/types/navigation.types';
+import RenderInvoices from '@/components/renderInvoices/RenderInvoices';
+import { InvoiceListItem } from '@/types/apis/invoice.types';
+import { useInvoice } from '@/hooks/apis/useInvoice';
+import { useFocusEffect } from '@react-navigation/native';
+import { useDebounce } from '@/hooks/useDebounce';
+import Loader from '@/components/loader/Loader';
 
 interface FilterAndSortingType {
   startDate: string;
@@ -24,7 +32,7 @@ interface FilterAndSortingType {
   amount: string;
 }
 
-const InvoiceScreen = ({navigation} : InvoiceStackProps<'InvoiceScreen'>) => {
+const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
   const [search, setSearch] = useState<string>('');
   const [openFilterModal, setOpenFilterModal] = useState(false);
   const [filterData, setFliterData] = useState<FilterAndSortingType>({
@@ -36,14 +44,33 @@ const InvoiceScreen = ({navigation} : InvoiceStackProps<'InvoiceScreen'>) => {
   const [appliedData, setAppliedData] = useState<FilterAndSortingType | null>(
     null,
   );
+  const [paginationLoading, setPaginationLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const page = useRef(1);
+  const onEndReachedCalledDuringMomentum = useRef(false);
 
   const { theme, isDark } = useAppTheme();
+  const {
+    getInvoices,
+    invoiceList,
+    loadingGetInvoice,
+    current_page,
+    last_page,
+  } = useInvoice();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
+  const debouncedSearch = useDebounce(search);
+
+  useFocusEffect(
+    useCallback(() => {
+      page.current = 1;
+      getInvoices(1);
+    }, [getInvoices]),
+  );
 
   const navigateToSelectQuoteScreen = () => {
-    navigation.navigate('SelectQuoteScreen')
-  }
+    navigation.navigate('SelectQuoteScreen');
+  };
 
   const handleSearchInput = useCallback((txt: string) => {
     setSearch(txt);
@@ -98,6 +125,123 @@ const InvoiceScreen = ({navigation} : InvoiceStackProps<'InvoiceScreen'>) => {
     setAppliedData(null);
     setOpenFilterModal(false);
   }, []);
+
+  const hasMore = useMemo(() => {
+    return current_page < last_page;
+  }, [current_page, last_page]);
+
+  const handleRefresh = useCallback(async () => {
+    if (refreshing) {
+      return;
+    }
+    try {
+      setRefreshing(true);
+      page.current = 1;
+      await getInvoices(1);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [refreshing, getInvoices]);
+
+  const handleLoadMore = useCallback(async () => {
+    if (paginationLoading || refreshing || !hasMore) {
+      return;
+    }
+    try {
+      setPaginationLoading(true);
+      const nextPage = page.current + 1;
+      page.current = nextPage;
+      await getInvoices(nextPage);
+    } finally {
+      setPaginationLoading(false);
+    }
+  }, [paginationLoading, refreshing, hasMore, getInvoices]);
+
+  const renderFooter = useCallback(() => {
+    if (!paginationLoading) {
+      return null;
+    }
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="small" />
+      </View>
+    );
+  }, [paginationLoading, styles.loaderContainer]);
+
+  const keyExtractor = useCallback(
+    (item: InvoiceListItem) => item.id.toString(),
+    [],
+  );
+
+  const renderItem = useCallback(({ item }: { item: InvoiceListItem }) => {
+    return <RenderInvoices item={item} />;
+  }, []);
+
+  const processedData = useMemo(() => {
+    let result = invoiceList;
+    if (!appliedData && !debouncedSearch.trim()) {
+      return result;
+    }
+    const { statuses, amount, startDate, endDate } = appliedData || {};
+    if (debouncedSearch.trim()) {
+      const lower = debouncedSearch.toLowerCase();
+      result = result.filter(item => {
+        const title = (item?.title || '').toLowerCase();
+        const name = (item?.name || '').toLowerCase();
+        const reference = (item?.reference_number || '').toLowerCase();
+        const status = (item?.status || '').toLowerCase();
+
+        return (
+          title.includes(lower) ||
+          name.includes(lower) ||
+          reference.includes(lower) ||
+          status.includes(lower)
+        );
+      });
+    }
+    if (statuses && statuses.length > 0) {
+      const normalizedStatuses = statuses.map(status =>
+        status.trim().toLowerCase(),
+      );
+      result = result.filter(item => {
+        const itemStatus = (item?.status || '').trim().toLowerCase();
+        return normalizedStatuses.includes(itemStatus);
+      });
+    }
+    if (startDate || endDate) {
+      const parseFilterDate = (date: string) => {
+        const [day, month, year] = date.split('-');
+        return new Date(`${year}-${month}-${day}`);
+      };
+      const start = startDate ? parseFilterDate(startDate) : null;
+      const end = endDate ? parseFilterDate(endDate) : null;
+      result = result.filter(item => {
+        if (!item?.expiry_date) {
+          return true;
+        }
+        const itemDate = new Date(item.expiry_date);
+        if (start && itemDate < start) {
+          return false;
+        }
+        if (end && itemDate > end) {
+          return false;
+        }
+        return true;
+      });
+    }
+    if (amount) {
+      result = [...result].sort((a, b) => {
+        const priceA = Number(a?.price || 0);
+        const priceB = Number(b?.price || 0);
+
+        return amount === 'Low to High' ? priceA - priceB : priceB - priceA;
+      });
+    }
+    return result;
+  }, [appliedData, debouncedSearch, invoiceList]);
+
+  console.log(invoiceList);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -150,8 +294,38 @@ const InvoiceScreen = ({navigation} : InvoiceStackProps<'InvoiceScreen'>) => {
               </View>
             </View>
           </View>
+
+          <FlatList
+            data={processedData}
+            renderItem={renderItem}
+            keyExtractor={keyExtractor}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.flat}
+            style={styles.flatlist}
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            removeClippedSubviews
+            initialNumToRender={10}
+            maxToRenderPerBatch={10}
+            windowSize={5}
+            onEndReachedThreshold={0.2}
+            ListFooterComponent={renderFooter}
+            // ListEmptyComponent={renderEmpty}
+            onMomentumScrollBegin={() => {
+              onEndReachedCalledDuringMomentum.current = false;
+            }}
+            onEndReached={() => {
+              if (!onEndReachedCalledDuringMomentum.current) {
+                handleLoadMore();
+                onEndReachedCalledDuringMomentum.current = true;
+              }
+            }}
+          />
           <View style={styles.add}>
-            <TouchableOpacity activeOpacity={0.8} onPress={navigateToSelectQuoteScreen}>
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={navigateToSelectQuoteScreen}
+            >
               <Image source={icons.ic_add} style={styles.ic} />
             </TouchableOpacity>
           </View>
@@ -169,6 +343,7 @@ const InvoiceScreen = ({navigation} : InvoiceStackProps<'InvoiceScreen'>) => {
           onToggleStatus={togglestatuse}
           onToggleAmount={toggleAmount}
         />
+        <Loader visible={loadingGetInvoice} />
       </LinearGradient>
     </KeyboardAvoidingView>
   );

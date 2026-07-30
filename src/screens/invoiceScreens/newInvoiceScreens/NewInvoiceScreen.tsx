@@ -9,12 +9,12 @@ import PreviewScreen from '../tabs/previewScreen/PreviewScreen';
 
 const Tab = createMaterialTopTabNavigator<NewInvoiceTopTabParamList>();
 const NewInvoiceScreen = ({ route }: RootScreenProps<'NewInvoiceScreens'>) => {
-    
+    const quoteId = route.params?.quoteId
    
     return (
      
         <Tab.Navigator tabBar={props => <CustomTabBars {...props} headerText="New Invoice"/>}>
-          <Tab.Screen name="Summury" component={SummuryScreen} />
+          <Tab.Screen name="Summury" component={SummuryScreen} initialParams={{quoteId}}/>
           <Tab.Screen name="Items" component={ItemsScreen} />
           <Tab.Screen name="Preview" component={PreviewScreen} />
         </Tab.Navigator>

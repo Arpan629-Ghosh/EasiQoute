@@ -6,6 +6,7 @@ import homeReducer from './apis/home/homeSlice'
 import quotesReducer from './apis/quotes/quotesSlice'
 import settingsReducer from './apis/settings/settingsSlice'
 import clientsReducer from './apis/client/clientSlice'
+import invoiceReducer from './apis/invoice/invoiceSlice'
 
 const rootReducer = combineReducers({
   theme: themeReducer,
@@ -15,6 +16,7 @@ const rootReducer = combineReducers({
   quotes: quotesReducer,
   settings: settingsReducer,
   clients: clientsReducer,
+  invoice: invoiceReducer
 });
 
 export default rootReducer;

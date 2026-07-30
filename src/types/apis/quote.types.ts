@@ -31,7 +31,8 @@ export interface QuoteItem {
     | 'approved'
     | 'expired'
     | 'pending'
-    | string;
+  | string;
+  discount: number | null
   categorised: string;
   template: string;
   price: number;

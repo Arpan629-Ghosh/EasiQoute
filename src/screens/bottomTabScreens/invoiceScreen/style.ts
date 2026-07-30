@@ -74,4 +74,16 @@ export const createStyles = (theme: Theme) =>
       width: '100%',
       resizeMode: 'cover',
     },
+    flatlist: {
+      flex: 1,
+      paddingHorizontal: 12,
+    },
+    flat: {
+      paddingBottom: 120,
+    },
+    loaderContainer: {
+      paddingVertical: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   });

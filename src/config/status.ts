@@ -38,5 +38,9 @@ export const StatusData = (): Status[] => {
       type: 'Cancelled',
       icon: isDark ? icons.ic_darkl4 : icons.ic_cancelled,
     },
+    {
+      type: 'Overdue',
+      icon: isDark ? icons.ic_darkl5 : icons.ic_overdue
+    }
   ];
 };

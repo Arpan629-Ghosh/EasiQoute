@@ -31,6 +31,7 @@ import AddClientScreen from '@/screens/clientScreens/addClientScreen/AddClientSc
 import ClientDetailScreen from '@/screens/clientScreens/clientDetailScreen/ClientDetailScreen';
 import SelectQuoteScreen from '@/screens/invoiceScreens/selectQuoteScreen/SelectQuoteScreen';
 import NewInvoiceScreen from '@/screens/invoiceScreens/newInvoiceScreens/NewInvoiceScreen';
+import InvoiceDetailsScreens from '@/screens/invoiceScreens/invoiceDetailsScreen/InvoiceDetailsScreens';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStack = () => {
@@ -116,6 +117,7 @@ const RootStack = () => {
       <Stack.Screen name="ClientDetailScreen" component={ClientDetailScreen} />
       <Stack.Screen name='SelectQuoteScreen' component={SelectQuoteScreen} />
       <Stack.Screen name='NewInvoiceScreens' component={NewInvoiceScreen} />
+      <Stack.Screen name='InvoiceDetailsScreens' component={InvoiceDetailsScreens} />
     </Stack.Navigator>
   );
 };

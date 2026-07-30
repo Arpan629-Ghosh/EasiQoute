@@ -17,4 +17,5 @@ export const ENDPOINTS = {
   UPDATESTATUS: '/api/update-status',
   GETSECTIONS: '/api/proposal-document/sections',
   CRREATECLIENT: '/api/clients',
+  CREATEINVOICE: '/api/invoices',
 };

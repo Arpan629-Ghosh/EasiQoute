@@ -118,7 +118,11 @@ export type RootStackParamList = {
 
   SelectQuoteScreen: undefined;
 
-  NewInvoiceScreens: undefined;
+  NewInvoiceScreens: { quoteId?: number } | undefined;
+
+  InvoiceDetailsScreens: {
+    invoiceId: number;
+  };
 };
 
 export type MainTabParamList = {
@@ -157,10 +161,16 @@ export type NewQuoteTopTabParamList = {
 };
 
 export type NewInvoiceTopTabParamList = {
-  Summury: undefined;
+  Summury: {quoteId: number};
   Items: undefined;
   Preview: undefined;
 };
+
+export type InvoiceDetailsTopTabParamList = {
+  Summury: {invoiceId: number};
+  Description: undefined;
+  Payments: undefined
+}
 
 /* -------------------------------------------------------------------------- */
 /*                              GENERIC TYPES                                 */
@@ -177,6 +187,9 @@ export type QuoteTabScreenProps<T extends keyof NewQuoteTopTabParamList> =
 
 export type InvoiceTabScreenProps<T extends keyof NewInvoiceTopTabParamList> =
   MaterialTopTabScreenProps<NewInvoiceTopTabParamList, T>;
+
+export type InvoiceDetailsScreenProps<T extends keyof InvoiceDetailsTopTabParamList> =
+  MaterialTopTabScreenProps<InvoiceDetailsTopTabParamList, T>;
 
 export type HomeStackScreenProps<T extends keyof HomeStackParamList> =
   NativeStackScreenProps<HomeStackParamList, T>;

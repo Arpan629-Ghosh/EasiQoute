@@ -65,7 +65,6 @@ const SummuryScreen = ({ navigation }: QuoteTopTabWithRootProps<'Summury'>) => {
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const navigateToAddClientScreen = () => {
-    console.log('Pressed');
     navigation.navigate('AddClientScreen');
   };
   const updateField = useCallback((key: keyof NewQuoteForm, value: string) => {
