@@ -66,5 +66,28 @@ export const createStyles =(theme: Theme) => StyleSheet.create({
     scrollView: {
         flexGrow: 1,
       paddingBottom: 16
-  }
+  },
+  webViewContainer: {
+    flex: 1,
+    marginHorizontal: 12,
+    marginTop: 12,
+    overflow: 'hidden',
+    backgroundColor: theme.background
+  },
+  
+  webView: {
+    flex: 1,
+    backgroundColor: theme.background,
+  },
+  
+  loader: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
+  },
 });

@@ -50,18 +50,13 @@ const invoiceSlice = createSlice({
           .addCase(getInvoicesThunk.pending, state => {
             state.loadingGetInvoice = true;
             state.error = null;
-            console.log("pending")
           })
           .addCase(getInvoicesThunk.fulfilled, (state, action) => {
             
             state.loadingGetInvoice = false;
-            console.log('fulfilled');
             state.error = null;
 
-            console.log("data: ", action.payload)
-
             const incomingData = action.payload.payload.data;
-            console.log("incomingData: ", incomingData)
             const current_page = action.payload.payload.meta.last_page;
 
             if (current_page === 1) {

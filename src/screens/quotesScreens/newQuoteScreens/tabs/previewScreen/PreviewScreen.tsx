@@ -1,21 +1,24 @@
-import { Image, ScrollView, TouchableOpacity, View } from 'react-native'
-import React, { useMemo } from 'react'
+import { ActivityIndicator, Image, TouchableOpacity, View } from 'react-native'
+import React, { useMemo, useState } from 'react'
 import { createStyles } from './style'
 import Input from '@/components/inputComponent/Input'
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent'
 import { icons } from '@/config/icons'
-import { images } from '@/config/images'
 import { useAppTheme } from '@/hooks/useAppTheme'
 import {  useSafeAreaInsets } from 'react-native-safe-area-context'
 import { QuoteTopTabWithRootProps } from '@/types/navigation.types'
+import WebView from 'react-native-webview'
 
-const PreviewScreen = ({ navigation }: QuoteTopTabWithRootProps<'Preview'>) => {
+const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'>) => {
+  const [loading, setLoading] = useState(true);
   const { theme } = useAppTheme();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const navigateToTemplatesScreen = () => {
     navigation.navigate('TemplatesScreen');
   };
+
+  console.log("preview", route.params?.previewUrl)
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -29,15 +32,31 @@ const PreviewScreen = ({ navigation }: QuoteTopTabWithRootProps<'Preview'>) => {
           </TouchableOpacity>
         </View>
       </View>
-      <ScrollView
-        style={styles.scrollView}
-        contentContainerStyle={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.quote}>
-          <Image source={images.img_quote} style={styles.quoteimg} />
-        </View>
-      </ScrollView>
+      <View style={styles.webViewContainer}>
+        {loading && (
+          <View style={styles.loader}>
+            <ActivityIndicator size="large" color={theme.primary} />
+          </View>
+        )}
+
+        <WebView
+          source={{ uri: route.params?.previewUrl }}
+          style={styles.webView}
+          startInLoadingState
+          javaScriptEnabled
+          domStorageEnabled
+          originWhitelist={['*']}
+          scalesPageToFit
+          mixedContentMode="always"
+          showsVerticalScrollIndicator={false}
+          onLoadStart={() => setLoading(true)}
+          onLoadEnd={() => setLoading(false)}
+          onError={event => {
+            console.log('WebView Error', event.nativeEvent);
+            setLoading(false);
+          }}
+        />
+      </View>
 
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.firstBttnContainer}>

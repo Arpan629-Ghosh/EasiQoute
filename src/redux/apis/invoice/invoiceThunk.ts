@@ -25,7 +25,6 @@ export const getInvoicesThunk = createAsyncThunk(
       if (!response.result) {
         return thunkAPI.rejectWithValue(response.message);
       }
-      console.log("invoiceThunk: ",response.payload)
       return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error);

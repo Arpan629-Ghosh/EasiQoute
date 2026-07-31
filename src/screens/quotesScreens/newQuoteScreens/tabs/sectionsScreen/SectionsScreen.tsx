@@ -76,6 +76,7 @@ const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Section
           />
         )}
         keyExtractor={item => item.id.toString()}
+        contentContainerStyle={styles.flatlist}
       />
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footeritem}>

@@ -30,7 +30,7 @@ const ModalComponent = ({ visible, mheight, mpadding, onClose, children }: Props
       </TouchableWithoutFeedback>
 
      
-      <View style={[styles.sheet, {height: mheight, padding: mpadding}]}>
+      <View style={[styles.sheet, {height: mheight, paddingBottom: mpadding}]}>
         {children}
       </View>
     </Modal>

@@ -1,5 +1,5 @@
 import { View, ScrollView, TouchableOpacity, Image } from 'react-native';
-import React, {  useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
@@ -22,9 +22,9 @@ import { InvoiceDetailsScreenProps } from '@/types/navigation.types';
 import { useToast } from '@/hooks/useToast';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 
-const SummuryScreen = ({route}: InvoiceDetailsScreenProps<'Summury'>) => {
+const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
   const [open, setOpen] = useState(false);
-   const [selectedStatus, setSelectedStatus] = useState<string>("")
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
   const { showToast } = useToast();
   const { invoiceDetails, loadingInvoiceDetails, getInvoiceDetails } =
     useInvoice();
@@ -35,7 +35,7 @@ const SummuryScreen = ({route}: InvoiceDetailsScreenProps<'Summury'>) => {
 
   console.log('invoiceDetails: ', invoiceDetails);
 
-  const formatDate = (dateString: string): string => {
+  const formatDate = (dateString?: string): string => {
     if (!dateString) return '';
 
     const date = new Date(dateString);
@@ -49,26 +49,26 @@ const SummuryScreen = ({route}: InvoiceDetailsScreenProps<'Summury'>) => {
   };
 
   const handleClose = useCallback(() => {
-      setOpen(false)
-    },[])
-  
-    const toggleStatus = useCallback(async (type: string) => {
-      try {
-        await updateStatus({
-          invoice_id: route.params.invoiceId,
-          status: type.toLowerCase(),
-        });
-        getInvoiceDetails(route.params.invoiceId);
-        setSelectedStatus(prev => {
-          const isSelected = prev.includes(type);
-          const updatedStatus = isSelected ? '' : type;
-          return updatedStatus;
-        });
-      } catch (error) {
-        showToast(String(error), 'error');
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    setOpen(false);
+  }, []);
+
+  const toggleStatus = useCallback(async (type: string) => {
+    try {
+      await updateStatus({
+        invoice_id: route.params.invoiceId,
+        status: type.toLowerCase(),
+      });
+      getInvoiceDetails(route.params.invoiceId);
+      setSelectedStatus(prev => {
+        const isSelected = prev.includes(type);
+        const updatedStatus = isSelected ? '' : type;
+        return updatedStatus;
+      });
+    } catch (error) {
+      showToast(String(error), 'error');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.content}>
       <ScrollView
@@ -210,15 +210,9 @@ const SummuryScreen = ({route}: InvoiceDetailsScreenProps<'Summury'>) => {
                 value={`£${invoiceDetails?.financial_summary.sub_total}`}
               />
 
-              <InfoRow
-                label="Credit Applied"
-               
-              />
+              <InfoRow label="Credit Applied" />
               <View style={styles.margin}>
-                <InfoRow
-                  label="Margin (50%)"
-                                 
-                />
+                <InfoRow label="Margin (50%)" />
                 <InterTightRegular
                   fsize={14}
                   fcolor={theme.primary}
@@ -300,13 +294,13 @@ const SummuryScreen = ({route}: InvoiceDetailsScreenProps<'Summury'>) => {
         </View>
       </View>
       <StatusChanger
-              visible={open}
-              onClose={handleClose}
-              onToggleStatus={toggleStatus}
-              selectedStatus={selectedStatus}
-            />
-      <Loader visible={loadingInvoiceDetails} />
-
+        visible={open}
+        onClose={handleClose}
+        onToggleStatus={toggleStatus}
+        selectedStatus={selectedStatus}
+        screen="Invoice"
+      />
+      <Loader visible={loadingInvoiceDetails } />
     </LinearGradient>
   );
 };

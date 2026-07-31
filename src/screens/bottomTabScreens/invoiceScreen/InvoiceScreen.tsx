@@ -240,8 +240,6 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
     return result;
   }, [appliedData, debouncedSearch, invoiceList]);
 
-  console.log(invoiceList);
-
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}

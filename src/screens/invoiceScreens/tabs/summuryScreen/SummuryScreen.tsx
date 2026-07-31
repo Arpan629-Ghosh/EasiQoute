@@ -38,7 +38,7 @@ const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
   const [activeField, setActiveField] = useState<'start' | 'end' | null>(null);
   const [enabled, setEnabled] = useState(false);
   const [newInvoiceFormData, setNewInvoiceFormData] = useState<NewInvoiceProp>({
-    quoteId: route.params.quoteId,
+    quoteId: route.params?.quoteId,
     issueDate: '',
     expiryDate: '',
     serviceNotes: '',
@@ -55,12 +55,13 @@ const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
   const MAX_FILES = 10;
 
-  console.log(route.params.quoteId)
+  console.log("quoteId: ", route.params?.quoteId)
+  console.log("invoiceId: ", route.params?.invoiceId)
 
   const extractQuote = useMemo(() => {
-    const extractedQuote = quoteList.filter((quote) => quote.id === route.params.quoteId)
+    const extractedQuote = quoteList.filter((quote) => quote.id === route.params?.quoteId)
     return extractedQuote;
-  }, [quoteList, route.params.quoteId])
+  }, [quoteList, route.params?.quoteId])
 
   const updateField = useCallback(
     (key: keyof NewInvoiceProp, value: string) => {
@@ -185,14 +186,14 @@ const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
     // console.log(newQuoteFormData);
     try {
       await createInvoice({
-        quote_id: route.params.quoteId,
+        quote_id: route.params?.quoteId,
         invoice_date: newInvoiceFormData.issueDate,
         due_date: newInvoiceFormData.expiryDate,
         message: newInvoiceFormData.serviceNotes
       });
       showToast('Invoice created successfully.');
       setNewInvoiceFormData({
-        quoteId: route.params.quoteId,
+        quoteId: route.params?.quoteId,
         issueDate: '',
         expiryDate: '',
         serviceNotes: '',

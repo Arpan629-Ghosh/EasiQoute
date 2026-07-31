@@ -99,4 +99,27 @@ export const createStyles = (theme: Theme) =>
       paddingTop: 16,
       paddingHorizontal: 12,
     },
+    dropdown: {
+      flex: 1,
+      position: 'absolute',
+      top: 125,
+      left: 12,
+      right: 12,
+      maxHeight: 240,
+      backgroundColor: theme.background,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: theme.border,
+      zIndex: 999,
+      elevation: 8,
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 4,
+      },
+    },
+    ddcontainer: {
+      flexGrow: 1,
+      paddingVertical: 6,
+    },
   });

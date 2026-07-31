@@ -44,3 +44,26 @@ export const StatusData = (): Status[] => {
     }
   ];
 };
+
+export const InvoiceStatus = (): Status[] => {
+  const { isDark } = useAppTheme();
+
+  return [
+    {
+      type: 'Draft',
+      icon: isDark ? icons.ic_darkl1 : icons.ic_draft,
+    },
+    {
+      type: 'Sent',
+      icon: isDark ? icons.ic_darkl2 : icons.ic_sent,
+    },
+    {
+      type: 'Paid',
+      icon: isDark ? icons.ic_darkl3 : icons.ic_paid,
+    },
+    {
+      type: 'Overdue',
+      icon: isDark ? icons.ic_darkl5 : icons.ic_overdue,
+    },
+  ];
+}

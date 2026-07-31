@@ -47,18 +47,20 @@ const Signature = ({
           <Image source={icons.ic_crossicn} style={styles.cross} />
         </TouchableOpacity>
       </View>
-      <View style={styles.signature}>
-        <SignatureView
-          ref={ref}
-          onOK={handleSignature}
-          autoClear={false}
-       
-          webviewProps={{
-            cacheEnabled: true,
-            androidLayerType: 'hardware',
-          }}
-        />
+      <View style = {styles.signContainer}>
+        <View style={styles.signature}>
+          <SignatureView
+            ref={ref}
+            onOK={handleSignature}
+            autoClear={false}
+            webviewProps={{
+              cacheEnabled: true,
+              androidLayerType: 'hardware',
+            }}
+          />
+        </View>
       </View>
+
       <View style={styles.bttnContainer}>
         <ButtonComponent
           buttonWidth={165.5}
@@ -68,7 +70,7 @@ const Signature = ({
         />
         <ButtonComponent
           bg={theme.primary}
-          bttnTxt={isLoading ? "Saving..." : "Save"}
+          bttnTxt={isLoading ? 'Saving...' : 'Save'}
           buttonWidth={165.5}
           txtColor={theme.primaryText}
           onPress={handleEnd}
@@ -87,6 +89,8 @@ const createStyles = (theme: Theme) =>
       width: '100%',
       justifyContent: 'space-between',
       alignItems: 'center',
+      paddingVertical: 16,
+      paddingHorizontal: 12
     },
     cross: {
       height: 16,
@@ -99,18 +103,15 @@ const createStyles = (theme: Theme) =>
       borderWidth: 1,
       borderColor: theme.border,
       height: 200,
-      width: 303,
+      width: "100%",
     },
     bttnContainer: {
       flexDirection: 'row',
+      padding: 12
     },
-    signaturecomponet: {
-      height: 200,
-      width: 303,
-      borderRadius: 12,
-      borderWidth: 1,
-      gap: 12,
-      borderColor: theme.border,
-      bottom: 0,
-    },
+   
+    signContainer: {
+      padding: 12,
+      gap: 16
+    }
   });

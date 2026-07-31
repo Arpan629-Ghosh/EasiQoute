@@ -82,8 +82,11 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
   };
 
   const navigateToEdit = () => {
+    console.log('previewUrl: ', quoteDetails?.url);
+
     navigation.navigate("NewQuoteScreens", {
-      quoteId: quoteId
+      quoteId: quoteId,
+      previewUrl: quoteDetails?.url
     })
   }
 
@@ -134,7 +137,6 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
   //   }, [quoteId, fetchQuoteDetails])
   // )
 
-  
   
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>

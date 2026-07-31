@@ -55,7 +55,8 @@ export type RootStackParamList = {
 
   NewQuoteScreens:
     | {
-        quoteId?: number;
+    quoteId?: number;
+    previewUrl?: string;
       }
     | undefined;
 
@@ -118,7 +119,11 @@ export type RootStackParamList = {
 
   SelectQuoteScreen: undefined;
 
-  NewInvoiceScreens: { quoteId?: number } | undefined;
+  NewInvoiceScreens: {
+    quoteId?: number;
+    invoiceId?: number;
+    preveiwUrl?: string;
+  } | undefined;
 
   InvoiceDetailsScreens: {
     invoiceId: number;
@@ -157,13 +162,13 @@ export type NewQuoteTopTabParamList = {
   Summury: { quoteId?: number };
   Items: { quoteId?: number };
   Sections: { quoteId?: number };
-  Preview: { quoteId?: number };
+  Preview: { quoteId?: number; previewUrl: string };
 };
 
 export type NewInvoiceTopTabParamList = {
-  Summury: {quoteId: number};
-  Items: undefined;
-  Preview: undefined;
+  Summury: { quoteId?: number; invoiceId?: number } | undefined;
+  Items: { invoiceId?: number } | undefined;
+  Preview: {previewUrl: string};
 };
 
 export type InvoiceDetailsTopTabParamList = {

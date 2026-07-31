@@ -15,6 +15,8 @@ const InvoiceDetailsScreens = ({ route }: RootScreenProps<'InvoiceDetailsScreens
   const invoiceId = route.params?.invoiceId;
   const { getInvoiceDetails, invoiceDetails } = useInvoice();
 
+  console.log("invoiceId: ", invoiceId)
+
   useEffect(() => {
     getInvoiceDetails(invoiceId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -22,14 +24,14 @@ const InvoiceDetailsScreens = ({ route }: RootScreenProps<'InvoiceDetailsScreens
 
   return (
     <Tab.Navigator
-      tabBar={props => <InvoiceTopTabBars {...props} invoiceTitle={invoiceDetails?.title} clientName={invoiceDetails?.client.name} />}
+      tabBar={props => <InvoiceTopTabBars {...props} invoiceId={invoiceId} invoiceTitle={invoiceDetails?.title} clientName={invoiceDetails?.client.name} />}
     >
       <Tab.Screen
         name="Summury"
         component={SummuryScreen}
         initialParams={{ invoiceId }}
       />
-      <Tab.Screen name="Description" component={DescriptionsScreen} />
+      <Tab.Screen name="Description" component={DescriptionsScreen}/>
       <Tab.Screen name="Payments" component={PaymentScreen} />
     </Tab.Navigator>
   );

@@ -115,7 +115,7 @@ export interface RecentActivity {
 
 
 export interface InvoiceCreate {
-  quote_id: number;
+  quote_id: number | undefined;
   invoice_date: string;
   due_date: string;
     message: string;
@@ -216,3 +216,4 @@ export interface UpdateInvoiceStatus {
   status: string;
   invoice_id: number;
 }
+

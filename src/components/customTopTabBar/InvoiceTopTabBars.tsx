@@ -1,19 +1,32 @@
 import { Animated, Image, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import { icons } from '@/config/icons';
 import InterTightRegular from '../fontComponents/InterTightRegular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useInvoice } from '@/hooks/apis/useInvoice';
 
-const InvoiceTopTabBars = ({ state, navigation, invoiceTitle, clientName }: any) => {
+const InvoiceTopTabBars = ({ state, navigation, invoiceId,  invoiceTitle, clientName }: any) => {
 
     const [openEdit, setOpenEdit] = useState(false)
     const { theme, isDark } = useAppTheme();
-    const insets = useSafeAreaInsets();
+  const insets = useSafeAreaInsets();
+  const { invoiceDetails } = useInvoice();
     const animation = useRef(new Animated.Value(0)).current;
-    const styles = useMemo(() => createStyles(theme), [theme]);
+  const styles = useMemo(() => createStyles(theme), [theme]);
+
+  console.log("invoiceId: ", invoiceId)
+  
+  useEffect(() => {
+      Animated.timing(animation, {
+        toValue: openEdit ? 1 : 0,
+        duration: 220,
+        useNativeDriver: true,
+      }).start();
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [openEdit]);
     
     const translateY = animation.interpolate({
       inputRange: [0, 1],
@@ -28,6 +41,16 @@ const InvoiceTopTabBars = ({ state, navigation, invoiceTitle, clientName }: any)
     const navigateToBack = () => {
         navigation.goBack();
     }
+    
+  const navigateToUpdate = () => {
+    navigation.navigate("NewInvoiceScreens", {
+      invoiceId: invoiceId,
+      previewUrl: invoiceDetails?.url
+    })
+  }
+
+  console.log(invoiceDetails?.url)
+  
     
   return (
     <View style={styles.content}>
@@ -61,7 +84,7 @@ const InvoiceTopTabBars = ({ state, navigation, invoiceTitle, clientName }: any)
             </TouchableOpacity>
 
             <Animated.View
-              pointerEvents={openEdit ? 'auto' : 'none'}
+              
               style={[
                 styles.update,
                 {
@@ -70,9 +93,9 @@ const InvoiceTopTabBars = ({ state, navigation, invoiceTitle, clientName }: any)
                 },
               ]}
             >
-              <TouchableOpacity activeOpacity={0.8}>
+              <TouchableOpacity activeOpacity={0.8} onPress={navigateToUpdate}>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                  Update Quote
+                  Update Invoice
                 </InterTightRegular>
               </TouchableOpacity>
             </Animated.View>

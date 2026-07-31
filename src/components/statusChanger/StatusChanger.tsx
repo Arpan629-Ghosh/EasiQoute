@@ -3,67 +3,114 @@ import React, { useMemo } from 'react';
 import ModalComponent from '../modal/ModalComponent';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import InterTightRegular from '../fontComponents/InterTightRegular';
-import { StatusData } from '@/config/status';
+import { InvoiceStatus, StatusData } from '@/config/status';
 import { icons } from '@/config/icons';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useQuotes } from '@/hooks/apis/useQuotes';
+import Loader from '../loader/Loader';
 
 type Props = {
   visible: boolean;
   selectedStatus: string;
+  screen?: 'Quote' | 'Invoice';
   onClose: () => void;
   onToggleStatus: (type: string) => void;
 };
 const StatusChanger = ({
   visible,
   selectedStatus,
+  screen = "Quote",
   onClose,
   onToggleStatus,
 }: Props) => {
+
+  const { loadingUpdateQuote } = useQuotes();
+
+  const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   return (
-    <ModalComponent visible={visible} onClose={onClose} mheight={461}>
+    <ModalComponent visible={visible} onClose={onClose} mpadding={insets.bottom + 12}>
       <View style={styles.modal}>
         <View style={styles.header}>
           <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
-            Quote Status
+            {screen === 'Quote' ? "Quote Status" : "Invoice Status"}
           </InterTightMedium>
         </View>
 
         <View style={styles.status}>
-          {StatusData().map(item => {
-            const isSelected = selectedStatus.includes(item.type);
+          {screen === 'Quote'
+            ? StatusData().map(item => {
+                const isSelected = selectedStatus.includes(item.type);
 
-            return (
-              <View key={item.type} style={styles.statusView}>
-                <TouchableOpacity
-                  key={item.type}
-                  onPress={() => onToggleStatus(item.type)}
-                  activeOpacity={0.8}
-                  style={styles.statusBttn}
-                >
-                  <Image source={item.icon} style={styles.icon} />
+                return (
+                  <View key={item.type} style={styles.statusView}>
+                    <TouchableOpacity
+                      key={item.type}
+                      onPress={() => onToggleStatus(item.type)}
+                      activeOpacity={0.8}
+                      style={styles.statusBttn}
+                    >
+                      <Image source={item.icon} style={styles.icon} />
 
-                  <InterTightRegular
-                    fsize={16}
-                    fcolor={isSelected ? theme.textMuted : theme.textSecondary}
-                  >
-                    {item.type}
-                  </InterTightRegular>
+                      <InterTightRegular
+                        fsize={16}
+                        fcolor={
+                          isSelected ? theme.textMuted : theme.textSecondary
+                        }
+                      >
+                        {item.type}
+                      </InterTightRegular>
 
-                  {isSelected && (
-                    <Image
-                      source={isDark ? icons.ic_darktick : icons.ic_tick}
-                      style={styles.cross}
-                    />
-                  )}
-                </TouchableOpacity>
-                {item.type !== 'Cancelled' && <View style={styles.empty} />}
-              </View>
-            );
-          })}
+                     
+                      {isSelected && (
+                        <Image
+                          source={isDark ? icons.ic_darktick : icons.ic_tick}
+                          style={styles.cross}
+                        />
+                      )}
+                    </TouchableOpacity>
+                    {item.type !== 'Overdue' && <View style={styles.empty} />}
+                  </View>
+                );
+              })
+            : InvoiceStatus().map(item => {
+                const isSelected = selectedStatus.includes(item.type);
+
+                return (
+                  <View key={item.type} style={styles.statusView}>
+                    <TouchableOpacity
+                      key={item.type}
+                      onPress={() => onToggleStatus(item.type)}
+                      activeOpacity={0.8}
+                      style={styles.statusBttn}
+                    >
+                      <Image source={item.icon} style={styles.icon} />
+
+                      <InterTightRegular
+                        fsize={16}
+                        fcolor={
+                          isSelected ? theme.textMuted : theme.textSecondary
+                        }
+                      >
+                        {item.type}
+                      </InterTightRegular>
+
+                      {isSelected && (
+                        <Image
+                          source={isDark ? icons.ic_darktick : icons.ic_tick}
+                          style={styles.cross}
+                        />
+                      )}
+                    </TouchableOpacity>
+                    {item.type !== 'Overdue' && <View style={styles.empty} />}
+                  </View>
+                );
+              })}
         </View>
+        <Loader visible={ loadingUpdateQuote} />
       </View>
     </ModalComponent>
   );
