@@ -15,7 +15,6 @@ const PreviewScreen = ({ route }: InvoiceTopTabWithRootProps<'Preview'>) => {
   const styles = useMemo(() => createStyles(theme), [theme])
 
   
-  console.log(route.params.previewUrl)
   return (
     <View style={styles.containe}>
       <View style={styles.webViewContainer}>

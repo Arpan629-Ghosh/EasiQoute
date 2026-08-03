@@ -7,7 +7,6 @@ import { useDispatch, useSelector } from "react-redux"
 export const useHomeScreenData = () => {
     const dispatch = useDispatch<AppDispatch>();
     const home = useSelector((state: RootState) => state.home);
-    console.log(home);
     const homeScreenData = useCallback(() => {
         return dispatch(homeScreenDataThunk()).unwrap();
     }, [dispatch])

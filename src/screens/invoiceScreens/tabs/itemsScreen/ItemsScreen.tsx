@@ -35,6 +35,9 @@ import { useSettings } from '@/hooks/apis/useSettings';
 import { useDebounce } from '@/hooks/useDebounce';
 import RenderFilterData from '@/components/renderFilterData/RenderFilterData';
 import { FetchItemsData } from '@/types/apis/settings.types';
+import { useInvoice } from '@/hooks/apis/useInvoice';
+import { useToast } from '@/hooks/useToast';
+import { useInvoiceContext } from '@/hooks/useInvoiceContext';
 
 interface FinancialBreakDown {
   subtotal: string;
@@ -60,6 +63,8 @@ const ItemsScreen = ({
   const [refreshing, setRefreshing] = useState(false);
   const [paginationLoading, setPaginationLoading] = useState(false);
 
+  const { summary } = useInvoiceContext();
+
   const page = useRef(1);
   const onEndReachedCalledDuringMomentum = useRef(false);
 
@@ -74,10 +79,12 @@ const ItemsScreen = ({
     items_last_page,
     fetchItems,
   } = useSettings();
+  const { loadingInvoiceUpdate, updateInvoice } = useInvoice();
+  const { showToast } = useToast();
   const debouncedSearch = useDebounce(search);
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  console.log('invoiceId: ', route.params?.invoiceId);
+  const invoiceId = route.params?.invoiceId
 
   useEffect(() => {
     height.value = withTiming(openFinancialBreakdown ? 500 : 0, {
@@ -222,7 +229,28 @@ const ItemsScreen = ({
       result.tax = tax.toFixed(2);
       result.total = grandTotal.toFixed(2);
       return result;
-    }, [selectedItems, discountPrice]);
+  }, [selectedItems, discountPrice]);
+  
+  const handleUpdateInvoice = async () => {
+    if (typeof invoiceId !== 'number') {
+      showToast('Invalid invoice id!', 'error');
+      return;
+    }
+    try {
+      await updateInvoice({
+        invoice_id: invoiceId,
+        discount: discountPrice,
+        invoice_summury: summary,
+        invoice_items: selectedItems
+      })
+      showToast('Invoice updated successfully!')
+      navigation.jumpTo('Preview', {previewUrl: route.params?.previewUrl})
+    } catch (error) {
+      showToast(String(error), 'error')
+    }
+  }
+
+  // console.log('Summury: ', summury)
 
   return (
     <LinearGradient
@@ -387,8 +415,8 @@ const ItemsScreen = ({
               bttnTxt="Save & Preview"
               txtColor={theme.primaryText}
               buttonWidth={169.5}
-              // showLoader={loadingUpdateQuote}
-              // onPress={handleUpdateQuote}
+              showLoader={loadingInvoiceUpdate}
+              onPress={handleUpdateInvoice}
             />
           </View>
         </View>

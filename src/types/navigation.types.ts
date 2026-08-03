@@ -167,8 +167,8 @@ export type NewQuoteTopTabParamList = {
 
 export type NewInvoiceTopTabParamList = {
   Summury: { quoteId?: number; invoiceId?: number } | undefined;
-  Items: { invoiceId?: number } | undefined;
-  Preview: {previewUrl: string};
+  Items: { invoiceId?: number; previewUrl: string  } | undefined;
+  Preview: {previewUrl: string | undefined};
 };
 
 export type InvoiceDetailsTopTabParamList = {

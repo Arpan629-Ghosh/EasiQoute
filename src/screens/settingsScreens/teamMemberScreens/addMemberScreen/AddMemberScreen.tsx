@@ -14,6 +14,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
 import Input from '@/components/inputComponent/Input';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import { useSettings } from '@/hooks/apis/useSettings';
+import { useToast } from '@/hooks/useToast';
 
 interface AddMemberForm {
   name: string;
@@ -33,6 +35,8 @@ const AddMemberScreen = () => {
   const passwordRef = useRef<TextInput | null>(null);
 
   const { theme } = useAppTheme();
+  const { showToast } = useToast();
+  const {createTeamMembers, settingLoading} = useSettings()
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const handleInput = (name: string, value: string) => {
@@ -41,6 +45,20 @@ const AddMemberScreen = () => {
       [name]: value,
     }));
   };
+
+  const handleAddMember = async() => {
+    try {
+      await createTeamMembers({
+        
+        name: addMemberForm.name,
+        email: addMemberForm.email,
+        password: addMemberForm.password
+      })
+      showToast('Team member created successfully.');
+    } catch (error) {
+      showToast(String(error), 'error');
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -118,6 +136,8 @@ const AddMemberScreen = () => {
               bg={theme.primary}
               bttnTxt="Add Member"
               txtColor={theme.primaryText}
+              showLoader={settingLoading}
+              onPress={handleAddMember}
             />
           </View>
         </View>

@@ -24,7 +24,6 @@ const AppContent = () => {
   const { theme, isDark } = useAppTheme();
   const { user } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
-  // const { user } = useAuth();
   console.log(user)
   
 
@@ -43,17 +42,7 @@ const AppContent = () => {
     setupFCM();
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   const clear = async () => {
-  //     await storage.clearSession();
-
-  //     await persistor.purge();
-
-  //     console.log('SESSION CLEARED', user);
-  //   };
-
-  //   clear();
-  // }, []);
+  
 
   return (
     <View style={[styles.container, { backgroundColor: theme.background }]}>

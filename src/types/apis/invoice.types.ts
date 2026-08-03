@@ -1,6 +1,7 @@
 import { AttachmentFile } from "@/screens/invoiceScreens/tabs/summuryScreen/SummuryScreen";
 import { QuoteItem } from "./quote.types";
 import { Clients } from "./client.types";
+import { FetchItemsData } from "./settings.types";
 
 export interface InvoiceResponse {
   payload: InvoicePayload;
@@ -115,11 +116,19 @@ export interface RecentActivity {
 
 
 export interface InvoiceCreate {
-  quote_id: number | undefined;
-  invoice_date: string;
-  due_date: string;
-    message: string;
-    attachments?: AttachmentFile[] 
+  quote_id?: number | undefined;
+  invoice_date: string | undefined;
+  due_date: string | undefined;
+  message: string | undefined;
+  notes: string | undefined;
+  attachments?: AttachmentFile[] 
+}
+
+export interface UpdateInvoicePayload {
+  invoice_id: number;
+  invoice_summury?: InvoiceCreate;
+  invoice_items: FetchItemsData[];
+  discount: number;
 }
 
 

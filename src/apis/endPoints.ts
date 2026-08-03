@@ -18,4 +18,5 @@ export const ENDPOINTS = {
   GETSECTIONS: '/api/proposal-document/sections',
   CRREATECLIENT: '/api/clients',
   CREATEINVOICE: '/api/invoices',
+  TEAMMEMBER: '/api/company/users',
 };

@@ -1,3 +1,4 @@
+import { CreateTeamMemberPayload, FetchTeamMembers, FetchTeamMembersPayload } from './../../types/apis/settings.types';
 import { apiClient } from "@/config/apis/client";
 import { Company } from "@/types/apis/auth.types";
 import { ApiResponse } from "@/types/apis/common.types";
@@ -145,6 +146,33 @@ export const settingsServices = {
   deleteItem: async (payload: number) => {
     const response = await apiClient.delete<ApiResponse<null>>(
       `${ENDPOINTS.FETCHITEMS}/${payload}`,
+    )
+
+    return response.data;
+  },
+
+  createTeamMember: async (payload: CreateTeamMemberPayload) => {
+    const formData = new FormData();
+
+    formData.append("name", payload.name);
+    formData.append("email", payload.email);
+    formData.append("password", payload.password);
+
+    const response = await apiClient.post<ApiResponse<CreateTeamMemberPayload>>(
+      ENDPOINTS.TEAMMEMBER, formData
+    )
+
+    return response.data
+  },
+
+  fetchTeamMembers: async (payload: FetchTeamMembersPayload) => {
+    const response = await apiClient.get<ApiResponse<FetchTeamMembers>>(
+      ENDPOINTS.TEAMMEMBER, {
+        params: {
+          search: payload.search, 
+          page: payload.page
+        }
+      }
     )
 
     return response.data;

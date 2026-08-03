@@ -15,7 +15,6 @@ const InvoiceDetailsScreens = ({ route }: RootScreenProps<'InvoiceDetailsScreens
   const invoiceId = route.params?.invoiceId;
   const { getInvoiceDetails, invoiceDetails } = useInvoice();
 
-  console.log("invoiceId: ", invoiceId)
 
   useEffect(() => {
     getInvoiceDetails(invoiceId);

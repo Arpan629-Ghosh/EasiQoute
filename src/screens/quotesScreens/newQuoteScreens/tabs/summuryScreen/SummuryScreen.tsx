@@ -183,7 +183,7 @@ const SummuryScreen = ({ navigation }: QuoteTopTabWithRootProps<'Summury'>) => {
   };
 
   const handleCreateQuote = async () => {
-    // console.log(newQuoteFormData);
+   
     try {
       await createQuote({
         title: newQuoteFormData.quoteTitle,

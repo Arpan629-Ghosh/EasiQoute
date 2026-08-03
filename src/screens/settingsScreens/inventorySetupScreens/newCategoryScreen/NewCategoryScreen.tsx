@@ -26,7 +26,7 @@ const NewCategoryScreen = ({ navigation, route }: RootScreenProps<'NewCategorySc
   const isEdit = !!editId
   
   const styles = useMemo(() => createStyles(theme), [theme])
-  console.log(editId)
+
 
   const handleCategory = async () => {
     try {

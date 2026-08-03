@@ -40,8 +40,8 @@ const TeamMembersScreen = ({navigation} : RootScreenProps<'TeamMembersScreen'>) 
               bg={theme.primary}
               bttnTxt="Add Member"
               txtColor={theme.primaryText}
-                          gap={8}
-                          onPress={navigateToAddMember}
+              gap={8}
+              onPress={navigateToAddMember}
             >
               <Image source={icons.ic_addpeople} style={styles.icn} />
             </ButtonComponent>

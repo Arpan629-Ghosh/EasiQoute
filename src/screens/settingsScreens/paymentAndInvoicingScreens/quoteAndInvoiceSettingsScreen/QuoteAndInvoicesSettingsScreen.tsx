@@ -34,13 +34,13 @@ const QuoteAndInvoicesSettingsScreen = () => {
   const handleSignature = useCallback((sign: string) => {
 
     setSignature(sign);
-    console.log(sign)
+   
     setIsLoading(false);
     setOpen(false)
   }, []);
 
   const handleClear = useCallback(() => {
-    console.log('Signature cleared');
+    
     setSignature(null);
     setOpen(false);
   }, []);

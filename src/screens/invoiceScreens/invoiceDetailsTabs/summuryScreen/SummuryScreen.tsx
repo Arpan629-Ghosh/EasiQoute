@@ -33,7 +33,6 @@ const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  console.log('invoiceDetails: ', invoiceDetails);
 
   const formatDate = (dateString?: string): string => {
     if (!dateString) return '';

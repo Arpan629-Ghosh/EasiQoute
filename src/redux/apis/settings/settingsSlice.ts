@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import {
   ChangePasswordThunk,
   createItemsThunk,
+  createTeamMemberThunk,
   deleteCategoryThunk,
   deleteItemThunk,
   deleteSubCategoryThunk,
@@ -15,10 +16,13 @@ import {
 import {
   CreateCategoriesPayload,
   FetchItemsData,
+  FetchTeamMembers,
   SubCategoriesPayload,
 } from '@/types/apis/settings.types';
 
 export interface SettingsState {
+  teamMembers: FetchTeamMembers | null ;
+  loadingTeamMembers: boolean;
   loading: boolean;
   isStale: boolean;
   isSubCatStale: boolean;
@@ -35,6 +39,8 @@ export interface SettingsState {
 }
 
 const initialState: SettingsState = {
+  teamMembers: null,
+  loadingTeamMembers: false,
   loading: false,
   isStale: false,
   isSubCatStale: false,
@@ -258,7 +264,20 @@ const settingsSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
         state.isStale = false;
-    })
+      })
+      .addCase(createTeamMemberThunk.pending, state => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createTeamMemberThunk.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(createTeamMemberThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string
+      })
+    
   },
 });
 

@@ -82,7 +82,7 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
   };
 
   const navigateToEdit = () => {
-    console.log('previewUrl: ', quoteDetails?.url);
+  
 
     navigation.navigate("NewQuoteScreens", {
       quoteId: quoteId,

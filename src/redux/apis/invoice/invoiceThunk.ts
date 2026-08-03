@@ -1,5 +1,5 @@
 import { invoiceServices } from '@/apis/services/invoiceServices';
-import { InvoiceCreate } from '@/types/apis/invoice.types';
+import { InvoiceCreate, UpdateInvoicePayload } from '@/types/apis/invoice.types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const createInvoiceThunk = createAsyncThunk(
@@ -37,6 +37,24 @@ export const getInvoiceDetailsThunk = createAsyncThunk(
   async (payload: number, thunkAPI) => {
     try {
       const response = await invoiceServices.getInvoiceDetails(payload);
+      if (!response.result) {
+        return thunkAPI.rejectWithValue(response.message);
+      }
+      return response.payload;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  }
+)
+
+export const updateInvoiceThunk = createAsyncThunk(
+  'update/invoice',
+
+  async (payload: UpdateInvoicePayload, thunkAPI) => {
+
+    console.log('payloadUI: ', payload);
+    try {
+      const response = await invoiceServices.updateInvoice(payload);
       if (!response.result) {
         return thunkAPI.rejectWithValue(response.message);
       }

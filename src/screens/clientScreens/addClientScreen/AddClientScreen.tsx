@@ -75,7 +75,6 @@ const AddClientScreen = ({ navigation } : RootScreenProps<'AddClientScreen'>) =>
           setSearchData([]);
         }
       } catch (error) {
-        console.log('SEARCH ERROR', error);
 
         showToast(String(error), 'error');
 

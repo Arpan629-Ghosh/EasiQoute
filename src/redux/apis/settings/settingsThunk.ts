@@ -1,6 +1,6 @@
 import { settingsServices } from '@/apis/services/settingsServices';
 import { Company } from '@/types/apis/auth.types';
-import { ChangePassword, CreateCategories, CreateItems, CreateSubCategories } from '@/types/apis/settings.types';
+import { ChangePassword, CreateCategories, CreateItems, CreateSubCategories, CreateTeamMemberPayload, FetchTeamMembersPayload } from '@/types/apis/settings.types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const updateProfileThunk = createAsyncThunk(
@@ -178,5 +178,40 @@ export const deleteItemThunk = createAsyncThunk('api/items',
     }
   }
 );
+
+export const createTeamMemberThunk = createAsyncThunk('/api/company/users',
+
+  async (payload: CreateTeamMemberPayload, thunkAPI) => {
+    try {
+      const response = await settingsServices.createTeamMember(payload)
+
+      if (!response.result) {
+        thunkAPI.rejectWithValue(response.message);
+      }
+
+      return response.message
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error)
+    }
+  }
+);
+
+export const fetchTeamMembersThunk = createAsyncThunk('/api/company/users',
+
+  async (payload: FetchTeamMembersPayload, thunkAPI) => {
+    try {
+      const response = await settingsServices.fetchTeamMembers(payload)
+
+      if (!response.result) {
+        thunkAPI.rejectWithValue(response.message);
+      }
+
+      return response.payload;
+
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+)
 
 

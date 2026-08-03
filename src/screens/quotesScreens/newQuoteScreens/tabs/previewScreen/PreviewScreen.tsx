@@ -18,7 +18,6 @@ const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'
     navigation.navigate('TemplatesScreen');
   };
 
-  console.log("preview", route.params?.previewUrl)
   return (
     <View style={styles.container}>
       <View style={styles.header}>

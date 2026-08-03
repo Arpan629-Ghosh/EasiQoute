@@ -45,7 +45,6 @@ export const signupThunk = createAsyncThunk(
       const authData = response.payload;
       return authData;
     } catch (error) {
-   
       return thunkAPI.rejectWithValue(error);
     }
   },
@@ -82,6 +81,8 @@ export const profileSetupThunk = createAsyncThunk(
     }
   },
 );
+
+
 export const companyProfileSetupThunk = createAsyncThunk(
   '/api/company',
 

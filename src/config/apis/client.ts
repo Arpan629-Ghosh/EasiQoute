@@ -1,35 +1,23 @@
 import { parseApiError } from '@/utils/errorHandler';
 import { storage } from './../../storage/asyncStorage';
-import axios from "axios"
+import axios from 'axios';
 import { X_API_Key } from '@/constants/apis/xApiKey';
 
 export const apiClient = axios.create({
   baseURL: 'https://sandbox.eaziquote.com',
   timeout: 10000,
   headers: {
-      Accept: 'application/json',
+    Accept: 'application/json',
     'Content-Type': 'multipart/form-data',
-      'X-API-Key' : X_API_Key
+    'X-API-Key': X_API_Key,
   },
 });
 
 apiClient.interceptors.request.use(
   async config => {
-    const publicRoutes = [
-      '/api/auth/signup',
-      '/api/auth/login',
-      '/api/auth/forgot-password',
-    ];
+    const token = await storage.getAccessToken();
 
-    const isPublicRoute = publicRoutes.includes(config.url || '');
-
-    if (!isPublicRoute) {
-      const token = await storage.getAccessToken();
-
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
+    config.headers.Authorization = `Bearer ${token}`;
 
     return config;
   },

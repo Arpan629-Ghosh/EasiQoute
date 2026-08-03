@@ -18,6 +18,7 @@ import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { InvoiceTopTabWithRootProps } from '@/types/navigation.types';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useInvoice } from '@/hooks/apis/useInvoice';
+import { useInvoiceContext } from '@/hooks/useInvoiceContext';
 
 export interface AttachmentFile {
   uri: string;
@@ -25,26 +26,27 @@ export interface AttachmentFile {
   type: string;
   size?: number;
 }
-interface NewInvoiceProp {
+export interface NewInvoiceProp {
   quoteId: number | undefined;
-  issueDate: string;
-  expiryDate: string;
-  serviceNotes: string;
+  invoice_date: string;
+  due_date: string;
+  message: string;
   notes: string;
   file: AttachmentFile[];
 }
-const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
+const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summury'>) => {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [activeField, setActiveField] = useState<'start' | 'end' | null>(null);
   const [enabled, setEnabled] = useState(false);
   const [newInvoiceFormData, setNewInvoiceFormData] = useState<NewInvoiceProp>({
     quoteId: route.params?.quoteId,
-    issueDate: '',
-    expiryDate: '',
-    serviceNotes: '',
+    invoice_date: '',
+    due_date: '',
+    message: '',
     notes: '',
-    file: []
-  })
+    file: [],
+  });
+  const { setSummary } = useInvoiceContext();
   const { quoteList } = useQuotes();
   const { theme } = useAppTheme();
   const { showToast } = useToast();
@@ -52,16 +54,19 @@ const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
+  const invoiceId = route.params?.invoiceId;
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
   const MAX_FILES = 10;
 
-  console.log("quoteId: ", route.params?.quoteId)
-  console.log("invoiceId: ", route.params?.invoiceId)
+  // console.log("quoteId: ", route.params?.quoteId)
+  // console.log("invoiceId: ", route.params?.invoiceId)
 
   const extractQuote = useMemo(() => {
-    const extractedQuote = quoteList.filter((quote) => quote.id === route.params?.quoteId)
+    const extractedQuote = quoteList.filter(
+      quote => quote.id === route.params?.quoteId,
+    );
     return extractedQuote;
-  }, [quoteList, route.params?.quoteId])
+  }, [quoteList, route.params?.quoteId]);
 
   const updateField = useCallback(
     (key: keyof NewInvoiceProp, value: string) => {
@@ -74,11 +79,11 @@ const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
   );
 
   const removeFile = useCallback((index: number) => {
-      setNewInvoiceFormData(prev => ({
-        ...prev,
-        file: prev.file.filter((_, i) => i !== index),
-      }));
-    }, []);
+    setNewInvoiceFormData(prev => ({
+      ...prev,
+      file: prev.file.filter((_, i) => i !== index),
+    }));
+  }, []);
 
   const handleCalenderStartPicker = () => {
     setActiveField('start');
@@ -102,7 +107,7 @@ const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
     setNewInvoiceFormData(prev => {
       return {
         ...prev,
-        issueDate: stratDate,
+        invoice_date: stratDate,
       };
     });
   };
@@ -111,7 +116,7 @@ const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
     setNewInvoiceFormData(prev => {
       return {
         ...prev,
-        expiryDate: endDate,
+        due_date: endDate,
       };
     });
   };
@@ -129,80 +134,88 @@ const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
   };
 
   const openDocumentPicker = async () => {
-      try {
-        const result = await pick({
-          type: [types.pdf, types.docx, types.images],
-          allowMultiSelection: true,
-        });
-        const selectedFiles = result
-          .map(file => ({
-            uri: file.uri,
-            name: file.name ?? 'attachment',
-            type: file.type ?? 'application/octet-stream',
-            size: typeof file.size === 'number' ? file.size : undefined,
-          }))
-          .filter(file => {
-            const isValidSize = (file.size ?? 0) <= MAX_FILE_SIZE;
-            if (!isValidSize) {
-              showToast(
-                `${file.name} exceeds the maximum size of 10 MB`,
-                'error',
-              );
-            }
-            return isValidSize;
-          });
-        if (!selectedFiles.length) {
-          return;
-        }
-        setNewInvoiceFormData(prev => {
-          const merged = [...prev.file];
-          selectedFiles.forEach(newFile => {
-            const exists = merged.some(
-              file => file.name === newFile.name && file.size === newFile.size,
+    try {
+      const result = await pick({
+        type: [types.pdf, types.docx, types.images],
+        allowMultiSelection: true,
+      });
+      const selectedFiles = result
+        .map(file => ({
+          uri: file.uri,
+          name: file.name ?? 'attachment',
+          type: file.type ?? 'application/octet-stream',
+          size: typeof file.size === 'number' ? file.size : undefined,
+        }))
+        .filter(file => {
+          const isValidSize = (file.size ?? 0) <= MAX_FILE_SIZE;
+          if (!isValidSize) {
+            showToast(
+              `${file.name} exceeds the maximum size of 10 MB`,
+              'error',
             );
-  
-            if (!exists) {
-              merged.push(newFile);
-            }
-          });
-          if (merged.length > MAX_FILES) {
-            showToast(`You can upload a maximum of ${MAX_FILES} files`, 'error');
-            return prev;
           }
-          return {
-            ...prev,
-            file: merged,
-          };
+          return isValidSize;
         });
-      } catch (error: any) {
-        if (error?.code !== 'DOCUMENT_PICKER_CANCELED') {
-          console.log(error);
-          showToast('Failed to select file', 'error');
-        }
+      if (!selectedFiles.length) {
+        return;
       }
+      setNewInvoiceFormData(prev => {
+        const merged = [...prev.file];
+        selectedFiles.forEach(newFile => {
+          const exists = merged.some(
+            file => file.name === newFile.name && file.size === newFile.size,
+          );
+
+          if (!exists) {
+            merged.push(newFile);
+          }
+        });
+        if (merged.length > MAX_FILES) {
+          showToast(`You can upload a maximum of ${MAX_FILES} files`, 'error');
+          return prev;
+        }
+        return {
+          ...prev,
+          file: merged,
+        };
+      });
+    } catch (error: any) {
+      if (error?.code !== 'DOCUMENT_PICKER_CANCELED') {
+        console.log(error);
+        showToast('Failed to select file', 'error');
+      }
+    }
   };
-  
+
   const handleCreateInvoice = async () => {
     // console.log(newQuoteFormData);
     try {
       await createInvoice({
         quote_id: route.params?.quoteId,
-        invoice_date: newInvoiceFormData.issueDate,
-        due_date: newInvoiceFormData.expiryDate,
-        message: newInvoiceFormData.serviceNotes
+        invoice_date: newInvoiceFormData.invoice_date,
+        due_date: newInvoiceFormData.due_date,
+        message: newInvoiceFormData.message,
+        notes: newInvoiceFormData.notes
       });
       showToast('Invoice created successfully.');
+      setSummary(newInvoiceFormData);
       setNewInvoiceFormData({
         quoteId: route.params?.quoteId,
-        issueDate: '',
-        expiryDate: '',
-        serviceNotes: '',
+        invoice_date: '',
+        due_date: '',
+        message: '',
         notes: '',
         file: [],
       });
+      navigation.navigate('Items')
     } catch (error) {
       showToast(String(error), 'error');
     }
+  };
+
+  const updateContextForInvoiceUpdate = () => {
+    setSummary(newInvoiceFormData);
+    navigation.navigate('Items');
   };
 
   return (
@@ -269,8 +282,8 @@ const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
                     placeholder="DD-MM-YYYY"
                     style={styles.noBorderInput}
                     editable={false}
-                    value={newInvoiceFormData.issueDate}
-                    onChangeText={txt => updateField('issueDate', txt)}
+                    value={newInvoiceFormData.invoice_date}
+                    onChangeText={txt => updateField('invoice_date', txt)}
                   />
 
                   <Image source={icons.ic_cal} style={styles.searchic} />
@@ -289,8 +302,8 @@ const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
                     placeholder="DD-MM-YYYY"
                     style={styles.noBorderInput}
                     editable={false}
-                    value={newInvoiceFormData.expiryDate}
-                    onChangeText={txt => updateField('expiryDate', txt)}
+                    value={newInvoiceFormData.due_date}
+                    onChangeText={txt => updateField('due_date', txt)}
                   />
                   <Image source={icons.ic_cal} style={styles.searchic} />
                 </TouchableOpacity>
@@ -307,8 +320,8 @@ const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
                 placeholder="Explain what the invoice covers"
                 multiline={true}
                 tv="top"
-                value={newInvoiceFormData.serviceNotes}
-                onChangeText={txt => updateField('serviceNotes', txt)}
+                value={newInvoiceFormData.message}
+                onChangeText={txt => updateField('message', txt)}
               />
             </View>
             <View style={styles.note}>
@@ -360,7 +373,9 @@ const SummuryScreen = ({route} : InvoiceTopTabWithRootProps<'Summury'>) => {
             bttnTxt="Save"
             txtColor={theme.primaryText}
             showLoader={loadingCreateInvoice}
-            onPress={handleCreateInvoice}
+            onPress={
+              invoiceId ? updateContextForInvoiceUpdate : handleCreateInvoice
+            }
           />
         </View>
       </View>

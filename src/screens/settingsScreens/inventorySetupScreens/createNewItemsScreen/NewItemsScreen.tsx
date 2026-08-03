@@ -130,13 +130,13 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
   // };
 
   const handleItem = async () => {
-    console.log(itemData);
+
     try {
       const category_from_input = itemData.category.toLowerCase();
       const category_from_api = data.filter(
         item => item.name.toLowerCase() === category_from_input,
       );
-      console.log(category_from_api);
+     
       
       const category_id = category_from_api[0].id;
       const payload: CreateItems = {
@@ -155,7 +155,7 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
       showToast(isEdit ? "Item updated successfully" : 'Item created successfully');
       navigation.goBack();
     } catch (err) {
-      console.log('CREATE ITEM ERROR', err);
+     
       showToast(String(err), 'error');
     }
   };

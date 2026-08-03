@@ -17,7 +17,6 @@ const InvoiceTopTabBars = ({ state, navigation, invoiceId,  invoiceTitle, client
     const animation = useRef(new Animated.Value(0)).current;
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  console.log("invoiceId: ", invoiceId)
   
   useEffect(() => {
       Animated.timing(animation, {
@@ -49,7 +48,7 @@ const InvoiceTopTabBars = ({ state, navigation, invoiceId,  invoiceTitle, client
     })
   }
 
-  console.log(invoiceDetails?.url)
+  
   
     
   return (

@@ -1,7 +1,7 @@
-import { ChangePasswordThunk, createItemsThunk, deleteCategoryThunk, deleteItemThunk, deleteSubCategoryThunk, fetchCategoriesThunk, fetchItemsThunk, fetchSubCategoriesThunk, newCategoriesThunk, newSubCategoriesThunk, updateProfileThunk } from "@/redux/apis/settings/settingsThunk"
+import { ChangePasswordThunk, createItemsThunk, createTeamMemberThunk, deleteCategoryThunk, deleteItemThunk, deleteSubCategoryThunk, fetchCategoriesThunk, fetchItemsThunk, fetchSubCategoriesThunk, newCategoriesThunk, newSubCategoriesThunk, updateProfileThunk } from "@/redux/apis/settings/settingsThunk"
 import { AppDispatch, RootState } from "@/redux/store"
 import { Company } from "@/types/apis/auth.types"
-import { ChangePassword, CreateCategories, CreateItems, CreateSubCategories } from "@/types/apis/settings.types"
+import { ChangePassword, CreateCategories, CreateItems, CreateSubCategories, CreateTeamMemberPayload } from "@/types/apis/settings.types"
 import { useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
@@ -56,6 +56,10 @@ export const useSettings = () => {
         return dispatch(deleteItemThunk(payload)).unwrap()
     }
 
+    const createTeamMembers = useCallback((payload: CreateTeamMemberPayload) => {
+        return dispatch(createTeamMemberThunk(payload)).unwrap()
+    }, [dispatch])
+
     return {
         updateCompanyProfile,
         changePassword,
@@ -68,6 +72,7 @@ export const useSettings = () => {
         createItems,
         fetchItems,
         deleteItem,
+        createTeamMembers,
 
         settingLoading: settings.loading,
         isStale: settings.isStale,

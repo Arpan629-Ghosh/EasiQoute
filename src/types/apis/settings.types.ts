@@ -129,3 +129,42 @@ export interface FetchItemsParams {
   quote_template_id?: number;
   subcategory_ids?: number[];
 }
+
+export interface CreateTeamMember {
+  id: number;
+  name: string;
+  email: string;
+  avatar: string | null;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+} 
+
+export interface CreateTeamMemberPayload {
+  id?: number;
+  name: string;
+  email: string;
+  password: string;
+  active?: boolean
+}
+
+export interface MemberDetails {
+  id: number;
+  name: string;
+  email: string;
+  avatar: string | null;
+  active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface FetchTeamMembers {
+  data: MemberDetails[];
+  links: Links;
+  meta: Meta;
+}
+
+export interface FetchTeamMembersPayload {
+  search?: string;
+  page: number;
+}

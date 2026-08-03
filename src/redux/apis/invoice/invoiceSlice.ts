@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createInvoiceThunk, getInvoiceDetailsThunk, getInvoicesThunk } from "./invoiceThunk";
+import { createInvoiceThunk, getInvoiceDetailsThunk, getInvoicesThunk, updateInvoiceThunk } from "./invoiceThunk";
 import { InvoiceDetailsPayload, InvoiceListItem } from "@/types/apis/invoice.types";
 
 
@@ -8,6 +8,7 @@ export interface InvoiceState {
   invoiceDetails: InvoiceDetailsPayload | null;
   current_page: number;
   last_page: number;
+  loadingInvoiceUpdate: boolean;
   loadingInvoiceDetails: boolean;
   loadingGetInvoice: boolean;
   loadingCreateInvoice: boolean;
@@ -20,6 +21,7 @@ const initialState: InvoiceState = {
   invoiceDetails: null,
   current_page: 1,
   last_page: 1,
+  loadingInvoiceUpdate: false,
   loadingInvoiceDetails: false,
   loadingGetInvoice: false,
   loadingCreateInvoice: false,
@@ -89,6 +91,18 @@ const invoiceSlice = createSlice({
           .addCase(getInvoiceDetailsThunk.rejected, (state, action) => {
             state.loadingInvoiceDetails = false;
             state.error = action.payload as string;
+          })
+          .addCase(updateInvoiceThunk.pending, state => {
+            state.loadingInvoiceUpdate = true;
+            state.error = null;
+          })
+          .addCase(updateInvoiceThunk.fulfilled, state => {
+            state.loadingInvoiceUpdate = false;
+            state.error = null;
+          })
+          .addCase(updateInvoiceThunk.rejected, (state, action) => {
+            state.loadingInvoiceUpdate = false;
+            state.error = action.payload as string
       })
     }
 })
