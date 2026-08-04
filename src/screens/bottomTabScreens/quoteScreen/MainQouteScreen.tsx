@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
 import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
 import Input from '@/components/inputComponent/Input';
@@ -22,7 +22,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import RenderQuotes from '@/components/renderQuotes/RenderQuotes';
 import Loader from '@/components/loader/Loader';
-import { useFocusEffect } from '@react-navigation/native';
 import QuoteEmptyScreen from '@/components/emptyScreenComponents/QuoteEmptyScreen';
 import { QuoteItem } from '@/types/apis/quote.types';
 import { QuoteStackProps } from '@/types/navigation.types';
@@ -70,12 +69,10 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
 
   const debouncedSearch = useDebounce(search);
 
-  useFocusEffect(
-    useCallback(() => {
-      page.current = 1;
-      fetchQuotesScreenData(1);
-    }, [fetchQuotesScreenData]),
-  );
+  useEffect(() => {
+    page.current = 1;
+    fetchQuotesScreenData(1);
+  }, [fetchQuotesScreenData])
 
   const navigateToNewQuote = useCallback(() => {
     navigation.navigate('NewQuoteScreens');

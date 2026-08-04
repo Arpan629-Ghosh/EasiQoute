@@ -1,5 +1,17 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { View, Image, FlatList, ListRenderItem, ActivityIndicator } from 'react-native';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import {
+  View,
+  Image,
+  FlatList,
+  ListRenderItem,
+  ActivityIndicator,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '@/components/header/Header';
@@ -13,11 +25,11 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { createStyles } from './style';
 import { SubCategoriesPayload } from '@/types/apis/settings.types';
-import { useFocusEffect } from '@react-navigation/native';
 import { RootScreenProps } from '@/types/navigation.types';
 
-
-const SubCategoriesScreen = ({ navigation }: RootScreenProps<'SubCategoriesScreen'>) => {
+const SubCategoriesScreen = ({
+  navigation,
+}: RootScreenProps<'SubCategoriesScreen'>) => {
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const insets = useSafeAreaInsets();
@@ -35,15 +47,12 @@ const SubCategoriesScreen = ({ navigation }: RootScreenProps<'SubCategoriesScree
   const onEndReachedCalledDuringMomentum = useRef(false);
   const debouncedSearch = useDebounce(search);
 
-  useFocusEffect(
-    useCallback(() => {
-      if (isSubcatStale || !subcat_data.length) {
-        page.current = 1;
-        fetchSubCategories(1);
-      }
-    }, [isSubcatStale, subcat_data.length, fetchSubCategories]),
-  );
-
+  useEffect(() => {
+    if (isSubcatStale || !subcat_data.length) {
+      page.current = 1;
+      fetchSubCategories(1);
+    }
+  }, [fetchSubCategories, isSubcatStale, subcat_data.length]);
 
   const handleLoadMore = useCallback(async () => {
     if (
@@ -87,15 +96,17 @@ const SubCategoriesScreen = ({ navigation }: RootScreenProps<'SubCategoriesScree
 
     if (!q) return subcat_data ?? [];
 
-    return (subcat_data ?? []).filter((item) =>
+    return (subcat_data ?? []).filter(item =>
       item?.name?.toLowerCase()?.includes(q),
     );
   }, [subcat_data, debouncedSearch]);
 
-
-  const renderItem: ListRenderItem<SubCategoriesPayload> = useCallback(({ item }) => {
-    return <RenderSubCategories item={item} />;
-  }, []);
+  const renderItem: ListRenderItem<SubCategoriesPayload> = useCallback(
+    ({ item }) => {
+      return <RenderSubCategories item={item} />;
+    },
+    [],
+  );
 
   const renderFooter = useMemo(() => {
     if (!paginationLoading) return null;

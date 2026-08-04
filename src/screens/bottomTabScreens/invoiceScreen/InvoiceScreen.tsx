@@ -8,7 +8,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -21,7 +21,6 @@ import { InvoiceStackProps } from '@/types/navigation.types';
 import RenderInvoices from '@/components/renderInvoices/RenderInvoices';
 import { InvoiceListItem } from '@/types/apis/invoice.types';
 import { useInvoice } from '@/hooks/apis/useInvoice';
-import { useFocusEffect } from '@react-navigation/native';
 import { useDebounce } from '@/hooks/useDebounce';
 import Loader from '@/components/loader/Loader';
 
@@ -61,12 +60,12 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
   const styles = useMemo(() => createStyles(theme), [theme]);
   const debouncedSearch = useDebounce(search);
 
-  useFocusEffect(
-    useCallback(() => {
-      page.current = 1;
-      getInvoices(1);
-    }, [getInvoices]),
-  );
+ 
+
+  useEffect(() => {
+    page.current = 1;
+    getInvoices(1);
+  }, [getInvoices])
 
   const navigateToSelectQuoteScreen = () => {
     navigation.navigate('SelectQuoteScreen');

@@ -162,7 +162,10 @@ export interface Sections {
 
 export interface UpdateQuote {
   quoteId: number;
-  items: FetchItemsData[]
+  summury?: CreateQuote;
+  items?: FetchItemsData[];
+  sections?: Sections[];
+  discount?: number
 }
 
 export interface UpdateStatus {

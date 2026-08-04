@@ -1,5 +1,6 @@
 import React, {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -25,7 +26,6 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { createStyles } from './style';
 import { CreateCategoriesPayload } from '@/types/apis/settings.types';
-import { useFocusEffect } from '@react-navigation/native';
 import { RootScreenProps } from '@/types/navigation.types';
 
 const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) => {
@@ -48,14 +48,12 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
   const onEndReachedCalledDuringMomentum = useRef(false);
   const debouncedSearch = useDebounce(search);
 
-  useFocusEffect(
-    useCallback(() => {
-      if (isStale || !data.length) {
-        page.current = 1;
-        fetchCategories(1);
-      }
-    }, [isStale, data.length, fetchCategories]),
-  );
+  useEffect(() => {
+    if (isStale || !data.length) {
+      page.current = 1;
+      fetchCategories(1);
+    }
+  }, [isStale, data.length, fetchCategories])
 
 
   const hasMore = useMemo(() => {

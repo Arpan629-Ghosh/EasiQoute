@@ -1,5 +1,5 @@
 import { ActivityIndicator, Image, TouchableOpacity, View } from 'react-native'
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { createStyles } from './style'
 import Input from '@/components/inputComponent/Input'
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent'
@@ -8,15 +8,23 @@ import { useAppTheme } from '@/hooks/useAppTheme'
 import {  useSafeAreaInsets } from 'react-native-safe-area-context'
 import { QuoteTopTabWithRootProps } from '@/types/navigation.types'
 import WebView from 'react-native-webview'
+import { useQuotes } from '@/hooks/apis/useQuotes'
 
 const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'>) => {
   const [loading, setLoading] = useState(true);
   const { theme } = useAppTheme();
+  const { fetchQuoteDetails, quoteDetails} = useQuotes();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const navigateToTemplatesScreen = () => {
     navigation.navigate('TemplatesScreen');
   };
+
+  const quoteId = route.params?.quoteId
+
+  useEffect(() => {
+     fetchQuoteDetails(quoteId)
+  }, [fetchQuoteDetails, quoteId])
 
   return (
     <View style={styles.container}>
@@ -39,7 +47,7 @@ const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'
         )}
 
         <WebView
-          source={{ uri: route.params?.previewUrl }}
+          source={{ uri: quoteDetails?.url }}
           style={styles.webView}
           startInLoadingState
           javaScriptEnabled

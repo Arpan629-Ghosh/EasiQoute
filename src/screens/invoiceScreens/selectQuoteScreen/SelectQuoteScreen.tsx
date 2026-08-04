@@ -1,5 +1,5 @@
 import { useAppTheme } from '@/hooks/useAppTheme';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { createStyles } from './style';
 import Header from '@/components/header/Header';
@@ -8,7 +8,6 @@ import { ActivityIndicator, FlatList, View } from 'react-native';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useQuotes } from '@/hooks/apis/useQuotes';
-import { useFocusEffect } from '@react-navigation/native';
 import SelectQuote from '@/components/selectQuote/SelectQuote';
 import { QuoteItem } from '@/types/apis/quote.types';
 import Loader from '@/components/loader/Loader';
@@ -34,12 +33,11 @@ const SelectQuoteScreen = ({
     last_page,
   } = useQuotes();
 
-  useFocusEffect(
-    useCallback(() => {
-      page.current = 1;
-      fetchQuotesScreenData(1)
-    }, [fetchQuotesScreenData])
-  )
+
+  useEffect(() => {
+    page.current = 1;
+    fetchQuotesScreenData(1)
+  }, [fetchQuotesScreenData])
 
   const keyExtractor = useCallback((item: QuoteItem) => item.id.toString(), []);
 

@@ -6,7 +6,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
@@ -16,7 +16,6 @@ import Input from '@/components/inputComponent/Input';
 import { icons } from '@/config/icons';
 import ClientSortBottomSheet from '@/components/clientSortBottomSheet/ClientSortBottomSheet';
 import { useClient } from '@/hooks/apis/useClient';
-import { useFocusEffect } from '@react-navigation/native';
 import Loader from '@/components/loader/Loader';
 import { useToast } from '@/hooks/useToast';
 import RenderClients from '@/components/renderClients/RenderClients';
@@ -38,18 +37,16 @@ const ClientScreen = ({ navigation }: ClientStackProps<'ClientScreen'>) => {
   const { getClients, loading, clients, current_page, last_page } = useClient();
   const debouncedSearch = useDebounce(search, 500);
   const insets = useSafeAreaInsets();
-
-  useFocusEffect(
-    useCallback(() => {
-      page.current = 1;
-      const payload: GetClients = {
-        sort_by: 'asc',
-        page: 1,
-      };
-      getClients(payload);
-    }, [getClients]),
-  );
   const styles = useMemo(() => createStyles(theme), [theme]);
+
+  useEffect(() => {
+    page.current = 1;
+    const payload: GetClients = {
+      sort_by: 'asc',
+      page: 1,
+    }
+    getClients(payload)
+  }, [getClients])
 
   const handleClose = useCallback(() => {
     setOpen(false);

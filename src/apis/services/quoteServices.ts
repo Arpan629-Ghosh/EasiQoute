@@ -80,7 +80,7 @@ export const quoteServices = {
     updateQuote: async (payload: UpdateQuote) => {
         const response = await apiClient.put<ApiResponse<CreateQuotePayload>>(
           `${ENDPOINTS.QUOTELIST}/${payload.quoteId}`,
-            {items: payload.items},
+            {items: payload.items, discount: payload.discount},
           {
             headers: {
               'Content-Type': 'application/json',

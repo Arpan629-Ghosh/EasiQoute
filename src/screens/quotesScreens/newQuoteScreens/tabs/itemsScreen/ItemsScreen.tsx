@@ -21,11 +21,7 @@ import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
 import { QuoteTopTabWithRootProps } from '@/types/navigation.types';
 
-interface FinancialBreakDown {
-  subtotal: string;
-  tax: string;
-  total: string;
-}
+
 
 const FilterOptions = ['Materials', 'Labour', 'Services', 'Miscellaneous'];
 
@@ -48,7 +44,7 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
   const opacity = useSharedValue(0);
   const insets = useSafeAreaInsets();
   const debouncedSearch = useDebounce(search);
-  const quoteId = route.params.quoteId;
+  const quoteId = route.params.quoteDetails?.id;
 
   const { theme } = useAppTheme();
   const { showToast } = useToast();
@@ -74,6 +70,12 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openFinancialBreakdown]);
 
+  useEffect(() => {
+    if (route.params?.quoteDetails) {
+      setSelectedItems(route.params.quoteDetails.items);
+    }
+  }, [route.params]);
+
   const animatedStyle = useAnimatedStyle(() => {
     return {
       maxHeight: height.value,
@@ -92,15 +94,6 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
   useEffect(() => {
     fetchItems(1);
   }, [fetchItems]);
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     if (isStale || !items_data.length) {
-  //       page.current = 1;
-  //       fetchItems(1);
-  //     }
-  //   }, [fetchItems, isStale, items_data]),
-  // );
 
   const hasMore = useMemo(() => {
     return items_current_page < items_last_page;
@@ -209,26 +202,27 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
     [handleAddItem],
   );
 
-  const calculateFinancialBreakdown = useMemo(() => {
-    let result: FinancialBreakDown = {
-      subtotal: '',
-      tax: '',
-      total: '',
+  const financialBreakdown = useMemo(() => {
+    const subtotal = selectedItems.reduce((sum, item) => {
+      return sum + Number(item.total_price);
+    }, 0);
+
+    const taxRate =
+      route.params?.quoteDetails?.financial_summary.tax ?? 8;
+
+    const tax = subtotal * (taxRate / 100);
+
+    const discount = subtotal * (discountPrice / 100);
+
+    const grandTotal = subtotal + tax - discount;
+
+    return {
+      subtotal,
+      tax,
+      discount,
+      grandTotal,
     };
-    const subtotal = selectedItems.reduce(
-      (sum, item) => sum + Number(item.total_price || 0),
-      0,
-    );
-    const tax = subtotal * (8 / 100);
-    const total = subtotal + tax;
-    const grandTotal = total - (total * discountPrice) / 100;
-
-    result.subtotal = subtotal.toFixed(2);
-    result.tax = tax.toFixed(2);
-    result.total = grandTotal.toFixed(2);
-    return result;
-  }, [selectedItems, discountPrice]);
-
+  }, [selectedItems, discountPrice, route.params?.quoteDetails]);
   const handleUpdateQuote = async () => {
     if (typeof quoteId !== 'number') {
       showToast('Invalid quote ID', 'error');
@@ -240,6 +234,9 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
         items: selectedItems,
       });
       showToast('Quote updated successfully!');
+      navigation.jumpTo('Sections', {
+        quoteDetails: route.params.quoteDetails
+      })
     } catch (error) {
       showToast(String(error), 'error');
     }
@@ -343,7 +340,7 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
             <>
               <InfoRow
                 label="Subtotal"
-                value={`£${calculateFinancialBreakdown.subtotal}`}
+                value={`£${financialBreakdown.subtotal.toFixed(2)}`}
               />
 
               <TouchableOpacity onPress={() => setOpen(true)}>
@@ -356,13 +353,13 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
 
               <InfoRow
                 label="Tax(8%)"
-                value={`£${calculateFinancialBreakdown.tax}`}
+                value={`£${financialBreakdown.tax.toFixed(2)}`}
               />
 
               <TouchableOpacity onPress={() => setOpenDiscount(true)}>
                 <InfoRow
                   label="Discount"
-                  value={discountPrice ? discountPrice : '+ Add Discount'}
+                  value={`${discountPrice}%`}
                   activeColor={true}
                 />
               </TouchableOpacity>
@@ -371,7 +368,7 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
 
               <InfoRow
                 label="Grand Total"
-                value={`£${calculateFinancialBreakdown.total}`}
+                value={`£${financialBreakdown.grandTotal.toFixed(2)}`}
               />
 
               <InfoRow

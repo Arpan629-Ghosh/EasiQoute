@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -18,7 +18,6 @@ import { useSettings } from '@/hooks/apis/useSettings';
 import { useDebounce } from '@/hooks/useDebounce';
 import { FetchItemsData } from '@/types/apis/settings.types';
 import RenderItems from '@/components/renderItems/RenderItems';
-import { useFocusEffect } from '@react-navigation/native';
 import ItemEmptyScreen from '@/components/emptyScreenComponents/ItemEmptyScreen';
 import { RootScreenProps } from '@/types/navigation.types';
 
@@ -42,14 +41,12 @@ const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
   const onEndReachedCalledDuringMomentum = useRef(false);
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  useFocusEffect(
-    useCallback(() => {
-      if (isStale || !items_data.length) {
-        page.current = 1;
-        fetchItems(1);
-      }
-    }, [isStale, items_data.length, fetchItems]),
-  );
+  useEffect(() => {
+    if (isStale || !items_data.length) {
+      page.current = 1;
+      fetchItems(1);
+    }
+  }, [isStale, items_data.length, fetchItems])
 
   const hasMore = useMemo(() => {
     return items_current_page < items_last_page;

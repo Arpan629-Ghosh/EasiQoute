@@ -10,18 +10,18 @@ import { NewQuoteTopTabParamList, RootScreenProps } from '@/types/navigation.typ
 const Tab = createMaterialTopTabNavigator<NewQuoteTopTabParamList>();
 const NewQuoteScreens = ({ route }: RootScreenProps<'NewQuoteScreens'>) => {
   
-  const quoteId = route.params?.quoteId
-  const previewUrl = route.params?.previewUrl
+  const quoteDetails = route.params?.quoteDetails
+  const quoteId = quoteDetails?.id
 
   return (
     <Tab.Navigator
       tabBar={(props) => <CustomTabBars {...props} headerText="New Quote" />}
       
     >
-          <Tab.Screen name='Summury' component={SummuryScreen} initialParams={{quoteId}}/>
-          <Tab.Screen name='Items' component={ItemsScreen} initialParams={{quoteId}}/>
-          <Tab.Screen name='Sections' component={SectionsScreen} initialParams={{quoteId}}/>
-          <Tab.Screen name='Preview' component={PreviewScreen} initialParams={{quoteId, previewUrl}}/>
+          <Tab.Screen name='Summury' component={SummuryScreen} initialParams={{quoteDetails}}/>
+          <Tab.Screen name='Items' component={ItemsScreen} initialParams={{quoteDetails}}/>
+          <Tab.Screen name='Sections' component={SectionsScreen} initialParams={{quoteDetails}}/>
+          <Tab.Screen name='Preview' component={PreviewScreen} initialParams={{quoteId}}/>
     </Tab.Navigator>
   )
 }

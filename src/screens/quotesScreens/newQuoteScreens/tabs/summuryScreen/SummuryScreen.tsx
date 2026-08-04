@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -6,7 +7,13 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { createStyles } from './style';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
 import InterTightRegular from '@/components/fontComponents/InterTightRegular';
@@ -22,6 +29,10 @@ import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
 import { pick, types } from '@react-native-documents/picker';
 import { QuoteTopTabWithRootProps } from '@/types/navigation.types';
+import { useClient } from '@/hooks/apis/useClient';
+import { useDebounce } from '@/hooks/useDebounce';
+import { GetClients } from '@/types/apis/client.types';
+import CustomDropdown, { Item } from '@/components/dropdown/CustomDropdown';
 
 export interface AttachmentFile {
   uri: string;
@@ -35,44 +46,99 @@ interface NewQuoteForm {
   refNumber: string;
   qtDate: string;
   expDate: string;
-  client: string;
+  client: number | null;
   jobDescription: string;
   notes: string;
   file: AttachmentFile[];
 }
 
-const SummuryScreen = ({ navigation }: QuoteTopTabWithRootProps<'Summury'>) => {
+const SummuryScreen = ({
+  navigation,
+  route,
+}: QuoteTopTabWithRootProps<'Summury'>) => {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [activeField, setActiveField] = useState<'start' | 'end' | null>(null);
   const [enabled, setEnabled] = useState(false);
+  const [paginationLoading, setPaginationLoading] = useState(false);
+  const [search, setSearch] = useState('');
 
   const [newQuoteFormData, setNewQuoteFormData] = useState<NewQuoteForm>({
-    quoteTitle: '',
-    refNumber: '',
-    qtDate: '',
-    expDate: '',
-    client: '',
-    jobDescription: '',
-    notes: '',
-    file: [],
+    quoteTitle: route.params.quoteDetails?.title || '',
+    refNumber: route.params.quoteDetails?.reference_number || '',
+    qtDate: route.params.quoteDetails?.quote_date || '',
+    expDate: route.params.quoteDetails?.expiry_date || '',
+    client: route.params.quoteDetails?.client.id ?? null,
+    jobDescription: route.params.quoteDetails?.job_description || '',
+    notes: route.params.quoteDetails?.notes || '',
+    file: route.params.quoteDetails?.attachments || [],
   });
+
+  const page = useRef(1);
   const { theme } = useAppTheme();
   const { createQuote, loadingUpdateQuote } = useQuotes();
+  const { clients, current_page, last_page, getClients } = useClient();
   const { showToast } = useToast();
+  const debouncedSearch = useDebounce(search);
   const insets = useSafeAreaInsets();
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
   const MAX_FILES = 10;
   const styles = useMemo(() => createStyles(theme), [theme]);
 
+  useEffect(() => {
+    page.current = 1;
+    getClients({
+      search: debouncedSearch,
+      sort_by: 'asc',
+      page: page.current,
+    });
+  }, [getClients, debouncedSearch]);
+
+  const hasMore = useMemo(() => {
+    return current_page < last_page;
+  }, [current_page, last_page]);
+
+  const handleLoadMore = useCallback(async () => {
+    if (paginationLoading || !hasMore) {
+      return;
+    }
+    try {
+      setPaginationLoading(true);
+      const nextPage = page.current + 1;
+      page.current = nextPage;
+      const payload: GetClients = {
+        search: debouncedSearch,
+        page: nextPage,
+        sort_by: 'asc',
+      };
+      await getClients(payload);
+    } finally {
+      setPaginationLoading(false);
+    }
+  }, [paginationLoading, hasMore, debouncedSearch, getClients]);
+
+  const renderFooter = useCallback(() => {
+    if (!paginationLoading) {
+      return null;
+    }
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="small" />
+      </View>
+    );
+  }, [paginationLoading, styles.loaderContainer]);
+
   const navigateToAddClientScreen = () => {
     navigation.navigate('AddClientScreen');
   };
-  const updateField = useCallback((key: keyof NewQuoteForm, value: string) => {
-    setNewQuoteFormData(prev => ({
-      ...prev,
-      [key]: value,
-    }));
-  }, []);
+  const updateField = useCallback(
+    <K extends keyof NewQuoteForm>(key: K, value: NewQuoteForm[K]) => {
+      setNewQuoteFormData(prev => ({
+        ...prev,
+        [key]: value,
+      }));
+    },
+    [],
+  );
 
   const fillStartInput = (stratDate: string) => {
     setNewQuoteFormData(prev => {
@@ -127,6 +193,13 @@ const SummuryScreen = ({ navigation }: QuoteTopTabWithRootProps<'Summury'>) => {
       file: prev.file.filter((_, i) => i !== index),
     }));
   }, []);
+
+  const shapedDataForDropdown = useMemo(() => {
+    return clients.map(client => ({
+      label: `${client.name} • ${client.company_name}`,
+      value: client.id,
+    }));
+  }, [clients]);
 
   const openDocumentPicker = async () => {
     try {
@@ -183,7 +256,6 @@ const SummuryScreen = ({ navigation }: QuoteTopTabWithRootProps<'Summury'>) => {
   };
 
   const handleCreateQuote = async () => {
-   
     try {
       await createQuote({
         title: newQuoteFormData.quoteTitle,
@@ -200,16 +272,20 @@ const SummuryScreen = ({ navigation }: QuoteTopTabWithRootProps<'Summury'>) => {
         refNumber: '',
         qtDate: '',
         expDate: '',
-        client: '',
+        client: null,
         jobDescription: '',
         notes: '',
         file: [],
       });
+      navigation.jumpTo('Items', {
+        quoteDetails: route.params.quoteDetails
+      })
     } catch (error) {
       showToast(String(error), 'error');
     }
   };
 
+  console.log("selected client: ", newQuoteFormData.client)
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView
@@ -308,17 +384,18 @@ const SummuryScreen = ({ navigation }: QuoteTopTabWithRootProps<'Summury'>) => {
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Client
               </InterTightRegular>
-              <View style={styles.input}>
-                <Input
-                  placeholder="Search or select client"
-                  style={styles.noBorderInput}
-                  value={newQuoteFormData.client}
-                  onChangeText={txt => updateField('client', txt)}
-                />
-                <TouchableOpacity>
-                  <Image source={icons.ic_drop} style={styles.searchic} />
-                </TouchableOpacity>
-              </View>
+              <CustomDropdown
+                data={shapedDataForDropdown}
+                placeholder="Search or select client"
+                value={newQuoteFormData.client}
+                onChange={(item: Item) => updateField('client', Number(item.value))}
+                onSearch={setSearch}
+                flatListProps={{
+                  onEndReached: handleLoadMore,
+                  onEndReachedThreshold: 0.3,
+                  ListFooterComponent: renderFooter,
+                }}
+              />
               <TouchableOpacity onPress={navigateToAddClientScreen}>
                 <Image source={icons.ic_newclient} style={styles.newclient} />
               </TouchableOpacity>

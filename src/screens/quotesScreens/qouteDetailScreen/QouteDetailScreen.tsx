@@ -18,7 +18,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
 import { FetchItemsData } from '@/types/apis/settings.types';
-import { useFocusEffect } from '@react-navigation/native';
 import Loader from '@/components/loader/Loader';
 import { RootScreenProps } from '@/types/navigation.types';
 
@@ -42,17 +41,12 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
 
   const animation = useRef(new Animated.Value(0)).current;
 
-  useFocusEffect(
-    useCallback(() => {
-      try {
-        fetchQuoteDetails(quoteId);
-        getSelectedSections(quoteId);
-      } catch (error) {
-        console.log('Focus effect error:', error);
-      }
-      
-    }, [quoteId, fetchQuoteDetails, getSelectedSections]),
-  );
+  
+
+  useEffect(() => {
+    fetchQuoteDetails(quoteId)
+    getSelectedSections(quoteId)
+  }, [quoteId, fetchQuoteDetails, getSelectedSections])
 
 
   useEffect(() => {
@@ -85,7 +79,7 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
   
 
     navigation.navigate("NewQuoteScreens", {
-      quoteId: quoteId,
+      quoteDetails: quoteDetails,
       previewUrl: quoteDetails?.url
     })
   }
@@ -131,11 +125,6 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
     }
   };
   
-  // useFocusEffect( 
-  //   useCallback(() => {
-  //     fetchQuoteDetails(quoteId)
-  //   }, [quoteId, fetchQuoteDetails])
-  // )
 
   
   return (

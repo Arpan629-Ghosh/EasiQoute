@@ -5,13 +5,12 @@ export const createStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
- 
     },
     scrollview: {
       flex: 1,
     },
     content: {
-      paddingBottom: 120
+      paddingBottom: 120,
     },
     basicinfo: {
       paddingVertical: 20,
@@ -90,12 +89,12 @@ export const createStyles = (theme: Theme) =>
       borderWidth: 1,
       borderRadius: 12,
       padding: 12,
-      alignItems: "center"
+      alignItems: 'center',
     },
     delete: {
-       justifyContent: 'space-between',
+      justifyContent: 'space-between',
       borderColor: theme.border,
-     height: 24,
+      height: 24,
       width: 24,
     },
     footer: {
@@ -122,5 +121,10 @@ export const createStyles = (theme: Theme) =>
     keyboardContainer: {
       flex: 1,
       justifyContent: 'flex-end',
+    },
+    loaderContainer: {
+      paddingVertical: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   });

@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useCallback, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { createStyles } from './style';
 import { images } from '@/config/images';
 import InterTightMedium from '@/components/fontComponents/InterTightMedium';
@@ -18,7 +18,6 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { useHomeScreenData } from '@/hooks/apis/useHomeScreenData';
 import HomeEmptyScreen from '@/components/emptyScreenComponents/HomeEmptyScreen';
 import { useAuth } from '@/hooks/apis/useAuth';
-import { useFocusEffect } from '@react-navigation/native';
 
 import Loader from '@/components/loader/Loader';
 import { HomeStackProps } from '@/types/navigation.types';
@@ -30,23 +29,20 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
 
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  useFocusEffect(
-    useCallback(() => {
-      homeScreenData();
-    }, [homeScreenData]),
-  );
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const data = await homeScreenData();
-  //       console.log('home', data);
-  //     } catch (error) {
-  //       console.log('HOME SCREEN DATA FETCH ERROR', error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await homeScreenData();
+        console.log('home', data);
+      } catch (error) {
+        console.log('HOME SCREEN DATA FETCH ERROR', error);
+      }
+    };
+    fetchData();
+  }, [homeScreenData]);
 
   return (
     <View style={styles.safeareaview}>

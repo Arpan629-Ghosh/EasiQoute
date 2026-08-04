@@ -30,6 +30,7 @@ export const clientServices = {
             ENDPOINTS.CRREATECLIENT,
             {
                 params: {
+                    search: payload.search,
                     sort_by: payload.sort_by,
                     page: payload.page
                 }

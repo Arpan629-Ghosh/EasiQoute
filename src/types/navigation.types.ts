@@ -11,6 +11,7 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { CreateQuotePayload } from './apis/quote.types';
 
 /* -------------------------------------------------------------------------- */
 /*                               PARAM LISTS                                  */
@@ -55,7 +56,7 @@ export type RootStackParamList = {
 
   NewQuoteScreens:
     | {
-    quoteId?: number;
+    quoteDetails?: CreateQuotePayload | null;
     previewUrl?: string;
       }
     | undefined;
@@ -159,10 +160,10 @@ export type SettingStackParamList = {
 };
 
 export type NewQuoteTopTabParamList = {
-  Summury: { quoteId?: number };
-  Items: { quoteId?: number };
-  Sections: { quoteId?: number };
-  Preview: { quoteId?: number; previewUrl: string };
+  Summury: { quoteDetails?: CreateQuotePayload | null};
+  Items: { quoteDetails?: CreateQuotePayload | null };
+  Sections: { quoteDetails?: CreateQuotePayload | null };
+  Preview: {quoteId: number} ;
 };
 
 export type NewInvoiceTopTabParamList = {

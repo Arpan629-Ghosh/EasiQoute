@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, FlatListProps } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
@@ -13,10 +13,12 @@ interface Props {
   data: Item[] | string[];
   value: string | number | null;
   placeholder: string;
+  flatListProps?: Partial<FlatListProps<Item>>;
   onChange: (item: Item) => void;
+  onSearch?: (text: string) => void;
 }
 
-const CustomDropdown = ({ data, value, placeholder, onChange }: Props) => {
+const CustomDropdown = ({ data, value, placeholder, flatListProps, onChange, onSearch}: Props) => {
   const { theme } = useAppTheme();
 
     const styles = useMemo(() => createStyles(theme), [theme]);
@@ -35,16 +37,18 @@ const CustomDropdown = ({ data, value, placeholder, onChange }: Props) => {
         maxHeight={300}
         labelField="label"
         valueField="value"
+        flatListProps={flatListProps}
         placeholder={placeholder}
         searchPlaceholder="Search..."
         value={value}
         onChange={onChange}
+        onChangeText={onSearch}
       />
     </View>
   );
 };
 
-export default CustomDropdown;
+export default React.memo(CustomDropdown);
 
 const createStyles = (theme: Theme) =>
   StyleSheet.create({

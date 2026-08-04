@@ -64,6 +64,7 @@ export interface GetClientsPayload {
 export type SORT_BY = "asc" | "desc" | "ma"
 
 export interface GetClients {
+  search?: string;
   sort_by: SORT_BY;
   page: number;
 }
