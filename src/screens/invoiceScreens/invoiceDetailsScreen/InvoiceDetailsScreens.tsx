@@ -23,7 +23,7 @@ const InvoiceDetailsScreens = ({ route }: RootScreenProps<'InvoiceDetailsScreens
 
   return (
     <Tab.Navigator
-      tabBar={props => <InvoiceTopTabBars {...props} invoiceId={invoiceId} invoiceTitle={invoiceDetails?.title} clientName={invoiceDetails?.client.name} />}
+      tabBar={props => <InvoiceTopTabBars {...props} invoiceDetails={invoiceDetails} invoiceTitle={invoiceDetails?.title} clientName={invoiceDetails?.client.name} />}
     >
       <Tab.Screen
         name="Summury"

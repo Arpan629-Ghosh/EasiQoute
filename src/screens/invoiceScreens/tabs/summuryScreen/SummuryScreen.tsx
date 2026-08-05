@@ -18,7 +18,7 @@ import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { InvoiceTopTabWithRootProps } from '@/types/navigation.types';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useInvoice } from '@/hooks/apis/useInvoice';
-import { useInvoiceContext } from '@/hooks/useInvoiceContext';
+import { formatDateForInput, formatDateForPrifill } from '@/utils/formatDate';
 
 export interface AttachmentFile {
   uri: string;
@@ -39,14 +39,13 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
   const [activeField, setActiveField] = useState<'start' | 'end' | null>(null);
   const [enabled, setEnabled] = useState(false);
   const [newInvoiceFormData, setNewInvoiceFormData] = useState<NewInvoiceProp>({
-    quoteId: route.params?.quoteId,
-    invoice_date: '',
-    due_date: '',
-    message: '',
-    notes: '',
-    file: [],
+    quoteId: route.params?.invoiceDetails?.quote.id,
+    invoice_date: formatDateForPrifill(route.params?.invoiceDetails?.invoice_date) ||  '',
+    due_date: formatDateForPrifill(route.params?.invoiceDetails?.due_date) ||  '',
+    message: route.params?.invoiceDetails?.message || '',
+    notes: route.params?.invoiceDetails?.notes || '',
+    file: route.params?.invoiceDetails?.attachments || [],
   });
-  const { setSummary } = useInvoiceContext();
   const { quoteList } = useQuotes();
   const { theme } = useAppTheme();
   const { showToast } = useToast();
@@ -54,7 +53,7 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const invoiceId = route.params?.invoiceId;
+  // const invoiceId = route.params?.invoiceDetails?.id;
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
   const MAX_FILES = 10;
 
@@ -63,7 +62,7 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
 
   const extractQuote = useMemo(() => {
     const extractedQuote = quoteList.filter(
-      quote => quote.id === route.params?.quoteId,
+      quote => quote.id === route.params?.quoteId
     );
     return extractedQuote;
   }, [quoteList, route.params?.quoteId]);
@@ -95,13 +94,6 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
     setDatePickerVisible(true);
   };
 
-  const formatDate = (date: Date) => {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-
-    return `${day}-${month}-${year}`;
-  };
 
   const fillStartInput = (stratDate: string) => {
     setNewInvoiceFormData(prev => {
@@ -122,7 +114,7 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
   };
 
   const handleConfirm = (date: Date) => {
-    const formatted = formatDate(date);
+    const formatted = formatDateForInput(date);
 
     if (activeField === 'start') {
       fillStartInput(formatted);
@@ -191,16 +183,15 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
     // console.log(newQuoteFormData);
     try {
       await createInvoice({
-        quote_id: route.params?.quoteId,
+        quote_id: route.params?.invoiceDetails?.quote.id,
         invoice_date: newInvoiceFormData.invoice_date,
         due_date: newInvoiceFormData.due_date,
         message: newInvoiceFormData.message,
         notes: newInvoiceFormData.notes
       });
       showToast('Invoice created successfully.');
-      setSummary(newInvoiceFormData);
       setNewInvoiceFormData({
-        quoteId: route.params?.quoteId,
+        quoteId: route.params?.invoiceDetails?.quote.id,
         invoice_date: '',
         due_date: '',
         message: '',
@@ -213,10 +204,7 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
     }
   };
 
-  const updateContextForInvoiceUpdate = () => {
-    setSummary(newInvoiceFormData);
-    navigation.navigate('Items');
-  };
+ 
 
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
@@ -373,9 +361,7 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
             bttnTxt="Save"
             txtColor={theme.primaryText}
             showLoader={loadingCreateInvoice}
-            onPress={
-              invoiceId ? updateContextForInvoiceUpdate : handleCreateInvoice
-            }
+            onPress={handleCreateInvoice}
           />
         </View>
       </View>

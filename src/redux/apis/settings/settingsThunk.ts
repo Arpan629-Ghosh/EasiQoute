@@ -196,7 +196,7 @@ export const createTeamMemberThunk = createAsyncThunk('/api/company/users',
   }
 );
 
-export const fetchTeamMembersThunk = createAsyncThunk('/api/company/users',
+export const fetchTeamMembersThunk = createAsyncThunk('/get/api/company/users',
 
   async (payload: FetchTeamMembersPayload, thunkAPI) => {
     try {

@@ -16,6 +16,8 @@ import Input from '@/components/inputComponent/Input';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { useToast } from '@/hooks/useToast';
+import { RootScreenProps } from '@/types/navigation.types';
+import { CreateTeamMemberPayload } from '@/types/apis/settings.types';
 
 interface AddMemberForm {
   name: string;
@@ -23,10 +25,10 @@ interface AddMemberForm {
   password: string;
 }
 
-const AddMemberScreen = () => {
+const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'>) => {
   const [addMemberForm, setAddMemberForm] = useState<AddMemberForm>({
-    name: '',
-    email: '',
+    name: route.params?.name || '',
+    email: route.params?.email ||  '',
     password: '',
   });
 
@@ -38,6 +40,8 @@ const AddMemberScreen = () => {
   const { showToast } = useToast();
   const {createTeamMembers, settingLoading} = useSettings()
   const styles = useMemo(() => createStyles(theme), [theme]);
+  const editId = route.params?.editId;
+  const isEdit = !!editId
 
   const handleInput = (name: string, value: string) => {
     setAddMemberForm(prev => ({
@@ -48,13 +52,17 @@ const AddMemberScreen = () => {
 
   const handleAddMember = async() => {
     try {
-      await createTeamMembers({
-        
+
+      const payload: CreateTeamMemberPayload = {
         name: addMemberForm.name,
         email: addMemberForm.email,
-        password: addMemberForm.password
-      })
-      showToast('Team member created successfully.');
+        password: addMemberForm.password,
+      };
+
+      if (isEdit) payload.id = editId;
+      await createTeamMembers(payload)
+      showToast(isEdit ? 'Team member updated successfully' : 'Team member created successfully.');
+      navigation.goBack();
     } catch (error) {
       showToast(String(error), 'error');
     }
@@ -62,7 +70,10 @@ const AddMemberScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Header txt="Add Members" borderBottomEnabled={true}  />
+      <Header
+        txt={editId ? 'Edit Members' : 'Add Members'}
+        borderBottomEnabled={true}
+      />
 
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         <KeyboardAvoidingView
@@ -76,7 +87,6 @@ const AddMemberScreen = () => {
             showsVerticalScrollIndicator={false}
           >
             <View style={styles.formContainer}>
-             
               <View style={styles.inp}>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                   Name
@@ -134,7 +144,7 @@ const AddMemberScreen = () => {
           <View style={styles.footerContainer}>
             <ButtonComponent
               bg={theme.primary}
-              bttnTxt="Add Member"
+              bttnTxt={editId ? "Update Member" : "Add Member"}
               txtColor={theme.primaryText}
               showLoader={settingLoading}
               onPress={handleAddMember}

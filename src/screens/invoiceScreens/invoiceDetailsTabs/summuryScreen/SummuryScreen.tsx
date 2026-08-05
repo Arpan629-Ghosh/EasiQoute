@@ -21,6 +21,7 @@ import StatusChanger from '@/components/statusChanger/StatusChanger';
 import { InvoiceDetailsScreenProps } from '@/types/navigation.types';
 import { useToast } from '@/hooks/useToast';
 import { useQuotes } from '@/hooks/apis/useQuotes';
+import { formatDate } from '@/utils/formatDate';
 
 const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
   const [open, setOpen] = useState(false);
@@ -32,20 +33,6 @@ const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
   const { theme, isDark } = useAppTheme();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
-
-
-  const formatDate = (dateString?: string): string => {
-    if (!dateString) return '';
-
-    const date = new Date(dateString);
-
-    return new Intl.DateTimeFormat('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      timeZone: 'UTC', // prevents timezone shifts
-    }).format(date);
-  };
 
   const handleClose = useCallback(() => {
     setOpen(false);

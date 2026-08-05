@@ -37,7 +37,6 @@ import RenderFilterData from '@/components/renderFilterData/RenderFilterData';
 import { FetchItemsData } from '@/types/apis/settings.types';
 import { useInvoice } from '@/hooks/apis/useInvoice';
 import { useToast } from '@/hooks/useToast';
-import { useInvoiceContext } from '@/hooks/useInvoiceContext';
 
 interface FinancialBreakDown {
   subtotal: string;
@@ -63,7 +62,6 @@ const ItemsScreen = ({
   const [refreshing, setRefreshing] = useState(false);
   const [paginationLoading, setPaginationLoading] = useState(false);
 
-  const { summary } = useInvoiceContext();
 
   const page = useRef(1);
   const onEndReachedCalledDuringMomentum = useRef(false);
@@ -240,7 +238,6 @@ const ItemsScreen = ({
       await updateInvoice({
         invoice_id: invoiceId,
         discount: discountPrice,
-        invoice_summury: summary,
         invoice_items: selectedItems
       })
       showToast('Invoice updated successfully!')

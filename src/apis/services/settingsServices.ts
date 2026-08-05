@@ -106,11 +106,11 @@ export const settingsServices = {
     return response.data;
   },
 
-    deleteSubCategory: async (payload: CreateSubCategories) => {
-        const formData = new FormData();
-        formData.append('id', payload.id);
-        formData.append('category_id', payload.category_id);
-        formData.append('name', payload.name);
+  deleteSubCategory: async (payload: CreateSubCategories) => {
+    const formData = new FormData();
+    formData.append('id', payload.id);
+    formData.append('category_id', payload.category_id);
+    formData.append('name', payload.name);
     const response = await apiClient.delete<ApiResponse<null>>(
       `${ENDPOINTS.CREATESUBCATEGORIES}/${payload.id}`,
       {
@@ -119,7 +119,7 @@ export const settingsServices = {
     );
     return response.data;
   },
-    
+
   createItems: async (payload: CreateItems) => {
     const response = await apiClient.post<ApiResponse<CreateItemsPayload>>(
       ENDPOINTS.CREATEITEMS,
@@ -130,23 +130,23 @@ export const settingsServices = {
         },
       },
     );
-    return response.data
+    return response.data;
   },
-  
+
   fetchItems: async (payload: number) => {
     const response = await apiClient.get<ApiResponse<FetchItemsPayload>>(
       ENDPOINTS.FETCHITEMS,
       {
-        params: {page: payload}
-      }
-    )
-    return response.data
+        params: { page: payload },
+      },
+    );
+    return response.data;
   },
 
   deleteItem: async (payload: number) => {
     const response = await apiClient.delete<ApiResponse<null>>(
       `${ENDPOINTS.FETCHITEMS}/${payload}`,
-    )
+    );
 
     return response.data;
   },
@@ -154,27 +154,34 @@ export const settingsServices = {
   createTeamMember: async (payload: CreateTeamMemberPayload) => {
     const formData = new FormData();
 
-    formData.append("name", payload.name);
-    formData.append("email", payload.email);
-    formData.append("password", payload.password);
+    if (payload.id) formData.append('id', payload.id);
+
+    formData.append('name', payload.name);
+    formData.append('email', payload.email);
+    formData.append('password', payload.password);
 
     const response = await apiClient.post<ApiResponse<CreateTeamMemberPayload>>(
-      ENDPOINTS.TEAMMEMBER, formData
-    )
+      ENDPOINTS.TEAMMEMBER,
+      formData,
+    );
 
-    return response.data
+    return response.data;
   },
 
   fetchTeamMembers: async (payload: FetchTeamMembersPayload) => {
+    const params: Record<string, string | number> = {
+      page: payload.page,
+    };
+
+    if (payload.search?.trim()) {
+      params.search = payload.search.trim();
+    }
+
     const response = await apiClient.get<ApiResponse<FetchTeamMembers>>(
-      ENDPOINTS.TEAMMEMBER, {
-        params: {
-          search: payload.search, 
-          page: payload.page
-        }
-      }
-    )
+      ENDPOINTS.TEAMMEMBER,
+      { params },
+    );
 
     return response.data;
-  }
+  },
 };

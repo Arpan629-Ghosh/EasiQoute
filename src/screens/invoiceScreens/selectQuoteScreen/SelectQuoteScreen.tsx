@@ -13,7 +13,7 @@ import { QuoteItem } from '@/types/apis/quote.types';
 import Loader from '@/components/loader/Loader';
 
 const SelectQuoteScreen = ({
-  navigation,
+  navigation, route
 }: RootScreenProps<'SelectQuoteScreen'>) => {
 
   const [selectedQuote, setSelectedQuote] = useState<number | undefined>()
@@ -34,21 +34,34 @@ const SelectQuoteScreen = ({
   } = useQuotes();
 
 
+  const invoiceDetails = route.params?.invoiceDetails;
+  const linkedQuoteId = route.params?.invoiceDetails?.quote?.id
+
+  console.log("invoiceDetails: ", invoiceDetails)
+
   useEffect(() => {
     page.current = 1;
     fetchQuotesScreenData(1)
   }, [fetchQuotesScreenData])
 
+  useEffect(() => {
+    if (linkedQuoteId !== undefined) {
+      setSelectedQuote(linkedQuoteId);
+    }
+  }, [linkedQuoteId]);
+
+  
+
   const keyExtractor = useCallback((item: QuoteItem) => item.id.toString(), []);
 
-  const onToggle = useCallback((item : QuoteItem) => {
+  const onToggle = useCallback((item: QuoteItem) => {
     setSelectedQuote(prev => prev === item.id ? undefined : item.id)
   }, [])
 
   const renderItem = useCallback(({ item }: { item: QuoteItem }) => {
     return <SelectQuote
       item={item}
-      isSelected={selectedQuote === item.id}
+      isSelected={selectedQuote === item.id }
       onToggle={onToggle}
     />
   }, [onToggle, selectedQuote])
@@ -97,6 +110,7 @@ const SelectQuoteScreen = ({
 
   const navigateToNewInvoiceScreens = () => {
     navigation.navigate('NewInvoiceScreens', {
+      invoiceDetails: invoiceDetails || undefined,
       quoteId: selectedQuote
     });
   };

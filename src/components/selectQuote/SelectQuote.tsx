@@ -16,6 +16,7 @@ interface Props {
 const SelectQuote = ({ item, isSelected, onToggle }: Props) => {
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
+  
 
   const handleToggle = useCallback(() => {
     onToggle(item);

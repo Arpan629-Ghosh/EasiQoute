@@ -12,6 +12,7 @@ import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CreateQuotePayload } from './apis/quote.types';
+import { InvoiceDetailsPayload } from './apis/invoice.types';
 
 /* -------------------------------------------------------------------------- */
 /*                               PARAM LISTS                                  */
@@ -64,7 +65,11 @@ export type RootStackParamList = {
   TemplatesScreen: undefined;
 
   TeamMembersScreen: undefined;
-  AddMemberScreen: undefined;
+  AddMemberScreen: | {
+    editId: number,
+    email: string,
+    name: string
+  } | undefined;
   ChangePasswordScreen: undefined;
   QuoteAndInvoicesSettingScreen: undefined;
   BillingPreferencesScreen: undefined;
@@ -118,12 +123,11 @@ export type RootStackParamList = {
     clientId: number;
   };
 
-  SelectQuoteScreen: undefined;
+  SelectQuoteScreen: {invoiceDetails: InvoiceDetailsPayload} | undefined;
 
   NewInvoiceScreens: {
-    quoteId?: number;
-    invoiceId?: number;
-    preveiwUrl?: string;
+    invoiceDetails?: InvoiceDetailsPayload;
+    quoteId?: number
   } | undefined;
 
   InvoiceDetailsScreens: {
@@ -167,7 +171,7 @@ export type NewQuoteTopTabParamList = {
 };
 
 export type NewInvoiceTopTabParamList = {
-  Summury: { quoteId?: number; invoiceId?: number } | undefined;
+  Summury: { invoiceDetails?: InvoiceDetailsPayload; quoteId: number } | undefined;
   Items: { invoiceId?: number; previewUrl: string  } | undefined;
   Preview: {previewUrl: string | undefined};
 };

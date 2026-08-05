@@ -1,4 +1,11 @@
-import { Animated, Image, StatusBar, StyleSheet, TouchableOpacity, View } from 'react-native';
+import {
+  Animated,
+  Image,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
@@ -6,51 +13,49 @@ import InterTightMedium from '../fontComponents/InterTightMedium';
 import { icons } from '@/config/icons';
 import InterTightRegular from '../fontComponents/InterTightRegular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useInvoice } from '@/hooks/apis/useInvoice';
 
-const InvoiceTopTabBars = ({ state, navigation, invoiceId,  invoiceTitle, clientName }: any) => {
-
-    const [openEdit, setOpenEdit] = useState(false)
-    const { theme, isDark } = useAppTheme();
+const InvoiceTopTabBars = ({
+  state,
+  navigation,
+  invoiceDetails,
+  invoiceTitle,
+  clientName,
+}: any) => {
+  const [openEdit, setOpenEdit] = useState(false);
+  const { theme, isDark } = useAppTheme();
   const insets = useSafeAreaInsets();
-  const { invoiceDetails } = useInvoice();
-    const animation = useRef(new Animated.Value(0)).current;
+  const animation = useRef(new Animated.Value(0)).current;
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  
   useEffect(() => {
-      Animated.timing(animation, {
-        toValue: openEdit ? 1 : 0,
-        duration: 220,
-        useNativeDriver: true,
-      }).start();
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [openEdit]);
-    
-    const translateY = animation.interpolate({
-      inputRange: [0, 1],
-      outputRange: [-10, 0],
-    });
+    Animated.timing(animation, {
+      toValue: openEdit ? 1 : 0,
+      duration: 220,
+      useNativeDriver: true,
+    }).start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openEdit]);
 
-    const opacity = animation.interpolate({
-      inputRange: [0, 1],
-      outputRange: [0, 1],
-    });
+  const translateY = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-10, 0],
+  });
 
-    const navigateToBack = () => {
-        navigation.goBack();
-    }
-    
+  const opacity = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
+  const navigateToBack = () => {
+    navigation.goBack();
+  };
+
   const navigateToUpdate = () => {
-    navigation.navigate("NewInvoiceScreens", {
-      invoiceId: invoiceId,
-      previewUrl: invoiceDetails?.url
-    })
-  }
+    navigation.navigate('SelectQuoteScreen', {
+      invoiceDetails: invoiceDetails,
+    });
+  };
 
-  
-  
-    
   return (
     <View style={styles.content}>
       {isDark ? (
@@ -83,7 +88,6 @@ const InvoiceTopTabBars = ({ state, navigation, invoiceId,  invoiceTitle, client
             </TouchableOpacity>
 
             <Animated.View
-              
               style={[
                 styles.update,
                 {
@@ -101,9 +105,9 @@ const InvoiceTopTabBars = ({ state, navigation, invoiceId,  invoiceTitle, client
           </View>
         </View>
       </View>
-      <View style = {styles.headerText}>
+      <View style={styles.headerText}>
         <InterTightMedium fsize={20} fcolor={theme.textPrimary}>
-                  {invoiceTitle} - {clientName}
+          {invoiceTitle} - {clientName}
         </InterTightMedium>
       </View>
       <View style={styles.tabBarContainer}>
@@ -135,13 +139,13 @@ export default InvoiceTopTabBars;
 const createStyles = (theme: Theme) =>
   StyleSheet.create({
     content: {
-    //   flex: 1,
+      //   flex: 1,
     },
     tabBarContainer: {
       flexDirection: 'row',
       borderRadius: 40,
       padding: 4,
-        marginHorizontal: 12,
+      marginHorizontal: 12,
       marginTop: 20,
       height: 41,
       backgroundColor: theme.background,
@@ -198,8 +202,8 @@ const createStyles = (theme: Theme) =>
     },
     animation: {
       position: 'relative',
-      },
-      headerText: {
-        paddingHorizontal: 12
-    }
+    },
+    headerText: {
+      paddingHorizontal: 12,
+    },
   });

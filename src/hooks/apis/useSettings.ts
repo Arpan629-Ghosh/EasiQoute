@@ -1,7 +1,7 @@
-import { ChangePasswordThunk, createItemsThunk, createTeamMemberThunk, deleteCategoryThunk, deleteItemThunk, deleteSubCategoryThunk, fetchCategoriesThunk, fetchItemsThunk, fetchSubCategoriesThunk, newCategoriesThunk, newSubCategoriesThunk, updateProfileThunk } from "@/redux/apis/settings/settingsThunk"
+import { ChangePasswordThunk, createItemsThunk, createTeamMemberThunk, deleteCategoryThunk, deleteItemThunk, deleteSubCategoryThunk, fetchCategoriesThunk, fetchItemsThunk, fetchSubCategoriesThunk, fetchTeamMembersThunk, newCategoriesThunk, newSubCategoriesThunk, updateProfileThunk } from "@/redux/apis/settings/settingsThunk"
 import { AppDispatch, RootState } from "@/redux/store"
 import { Company } from "@/types/apis/auth.types"
-import { ChangePassword, CreateCategories, CreateItems, CreateSubCategories, CreateTeamMemberPayload } from "@/types/apis/settings.types"
+import { ChangePassword, CreateCategories, CreateItems, CreateSubCategories, CreateTeamMemberPayload, FetchTeamMembersPayload } from "@/types/apis/settings.types"
 import { useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
 
@@ -60,6 +60,10 @@ export const useSettings = () => {
         return dispatch(createTeamMemberThunk(payload)).unwrap()
     }, [dispatch])
 
+    const fetchTeamMembers = useCallback((payload: FetchTeamMembersPayload) => {
+        return dispatch(fetchTeamMembersThunk(payload)).unwrap()
+    }, [dispatch])
+
     return {
         updateCompanyProfile,
         changePassword,
@@ -73,6 +77,7 @@ export const useSettings = () => {
         fetchItems,
         deleteItem,
         createTeamMembers,
+        fetchTeamMembers,
 
         settingLoading: settings.loading,
         isStale: settings.isStale,
@@ -86,6 +91,10 @@ export const useSettings = () => {
         subcat_last_page: settings.subcat_last_page,
         items_data: settings.items_data,
         items_current_page: settings.items_current_page,
-        items_last_page: settings.items_last_page
+        items_last_page: settings.items_last_page,
+        teamMembers: settings.teamMembers,
+        loadingTeamMembers: settings.loadingTeamMembers,
+        member_current_page: settings.members_current_page,
+        member_last_page: settings.members_last_page
     }
 }

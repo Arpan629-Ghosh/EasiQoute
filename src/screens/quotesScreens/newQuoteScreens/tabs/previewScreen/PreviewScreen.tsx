@@ -23,6 +23,7 @@ const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'
   const quoteId = route.params?.quoteId
 
   useEffect(() => {
+    if(quoteId)
      fetchQuoteDetails(quoteId)
   }, [fetchQuoteDetails, quoteId])
 

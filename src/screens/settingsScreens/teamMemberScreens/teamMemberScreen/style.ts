@@ -52,4 +52,18 @@ export const createStyles = (theme: Theme) =>
       height: 12,
       width: 12,
     },
+
+    flatlist: {
+      marginTop: 16,
+      paddingHorizontal: 12,
+    },
+
+    flatlistContent: {
+      paddingBottom: 120,
+    },
+    loaderContainer: {
+      paddingVertical: 20,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
   });

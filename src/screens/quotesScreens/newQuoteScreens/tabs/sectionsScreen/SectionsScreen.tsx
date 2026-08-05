@@ -23,7 +23,7 @@ const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Section
     loadingSections,
   } = useQuotes();
   const insets = useSafeAreaInsets();
-  const quoteId = route.params.quoteId;
+  const quoteId = route.params.quoteDetails?.id;
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const navigateToNewSection = () => {
@@ -54,6 +54,9 @@ const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Section
 
       await createSelectedSections(payload);
       showToast('Quote sections saved successfully.');
+      navigation.navigate('Preview', {
+        quoteId: quoteId
+      })
     } catch (error) {
       showToast(String(error), 'error');
     }

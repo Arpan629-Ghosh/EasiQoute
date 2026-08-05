@@ -9,6 +9,7 @@ import {
   fetchCategoriesThunk,
   fetchItemsThunk,
   fetchSubCategoriesThunk,
+  fetchTeamMembersThunk,
   newCategoriesThunk,
   newSubCategoriesThunk,
   updateProfileThunk,
@@ -16,13 +17,15 @@ import {
 import {
   CreateCategoriesPayload,
   FetchItemsData,
-  FetchTeamMembers,
+  MemberDetails,
   SubCategoriesPayload,
 } from '@/types/apis/settings.types';
 
 export interface SettingsState {
-  teamMembers: FetchTeamMembers | null ;
+  teamMembers: MemberDetails[] ;
   loadingTeamMembers: boolean;
+  members_current_page: number;
+  members_last_page: number;
   loading: boolean;
   isStale: boolean;
   isSubCatStale: boolean;
@@ -39,8 +42,10 @@ export interface SettingsState {
 }
 
 const initialState: SettingsState = {
-  teamMembers: null,
+  teamMembers: [],
   loadingTeamMembers: false,
+  members_current_page: 1,
+  members_last_page: 1,
   loading: false,
   isStale: false,
   isSubCatStale: false,
@@ -277,7 +282,35 @@ const settingsSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string
       })
-    
+      .addCase(fetchTeamMembersThunk.pending, state => {
+        state.loadingTeamMembers = true;
+        state.error = null;
+      })
+      .addCase(fetchTeamMembersThunk.fulfilled, (state, action) => {
+        state.loadingTeamMembers = false;
+        state.error = null;
+
+        const incomingData = action.payload.data;
+        const current_page = action.payload.meta.current_page;
+
+        if (current_page === 1) {
+          state.teamMembers = incomingData;
+        } else {
+          const existingIds = new Set(state.teamMembers.map(item => item.id));
+
+          const uniqueItems = incomingData.filter(
+            item => !existingIds.has(item.id),
+          );
+          state.teamMembers.push(...uniqueItems);
+        }
+        state.members_current_page = current_page;
+        state.members_last_page = action.payload.meta.last_page;
+        state.isStale = false;
+      })
+      .addCase(fetchTeamMembersThunk.rejected, (state, action) => {
+        state.loadingTeamMembers = false;
+        state.error = action.payload as string
+    })
   },
 });
 
