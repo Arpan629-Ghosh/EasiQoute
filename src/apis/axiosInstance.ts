@@ -1,5 +1,5 @@
 import { parseApiError } from '@/utils/errorHandler';
-import { storage } from './../../storage/asyncStorage';
+import { storage } from '../storage/asyncStorage';
 import axios from 'axios';
 import { X_API_Key } from '@/constants/apis/xApiKey';
 
@@ -17,7 +17,8 @@ apiClient.interceptors.request.use(
   async config => {
     const token = await storage.getAccessToken();
 
-    config.headers.Authorization = `Bearer ${token}`;
+    if(token)
+      config.headers.Authorization = `Bearer ${token}`;
 
     return config;
   },
@@ -29,6 +30,7 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   response => response,
+  
   error => {
     return Promise.reject(parseApiError(error));
   },

@@ -252,19 +252,20 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
       grandTotal,
     };
   }, [selectedItems, discountPrice, route.params?.quoteDetails]);
+
   const handleUpdateQuote = async () => {
     if (typeof quoteId !== 'number') {
       showToast('Invalid quote ID', 'error');
       return;
     }
     try {
-      await updateQuote({
-        quoteId: quoteId,
-        items: selectedItems,
+      const res = await updateQuote({
+        quote_id: quoteId,
+        quote_items: selectedItems,
       });
       showToast('Quote updated successfully!');
       navigation.jumpTo('Sections', {
-        quoteDetails: route.params.quoteDetails
+        quoteDetails: route.params.quoteDetails || res
       })
     } catch (error) {
       showToast(String(error), 'error');
@@ -416,7 +417,8 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
               txtColor={theme.textPrimary}
               onPress={navigateToNewItem}
               borderwidth={1}
-              buttonWidth={169.5}
+              buttonWidth="48.5%"
+          
               gap={8}
             >
               <Image source={icons.ic_blueadd} style={styles.icn} />
@@ -426,7 +428,7 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
               bg={theme.primary}
               bttnTxt="Save & Preview"
               txtColor={theme.primaryText}
-              buttonWidth={169.5}
+              buttonWidth="48.5%"
               showLoader={loadingUpdateQuote}
               onPress={handleUpdateQuote}
             />

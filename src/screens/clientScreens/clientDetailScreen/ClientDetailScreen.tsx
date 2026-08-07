@@ -4,8 +4,9 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  Animated,
 } from 'react-native';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
@@ -20,7 +21,11 @@ import { useClient } from '@/hooks/apis/useClient';
 import RecentClientActivity from '@/components/recentClientActivity/RecentClientActivity';
 import { RootScreenProps } from '@/types/navigation.types';
 
-const ClientDetailScreen = ({ navigation, route }: RootScreenProps<'ClientDetailScreen'>) => {
+const ClientDetailScreen = ({
+  navigation,
+  route,
+}: RootScreenProps<'ClientDetailScreen'>) => {
+  const [openEdit, setOpenEdit] = useState(false);
   const clientId = route.params.clientId;
   const { theme, isDark } = useAppTheme();
   const { showClientDetail, client_detail } = useClient();
@@ -30,6 +35,18 @@ const ClientDetailScreen = ({ navigation, route }: RootScreenProps<'ClientDetail
     navigation.goBack();
   };
 
+  const animation = useRef(new Animated.Value(0)).current;
+
+  const translateY = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-10, 0],
+  });
+
+  const opacity = animation.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+  });
+
   const navigateToAddClient = () => {
     navigation.navigate('AddClientScreen');
   };
@@ -37,8 +54,21 @@ const ClientDetailScreen = ({ navigation, route }: RootScreenProps<'ClientDetail
   useEffect(() => {
     showClientDetail(clientId);
   }, [clientId, showClientDetail]);
+
+  useEffect(() => {
+    Animated.timing(animation, {
+      toValue: openEdit ? 1 : 0,
+      duration: 220,
+      useNativeDriver: true,
+    }).start();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openEdit]);
+
   return (
-    <LinearGradient colors={theme.gradientPrimary} style={[styles.container, {paddingBottom: insets.bottom}]}>
+    <LinearGradient
+      colors={theme.gradientPrimary}
+      style={[styles.container, { paddingBottom: insets.bottom }]}
+    >
       {isDark ? (
         <StatusBar
           barStyle="light-content"
@@ -61,10 +91,39 @@ const ClientDetailScreen = ({ navigation, route }: RootScreenProps<'ClientDetail
             />
           </TouchableOpacity>
 
-          <Image
-            source={isDark ? icons.ic_darkdots : icons.ic_dots}
-            style={styles.img}
-          />
+          <View style={styles.animation}>
+            <TouchableOpacity onPress={() => setOpenEdit(!openEdit)}>
+              <Image
+                source={isDark ? icons.ic_darkdots : icons.ic_dots}
+                style={styles.img}
+              />
+            </TouchableOpacity>
+
+            <Animated.View
+              pointerEvents={openEdit ? 'auto' : 'none'}
+              style={[
+                styles.update,
+                {
+                  opacity,
+                  transform: [{ translateY }],
+                },
+              ]}
+            >
+              <TouchableOpacity activeOpacity={0.7} style={styles.dropdownItem}>
+                <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
+                  Edit
+                </InterTightMedium>
+              </TouchableOpacity>
+
+              <View style={styles.separator} />
+
+              <TouchableOpacity activeOpacity={0.7} style={styles.dropdownItem}>
+                <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
+                  Delete
+                </InterTightMedium>
+              </TouchableOpacity>
+            </Animated.View>
+          </View>
         </View>
       </View>
       <View style={styles.content}>
@@ -180,7 +239,7 @@ const ClientDetailScreen = ({ navigation, route }: RootScreenProps<'ClientDetail
         <TouchableOpacity activeOpacity={0.8} onPress={navigateToAddClient}>
           <Image source={icons.ic_add} style={styles.ic} />
         </TouchableOpacity>
-          </View>
+      </View>
     </LinearGradient>
   );
 };

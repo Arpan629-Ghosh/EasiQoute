@@ -9,7 +9,9 @@ import {
   createQuoteThunk,
   createSectionsThunk,
   createSelectedSectionsThunk,
+  deleteQuoteThunk,
   deleteSectionsThunk,
+  duplicateQuoteThunk,
   fetchQuoteDetailsThunk,
   getSectionsThunk,
   getSelectedSectionsThunk,
@@ -27,8 +29,11 @@ export interface QuotesState {
   last_page: number;
   loadingQuoteDetails: boolean;
   loadingUpdateQuote: boolean;
+  loadingUpdateStatus: boolean;
   loadingSections: boolean;
   loadingQuoteList: boolean;
+  loadingDuplicateQuote: boolean;
+  loadingDeleteQuote: boolean;
   error: string | null;
   isFetchCall: boolean;
 }
@@ -42,8 +47,11 @@ const initialState: QuotesState = {
   last_page: 1,
   loadingQuoteDetails: false,
   loadingUpdateQuote: false,
+  loadingUpdateStatus: false,
   loadingSections: false,
   loadingQuoteList: false,
+  loadingDuplicateQuote: false,
+  loadingDeleteQuote: false,
   error: null,
   isFetchCall: false,
 };
@@ -164,15 +172,15 @@ const quotesSlice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(updateStatusThunk.pending, state => {
-        state.loadingUpdateQuote = true;
+        state.loadingUpdateStatus = true;
         state.error = null;
       })
       .addCase(updateStatusThunk.fulfilled, state => {
-        state.loadingUpdateQuote = false;
+        state.loadingUpdateStatus = false;
         state.error = null;
       })
       .addCase(updateStatusThunk.rejected, (state, action) => {
-        state.loadingUpdateQuote = false;
+        state.loadingUpdateStatus = false;
         state.error = action.payload as string;
       })
       .addCase(createSelectedSectionsThunk.pending, state => {
@@ -199,7 +207,31 @@ const quotesSlice = createSlice({
       .addCase(getSelectedSectionsThunk.rejected, (state, action) => {
         state.loadingSections = false;
         state.error = action.payload as string;
-      });
+      })
+      .addCase(duplicateQuoteThunk.pending, state => {
+        state.loadingDuplicateQuote = true;
+        state.error = null
+      })
+      .addCase(duplicateQuoteThunk.fulfilled, state => {
+        state.loadingDuplicateQuote = false;
+        state.error = null
+      })
+      .addCase(duplicateQuoteThunk.rejected, (state, action) => {
+        state.loadingDuplicateQuote = false;
+        state.error = action.payload as string;
+      })
+      .addCase(deleteQuoteThunk.pending, state => {
+        state.loadingDeleteQuote = true;
+        state.error = null;
+      })
+      .addCase(deleteQuoteThunk.fulfilled, state => {
+        state.loadingDeleteQuote = false;
+        state.error = null;
+      })
+      .addCase(deleteQuoteThunk.rejected, (state, action) => {
+        state.loadingDeleteQuote = false;
+        state.error = action.payload as string;
+    })
   },
 });
 

@@ -11,8 +11,9 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import { icons } from '@/config/icons';
-import InterTightRegular from '../fontComponents/InterTightRegular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useInvoice } from '@/hooks/apis/useInvoice';
+import { useToast } from '@/hooks/useToast';
 
 const InvoiceTopTabBars = ({
   state,
@@ -23,6 +24,8 @@ const InvoiceTopTabBars = ({
 }: any) => {
   const [openEdit, setOpenEdit] = useState(false);
   const { theme, isDark } = useAppTheme();
+  const { deleteInvoice } = useInvoice();
+  const { showToast } = useToast();
   const insets = useSafeAreaInsets();
   const animation = useRef(new Animated.Value(0)).current;
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -56,6 +59,16 @@ const InvoiceTopTabBars = ({
     });
   };
 
+  const handleDeleteInvoice = () => {
+    try {
+      deleteInvoice(invoiceDetails.id);
+      showToast(`${invoiceDetails.title} deleted successfully!`);
+      navigateToBack();
+    } catch (error) {
+      showToast(String(error), 'error')
+    }
+  }
+
   return (
     <View style={styles.content}>
       {isDark ? (
@@ -88,6 +101,7 @@ const InvoiceTopTabBars = ({
             </TouchableOpacity>
 
             <Animated.View
+              pointerEvents={openEdit ? 'auto' : 'none'}
               style={[
                 styles.update,
                 {
@@ -96,10 +110,22 @@ const InvoiceTopTabBars = ({
                 },
               ]}
             >
-              <TouchableOpacity activeOpacity={0.8} onPress={navigateToUpdate}>
-                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                  Update Invoice
-                </InterTightRegular>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={navigateToUpdate}
+                style={styles.dropdownItem}
+              >
+                <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
+                  Edit
+                </InterTightMedium>
+              </TouchableOpacity>
+
+              <View style={styles.separator} />
+
+              <TouchableOpacity activeOpacity={0.7} style={styles.dropdownItem}>
+                <InterTightMedium onPress={handleDeleteInvoice} fsize={14} fcolor={theme.textPrimary}>
+                  Delete
+                </InterTightMedium>
               </TouchableOpacity>
             </Animated.View>
           </View>
@@ -180,25 +206,40 @@ const createStyles = (theme: Theme) =>
     },
     update: {
       position: 'absolute',
-      top: 25,
+      top: 30,
       right: 0,
-      backgroundColor: theme.background,
-      // paddingVertical: 10,
-      // paddingHorizontal: 14,
-      borderRadius: 12,
-      width: 100,
-      height: 30,
 
+      width: 120,
+      backgroundColor: theme.background,
+
+      borderRadius: 10,
+      paddingVertical: 6,
+
+      // iOS
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
-        height: 2,
+        height: 4,
       },
-      shadowOpacity: 0.15,
-      shadowRadius: 6,
-      elevation: 5,
-      alignItems: 'center',
+      shadowOpacity: 0.12,
+      shadowRadius: 8,
+
+      // Android
+      elevation: 6,
+
+      zIndex: 1000,
+    },
+
+    dropdownItem: {
+      height: 40,
+      paddingHorizontal: 14,
+
       justifyContent: 'center',
+    },
+
+    separator: {
+      height: StyleSheet.hairlineWidth,
+      backgroundColor: theme.border,
     },
     animation: {
       position: 'relative',

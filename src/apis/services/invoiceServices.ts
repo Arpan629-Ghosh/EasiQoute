@@ -1,4 +1,4 @@
-import { apiClient } from '@/config/apis/client';
+import { apiClient } from '@/apis/axiosInstance';
 import { ApiResponse } from '@/types/apis/common.types';
 import {
   InvoiceCreate,
@@ -47,14 +47,14 @@ export const invoiceServices = {
   updateInvoice: async (payload: UpdateInvoicePayload) => {
     const formData = new FormData();
     formData.append('_method', 'PUT');
-    formData.append('invoice_id', payload.invoice_id)
-    if(payload.invoice_summury?.invoice_date)
+    formData.append('invoice_id', payload.invoice_id);
+    if (payload.invoice_summury?.invoice_date)
       formData.append('invoice_date', payload.invoice_summury?.invoice_date);
-    if(payload.invoice_summury?.due_date)
+    if (payload.invoice_summury?.due_date)
       formData.append('due_date', payload.invoice_summury?.due_date);
-    if(payload.invoice_summury?.message)
+    if (payload.invoice_summury?.message)
       formData.append('message', payload.invoice_summury?.message);
-    if(payload.invoice_summury?.notes)
+    if (payload.invoice_summury?.notes)
       formData.append('notes', payload.invoice_summury?.notes);
     payload.invoice_summury?.attachments?.forEach(file => {
       formData.append('attachments', {
@@ -64,16 +64,19 @@ export const invoiceServices = {
       });
     });
 
-    if (payload.discount) formData.append("discount", payload.discount);
+    if (payload.discount) formData.append('discount', payload.discount);
     if (payload.invoice_items) {
       payload.invoice_items.map((item, index) => {
         for (const key of Object.keys(item)) {
-          formData.append(`items[${index}][${key}]`, item[key as keyof FetchItemsData])
+          formData.append(
+            `items[${index}][${key}]`,
+            item[key as keyof FetchItemsData],
+          );
         }
-      })
+      });
     }
 
-    console.log("formData: ", formData)
+    console.log('formData: ', formData);
 
     const response = await apiClient.post<ApiResponse<InvoicePayload>>(
       `${ENDPOINTS.CREATEINVOICE}/${payload.invoice_id}`,
@@ -85,6 +88,14 @@ export const invoiceServices = {
 
   getInvoiceDetails: async (payload: number) => {
     const response = await apiClient.get<ApiResponse<InvoiceDetailsPayload>>(
+      `${ENDPOINTS.CREATEINVOICE}/${payload}`,
+    );
+
+    return response.data;
+  },
+
+  deleteInvoice: async (payload: number) => {
+    const response = await apiClient.delete<ApiResponse<null>>(
       `${ENDPOINTS.CREATEINVOICE}/${payload}`,
     );
 

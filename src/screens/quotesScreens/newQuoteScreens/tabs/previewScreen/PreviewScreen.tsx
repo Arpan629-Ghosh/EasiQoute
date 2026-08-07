@@ -81,7 +81,7 @@ const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'
             borderc={theme.chipBorder}
             gap={8}
             borderwidth={1}
-            buttonWidth={182}
+            buttonWidth="48.5%"
             bttnTxt="Share"
             txtColor={theme.textMuted}
           >
@@ -89,7 +89,7 @@ const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'
           </ButtonComponent>
           <ButtonComponent
             bg={theme.primary}
-            buttonWidth={182}
+            buttonWidth="48.5%"
             bttnTxt="Save"
             txtColor={theme.primaryText}
           />

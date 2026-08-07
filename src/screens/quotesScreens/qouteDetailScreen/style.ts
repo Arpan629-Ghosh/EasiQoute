@@ -35,7 +35,7 @@ export const createStyles = (theme: Theme) =>
       paddingVertical: 4.5,
       gap: 10,
       alignItems: 'center',
-      justifyContent: "center",
+      justifyContent: 'center',
       backgroundColor: '#F973151A',
     },
     statusimg: {
@@ -124,25 +124,40 @@ export const createStyles = (theme: Theme) =>
     },
     update: {
       position: 'absolute',
-      top: 25,
+      top: 30,
       right: 0,
-      backgroundColor: theme.background,
-      // paddingVertical: 10,
-      // paddingHorizontal: 14,
-      borderRadius: 12,
-      width: 100,
-      height: 30,
 
+      width: 120,
+      backgroundColor: theme.background,
+
+      borderRadius: 10,
+      paddingVertical: 6,
+
+      // iOS
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
-        height: 2,
+        height: 4,
       },
-      shadowOpacity: 0.15,
-      shadowRadius: 6,
-      elevation: 5,
-      alignItems: "center",
-      justifyContent: "center"
+      shadowOpacity: 0.12,
+      shadowRadius: 8,
+
+      // Android
+      elevation: 6,
+
+      zIndex: 1000,
+    },
+
+    dropdownItem: {
+      height: 40,
+      paddingHorizontal: 14,
+
+      justifyContent: 'center',
+    },
+
+    separator: {
+      height: StyleSheet.hairlineWidth,
+      backgroundColor: theme.border,
     },
     animation: {
       position: 'relative',
@@ -151,5 +166,8 @@ export const createStyles = (theme: Theme) =>
       width: 22,
       height: 22,
       resizeMode: 'contain',
+    },
+    threedot: {
+      paddingHorizontal: 12,
     },
   });

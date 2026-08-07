@@ -36,7 +36,7 @@ export const createStyles = (theme: Theme) =>
       width: '100%',
     },
     inputicon: {
-      width: 325,
+      width: "87%",
       borderWidth: 1,
       borderColor: theme.searchInput,
       backgroundColor: theme.searchInput,

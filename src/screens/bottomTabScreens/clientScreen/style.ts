@@ -22,7 +22,7 @@ export const createStyles = (theme: Theme) =>
       flexDirection: 'row',
     },
     inputicon: {
-      width: 325,
+      width: "87%",
       borderWidth: 1,
       borderColor: theme.searchInput,
       backgroundColor: theme.searchInput,

@@ -130,14 +130,15 @@ export interface CreateQuotePayload {
 }
 
 export interface CreateQuote {
-  quote_id?: number | undefined
+  quote_id?: number | undefined;
   title: string;
   description: string;
   quote_date: string;
   expiry_date: string;
   client_id?: number;
-  attachments?: AttachmentFile[]
+  attachments?: AttachmentFile[];
   notes: string;
+  is_company_phone_number_show?: boolean
 }
 
 export interface SectionsPayload {
@@ -204,6 +205,7 @@ export interface UpdateQuotePayload {
   quote_summury?: CreateQuote;
   quote_items?: FetchItemsData[];
   discount?: number;
+  is_company_phone_number_show?: boolean
 }
 
 export interface QuoteSectionData {

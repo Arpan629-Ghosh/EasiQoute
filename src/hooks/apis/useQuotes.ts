@@ -2,7 +2,9 @@ import {
   createQuoteThunk,
   createSectionsThunk,
   createSelectedSectionsThunk,
+  deleteQuoteThunk,
   deleteSectionsThunk,
+  duplicateQuoteThunk,
   fetchQuoteDetailsThunk,
   getSectionsThunk,
   getSelectedSectionsThunk,
@@ -96,6 +98,14 @@ export const useQuotes = () => {
     [dispatch],
   );
 
+  const duplicateQuote = useCallback((payload: number) => {
+    return dispatch(duplicateQuoteThunk(payload)).unwrap();
+  }, [dispatch])
+  
+  const deleteQuote = useCallback((payload: number) => {
+    return dispatch(deleteQuoteThunk(payload)).unwrap();
+  }, [dispatch])
+
   return {
     // actions
     fetchQuotesScreenData,
@@ -108,6 +118,8 @@ export const useQuotes = () => {
     updateStatus,
     createSelectedSections,
     getSelectedSections,
+    duplicateQuote,
+    deleteQuote,
 
     // state
     quoteList: quote.quoteList,
@@ -118,7 +130,9 @@ export const useQuotes = () => {
     loadingUpdateQuote: quote.loadingUpdateQuote,
     loadingSections: quote.loadingSections,
     loadingQuoteList: quote.loadingQuoteList,
-    
+    loadingDuplicateQuote: quote.loadingDuplicateQuote,
+    loadingUpdateStatus: quote.loadingUpdateStatus,
+    loadingDeleteQuote: quote.loadingDeleteQuote,
 
     error: quote.error,
     isFetchCall: quote.isFetchCall,

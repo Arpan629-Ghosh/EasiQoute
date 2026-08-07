@@ -26,7 +26,7 @@ const StatusChanger = ({
   onToggleStatus,
 }: Props) => {
 
-  const { loadingUpdateQuote } = useQuotes();
+  const { loadingUpdateStatus } = useQuotes();
 
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
@@ -110,7 +110,7 @@ const StatusChanger = ({
                 );
               })}
         </View>
-        <Loader visible={ loadingUpdateQuote} />
+        <Loader visible={ loadingUpdateStatus} />
       </View>
     </ModalComponent>
   );

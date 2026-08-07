@@ -61,6 +61,8 @@ const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Section
       showToast(String(error), 'error');
     }
   };
+
+  
   return (
     <View style={styles.container}>
       <FlatList
@@ -89,14 +91,14 @@ const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Section
             borderc={theme.chipBorder}
             bttnTxt="New Section"
             txtColor={theme.textMuted}
-            buttonWidth={169.5}
+            buttonWidth="48.5%"
             onPress={navigateToNewSection}
           >
             <Image source={icons.ic_addicon} style={styles.addicon} />
           </ButtonComponent>
           <ButtonComponent
             bg={theme.primary}
-            buttonWidth={169.5}
+            buttonWidth="48.5%"
             bttnTxt="Save & Preview"
             txtColor={theme.primaryText}
             showLoader={loadingSections}

@@ -158,3 +158,38 @@ export const getSelectedSectionsThunk = createAsyncThunk(
     }
   },
 );
+
+export const duplicateQuoteThunk = createAsyncThunk(
+    '/api/quote/duplicate',
+
+    async (payload: number, thunkAPI) => {
+        try {
+            const response = await quoteServices.duplicateQuote(payload);
+
+            if (!response.result) {
+                return thunkAPI.rejectWithValue(response.message);
+            }
+            return response.payload
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+);
+
+export const deleteQuoteThunk = createAsyncThunk(
+    '/api/quote/delete',
+
+    async (payload: number, thunkAPI) => {
+        try {
+            const response = await quoteServices.deleteQuote(payload);
+
+            if (!response.result) {
+                return thunkAPI.rejectWithValue(response.message);
+            }
+
+            return response.payload
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)

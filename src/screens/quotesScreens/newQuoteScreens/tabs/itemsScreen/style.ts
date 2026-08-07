@@ -57,7 +57,8 @@ export const createStyles = (theme: Theme) =>
       borderTopColor: theme.border,
       backgroundColor: theme.background,
       width: '100%',
-      alignItems: 'center',
+      // alignItems: 'center',
+      paddingHorizontal: 12
     },
     footerComponent: {
       paddingVertical: 12,
@@ -75,10 +76,9 @@ export const createStyles = (theme: Theme) =>
       width: 18,
     },
     bttnContainer: {
-      padding: 12,
       gap: 12,
       flexDirection: 'row',
-      justifyContent: 'space-between',
+      
     },
 
     icn: {

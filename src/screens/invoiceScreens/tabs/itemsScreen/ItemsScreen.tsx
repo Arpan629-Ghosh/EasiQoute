@@ -440,7 +440,7 @@ const ItemsScreen = ({
               txtColor={theme.textPrimary}
               onPress={navigateToNewItem}
               borderwidth={1}
-              buttonWidth={169.5}
+              buttonWidth="48.5%"
               gap={8}
             >
               <Image source={icons.ic_blueadd} style={styles.icn} />
@@ -450,7 +450,7 @@ const ItemsScreen = ({
               bg={theme.primary}
               bttnTxt="Save & Preview"
               txtColor={theme.primaryText}
-              buttonWidth={169.5}
+              buttonWidth="48.5%"
               showLoader={loadingInvoiceUpdate}
               onPress={handleUpdateInvoice}
             />

@@ -32,8 +32,12 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
     fetchQuoteDetails,
     getSelectedSections,
     updateStatus,
+    duplicateQuote,
+    deleteQuote,
     quoteDetails,
     loadingQuoteDetails,
+    loadingDuplicateQuote,
+    loadingDeleteQuote,
     selectedSections,
   } = useQuotes();
   const quoteId = route.params.quoteId; 
@@ -47,6 +51,16 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
     fetchQuoteDetails(quoteId)
     getSelectedSections(quoteId)
   }, [quoteId, fetchQuoteDetails, getSelectedSections])
+
+  const handleDuplicateQuote = () => {
+    try {
+      duplicateQuote(quoteId);
+      showToast('Quote duplcated successfully!');
+    } catch (error) {
+      showToast(String(error), 'error')
+    }
+    
+  }
 
 
   useEffect(() => {
@@ -124,6 +138,16 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
       showToast('Failed to open attachment', 'error');
     }
   };
+
+  const handleDeleteQuote = () => {
+    try {
+      deleteQuote(quoteId);
+      showToast(`${quoteDetails?.title} deleted successfully!`)
+      navigateToBack();
+    } catch (error) {
+      showToast(String(error), 'error')
+    }
+  }
   
 
   
@@ -168,10 +192,22 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
                 },
               ]}
             >
-              <TouchableOpacity activeOpacity={0.8} onPress={navigateToEdit}>
-                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                  Update Quote
-                </InterTightRegular>
+              <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={navigateToEdit}
+                style={styles.dropdownItem}
+              >
+                <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
+                  Edit
+                </InterTightMedium>
+              </TouchableOpacity>
+
+              <View style={styles.separator} />
+
+              <TouchableOpacity onPress={handleDeleteQuote} activeOpacity={0.7} style={styles.dropdownItem}>
+                <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
+                  Delete
+                </InterTightMedium>
               </TouchableOpacity>
             </Animated.View>
           </View>
@@ -539,6 +575,7 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
             borderc="#082B60"
             txtColor={theme.textPrimary}
             gap={8}
+            onPress={handleDuplicateQuote}
           >
             <Image source={icons.ic_duplicate} style={styles.addicon} />
           </ButtonComponent>
@@ -550,7 +587,7 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
         onToggleStatus={toggleStatus}
         selectedStatus={selectedStatus}
       />
-      <Loader visible={loadingQuoteDetails} />
+      <Loader visible={loadingQuoteDetails || loadingDuplicateQuote || loadingDeleteQuote} />
     </LinearGradient>
   );
 };

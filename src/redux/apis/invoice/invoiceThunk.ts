@@ -64,3 +64,21 @@ export const updateInvoiceThunk = createAsyncThunk(
     }
   }
 )
+
+export const deleteInvoiceThunk = createAsyncThunk(
+  '/api/invoice/delete',
+
+  async (payload: number, thunkAPI) => {
+    try {
+      const response = await invoiceServices.deleteInvoice(payload);
+
+      if (!response.result) {
+        return thunkAPI.rejectWithValue(response.message);
+      }
+
+      return response.payload
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  }
+)

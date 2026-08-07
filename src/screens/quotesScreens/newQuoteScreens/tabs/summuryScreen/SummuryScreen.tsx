@@ -59,7 +59,7 @@ const SummuryScreen = ({
 }: QuoteTopTabWithRootProps<'Summury'>) => {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [activeField, setActiveField] = useState<'start' | 'end' | null>(null);
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(route.params.quoteDetails?.is_company_phone_number_show || false);
   const [paginationLoading, setPaginationLoading] = useState(false);
   const [search, setSearch] = useState('');
 
@@ -86,6 +86,7 @@ const SummuryScreen = ({
   const styles = useMemo(() => createStyles(theme), [theme]);
   const quoteDetails = route.params.quoteDetails;
   const quoteId = quoteDetails?.id
+  const isEdit = !!quoteId
 
   useEffect(() => {
     page.current = 1;
@@ -147,7 +148,7 @@ const SummuryScreen = ({
     setNewQuoteFormData(prev => {
       return {
         ...prev,
-        qtDate: stratDate,
+        quote_date: stratDate,
       };
     });
   };
@@ -156,7 +157,7 @@ const SummuryScreen = ({
     setNewQuoteFormData(prev => {
       return {
         ...prev,
-        expDate: endDate,
+        expiry_date: endDate,
       };
     });
   };
@@ -254,7 +255,7 @@ const SummuryScreen = ({
 
   const handleCreateQuote = async () => {
     try {
-      await createQuote({
+      const res = await createQuote({
         title: newQuoteFormData.title,
         description: newQuoteFormData.description,
         quote_date: newQuoteFormData.quote_date,
@@ -262,6 +263,7 @@ const SummuryScreen = ({
         client_id: Number(newQuoteFormData.client_id),
         notes: newQuoteFormData.notes,
         attachments: newQuoteFormData.file,
+        is_company_phone_number_show: enabled
       });
       showToast('Quote created successfully.');
       setNewQuoteFormData({
@@ -275,7 +277,7 @@ const SummuryScreen = ({
         file: [],
       });
       navigation.jumpTo('Items', {
-        quoteDetails: route.params.quoteDetails
+        quoteDetails: res
       })
     } catch (error) {
       showToast(String(error), 'error');
@@ -286,7 +288,8 @@ const SummuryScreen = ({
     try {
       await updateQuote({
         quote_id: quoteId,
-        quote_summury: newQuoteFormData
+        quote_summury: newQuoteFormData,
+        is_company_phone_number_show: enabled
       });
       showToast('Invoice updated successfully!');
       setNewQuoteFormData({
@@ -300,7 +303,7 @@ const SummuryScreen = ({
         file: [],
       });
       navigation.jumpTo('Items', {
-        
+        quoteDetails: route.params?.quoteDetails
       });
       
     } catch (error) {
@@ -408,7 +411,7 @@ const SummuryScreen = ({
               <CustomDropdown
                 data={shapedDataForDropdown}
                 placeholder="Search or select client"
-                value={newQuoteFormData.client_id}
+                value={newQuoteFormData?.client_id || null}
                 onChange={(item: Item) => updateField('client_id', Number(item.value))}
                 onSearch={setSearch}
                 flatListProps={{
@@ -481,7 +484,7 @@ const SummuryScreen = ({
             bttnTxt="Save"
             txtColor={theme.primaryText}
             showLoader={loadingUpdateQuote}
-            onPress={handleCreateQuote}
+            onPress={isEdit ? handleUpdateInvoice : handleCreateQuote}
           />
         </View>
       </View>

@@ -1,5 +1,5 @@
 import { CreateTeamMemberPayload, FetchTeamMembers, FetchTeamMembersPayload } from './../../types/apis/settings.types';
-import { apiClient } from "@/config/apis/client";
+import { apiClient } from '@/apis/axiosInstance';
 import { Company } from "@/types/apis/auth.types";
 import { ApiResponse } from "@/types/apis/common.types";
 import { ENDPOINTS } from "../endPoints";

@@ -8,11 +8,11 @@ interface Props extends TouchableOpacityProps {
   borderc?: string;
   gap?: number;
   borderwidth?: number;
-  buttonWidth?: number; 
+  buttonWidth?: number |`${number}%`; 
   showLoader?: boolean;
   txtColor: string;
   bttnTxt: string;
- 
+  flex?: number 
 
 }
 const ButtonComponent: React.FC<Props> = ({
@@ -26,6 +26,7 @@ const ButtonComponent: React.FC<Props> = ({
   bttnTxt,
   children,
   buttonWidth,
+  flex,
   ...rest
 }) => {
   return (
@@ -34,6 +35,7 @@ const ButtonComponent: React.FC<Props> = ({
       style={[
         styles.bttn,
         {
+          flex: flex ,
           backgroundColor: bg,
           gap: gap,
           borderColor: borderc,

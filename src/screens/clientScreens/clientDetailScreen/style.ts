@@ -102,10 +102,49 @@ export const createStyles = (theme: Theme) =>
       height: '100%',
       width: '100%',
       resizeMode: 'cover',
+    },
+    flatlist: {
+      paddingBottom: 120,
+    },
+
+    update: {
+      position: 'absolute',
+      top: 30,
+      right: 0,
+
+      width: 120,
+      backgroundColor: theme.background,
+
+      borderRadius: 10,
+      paddingVertical: 6,
+
+      // iOS
+      shadowColor: '#000',
+      shadowOffset: {
+        width: 0,
+        height: 4,
       },
-      flatlist: {
-        paddingBottom: 120
-      },
-      
-     
+      shadowOpacity: 0.12,
+      shadowRadius: 8,
+
+      // Android
+      elevation: 6,
+
+      zIndex: 1000,
+    },
+
+    dropdownItem: {
+      height: 40,
+      paddingHorizontal: 14,
+
+      justifyContent: 'center',
+    },
+
+    separator: {
+      height: StyleSheet.hairlineWidth,
+      backgroundColor: theme.border,
+    },
+    animation: {
+      position: 'relative',
+    },
   });

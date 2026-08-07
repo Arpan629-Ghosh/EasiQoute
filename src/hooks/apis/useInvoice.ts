@@ -1,4 +1,4 @@
-import { createInvoiceThunk, getInvoiceDetailsThunk, getInvoicesThunk, updateInvoiceThunk } from "@/redux/apis/invoice/invoiceThunk";
+import { createInvoiceThunk, deleteInvoiceThunk, getInvoiceDetailsThunk, getInvoicesThunk, updateInvoiceThunk } from "@/redux/apis/invoice/invoiceThunk";
 import { AppDispatch, RootState } from "@/redux/store";
 import { InvoiceCreate, UpdateInvoicePayload } from "@/types/apis/invoice.types";
 import { useCallback } from "react";
@@ -27,11 +27,16 @@ export const useInvoice = () => {
         return dispatch(updateInvoiceThunk(payload)).unwrap();
     }, [dispatch])
 
+    const deleteInvoice = useCallback((payload: number) => {
+        return dispatch(deleteInvoiceThunk(payload)).unwrap();
+    }, [dispatch])
+
     return {
         createInvoice,
         getInvoices,
         getInvoiceDetails,
         updateInvoice,
+        deleteInvoice,
 
         invoiceList: invoice.invoiceList,
         invoiceDetails: invoice.invoiceDetails,
@@ -41,6 +46,7 @@ export const useInvoice = () => {
         loadingInvoiceUpdate: invoice.loadingInvoiceUpdate,
         loadingCreateInvoice: invoice.loadingCreateInvoice,
         loadingInvoiceDetails: invoice.loadingInvoiceDetails,
+        loadingDeleteInvoice: invoice.loadingDeleteInvoice,
         error: invoice.error
     };
 };
