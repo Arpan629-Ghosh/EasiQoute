@@ -1,4 +1,4 @@
-import { apiClient } from '@/config/apis/client';
+import { apiClient } from '@/apis/axiosInstance';
 import {
   AuthPayload,
   Company,
@@ -118,19 +118,17 @@ export const authServices = {
   },
 
   logout: async () => {
-    const response = await apiClient.post<ApiResponse<null>>(
-      ENDPOINTS.LOGOUT
-    )
-    return response.data
+    const response = await apiClient.post<ApiResponse<null>>(ENDPOINTS.LOGOUT);
+    return response.data;
   },
 
-  searchAddress: async(payload: string) => {
+  searchAddress: async (payload: string) => {
     const response = await apiClient.get<ApiResponse<SearchAddressPayload[]>>(
-      ENDPOINTS.SEARCHADDRESS, {
-        params: {postcode: payload}
-      }
-    )
+      ENDPOINTS.SEARCHADDRESS,
+      {
+        params: { postcode: payload },
+      },
+    );
     return response.data;
-  }
-  
+  },
 };
