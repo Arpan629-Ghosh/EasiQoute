@@ -20,6 +20,7 @@ import { FetchItemsData } from '@/types/apis/settings.types';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
 import { QuoteTopTabWithRootProps } from '@/types/navigation.types';
+import { InvoiceItem } from '@/types/apis/invoice.types';
 
 
 
@@ -45,7 +46,7 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
   const insets = useSafeAreaInsets();
   const debouncedSearch = useDebounce(search);
   const quoteId = route.params.quoteDetails?.id;
-
+  const quoteItems : InvoiceItem[] | undefined = route.params.quoteDetails?.items
   const { theme } = useAppTheme();
   const { showToast } = useToast();
   const {
@@ -71,10 +72,27 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
   }, [openFinancialBreakdown]);
 
   useEffect(() => {
-    if (route.params?.quoteDetails) {
-      setSelectedItems(route.params.quoteDetails.items);
-    }
-  }, [route.params]);
+    if (!quoteItems?.length) return;
+
+    const mapped = quoteItems.map(item => ({
+      id: item.id,
+      name: item.name,
+      quantity: item.quantity,
+      price: item.price,
+      total_price: item.total_price,
+      total_cost: item.total_cost,
+      category_name: item.category_name,
+      subcategory_name: item.subcategory_name,
+      unit: item.unit,
+      cost: item.cost,
+      is_added: true,
+      category_id: item.category_id,
+      subcategory_id: item.subcategory_id,
+      type: item.type,
+    }));
+
+    setSelectedItems(mapped);
+  }, [quoteItems]);
 
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -175,19 +193,21 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
     return result;
   }, [subcat_data, debouncedSearch]);
 
-  const handleAddItem = useCallback((updatedItem: FetchItemsData) => {
-    setSelectedItems(prev => {
-      const alreadyExists = prev.find(item => item.id === updatedItem.id);
+ const handleAddItem = useCallback((updatedItem: FetchItemsData) => {
+     setSelectedItems(prev => {
+       const exists = prev.find(i => i.id === updatedItem.id);
+ 
+       if (exists) {
+         return prev.map(i => (i.id === updatedItem.id ? updatedItem : i));
+       }
+ 
+       return [...prev, updatedItem];
+     });
+   }, []);
 
-      if (alreadyExists) {
-        return prev.map(item =>
-          item.id === updatedItem.id ? updatedItem : item,
-        );
-      }
-
-      return [...prev, updatedItem];
-    });
-  }, []);
+   const handleRemoveItem = useCallback((id: number) => {
+      setSelectedItems(prev => prev.filter(i => i.id !== id));
+    }, []);
 
   const discountValue = (discount: number) => {
     setDiscountPrice(discount);
@@ -197,9 +217,18 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
 
   const renderItems: ListRenderItem<FetchItemsData> = useCallback(
     ({ item }) => {
-      return <RenderFilterData item={item} onAddItem={handleAddItem} />;
+      const selectedItem = selectedItems.find(i => i.id === item.id);
+
+      return (
+        <RenderFilterData
+          item={item}
+          selectedItem={selectedItem}
+          onAddItem={handleAddItem}
+          onRemoveItem={handleRemoveItem}
+        />
+      );
     },
-    [handleAddItem],
+    [handleAddItem, handleRemoveItem, selectedItems],
   );
 
   const financialBreakdown = useMemo(() => {

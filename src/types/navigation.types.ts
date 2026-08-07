@@ -12,7 +12,7 @@ import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CreateQuotePayload } from './apis/quote.types';
-import { InvoiceDetailsPayload } from './apis/invoice.types';
+import { InvoiceDetailsPayload, InvoiceItem } from './apis/invoice.types';
 
 /* -------------------------------------------------------------------------- */
 /*                               PARAM LISTS                                  */
@@ -172,7 +172,7 @@ export type NewQuoteTopTabParamList = {
 
 export type NewInvoiceTopTabParamList = {
   Summury: { invoiceDetails?: InvoiceDetailsPayload; quoteId: number } | undefined;
-  Items: { invoiceId?: number; previewUrl: string  } | undefined;
+  Items: { invoiceItems?: InvoiceItem[]; invoiceId?: number  } | undefined;
   Preview: {previewUrl: string | undefined};
 };
 

@@ -17,7 +17,7 @@ import {
   CreateQuote,
   QuoteSection,
   Sections,
-  UpdateQuote,
+  UpdateQuotePayload,
   UpdateStatus,
 } from '@/types/apis/quote.types';
 
@@ -69,7 +69,7 @@ export const useQuotes = () => {
   );
 
   const updateQuote = useCallback(
-    (payload: UpdateQuote) => {
+    (payload: UpdateQuotePayload) => {
       return dispatch(updateQuoteThunk(payload)).unwrap();
     },
     [dispatch],
@@ -118,6 +118,7 @@ export const useQuotes = () => {
     loadingUpdateQuote: quote.loadingUpdateQuote,
     loadingSections: quote.loadingSections,
     loadingQuoteList: quote.loadingQuoteList,
+    
 
     error: quote.error,
     isFetchCall: quote.isFetchCall,

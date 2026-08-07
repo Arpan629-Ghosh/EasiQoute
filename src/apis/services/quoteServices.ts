@@ -1,8 +1,9 @@
 import { apiClient } from "@/config/apis/client"
 import { ApiResponse } from "@/types/apis/common.types"
-import { CreateQuote, CreateQuotePayload, GetSections, QuoteSection, QuoteSectionData, QuoteSectionPayload, QuotesPayload, Sections, SectionsPayload, UpdateQuote, UpdateStatus } from "@/types/apis/quote.types"
+import { CreateQuote, CreateQuotePayload, GetSections, QuoteSection, QuoteSectionData, QuoteSectionPayload, QuotesPayload, Sections, SectionsPayload, UpdateQuotePayload, UpdateStatus } from "@/types/apis/quote.types"
 import { ENDPOINTS } from "../endPoints"
 import { UpdateInvoiceStatus } from "@/types/apis/invoice.types"
+import { FetchItemsData } from "@/types/apis/settings.types"
 
 
 export const quoteServices = {
@@ -77,19 +78,44 @@ export const quoteServices = {
         return response.data;
     },
 
-    updateQuote: async (payload: UpdateQuote) => {
-        const response = await apiClient.put<ApiResponse<CreateQuotePayload>>(
-          `${ENDPOINTS.QUOTELIST}/${payload.quoteId}`,
-            {items: payload.items, discount: payload.discount},
-          {
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          },
+    updateQuote: async (payload: UpdateQuotePayload) => {
+        const formData = new FormData();
+        formData.append('_method', 'PUT');
+        formData.append('invoice_id', payload.quote_id)
+        if(payload.quote_summury?.quote_date)
+          formData.append('invoice_date', payload.quote_summury.quote_id);
+        if(payload.quote_summury?.expiry_date)
+          formData.append('due_date', payload.quote_summury.expiry_date);
+        if(payload.quote_summury?.description)
+          formData.append('message', payload.quote_summury.description);
+        if(payload.quote_summury?.notes)
+          formData.append('notes', payload.quote_summury.notes);
+        payload.quote_summury?.attachments?.forEach(file => {
+          formData.append('attachments', {
+            uri: file.uri,
+            name: file.name,
+            type: file.type,
+          });
+        });
+    
+        if (payload.discount) formData.append("discount", payload.discount);
+        if (payload.quote_items) {
+          payload.quote_items.map((item, index) => {
+            for (const key of Object.keys(item)) {
+              formData.append(`items[${index}][${key}]`, item[key as keyof FetchItemsData])
+            }
+          })
+        }
+    
+        console.log("formData: ", formData)
+    
+        const response = await apiClient.post<ApiResponse<CreateQuotePayload>>(
+          `${ENDPOINTS.CREATEINVOICE}/${payload.quote_id}`,
+          formData,
         );
-
+    
         return response.data;
-    },
+      },
 
     updateStatus: async (payload: UpdateStatus | UpdateInvoiceStatus) => {
         const response = await apiClient.patch<ApiResponse<null>>(

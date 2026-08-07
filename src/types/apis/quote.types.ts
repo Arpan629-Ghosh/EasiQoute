@@ -130,11 +130,12 @@ export interface CreateQuotePayload {
 }
 
 export interface CreateQuote {
+  quote_id?: number | undefined
   title: string;
   description: string;
   quote_date: string;
   expiry_date: string;
-  client_id: number;
+  client_id?: number;
   attachments?: AttachmentFile[]
   notes: string;
 }
@@ -160,13 +161,13 @@ export interface Sections {
   sort: number
 }
 
-export interface UpdateQuote {
-  quoteId: number;
-  summury?: CreateQuote;
-  items?: FetchItemsData[];
-  sections?: Sections[];
-  discount?: number
-}
+// export interface UpdateQuote {
+//   quoteId?: number;
+//   summury?: CreateQuote;
+//   items?: FetchItemsData[];
+//   sections?: Sections[];
+//   discount?: number
+// }
 
 export interface UpdateStatus {
   status: string
@@ -196,6 +197,13 @@ export interface QuoteSectionPayload {
   active: number;
   created_at: string;
   updated_at: string;
+}
+
+export interface UpdateQuotePayload {
+  quote_id?: number | undefined;
+  quote_summury?: CreateQuote;
+  quote_items?: FetchItemsData[];
+  discount?: number;
 }
 
 export interface QuoteSectionData {

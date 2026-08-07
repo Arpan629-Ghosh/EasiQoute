@@ -23,28 +23,33 @@ import { FetchItemsData } from '@/types/apis/settings.types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/navigation.types';
-import { useToast } from '@/hooks/useToast';
 
 interface Props {
   item: FetchItemsData;
+  selectedItem?: FetchItemsData;
   onAddItem: (item: FetchItemsData) => void;
+  onRemoveItem: (itemId: number) => void;
 }
 
-const RenderFilterData: React.FC<Props> = ({ item, onAddItem }) => {
+const RenderFilterData: React.FC<Props> = ({
+  item,
+  selectedItem,
+  onAddItem,
+  onRemoveItem,
+}) => {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const { theme } = useAppTheme();
-  const { showToast } = useToast();
 
   const styles = useMemo(() => createStyles(theme), [theme]);
-
-  const [editablePrice, setEditablePrice] = useState(String(item.price ?? 0));
-
   const [isEditingPrice, setIsEditingPrice] = useState(false);
 
-  const [count, setCount] = useState(item.quantity || 1);
+  const [count, setCount] = useState(1);
+  const [editablePrice, setEditablePrice] = useState(String(item.price));
+  const [isDirty, setIsDirty] = useState(false);
 
+  const showRemoveButton = !!selectedItem && !isDirty;
   const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
@@ -56,6 +61,18 @@ const RenderFilterData: React.FC<Props> = ({ item, onAddItem }) => {
       return () => clearTimeout(timer);
     }
   }, [isEditingPrice]);
+
+  useEffect(() => {
+    if (selectedItem) {
+      setCount(selectedItem.quantity);
+      setEditablePrice(String(selectedItem.price));
+    } else {
+      setCount(1);
+      setEditablePrice(String(item.price ?? 0));
+    }
+
+    setIsDirty(false);
+  }, [selectedItem, item.price]);
 
   const navigateToEdit = useCallback(() => {
     navigation.navigate('NewItemsScreen', {
@@ -74,10 +91,12 @@ const RenderFilterData: React.FC<Props> = ({ item, onAddItem }) => {
 
   const increaseCount = useCallback(() => {
     setCount(prev => prev + 1);
+    setIsDirty(true)
   }, []);
 
   const decreaseCount = useCallback(() => {
     setCount(prev => Math.max(prev - 1, 1));
+    setIsDirty(true)
   }, []);
 
   const totalPrice = useMemo(() => {
@@ -85,6 +104,7 @@ const RenderFilterData: React.FC<Props> = ({ item, onAddItem }) => {
   }, [editablePrice, count]);
 
   const handleAdd = useCallback(() => {
+
     const updatedItem: FetchItemsData = {
       ...item,
       quantity: count,
@@ -93,10 +113,16 @@ const RenderFilterData: React.FC<Props> = ({ item, onAddItem }) => {
       total_cost: item.cost * count,
       is_added: true,
     };
-    showToast(`${item.name} added successfully!`);
+
     onAddItem(updatedItem);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setIsDirty(false);
+
   }, [item, count, editablePrice, totalPrice, onAddItem]);
+
+  const handleRemove = useCallback(() => {
+    onRemoveItem(item.id);
+
+  }, [item.id, onRemoveItem]);
 
   return (
     <Card style={styles.card}>
@@ -159,7 +185,10 @@ const RenderFilterData: React.FC<Props> = ({ item, onAddItem }) => {
               <TextInput
                 ref={inputRef}
                 value={editablePrice}
-                onChangeText={setEditablePrice}
+                onChangeText={text => {
+                  setEditablePrice(text);
+                  setIsDirty(true);
+                }}
                 keyboardType="numeric"
                 onBlur={() => setIsEditingPrice(false)}
                 style={styles.input}
@@ -186,13 +215,20 @@ const RenderFilterData: React.FC<Props> = ({ item, onAddItem }) => {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.bttn} onPress={handleAdd}>
-          <Image source={icons.ic_whiteadd} style={styles.icn} />
-
-          <InterTightMedium fsize={14} fcolor={theme.primaryText}>
-            Add
-          </InterTightMedium>
-        </TouchableOpacity>
+        {showRemoveButton ? (
+          <TouchableOpacity style={styles.removeBtn} onPress={handleRemove}>
+            <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
+              Remove
+            </InterTightMedium>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={styles.bttn} onPress={handleAdd}>
+            <Image source={icons.ic_whiteadd} style={styles.icn} />
+            <InterTightMedium fsize={14} fcolor={theme.primaryText}>
+              Add
+            </InterTightMedium>
+          </TouchableOpacity>
+        )}
       </View>
     </Card>
   );
@@ -299,5 +335,15 @@ const createStyles = (theme: Theme) =>
       color: theme.textMuted,
       minWidth: 70,
       height: 20,
+    },
+    removeBtn: {
+      borderRadius: 7,
+      paddingVertical: 4,
+      paddingHorizontal: 16,
+      borderWidth: 1,
+      borderColor: theme.border,
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: 28,
     },
   });

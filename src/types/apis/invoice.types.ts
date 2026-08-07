@@ -125,10 +125,10 @@ export interface InvoiceCreate {
 }
 
 export interface UpdateInvoicePayload {
-  invoice_id: number;
+  invoice_id?: number | undefined;
   invoice_summury?: InvoiceCreate;
-  invoice_items: FetchItemsData[];
-  discount: number;
+  invoice_items?: FetchItemsData[];
+  discount?: number;
 }
 
 

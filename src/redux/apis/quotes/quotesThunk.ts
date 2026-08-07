@@ -1,4 +1,4 @@
-import { QuoteSection, UpdateQuote, UpdateStatus } from './../../../types/apis/quote.types';
+import { QuoteSection, UpdateQuotePayload, UpdateStatus } from './../../../types/apis/quote.types';
 import { quoteServices } from "@/apis/services/quoteServices";
 import { UpdateInvoiceStatus } from '@/types/apis/invoice.types';
 import { CreateQuote, Sections } from "@/types/apis/quote.types";
@@ -99,7 +99,7 @@ export const deleteSectionsThunk = createAsyncThunk(
 
 export const updateQuoteThunk = createAsyncThunk('api/quotes/update',
 
-    async (payload: UpdateQuote, thunkAPI) => {
+    async (payload: UpdateQuotePayload, thunkAPI) => {
         try {
             const response = await quoteServices.updateQuote(payload)
             if (!response.result) {

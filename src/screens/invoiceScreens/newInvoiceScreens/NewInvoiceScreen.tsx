@@ -16,33 +16,32 @@ const NewInvoiceScreen = ({ route }: RootScreenProps<'NewInvoiceScreens'>) => {
 
   const invoiceDetails = route.params?.invoiceDetails;
   const quoteId = route.params?.quoteId
+  const invoiceId = route.params?.invoiceDetails?.id;
+  const invoiceItems = route.params?.invoiceDetails?.items;
+  const previewUrl = invoiceDetails?.url
  
 
    
     return (
- 
-        <Tab.Navigator
-          tabBar={props => (
-            <CustomTabBars {...props} headerText="New Invoice" />
-          )}
-        >
-          <Tab.Screen
-            name="Summury"
-            component={SummuryScreen}
-            initialParams={{ invoiceDetails , quoteId }}
-          />
-          <Tab.Screen
-            name="Items"
-            component={ItemsScreen}
-            // initialParams={{ invoiceId, previewUrl }}
-          />
-          <Tab.Screen
-            name="Preview"
-            component={PreviewScreen}
-            // initialParams={{ previewUrl }}
-          />
-        </Tab.Navigator>
-  
+      <Tab.Navigator
+        tabBar={props => <CustomTabBars {...props} headerText="New Invoice" />}
+      >
+        <Tab.Screen
+          name="Summury"
+          component={SummuryScreen}
+          initialParams={{ invoiceDetails, quoteId }}
+        />
+        <Tab.Screen
+          name="Items"
+          component={ItemsScreen}
+          initialParams={{ invoiceId, invoiceItems }}
+        />
+        <Tab.Screen
+          name="Preview"
+          component={PreviewScreen}
+          initialParams={{ previewUrl }}
+        />
+      </Tab.Navigator>
     );
 }
 

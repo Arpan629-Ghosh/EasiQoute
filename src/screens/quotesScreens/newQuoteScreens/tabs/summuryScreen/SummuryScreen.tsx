@@ -43,12 +43,12 @@ export interface AttachmentFile {
 }
 
 interface NewQuoteForm {
-  quoteTitle: string;
+  title: string;
   refNumber: string;
-  qtDate: string;
-  expDate: string;
-  client: number | null;
-  jobDescription: string;
+  quote_date: string;
+  expiry_date: string;
+  client_id?: number;
+  description: string;
   notes: string;
   file: AttachmentFile[];
 }
@@ -64,19 +64,19 @@ const SummuryScreen = ({
   const [search, setSearch] = useState('');
 
   const [newQuoteFormData, setNewQuoteFormData] = useState<NewQuoteForm>({
-    quoteTitle: route.params.quoteDetails?.title || '',
+    title: route.params.quoteDetails?.title || '',
     refNumber: route.params.quoteDetails?.reference_number || '',
-    qtDate: route.params.quoteDetails?.quote_date || '',
-    expDate: route.params.quoteDetails?.expiry_date || '',
-    client: route.params.quoteDetails?.client.id ?? null,
-    jobDescription: route.params.quoteDetails?.job_description || '',
+    quote_date: route.params.quoteDetails?.quote_date || '',
+    expiry_date: route.params.quoteDetails?.expiry_date || '',
+    client_id: route.params.quoteDetails?.client.id || undefined,
+    description: route.params.quoteDetails?.job_description || '',
     notes: route.params.quoteDetails?.notes || '',
     file: route.params.quoteDetails?.attachments || [],
   });
 
   const page = useRef(1);
   const { theme } = useAppTheme();
-  const { createQuote, loadingUpdateQuote } = useQuotes();
+  const { createQuote, updateQuote,  loadingUpdateQuote } = useQuotes();
   const { clients, current_page, last_page, getClients } = useClient();
   const { showToast } = useToast();
   const debouncedSearch = useDebounce(search);
@@ -84,6 +84,8 @@ const SummuryScreen = ({
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
   const MAX_FILES = 10;
   const styles = useMemo(() => createStyles(theme), [theme]);
+  const quoteDetails = route.params.quoteDetails;
+  const quoteId = quoteDetails?.id
 
   useEffect(() => {
     page.current = 1;
@@ -253,22 +255,22 @@ const SummuryScreen = ({
   const handleCreateQuote = async () => {
     try {
       await createQuote({
-        title: newQuoteFormData.quoteTitle,
-        description: newQuoteFormData.jobDescription,
-        quote_date: newQuoteFormData.qtDate,
-        expiry_date: newQuoteFormData.expDate,
-        client_id: Number(newQuoteFormData.client),
+        title: newQuoteFormData.title,
+        description: newQuoteFormData.description,
+        quote_date: newQuoteFormData.quote_date,
+        expiry_date: newQuoteFormData.expiry_date,
+        client_id: Number(newQuoteFormData.client_id),
         notes: newQuoteFormData.notes,
         attachments: newQuoteFormData.file,
       });
       showToast('Quote created successfully.');
       setNewQuoteFormData({
-        quoteTitle: '',
+        title: '',
         refNumber: '',
-        qtDate: '',
-        expDate: '',
-        client: null,
-        jobDescription: '',
+        quote_date: '',
+        expiry_date: '',
+        client_id: undefined,
+        description: '',
         notes: '',
         file: [],
       });
@@ -280,7 +282,31 @@ const SummuryScreen = ({
     }
   };
 
-  console.log("selected client: ", newQuoteFormData.client)
+  const handleUpdateInvoice = async () => {
+    try {
+      await updateQuote({
+        quote_id: quoteId,
+        quote_summury: newQuoteFormData
+      });
+      showToast('Invoice updated successfully!');
+      setNewQuoteFormData({
+        title: '',
+        refNumber: '',
+        quote_date: '',
+        expiry_date: '',
+        client_id: undefined,
+        description: '',
+        notes: '',
+        file: [],
+      });
+      navigation.jumpTo('Items', {
+        
+      });
+      
+    } catch (error) {
+      showToast(String(error), 'error');
+    }
+  };
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView
@@ -306,8 +332,8 @@ const SummuryScreen = ({
               </InterTightRegular>
               <Input
                 placeholder="e.g. Kitchen Renovation"
-                value={newQuoteFormData.quoteTitle}
-                onChangeText={txt => updateField('quoteTitle', txt)}
+                value={newQuoteFormData.title}
+                onChangeText={txt => updateField('title', txt)}
                 keyboardType="name-phone-pad"
                 returnKeyType="next"
               />
@@ -336,8 +362,8 @@ const SummuryScreen = ({
                     placeholder="DD-MM-YYYY"
                     style={styles.noBorderInput}
                     editable={false}
-                    value={newQuoteFormData.qtDate}
-                    onChangeText={txt => updateField('qtDate', txt)}
+                    value={newQuoteFormData.quote_date}
+                    onChangeText={txt => updateField('quote_date', txt)}
                   />
 
                   <Image source={icons.ic_cal} style={styles.searchic} />
@@ -356,8 +382,8 @@ const SummuryScreen = ({
                     placeholder="DD-MM-YYYY"
                     style={styles.noBorderInput}
                     editable={false}
-                    value={newQuoteFormData.expDate}
-                    onChangeText={txt => updateField('expDate', txt)}
+                    value={newQuoteFormData.expiry_date}
+                    onChangeText={txt => updateField('expiry_date', txt)}
                   />
                   <Image source={icons.ic_cal} style={styles.searchic} />
                 </TouchableOpacity>
@@ -382,8 +408,8 @@ const SummuryScreen = ({
               <CustomDropdown
                 data={shapedDataForDropdown}
                 placeholder="Search or select client"
-                value={newQuoteFormData.client}
-                onChange={(item: Item) => updateField('client', Number(item.value))}
+                value={newQuoteFormData.client_id}
+                onChange={(item: Item) => updateField('client_id', Number(item.value))}
                 onSearch={setSearch}
                 flatListProps={{
                   onEndReached: handleLoadMore,
@@ -404,8 +430,8 @@ const SummuryScreen = ({
                 placeholder="Enter job details..."
                 multiline={true}
                 tv="top"
-                value={newQuoteFormData.jobDescription}
-                onChangeText={txt => updateField('jobDescription', txt)}
+                value={newQuoteFormData.description}
+                onChangeText={txt => updateField('description', txt)}
               />
             </View>
             <View style={styles.inp}>

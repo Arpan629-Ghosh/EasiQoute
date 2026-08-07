@@ -49,16 +49,17 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
   const { quoteList } = useQuotes();
   const { theme } = useAppTheme();
   const { showToast } = useToast();
-  const { createInvoice, loadingCreateInvoice } = useInvoice();
+  const { createInvoice, updateInvoice, loadingInvoiceUpdate, loadingCreateInvoice } = useInvoice();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  // const invoiceId = route.params?.invoiceDetails?.id;
+  const invoiceId = route.params?.invoiceDetails?.id;
+  const isEdit = !!invoiceId
+ 
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
   const MAX_FILES = 10;
 
-  // console.log("quoteId: ", route.params?.quoteId)
-  // console.log("invoiceId: ", route.params?.invoiceId)
+  
 
   const extractQuote = useMemo(() => {
     const extractedQuote = quoteList.filter(
@@ -183,7 +184,7 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
     // console.log(newQuoteFormData);
     try {
       await createInvoice({
-        quote_id: route.params?.invoiceDetails?.quote.id,
+        quote_id: route.params?.quoteId,
         invoice_date: newInvoiceFormData.invoice_date,
         due_date: newInvoiceFormData.due_date,
         message: newInvoiceFormData.message,
@@ -191,18 +192,46 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
       });
       showToast('Invoice created successfully.');
       setNewInvoiceFormData({
-        quoteId: route.params?.invoiceDetails?.quote.id,
+        quoteId: route.params?.quoteId,
         invoice_date: '',
         due_date: '',
         message: '',
         notes: '',
         file: [],
       });
-      navigation.navigate('Items')
+      navigation.jumpTo('Items', {
+        invoiceItems: route.params?.invoiceDetails?.items,
+        invoiceId: invoiceId
+      });
     } catch (error) {
       showToast(String(error), 'error');
     }
   };
+
+  const handleUpdateInvoice = async () => {
+    try {
+      await updateInvoice({
+        invoice_id: invoiceId,
+        invoice_summury: newInvoiceFormData,
+      })
+      showToast('Invoice updated successfully!')
+      setNewInvoiceFormData({
+        quoteId: route.params?.quoteId,
+        invoice_date: '',
+        due_date: '',
+        message: '',
+        notes: '',
+        file: [],
+      });
+      navigation.jumpTo('Items', {
+        invoiceItems: route.params?.invoiceDetails?.items,
+        invoiceId: invoiceId,
+      });
+      navigation.navigate('Items')
+    } catch (error) {
+      showToast(String(error), 'error')
+    }
+  }
 
  
 
@@ -254,7 +283,7 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
             </InterTightRegular>
             <View style={styles.invField}>
               <InterTightRegular fsize={16} fcolor={theme.placeholder}>
-                INV-2025-001
+                {route.params?.invoiceDetails?.invoice_number}
               </InterTightRegular>
             </View>
             <View style={styles.inputContainer}>
@@ -360,8 +389,8 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
             bg={theme.primary}
             bttnTxt="Save"
             txtColor={theme.primaryText}
-            showLoader={loadingCreateInvoice}
-            onPress={handleCreateInvoice}
+            showLoader={loadingCreateInvoice || loadingInvoiceUpdate}
+            onPress={isEdit ? handleUpdateInvoice : handleCreateInvoice}
           />
         </View>
       </View>

@@ -28,7 +28,6 @@ import InfoRow from '@/components/cardDetailsComponent/InfoRow';
 import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DiscountModal from '@/components/discountModal/DiscountModal';
-import InvoiceMargin from '@/components/invoiceMargin/InvoiceMargin';
 import { InvoiceTopTabWithRootProps } from '@/types/navigation.types';
 import RenderSubCategoriesDropDown from '@/components/renderSubCategoriesDropdown/RenderSubCategoriesDropDown';
 import { useSettings } from '@/hooks/apis/useSettings';
@@ -37,6 +36,7 @@ import RenderFilterData from '@/components/renderFilterData/RenderFilterData';
 import { FetchItemsData } from '@/types/apis/settings.types';
 import { useInvoice } from '@/hooks/apis/useInvoice';
 import { useToast } from '@/hooks/useToast';
+import MarginBottomSheet from '@/components/marginBottomSheet/MarginBottomSheet';
 
 interface FinancialBreakDown {
   subtotal: string;
@@ -62,7 +62,6 @@ const ItemsScreen = ({
   const [refreshing, setRefreshing] = useState(false);
   const [paginationLoading, setPaginationLoading] = useState(false);
 
-
   const page = useRef(1);
   const onEndReachedCalledDuringMomentum = useRef(false);
 
@@ -77,12 +76,15 @@ const ItemsScreen = ({
     items_last_page,
     fetchItems,
   } = useSettings();
-  const { loadingInvoiceUpdate, updateInvoice } = useInvoice();
+  const { loadingInvoiceUpdate, invoiceDetails, updateInvoice, getInvoiceDetails } = useInvoice();
   const { showToast } = useToast();
   const debouncedSearch = useDebounce(search);
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const invoiceId = route.params?.invoiceId
+  const invoiceId = route.params?.invoiceId;
+  const invoiceItems = route.params?.invoiceItems;
+  console.log('invoiceId: ', invoiceId);
+  console.log('items: ', invoiceItems);
 
   useEffect(() => {
     height.value = withTiming(openFinancialBreakdown ? 500 : 0, {
@@ -94,6 +96,29 @@ const ItemsScreen = ({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openFinancialBreakdown]);
+
+  useEffect(() => {
+    if (!invoiceItems?.length) return;
+
+    const mapped = invoiceItems.map(item => ({
+      id: item.id,
+      name: item.name,
+      quantity: item.quantity,
+      price: item.price,
+      total_price: item.total_price,
+      total_cost: item.total_cost,
+      category_name: item.category_name,
+      subcategory_name: item.subcategory_name,
+      unit: item.unit,
+      cost: item.cost,
+      is_added: true,
+      category_id: item.category_id,
+      subcategory_id: item.subcategory_id,
+      type: item.type,
+    }));
+
+    setSelectedItems(mapped);
+  }, [invoiceItems]);
 
   const navigateToNewItem = () => {
     navigation.navigate('NewItemsScreen');
@@ -190,45 +215,56 @@ const ItemsScreen = ({
 
   const handleAddItem = useCallback((updatedItem: FetchItemsData) => {
     setSelectedItems(prev => {
-      const alreadyExists = prev.find(item => item.id === updatedItem.id);
+      const exists = prev.find(i => i.id === updatedItem.id);
 
-      if (alreadyExists) {
-        return prev.map(item =>
-          item.id === updatedItem.id ? updatedItem : item,
-        );
+      if (exists) {
+        return prev.map(i => (i.id === updatedItem.id ? updatedItem : i));
       }
 
       return [...prev, updatedItem];
     });
   }, []);
 
+  const handleRemoveItem = useCallback((id: number) => {
+    setSelectedItems(prev => prev.filter(i => i.id !== id));
+  }, []);
+
   const renderItems: ListRenderItem<FetchItemsData> = useCallback(
     ({ item }) => {
-      return <RenderFilterData item={item} onAddItem={handleAddItem} />;
+      const selectedItem = selectedItems.find(i => i.id === item.id);
+
+      return (
+        <RenderFilterData
+          item={item}
+          selectedItem={selectedItem}
+          onAddItem={handleAddItem}
+          onRemoveItem={handleRemoveItem}
+        />
+      );
     },
-    [handleAddItem],
+    [handleAddItem, handleRemoveItem, selectedItems],
   );
 
   const calculateFinancialBreakdown = useMemo(() => {
-      let result: FinancialBreakDown = {
-        subtotal: '',
-        tax: '',
-        total: '',
-      };
-      const subtotal = selectedItems.reduce(
-        (sum, item) => sum + Number(item.total_price || 0),
-        0,
-      );
-      const tax = subtotal * (8 / 100);
-      const total = subtotal + tax;
-      const grandTotal = total - (total * discountPrice) / 100;
-  
-      result.subtotal = subtotal.toFixed(2);
-      result.tax = tax.toFixed(2);
-      result.total = grandTotal.toFixed(2);
-      return result;
+    let result: FinancialBreakDown = {
+      subtotal: '',
+      tax: '',
+      total: '',
+    };
+    const subtotal = selectedItems.reduce(
+      (sum, item) => sum + Number(item.total_price || 0),
+      0,
+    );
+    const tax = subtotal * (8 / 100);
+    const total = subtotal + tax;
+    const grandTotal = total - (total * discountPrice) / 100;
+
+    result.subtotal = subtotal.toFixed(2);
+    result.tax = tax.toFixed(2);
+    result.total = grandTotal.toFixed(2);
+    return result;
   }, [selectedItems, discountPrice]);
-  
+
   const handleUpdateInvoice = async () => {
     if (typeof invoiceId !== 'number') {
       showToast('Invalid invoice id!', 'error');
@@ -238,16 +274,19 @@ const ItemsScreen = ({
       await updateInvoice({
         invoice_id: invoiceId,
         discount: discountPrice,
-        invoice_items: selectedItems
+        invoice_items: selectedItems,
+      });
+      showToast('Invoice updated successfully!');
+      await getInvoiceDetails(invoiceId);
+      navigation.navigate('Preview', {
+        previewUrl: invoiceDetails?.url
       })
-      showToast('Invoice updated successfully!')
-      navigation.jumpTo('Preview', {previewUrl: route.params?.previewUrl})
     } catch (error) {
-      showToast(String(error), 'error')
+      showToast(String(error), 'error');
     }
-  }
+  };
 
-  // console.log('Summury: ', summury)
+  console.log('SelectedItems: ', selectedItems)
 
   return (
     <LinearGradient
@@ -419,8 +458,11 @@ const ItemsScreen = ({
         </View>
       </View>
 
-      <InvoiceMargin visible={open} onClose={handleClose} />
-
+      <MarginBottomSheet
+        visible={open}
+        onClose={handleClose}
+        margin_data={selectedItems}
+      />
       <DiscountModal
         visible={openDiscount}
         onClose={handleCloseDiscount}

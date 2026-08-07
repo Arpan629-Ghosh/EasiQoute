@@ -7,6 +7,7 @@ import { Theme } from '@/types/theme.types';
 import { RecentActivity } from '@/types/apis/home.types';
 import Card from '../cardDetailsComponent/Card';
 import { icons } from '@/config/icons';
+import { formatDate } from '@/utils/formatDate';
 
 const STATUS_COLORS = {
   overdue: {
@@ -96,10 +97,10 @@ const RecentClientActivity = ({ item }: { item: RecentActivity }) => {
           <View style={styles.footerTxt}>
             <View style={styles.inv}>
               <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
-                Due on:
+                Due on:{' '}
               </InterTightRegular>
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                {item.expiry_date}
+                {formatDate(item.expiry_date)}
               </InterTightRegular>
             </View>
             <View
