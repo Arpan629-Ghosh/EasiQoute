@@ -20,6 +20,7 @@ import { useToast } from '@/hooks/useToast';
 import { FetchItemsData } from '@/types/apis/settings.types';
 import Loader from '@/components/loader/Loader';
 import { RootScreenProps } from '@/types/navigation.types';
+import { STATUS_COLORS } from '@/config/statusColors';
 
 const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailScreen'>) => {
   const [open, setOpen] = useState(false)
@@ -82,6 +83,13 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
     outputRange: [0, 1],
   });
 
+  const statusColors = STATUS_COLORS[
+      quoteDetails?.status as keyof typeof STATUS_COLORS
+    ] || {
+      view: '#E8ECF4',
+      text: '#64748B',
+    };
+
   // const navigateToEdit = () => {
   //   navigation.navigate("Summury")
   // }
@@ -108,12 +116,13 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
         quote_id: quoteId,
         status: type.toLowerCase(),
       });
-      fetchQuoteDetails(quoteId);
+      await fetchQuoteDetails(quoteId);
       setSelectedStatus(prev => {
         const isSelected = prev.includes(type);
         const updatedStatus = isSelected ? '' : type;
         return updatedStatus;
       });
+      handleClose();
     } catch (error) {
       showToast(String(error), 'error');
     }
@@ -139,9 +148,9 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
     }
   };
 
-  const handleDeleteQuote = () => {
+  const handleDeleteQuote = async() => {
     try {
-      deleteQuote(quoteId);
+      await deleteQuote(quoteId);
       showToast(`${quoteDetails?.title} deleted successfully!`)
       navigateToBack();
     } catch (error) {
@@ -192,6 +201,8 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
                 },
               ]}
             >
+              {(quoteDetails?.status !== 'approved' && 'rejected') &&
+              <>
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={navigateToEdit}
@@ -202,7 +213,9 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
                 </InterTightMedium>
               </TouchableOpacity>
 
-              <View style={styles.separator} />
+                <View style={styles.separator} />
+              </>
+              }
 
               <TouchableOpacity onPress={handleDeleteQuote} activeOpacity={0.7} style={styles.dropdownItem}>
                 <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
@@ -224,8 +237,8 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
         >
           <View style={styles.cardContainer}>
             <Card style={styles.cardone}>
-              <View style={styles.status}>
-                <InterTightMedium fsize={14} fcolor="#F97315">
+              <View style={[styles.status, {backgroundColor: statusColors.view}]}>
+                <InterTightMedium fsize={14} fcolor={statusColors.text}>
                   {quoteDetails?.status}
                 </InterTightMedium>
               </View>
@@ -558,7 +571,7 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
         <View style={styles.footeritem}>
           <ButtonComponent
             bg={theme.background}
-            buttonWidth={169.5}
+            buttonWidth="48.5%"
             bttnTxt="Invoice"
             borderwidth={1}
             borderc="#082B60"
@@ -569,7 +582,7 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
           </ButtonComponent>
           <ButtonComponent
             bg={theme.background}
-            buttonWidth={169.5}
+            buttonWidth="48.5%"
             bttnTxt="Duplicate"
             borderwidth={1}
             borderc="#082B60"

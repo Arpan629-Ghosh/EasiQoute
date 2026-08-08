@@ -75,9 +75,7 @@ const AddClientScreen = ({ navigation } : RootScreenProps<'AddClientScreen'>) =>
           setSearchData([]);
         }
       } catch (error) {
-
-        showToast(String(error), 'error');
-
+        console.log(error)
         setSearchData([]);
       }
     };
@@ -113,7 +111,7 @@ const AddClientScreen = ({ navigation } : RootScreenProps<'AddClientScreen'>) =>
 
   const handleAddClient = async () => {
     try {
-      await createClient({
+      const res = await createClient({
         email: clientFormData.email,
         name: clientFormData.clientName,
         phone: formatPhone,
@@ -123,8 +121,24 @@ const AddClientScreen = ({ navigation } : RootScreenProps<'AddClientScreen'>) =>
         postcode: clientFormData.postcode,
         country: clientFormData.country,
       });
-        showToast('Customer saved successfully.');
-        navigation.goBack()
+      showToast('Customer saved successfully.');
+      setClientFormData({
+        clientName: '',
+        companyName: '',
+        phNo: '',
+        email: '',
+        search: '',
+        streetAddress: '',
+        city: '',
+        postcode: '',
+        country: '',
+      });
+      
+      navigation.navigate("ClientDetailScreen", {
+          clientId: res.id
+      })
+      
+
     } catch (error) {
       showToast(String(error), 'error');
     }

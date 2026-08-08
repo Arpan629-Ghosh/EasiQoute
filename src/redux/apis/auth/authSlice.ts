@@ -19,7 +19,14 @@ const initialState: AuthState = {
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    clearAuth: state => {
+      state.accessToken = null;
+      state.error = null;
+      state.loading = false;
+      state.user = null;
+    }
+  },
 
   // login
   extraReducers: builder => {
@@ -120,3 +127,4 @@ const authSlice = createSlice({
 });
 
 export default authSlice.reducer;
+export const { clearAuth } = authSlice.actions;

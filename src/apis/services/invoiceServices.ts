@@ -18,6 +18,10 @@ export const invoiceServices = {
     formData.append('due_date', payload.due_date);
     formData.append('message', payload.message);
     formData.append('notes', payload.notes);
+    formData.append(
+      'is_company_phone_number_show',
+      payload.is_company_phone_number_show ? '1' : '0',
+    );
     payload.attachments?.forEach(file => {
       formData.append('attachments', {
         uri: file.uri,
@@ -48,6 +52,10 @@ export const invoiceServices = {
     const formData = new FormData();
     formData.append('_method', 'PUT');
     formData.append('invoice_id', payload.invoice_id);
+    formData.append(
+      'is_company_phone_number_show',
+      payload.invoice_summury?.is_company_phone_number_show ? '1' : '0',
+    );
     if (payload.invoice_summury?.invoice_date)
       formData.append('invoice_date', payload.invoice_summury?.invoice_date);
     if (payload.invoice_summury?.due_date)

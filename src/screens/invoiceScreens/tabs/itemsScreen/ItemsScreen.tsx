@@ -74,6 +74,7 @@ const ItemsScreen = ({
     subcat_data,
     items_current_page,
     items_last_page,
+    isStale,
     fetchItems,
   } = useSettings();
   const { loadingInvoiceUpdate, invoiceDetails, updateInvoice, getInvoiceDetails } = useInvoice();
@@ -96,6 +97,13 @@ const ItemsScreen = ({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openFinancialBreakdown]);
+
+  useEffect(() => {
+      if (isStale) {
+        page.current = 1;
+        fetchItems(1);
+      }
+    }, [fetchItems, isStale]);
 
   useEffect(() => {
     if (!invoiceItems?.length) return;

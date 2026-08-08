@@ -34,14 +34,22 @@ export interface NewInvoiceProp {
   notes: string;
   file: AttachmentFile[];
 }
-const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summury'>) => {
+const SummuryScreen = ({
+  route,
+  navigation,
+  onInvoiceCreated,
+}: InvoiceTopTabWithRootProps<'Summury'> & {
+  onInvoiceCreated: (invoiceId: number) => void;
+}) => {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [activeField, setActiveField] = useState<'start' | 'end' | null>(null);
   const [enabled, setEnabled] = useState(false);
   const [newInvoiceFormData, setNewInvoiceFormData] = useState<NewInvoiceProp>({
     quoteId: route.params?.invoiceDetails?.quote.id,
-    invoice_date: formatDateForPrifill(route.params?.invoiceDetails?.invoice_date) ||  '',
-    due_date: formatDateForPrifill(route.params?.invoiceDetails?.due_date) ||  '',
+    invoice_date:
+      formatDateForPrifill(route.params?.invoiceDetails?.invoice_date) || '',
+    due_date:
+      formatDateForPrifill(route.params?.invoiceDetails?.due_date) || '',
     message: route.params?.invoiceDetails?.message || '',
     notes: route.params?.invoiceDetails?.notes || '',
     file: route.params?.invoiceDetails?.attachments || [],
@@ -49,21 +57,24 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
   const { quoteList } = useQuotes();
   const { theme } = useAppTheme();
   const { showToast } = useToast();
-  const { createInvoice, updateInvoice, loadingInvoiceUpdate, loadingCreateInvoice } = useInvoice();
+  const {
+    createInvoice,
+    updateInvoice,
+    loadingInvoiceUpdate,
+    loadingCreateInvoice,
+  } = useInvoice();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const invoiceId = route.params?.invoiceDetails?.id;
-  const isEdit = !!invoiceId
- 
+  const isEdit = !!invoiceId;
+
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
   const MAX_FILES = 10;
 
-  
-
   const extractQuote = useMemo(() => {
     const extractedQuote = quoteList.filter(
-      quote => quote.id === route.params?.quoteId
+      quote => quote.id === route.params?.quoteId,
     );
     return extractedQuote;
   }, [quoteList, route.params?.quoteId]);
@@ -94,7 +105,6 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
     setActiveField('end');
     setDatePickerVisible(true);
   };
-
 
   const fillStartInput = (stratDate: string) => {
     setNewInvoiceFormData(prev => {
@@ -183,12 +193,13 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
   const handleCreateInvoice = async () => {
     // console.log(newQuoteFormData);
     try {
-      await createInvoice({
+      const response = await createInvoice({
         quote_id: route.params?.quoteId,
         invoice_date: newInvoiceFormData.invoice_date,
         due_date: newInvoiceFormData.due_date,
         message: newInvoiceFormData.message,
-        notes: newInvoiceFormData.notes
+        notes: newInvoiceFormData.notes,
+        is_company_phone_number_show: enabled,
       });
       showToast('Invoice created successfully.');
       setNewInvoiceFormData({
@@ -199,9 +210,10 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
         notes: '',
         file: [],
       });
+      onInvoiceCreated(response.id);
       navigation.jumpTo('Items', {
         invoiceItems: route.params?.invoiceDetails?.items,
-        invoiceId: invoiceId
+        invoiceId: response.id,
       });
     } catch (error) {
       showToast(String(error), 'error');
@@ -213,8 +225,9 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
       await updateInvoice({
         invoice_id: invoiceId,
         invoice_summury: newInvoiceFormData,
-      })
-      showToast('Invoice updated successfully!')
+        is_company_phone_number_show: enabled,
+      });
+      showToast('Invoice updated successfully!');
       setNewInvoiceFormData({
         quoteId: route.params?.quoteId,
         invoice_date: '',
@@ -227,13 +240,11 @@ const SummuryScreen = ({ route, navigation }: InvoiceTopTabWithRootProps<'Summur
         invoiceItems: route.params?.invoiceDetails?.items,
         invoiceId: invoiceId,
       });
-      navigation.navigate('Items')
+      
     } catch (error) {
-      showToast(String(error), 'error')
+      showToast(String(error), 'error');
     }
-  }
-
- 
+  };
 
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>

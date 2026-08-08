@@ -29,6 +29,7 @@ const InvoiceTopTabBars = ({
   const insets = useSafeAreaInsets();
   const animation = useRef(new Animated.Value(0)).current;
   const styles = useMemo(() => createStyles(theme), [theme]);
+  
 
   useEffect(() => {
     Animated.timing(animation, {

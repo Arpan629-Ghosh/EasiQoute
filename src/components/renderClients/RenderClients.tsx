@@ -17,6 +17,13 @@ const RenderClients = ({ item }: { item: Clients }) => {
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   return (
+    <TouchableOpacity
+          onPress={() =>
+            navigation.navigate('ClientDetailScreen', {
+              clientId: item.id,
+            })
+          }
+        >
     <Card style={styles.card}>
       <View style={styles.header}>
         <View style={styles.txt}>
@@ -27,15 +34,9 @@ const RenderClients = ({ item }: { item: Clients }) => {
             {item.company_name}
           </InterTightRegular>
         </View>
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate('ClientDetailScreen', {
-              clientId: item.id,
-            })
-          }
-        >
+        
           <Image source={icons.ic_redirect} style={styles.img} />
-        </TouchableOpacity>
+        
       </View>
       <View style={styles.empty} />
       <View style={styles.footer}>
@@ -53,6 +54,7 @@ const RenderClients = ({ item }: { item: Clients }) => {
         </View>
       </View>
     </Card>
+    </TouchableOpacity>
   );
 };
 

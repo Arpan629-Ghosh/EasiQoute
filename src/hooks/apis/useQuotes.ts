@@ -127,6 +127,7 @@ export const useQuotes = () => {
     quoteDetails: quote.quoteDetails,
     selectedSections: quote.selectedSections,
     loadingQuoteDetails: quote.loadingQuoteDetails,
+    loadingCreateQuote: quote.loadingCreateQuote,
     loadingUpdateQuote: quote.loadingUpdateQuote,
     loadingSections: quote.loadingSections,
     loadingQuoteList: quote.loadingQuoteList,

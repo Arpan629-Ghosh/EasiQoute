@@ -28,6 +28,7 @@ export interface QuotesState {
   current_page: number;
   last_page: number;
   loadingQuoteDetails: boolean;
+  loadingCreateQuote: boolean;
   loadingUpdateQuote: boolean;
   loadingUpdateStatus: boolean;
   loadingSections: boolean;
@@ -46,6 +47,7 @@ const initialState: QuotesState = {
   current_page: 1,
   last_page: 1,
   loadingQuoteDetails: false,
+  loadingCreateQuote: false,
   loadingUpdateQuote: false,
   loadingUpdateStatus: false,
   loadingSections: false,
@@ -94,16 +96,37 @@ const quotesSlice = createSlice({
         state.error = action.payload as string;
       })
       .addCase(createQuoteThunk.pending, state => {
-        state.loadingUpdateQuote = true;
+        state.loadingCreateQuote = true;
         state.error = null;
       })
-      .addCase(createQuoteThunk.fulfilled, state => {
-        state.loadingUpdateQuote = false;
+      .addCase(createQuoteThunk.fulfilled, (state, action) => {
+        state.loadingCreateQuote = false;
         state.error = null;
-        state.isFetchCall = true;
+
+        const quote: QuoteItem = {
+          id: action.payload.id,
+          type: 'quote',
+          title: action.payload.title,
+          name: action.payload.title,
+          reference_number: action.payload.reference_number,
+          is_editable: action.payload.is_editable,
+          vat_setting_id: String(action.payload.vat_setting_id),
+          vat: action.payload.vat,
+          status: action.payload.status,
+          discount: action.payload.discount
+            ? Number(action.payload.discount)
+            : null,
+          categorised: action.payload.categorised,
+          template: action.payload.template,
+          price: 0,
+          expiry_date: action.payload.expiry_date,
+          created_at: action.payload.created_at,
+        };
+
+        state.quoteList.unshift(quote);
       })
       .addCase(createQuoteThunk.rejected, (state, action) => {
-        state.loadingUpdateQuote = false;
+        state.loadingCreateQuote = false;
         state.error = action.payload as string;
       })
       .addCase(fetchQuoteDetailsThunk.pending, state => {
@@ -163,8 +186,9 @@ const quotesSlice = createSlice({
         state.loadingUpdateQuote = true;
         state.error = null;
       })
-      .addCase(updateQuoteThunk.fulfilled, state => {
+      .addCase(updateQuoteThunk.fulfilled, (state, action) => {
         state.loadingUpdateQuote = false;
+        state.quoteDetails = action.payload;
         state.error = null;
       })
       .addCase(updateQuoteThunk.rejected, (state, action) => {
@@ -210,11 +234,11 @@ const quotesSlice = createSlice({
       })
       .addCase(duplicateQuoteThunk.pending, state => {
         state.loadingDuplicateQuote = true;
-        state.error = null
+        state.error = null;
       })
       .addCase(duplicateQuoteThunk.fulfilled, state => {
         state.loadingDuplicateQuote = false;
-        state.error = null
+        state.error = null;
       })
       .addCase(duplicateQuoteThunk.rejected, (state, action) => {
         state.loadingDuplicateQuote = false;
@@ -224,14 +248,18 @@ const quotesSlice = createSlice({
         state.loadingDeleteQuote = true;
         state.error = null;
       })
-      .addCase(deleteQuoteThunk.fulfilled, state => {
+      .addCase(deleteQuoteThunk.fulfilled, (state, action) => {
         state.loadingDeleteQuote = false;
         state.error = null;
+
+        state.quoteList = state.quoteList.filter(
+          quote => quote.id !== action.meta.arg,
+        );
       })
       .addCase(deleteQuoteThunk.rejected, (state, action) => {
         state.loadingDeleteQuote = false;
         state.error = action.payload as string;
-    })
+      });
   },
 });
 

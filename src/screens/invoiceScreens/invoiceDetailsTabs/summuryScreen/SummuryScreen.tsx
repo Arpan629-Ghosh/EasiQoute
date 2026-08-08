@@ -22,6 +22,7 @@ import { InvoiceDetailsScreenProps } from '@/types/navigation.types';
 import { useToast } from '@/hooks/useToast';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import { formatDate } from '@/utils/formatDate';
+import { STATUS_COLORS } from '@/config/statusColors';
 
 const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
   const [open, setOpen] = useState(false);
@@ -33,6 +34,13 @@ const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
   const { theme, isDark } = useAppTheme();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
+
+  const statusColors = STATUS_COLORS[
+    invoiceDetails?.status as keyof typeof STATUS_COLORS
+  ] || {
+    view: '#E8ECF4',
+    text: '#64748B',
+  };
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -64,8 +72,8 @@ const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
       >
         <View style={styles.cardContainer}>
           <Card style={styles.cardone}>
-            <View style={styles.status}>
-              <InterTightMedium fsize={14} fcolor="#F97315">
+            <View style={[styles.status, {backgroundColor: statusColors.view}]}>
+              <InterTightMedium fsize={14} fcolor={statusColors.text}>
                 {invoiceDetails?.status}
               </InterTightMedium>
             </View>
@@ -286,7 +294,7 @@ const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
         selectedStatus={selectedStatus}
         screen="Invoice"
       />
-      <Loader visible={loadingInvoiceDetails } />
+      <Loader visible={loadingInvoiceDetails} />
     </LinearGradient>
   );
 };

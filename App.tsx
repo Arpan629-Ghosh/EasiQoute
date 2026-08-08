@@ -17,6 +17,7 @@ import { notificationService } from '@/firebase/notification';
 import { setFCMToken } from '@/redux/apis/notification/notificationSlice';
 import ToastProvider from '@/components/toast/ToastContext';
 import { useAuth } from '@/hooks/apis/useAuth';
+import { navigationRef } from '@/utils/navigationRef';
 
 
 const AppContent = () => {
@@ -48,7 +49,7 @@ const AppContent = () => {
     <View style={[styles.container, { backgroundColor: theme.background }]}>
       <StatusBar barStyle={isDark ? 'light-content' : 'dark-content'} />
 
-      <NavigationContainer  theme={isDark ? DarkTheme : DefaultTheme}>
+      <NavigationContainer  theme={isDark ? DarkTheme : DefaultTheme} ref={navigationRef}>
         <RootStack />
       </NavigationContainer>
     </View>

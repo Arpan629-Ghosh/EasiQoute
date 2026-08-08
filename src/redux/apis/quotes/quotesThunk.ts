@@ -123,6 +123,7 @@ export const updateStatusThunk = createAsyncThunk('api/update-status',
            
             return response.message;
         } catch (error) {
+            console.log(error)
             return thunkAPI.rejectWithValue(error)
         }
     }

@@ -4,37 +4,71 @@ import React, { useMemo } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import InterTightMedium from '../fontComponents/InterTightMedium';
 import Header from '../header/Header';
+import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
 
-const CustomTabBars = ({ state, navigation, headerText }: any) => {
+interface CustomTabBarsProps extends MaterialTopTabBarProps {
+  headerText: string;
+  canAccessTabs: boolean;
+}
+const CustomTabBars = ({
+  state,
+  navigation,
+  headerText,
+  canAccessTabs,
+}: CustomTabBarsProps) => {
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
+  const isTabDisabled = (routeName: string) => {
+    // Summary is always accessible
+    if (routeName === 'Summury') {
+      return false;
+    } // All other tabs require quote to be created
+    return !canAccessTabs;
+  };
+
   return (
     <View style={styles.container}>
+      <Header txt={headerText} borderBottomEnabled={true}>
+        <View style={styles.tabBarContainer}>
+          {state.routes.map((route: any, index: number) => {
+            const isFocused = state.index === index;
+            const disabled = isTabDisabled(route.name);
 
-        <Header txt={headerText} borderBottomEnabled={true}>
-          <View style={styles.tabBarContainer}>
-            {state.routes.map((route: any, index: number) => {
-              const isFocused = state.index === index;
-
-              return (
-                <TouchableOpacity
-                  key={route.key}
-                  onPress={() => navigation.navigate(route.name)}
-                  style={[styles.tab, isFocused && styles.activeTab]}
+            return (
+              <TouchableOpacity
+                key={route.key}
+                disabled={disabled}
+                activeOpacity={disabled ? 1 : 0.7}
+                onPress={() => {
+                  if (disabled) {
+                    return;
+                  }
+                  navigation.navigate(route.name);
+                }}
+                style={[
+                  styles.tab,
+                  isFocused && styles.activeTab,
+                  disabled && styles.disabledTab,
+                ]}
+              >
+                <InterTightMedium
+                  fsize={14}
+                  fcolor={
+                    disabled
+                      ? theme.textSecondary
+                      : isFocused
+                      ? theme.primaryText
+                      : theme.textPrimary
+                  }
                 >
-                  <InterTightMedium
-                    fsize={14}
-                    fcolor={isFocused ? theme.primaryText : theme.textPrimary}
-                  >
-                    {route.name}
-                  </InterTightMedium>
-                </TouchableOpacity>
-              );
-            })}
-          </View>
-        </Header>
-
+                  {route.name}
+                </InterTightMedium>
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </Header>
     </View>
   );
 };
@@ -46,7 +80,6 @@ const createStyles = (theme: Theme) =>
     container: {
       backgroundColor: theme.background,
     },
-  
 
     itemContainer: {
       gap: 16,
@@ -57,7 +90,6 @@ const createStyles = (theme: Theme) =>
       justifyContent: 'space-between',
       alignItems: 'center',
       paddingHorizontal: 16,
-
     },
 
     tabBarContainer: {
@@ -94,4 +126,5 @@ const createStyles = (theme: Theme) =>
     emptyview: {
       width: 24,
     },
+    disabledTab: { opacity: 0.45 },
   });

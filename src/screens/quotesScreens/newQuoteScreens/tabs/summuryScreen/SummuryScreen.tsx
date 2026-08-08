@@ -56,10 +56,15 @@ interface NewQuoteForm {
 const SummuryScreen = ({
   navigation,
   route,
-}: QuoteTopTabWithRootProps<'Summury'>) => {
+  onQuoteCreated
+}: QuoteTopTabWithRootProps<'Summury'> & {
+  onQuoteCreated: (quoteId: number) => void;
+}) => {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [activeField, setActiveField] = useState<'start' | 'end' | null>(null);
-  const [enabled, setEnabled] = useState(route.params.quoteDetails?.is_company_phone_number_show || false);
+  const [enabled, setEnabled] = useState(
+    route.params.quoteDetails?.is_company_phone_number_show || false,
+  );
   const [paginationLoading, setPaginationLoading] = useState(false);
   const [search, setSearch] = useState('');
 
@@ -76,7 +81,8 @@ const SummuryScreen = ({
 
   const page = useRef(1);
   const { theme } = useAppTheme();
-  const { createQuote, updateQuote,  loadingUpdateQuote } = useQuotes();
+  const { createQuote, updateQuote, loadingCreateQuote, loadingUpdateQuote } =
+    useQuotes();
   const { clients, current_page, last_page, getClients } = useClient();
   const { showToast } = useToast();
   const debouncedSearch = useDebounce(search);
@@ -84,9 +90,9 @@ const SummuryScreen = ({
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
   const MAX_FILES = 10;
   const styles = useMemo(() => createStyles(theme), [theme]);
-  const quoteDetails = route.params.quoteDetails;
-  const quoteId = quoteDetails?.id
-  const isEdit = !!quoteId
+  const quoteDetails = route.params?.quoteDetails;
+  const quoteId = quoteDetails?.id;
+  const isEdit = !!quoteId;
 
   useEffect(() => {
     page.current = 1;
@@ -172,7 +178,6 @@ const SummuryScreen = ({
     setDatePickerVisible(true);
   };
 
-  
   const handleConfirm = (date: Date) => {
     const formatted = formatDateForInput(date);
 
@@ -263,7 +268,7 @@ const SummuryScreen = ({
         client_id: Number(newQuoteFormData.client_id),
         notes: newQuoteFormData.notes,
         attachments: newQuoteFormData.file,
-        is_company_phone_number_show: enabled
+        is_company_phone_number_show: enabled,
       });
       showToast('Quote created successfully.');
       setNewQuoteFormData({
@@ -276,9 +281,11 @@ const SummuryScreen = ({
         notes: '',
         file: [],
       });
+      onQuoteCreated(res.id);
+
       navigation.jumpTo('Items', {
         quoteDetails: res
-      })
+      });
     } catch (error) {
       showToast(String(error), 'error');
     }
@@ -289,7 +296,7 @@ const SummuryScreen = ({
       await updateQuote({
         quote_id: quoteId,
         quote_summury: newQuoteFormData,
-        is_company_phone_number_show: enabled
+        is_company_phone_number_show: enabled,
       });
       showToast('Invoice updated successfully!');
       setNewQuoteFormData({
@@ -303,13 +310,14 @@ const SummuryScreen = ({
         file: [],
       });
       navigation.jumpTo('Items', {
-        quoteDetails: route.params?.quoteDetails
+        quoteDetails: route.params?.quoteDetails,
       });
-      
     } catch (error) {
       showToast(String(error), 'error');
     }
   };
+
+  console.log(loadingCreateQuote, loadingUpdateQuote);
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView
@@ -412,7 +420,9 @@ const SummuryScreen = ({
                 data={shapedDataForDropdown}
                 placeholder="Search or select client"
                 value={newQuoteFormData?.client_id || null}
-                onChange={(item: Item) => updateField('client_id', Number(item.value))}
+                onChange={(item: Item) =>
+                  updateField('client_id', Number(item.value))
+                }
                 onSearch={setSearch}
                 flatListProps={{
                   onEndReached: handleLoadMore,
@@ -483,7 +493,7 @@ const SummuryScreen = ({
             bg={theme.primary}
             bttnTxt="Save"
             txtColor={theme.primaryText}
-            showLoader={loadingUpdateQuote}
+            showLoader={loadingUpdateQuote || loadingCreateQuote}
             onPress={isEdit ? handleUpdateInvoice : handleCreateQuote}
           />
         </View>

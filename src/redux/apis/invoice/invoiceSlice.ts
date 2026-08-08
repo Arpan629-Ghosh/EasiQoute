@@ -42,10 +42,28 @@ const invoiceSlice = createSlice({
             state.loadingCreateInvoice = true;
             state.error = null;
           })
-          .addCase(createInvoiceThunk.fulfilled, state => {
+          .addCase(createInvoiceThunk.fulfilled, (state, action) => {
             state.loadingCreateInvoice = false;
             state.error = null;
-            state.isFetchCall = true;
+            const invoice: InvoiceListItem = {
+              id: action.payload.id,
+              type: 'invoice',
+              title: action.payload.title,
+              name: action.payload.client.company_name,
+              reference_number: action.payload.invoice_number,
+              quote_reference_number: action.payload.quote.reference_number,
+              status: action.payload.status,
+              is_editable: action.payload.is_editable,
+              price: action.payload.financial_summary.grand_total,
+              total_due: 0,
+              expiry_date: action.payload.due_date,
+              created_at: action.payload.invoice_date,
+              deposit_required: action.payload.deposit_required,
+              deposit_type: action.payload.deposit_type,
+              deposit_amount: action.payload.deposit_amount,
+              deposit_available: action.payload.deposit_available,
+            };
+            state.invoiceList.unshift(invoice)
           })
           .addCase(createInvoiceThunk.rejected, (state, action) => {
             state.loadingCreateInvoice = false;
@@ -98,8 +116,9 @@ const invoiceSlice = createSlice({
             state.loadingInvoiceUpdate = true;
             state.error = null;
           })
-          .addCase(updateInvoiceThunk.fulfilled, state => {
+          .addCase(updateInvoiceThunk.fulfilled, (state, action) => {
             state.loadingInvoiceUpdate = false;
+            state.invoiceDetails = action.payload;
             state.error = null;
           })
           .addCase(updateInvoiceThunk.rejected, (state, action) => {
@@ -110,8 +129,10 @@ const invoiceSlice = createSlice({
             state.loadingDeleteInvoice = true;
             state.error = null;
           })
-          .addCase(deleteInvoiceThunk.fulfilled, state => {
+          .addCase(deleteInvoiceThunk.fulfilled, (state, action) => {
             state.loadingDeleteInvoice = false;
+            const invoiceId = action.meta.arg;
+            state.invoiceList.filter((invoice) => invoice.id !== invoiceId)
             state.error = null;
           })
           .addCase(deleteInvoiceThunk.rejected, (state, action) => {

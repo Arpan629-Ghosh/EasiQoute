@@ -121,7 +121,8 @@ export interface InvoiceCreate {
   due_date: string | undefined;
   message: string | undefined;
   notes: string | undefined;
-  attachments?: AttachmentFile[] 
+  attachments?: AttachmentFile[];
+  is_company_phone_number_show?: boolean 
 }
 
 export interface UpdateInvoicePayload {
@@ -129,6 +130,7 @@ export interface UpdateInvoicePayload {
   invoice_summury?: InvoiceCreate;
   invoice_items?: FetchItemsData[];
   discount?: number;
+  is_company_phone_number_show?: boolean;
 }
 
 

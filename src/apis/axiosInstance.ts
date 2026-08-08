@@ -2,6 +2,9 @@ import { parseApiError } from '@/utils/errorHandler';
 import { storage } from '../storage/asyncStorage';
 import axios from 'axios';
 import { X_API_Key } from '@/constants/apis/xApiKey';
+import { store } from '@/redux/store';
+import { clearAuth } from '@/redux/apis/auth/authSlice';
+import { resetToAuth } from '@/utils/navigationRef';
 
 export const apiClient = axios.create({
   baseURL: 'https://sandbox.eaziquote.com',
@@ -29,9 +32,17 @@ apiClient.interceptors.request.use(
 );
 
 apiClient.interceptors.response.use(
-  response => response,
+    response => response,
+   
   
-  error => {
+  async error => {
+
+    if (error.response?.status === 401) {
+      await storage.clearSession();
+      store.dispatch(clearAuth());
+      resetToAuth();
+    }
+
     return Promise.reject(parseApiError(error));
   },
 );

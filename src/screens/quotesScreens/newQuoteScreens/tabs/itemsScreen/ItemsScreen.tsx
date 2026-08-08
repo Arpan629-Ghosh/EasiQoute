@@ -46,6 +46,7 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
   const insets = useSafeAreaInsets();
   const debouncedSearch = useDebounce(search);
   const quoteId = route.params.quoteDetails?.id;
+  console.log(quoteId)
   const quoteItems : InvoiceItem[] | undefined = route.params.quoteDetails?.items
   const { theme } = useAppTheme();
   const { showToast } = useToast();
