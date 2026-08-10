@@ -1,5 +1,5 @@
 import { QuoteSection, UpdateQuotePayload, UpdateStatus } from './../../../types/apis/quote.types';
-import { quoteServices } from "@/apis/services/quoteServices";
+import { quoteServices } from "@/apis/services/quote.services";
 import { UpdateInvoiceStatus } from '@/types/apis/invoice.types';
 import { CreateQuote, Sections } from "@/types/apis/quote.types";
 import { createAsyncThunk } from "@reduxjs/toolkit";

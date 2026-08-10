@@ -1,4 +1,4 @@
-import { View, ActivityIndicator, Image } from 'react-native'
+import { View, ActivityIndicator, Image, Share } from 'react-native'
 import React, { useMemo, useState } from 'react'
 import { InvoiceTopTabWithRootProps } from '@/types/navigation.types'
 import { useAppTheme } from '@/hooks/useAppTheme';
@@ -14,7 +14,16 @@ const PreviewScreen = ({ route }: InvoiceTopTabWithRootProps<'Preview'>) => {
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme])
 
-  console.log(route.params?.previewUrl)
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `Check out this invoice ${route.params.previewUrl}`
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <View style={styles.containe}>
       <View style={styles.webViewContainer}>
@@ -23,8 +32,8 @@ const PreviewScreen = ({ route }: InvoiceTopTabWithRootProps<'Preview'>) => {
             <ActivityIndicator size="large" color={theme.primary} />
           </View>
         )}
-
-        <WebView
+        {
+          route.params.previewUrl ? <WebView
           source={{ uri: route.params?.previewUrl }}
           style={styles.webView}
           startInLoadingState
@@ -40,7 +49,9 @@ const PreviewScreen = ({ route }: InvoiceTopTabWithRootProps<'Preview'>) => {
             console.log('WebView Error', event.nativeEvent);
             setLoading(false);
           }}
-        />
+        /> : null
+        }
+        
       </View>
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.firstBttnContainer}>
@@ -59,6 +70,7 @@ const PreviewScreen = ({ route }: InvoiceTopTabWithRootProps<'Preview'>) => {
             buttonWidth="48.5%"
             bttnTxt="Share"
             txtColor={theme.textMuted}
+            onPress={handleShare}
           >
             <Image source={icons.ic_share} style={styles.share} />
           </ButtonComponent>

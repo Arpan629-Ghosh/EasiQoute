@@ -20,7 +20,7 @@ import { FetchItemsData } from '@/types/apis/settings.types';
 export const quoteServices = {
   quoteList: async (payload: number) => {
     const response = await apiClient.get<ApiResponse<QuotesPayload>>(
-      ENDPOINTS.QUOTELIST,
+      ENDPOINTS.QUOTE,
       {
         params: { page: payload },
       },
@@ -52,7 +52,7 @@ export const quoteServices = {
     );
 
     const response = await apiClient.post<ApiResponse<CreateQuotePayload>>(
-      ENDPOINTS.QUOTELIST,
+      ENDPOINTS.QUOTE,
       formData,
     );
 
@@ -61,7 +61,7 @@ export const quoteServices = {
 
   fetchQuoteDetails: async (payload: number) => {
     const response = await apiClient.get<ApiResponse<CreateQuotePayload>>(
-      `${ENDPOINTS.QUOTELIST}/${payload}`,
+      `${ENDPOINTS.QUOTE}/${payload}`,
     );
     return response.data;
   },
@@ -140,10 +140,8 @@ export const quoteServices = {
       });
     }
 
-    console.log('formData: ', formData);
-
     const response = await apiClient.post<ApiResponse<CreateQuotePayload>>(
-      `${ENDPOINTS.QUOTELIST}/${payload.quote_id}`,
+      `${ENDPOINTS.QUOTE}/${payload.quote_id}`,
       formData,
     );
 
@@ -165,7 +163,7 @@ export const quoteServices = {
 
   createSelectedSection: async (payload: QuoteSection) => {
     const response = await apiClient.post<ApiResponse<QuoteSectionPayload[]>>(
-      `${ENDPOINTS.QUOTELIST}/${payload.quote_id}/sections`,
+      `${ENDPOINTS.QUOTE}/${payload.quote_id}/sections`,
       { sections: payload.sections },
       {
         headers: {
@@ -177,7 +175,7 @@ export const quoteServices = {
   },
   getSelectedSections: async (payload: number) => {
     const response = await apiClient.get<ApiResponse<QuoteSectionData>>(
-      ENDPOINTS.GETSECTIONS,
+      ENDPOINTS.SECTIONS,
       {
         params: {
           quote_id: payload,
@@ -190,7 +188,7 @@ export const quoteServices = {
 
   duplicateQuote: async (payload: number) => {
     const response = await apiClient.post<ApiResponse<CreateQuote>>(
-      `${ENDPOINTS.QUOTELIST}/${payload}/duplicate`,
+      `${ENDPOINTS.QUOTE}/${payload}/duplicate`,
     );
 
     return response.data;
@@ -198,7 +196,7 @@ export const quoteServices = {
 
   deleteQuote: async (payload: number) => {
     const response = await apiClient.delete<ApiResponse<null>>(
-      `${ENDPOINTS.QUOTELIST}/${payload}`,
+      `${ENDPOINTS.QUOTE}/${payload}`,
     );
 
     return response.data;

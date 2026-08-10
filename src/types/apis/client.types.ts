@@ -70,6 +70,7 @@ export interface GetClients {
 }
 
 export interface CreateClient{
+   id?: number
     email: string;
     phone: string;
     name: string;

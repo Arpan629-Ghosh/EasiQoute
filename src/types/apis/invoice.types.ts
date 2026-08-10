@@ -1,7 +1,6 @@
-import { AttachmentFile } from "@/screens/invoiceScreens/tabs/summuryScreen/SummuryScreen";
-import { QuoteItem } from "./quote.types";
-import { Clients } from "./client.types";
-import { FetchItemsData } from "./settings.types";
+import { AttachmentFile } from '@/screens/invoiceScreens/newInvoiceScreens/tabs/summuryScreen/SummuryScreen';
+import { QuoteItem } from './quote.types';
+import { FetchItemsData } from './settings.types';
 
 export interface InvoiceResponse {
   payload: InvoicePayload;
@@ -30,7 +29,7 @@ export interface InvoicePayload {
   quote: InvoiceQuote;
   client: InvoiceClient;
   financial_summary: FinancialSummary;
-  attachments: Attachment[] | [];
+  attachments: Attachment[];
   items: InvoiceItem[] | [];
   payments: Payment[] | [];
   created_at: string;
@@ -114,7 +113,6 @@ export interface RecentActivity {
   // Add fields when the API starts returning recent activity objects.
 }
 
-
 export interface InvoiceCreate {
   quote_id?: number | undefined;
   invoice_date: string | undefined;
@@ -122,7 +120,7 @@ export interface InvoiceCreate {
   message: string | undefined;
   notes: string | undefined;
   attachments?: AttachmentFile[];
-  is_company_phone_number_show?: boolean 
+  is_company_phone_number_show?: boolean;
 }
 
 export interface UpdateInvoicePayload {
@@ -132,8 +130,6 @@ export interface UpdateInvoicePayload {
   discount?: number;
   is_company_phone_number_show?: boolean;
 }
-
-
 
 export interface InvoiceListPayload {
   summary: InvoiceSummary;
@@ -204,7 +200,7 @@ export interface InvoiceDetailsPayload {
   deposit_required: boolean;
   deposit_type: string | null;
   deposit_amount: number | null;
-  deposit_available: 0;
+  deposit_available: number;
   message: string;
   notes: string | null;
   is_editable: boolean;
@@ -213,11 +209,11 @@ export interface InvoiceDetailsPayload {
   template: string;
   is_company_phone_number_show: boolean;
   quote: QuoteItem;
-  client: Clients;
+  client: InvoiceClient;
   financial_summary: FinancialSummary;
   attachments: [];
   items: InvoiceItem[];
-  payments: [];
+  payments: Payment[];
   created_at: string;
   payment_method: string | null;
   route_url: string;
@@ -227,4 +223,3 @@ export interface UpdateInvoiceStatus {
   status: string;
   invoice_id: number;
 }
-

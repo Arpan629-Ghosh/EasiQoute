@@ -6,7 +6,6 @@ import {
   GetClientsPayload,
 } from '@/types/apis/client.types';
 import { ApiResponse } from '@/types/apis/common.types';
-import { CreateCategoriesPayload } from '@/types/apis/settings.types';
 import { ENDPOINTS } from '../endPoints';
 
 export const clientServices = {
@@ -21,8 +20,8 @@ export const clientServices = {
     formData.append('postcode', payload.postcode);
     formData.append('country', payload.country);
 
-    const response = await apiClient.post<ApiResponse<CreateCategoriesPayload>>(
-      ENDPOINTS.CRREATECLIENT,
+    const response = await apiClient.post<ApiResponse<Clients>>(
+      ENDPOINTS.CLIENT,
       formData,
     );
 
@@ -31,7 +30,7 @@ export const clientServices = {
 
   getClients: async (payload: GetClients) => {
     const response = await apiClient.get<ApiResponse<GetClientsPayload>>(
-      ENDPOINTS.CRREATECLIENT,
+      ENDPOINTS.CLIENT,
       {
         params: {
           search: payload.search,
@@ -46,9 +45,24 @@ export const clientServices = {
 
   showClientDetails: async (payload: number) => {
     const response = await apiClient.get<ApiResponse<Clients>>(
-      `${ENDPOINTS.CRREATECLIENT}/${payload}`,
+      `${ENDPOINTS.CLIENT}/${payload}`,
     );
 
     return response.data;
   },
+
+  updateClient: async (payload: CreateClient) => {
+    const response = await apiClient.put<ApiResponse<Clients>>(
+      `${ENDPOINTS.CLIENT}/${payload.id}`, payload
+    )
+    return response.data;
+  },
+
+  deleteClient: async (payload: number) => {
+    const response = await apiClient.delete<ApiResponse<null>>(
+      `${ENDPOINTS.CLIENT}/${payload}`,
+    );
+
+    return response.data;
+  }
 };

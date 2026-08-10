@@ -1,4 +1,4 @@
-import { invoiceServices } from '@/apis/services/invoiceServices';
+import { invoiceServices } from '@/apis/services/invoice.services';
 import { InvoiceCreate, UpdateInvoicePayload } from '@/types/apis/invoice.types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 

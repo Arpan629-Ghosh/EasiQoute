@@ -67,14 +67,21 @@ const RenderActivities = ({ item }: { item: RecentActivity }) => {
     view: '#E8ECF4',
     text: '#64748B',
   };
+
+  const handleNavigation = () => {
+    if (item.type === 'quote') navigation.navigate('QouteDetailScreen', {
+      quoteId: item.id
+    })
+    else {
+      navigation.navigate('InvoiceDetailsScreens', {
+        invoiceId: item.id
+      })
+    }
+  }
   return (
     <View style={styles.container}>
       <TouchableOpacity
-        onPress={() =>
-          navigation.navigate('QouteDetailScreen', {
-            quoteId: item.id,
-          })
-        }
+        onPress={handleNavigation}
       >
         <View style={styles.card}>
           <View style={styles.header}>

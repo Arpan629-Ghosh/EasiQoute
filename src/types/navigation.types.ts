@@ -13,6 +13,7 @@ import { MaterialTopTabScreenProps } from '@react-navigation/material-top-tabs';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CreateQuotePayload } from './apis/quote.types';
 import { InvoiceDetailsPayload, InvoiceItem } from './apis/invoice.types';
+import { Clients } from './apis/client.types';
 
 /* -------------------------------------------------------------------------- */
 /*                               PARAM LISTS                                  */
@@ -117,7 +118,7 @@ export type RootStackParamList = {
       }
     | undefined;
 
-  AddClientScreen: undefined;
+  AddClientScreen: {clientDetails: Clients | null} | undefined;
 
   ClientDetailScreen: {
     clientId: number;

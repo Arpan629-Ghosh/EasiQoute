@@ -340,7 +340,7 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
           onToggleStatus={togglestatuse}
           onToggleAmount={toggleAmount}
         />
-        <Loader visible={loadingGetInvoice} />
+        {(!refreshing && !paginationLoading) && <Loader visible={loadingGetInvoice} />}
       </LinearGradient>
     </KeyboardAvoidingView>
   );

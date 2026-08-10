@@ -1,10 +1,21 @@
-import { CreateTeamMemberPayload, FetchTeamMembers, FetchTeamMembersPayload } from './../../types/apis/settings.types';
 import { apiClient } from '@/apis/axiosInstance';
-import { Company } from "@/types/apis/auth.types";
-import { ApiResponse } from "@/types/apis/common.types";
-import { ENDPOINTS } from "../endPoints";
-import { ChangePassword, CreateCategories, CreateCategoriesPayload, FetchCategoriesPayload, CreateSubCategories, SubCategoriesPayload, FetchSubCategoriesPayload, CreateItems, CreateItemsPayload, FetchItemsPayload } from "@/types/apis/settings.types";
-
+import { Company } from '@/types/apis/auth.types';
+import { ApiResponse } from '@/types/apis/common.types';
+import { ENDPOINTS } from '../endPoints';
+import {
+  ChangePassword,
+  CreateCategories,
+  CreateCategoriesPayload,
+  FetchCategoriesPayload,
+  CreateSubCategories,
+  SubCategoriesPayload,
+  FetchSubCategoriesPayload,
+  CreateItems,
+  CreateItemsPayload,
+  FetchItemsPayload,
+  CreateTeamMemberPayload,
+  FetchTeamMembersPayload,
+} from '@/types/apis/settings.types';
 
 export const settingsServices = {
   companyProfileUpdate: async (payload: Company) => {
@@ -57,7 +68,7 @@ export const settingsServices = {
     formData.append('name', payload.name);
 
     const response = await apiClient.post<ApiResponse<CreateCategoriesPayload>>(
-      ENDPOINTS.CREATECATEGORIES,
+      ENDPOINTS.CATEGORIES,
       formData,
     );
 
@@ -66,7 +77,7 @@ export const settingsServices = {
 
   fetchNewCategories: async (payload: number) => {
     const response = await apiClient.get<ApiResponse<FetchCategoriesPayload>>(
-      ENDPOINTS.CREATECATEGORIES,
+      ENDPOINTS.CATEGORIES,
       {
         params: { page: payload },
       },
@@ -76,7 +87,7 @@ export const settingsServices = {
   },
   deleteCategory: async (payload: number) => {
     const response = await apiClient.delete<ApiResponse<null>>(
-      `${ENDPOINTS.CREATECATEGORIES}/${payload}`,
+      `${ENDPOINTS.CATEGORIES}/${payload}`,
     );
 
     return response.data;
@@ -91,7 +102,7 @@ export const settingsServices = {
     formData.append('name', payload.name);
 
     const response = await apiClient.post<ApiResponse<SubCategoriesPayload>>(
-      ENDPOINTS.CREATESUBCATEGORIES,
+      ENDPOINTS.SUBCATEGORIES,
       formData,
     );
     return response.data;
@@ -100,7 +111,7 @@ export const settingsServices = {
   fetchNewSubCategories: async (payload: number) => {
     const response = await apiClient.get<
       ApiResponse<FetchSubCategoriesPayload>
-    >(ENDPOINTS.CREATESUBCATEGORIES, {
+    >(ENDPOINTS.SUBCATEGORIES, {
       params: { page: payload },
     });
     return response.data;
@@ -112,7 +123,7 @@ export const settingsServices = {
     formData.append('category_id', payload.category_id);
     formData.append('name', payload.name);
     const response = await apiClient.delete<ApiResponse<null>>(
-      `${ENDPOINTS.CREATESUBCATEGORIES}/${payload.id}`,
+      `${ENDPOINTS.SUBCATEGORIES}/${payload.id}`,
       {
         data: formData,
       },
@@ -122,7 +133,7 @@ export const settingsServices = {
 
   createItems: async (payload: CreateItems) => {
     const response = await apiClient.post<ApiResponse<CreateItemsPayload>>(
-      ENDPOINTS.CREATEITEMS,
+      ENDPOINTS.ITEMS,
       payload,
       {
         headers: {
@@ -177,7 +188,7 @@ export const settingsServices = {
       params.search = payload.search.trim();
     }
 
-    const response = await apiClient.get<ApiResponse<FetchTeamMembers>>(
+    const response = await apiClient.get<ApiResponse<FetchTeamMembersPayload>>(
       ENDPOINTS.TEAMMEMBER,
       { params },
     );

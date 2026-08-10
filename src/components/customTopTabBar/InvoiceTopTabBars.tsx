@@ -55,6 +55,7 @@ const InvoiceTopTabBars = ({
   };
 
   const navigateToUpdate = () => {
+    setOpenEdit(false);
     navigation.navigate('SelectQuoteScreen', {
       invoiceDetails: invoiceDetails,
     });
@@ -64,7 +65,9 @@ const InvoiceTopTabBars = ({
     try {
       deleteInvoice(invoiceDetails.id);
       showToast(`${invoiceDetails.title} deleted successfully!`);
+      setOpenEdit(false)
       navigateToBack();
+
     } catch (error) {
       showToast(String(error), 'error')
     }

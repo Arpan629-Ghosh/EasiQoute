@@ -1,4 +1,4 @@
-import { homeService } from "@/apis/services/homeService";
+import { homeService } from "@/apis/services/home.services";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 
 

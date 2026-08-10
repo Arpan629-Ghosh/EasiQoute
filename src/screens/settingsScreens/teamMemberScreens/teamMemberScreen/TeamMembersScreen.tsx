@@ -175,7 +175,7 @@ const TeamMembersScreen = ({
           </View>
         </View>
       </LinearGradient>
-      <Loader visible={loadingTeamMembers} />
+      {(!refreshing && !paginationLoading) && <Loader visible={loadingTeamMembers} />}
     </View>
   );
 };

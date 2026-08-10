@@ -8,6 +8,9 @@ import { RecentActivity } from '@/types/apis/home.types';
 import Card from '../cardDetailsComponent/Card';
 import { icons } from '@/config/icons';
 import { formatDate } from '@/utils/formatDate';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@/types/navigation.types';
 
 const STATUS_COLORS = {
   overdue: {
@@ -57,8 +60,8 @@ const STATUS_COLORS = {
 } as const;
 
 const RecentClientActivity = ({ item }: { item: RecentActivity }) => {
-  // const navigation =
-  //   useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const statusColors = STATUS_COLORS[
@@ -67,8 +70,20 @@ const RecentClientActivity = ({ item }: { item: RecentActivity }) => {
     view: '#E8ECF4',
     text: '#64748B',
   };
+
+  const handleNavigation = () => {
+    if (item.type === 'quote')
+      navigation.navigate('QouteDetailScreen', {
+        quoteId: item.id,
+      });
+    else {
+      navigation.navigate('InvoiceDetailsScreens', {
+        invoiceId: item.id,
+      });
+    }
+  };
   return (
-    <View style={styles.container}>
+    <TouchableOpacity onPress={handleNavigation} style={styles.container}>
       <Card style={styles.card}>
         <View style={styles.header}>
           <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
@@ -113,7 +128,7 @@ const RecentClientActivity = ({ item }: { item: RecentActivity }) => {
           </View>
         </View>
       </Card>
-    </View>
+    </TouchableOpacity>
   );
 };
 

@@ -5,9 +5,9 @@ import {
 } from '@/types/navigation.types';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import InvoiceTopTabBars from '@/components/customTopTabBar/InvoiceTopTabBars';
-import SummuryScreen from '../invoiceDetailsTabs/summuryScreen/SummuryScreen';
-import DescriptionsScreen from '../invoiceDetailsTabs/descriptionsScreen/DescriptionsScreen';
-import PaymentScreen from '../invoiceDetailsTabs/paymentScreen/PaymentScreen';
+import SummuryScreen from './tabs/summuryScreen/SummuryScreen';
+import DescriptionsScreen from './tabs/descriptionsScreen/DescriptionsScreen';
+import PaymentScreen from './tabs/paymentScreen/PaymentScreen';
 import { useInvoice } from '@/hooks/apis/useInvoice';
 
 const Tab = createMaterialTopTabNavigator<InvoiceDetailsTopTabParamList>();

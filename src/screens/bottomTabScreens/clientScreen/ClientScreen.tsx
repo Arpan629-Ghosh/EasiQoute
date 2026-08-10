@@ -237,7 +237,7 @@ const ClientScreen = ({ navigation }: ClientStackProps<'ClientScreen'>) => {
         selectedSortOption={selctedSortOption}
         onToggleSort={toggleSort}
       />
-      <Loader visible={loading} />
+     { (!refreshing && !paginationLoading) && <Loader visible={loading} />}
     </LinearGradient>
   );
 };

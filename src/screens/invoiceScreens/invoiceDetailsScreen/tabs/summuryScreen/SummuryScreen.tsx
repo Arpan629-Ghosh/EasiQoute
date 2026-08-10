@@ -1,4 +1,4 @@
-import { View, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, ScrollView, TouchableOpacity, Image, Share } from 'react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
@@ -63,6 +63,16 @@ const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleShare = async() => {
+    try {
+      await Share.share({
+        message: `Check out this invoice ${invoiceDetails?.url}`
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.content}>
       <ScrollView
@@ -282,6 +292,7 @@ const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
             borderc="#082B60"
             txtColor={theme.textPrimary}
             gap={8}
+            onPress={handleShare}
           >
             <Image source={icons.ic_share} style={styles.addicon} />
           </ButtonComponent>

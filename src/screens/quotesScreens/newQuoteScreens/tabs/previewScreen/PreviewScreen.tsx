@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, Share, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { createStyles } from './style'
 import Input from '@/components/inputComponent/Input'
@@ -27,6 +27,16 @@ const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'
      fetchQuoteDetails(quoteId)
   }, [fetchQuoteDetails, quoteId])
 
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `Check out this quote ${quoteDetails?.url}`
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -47,23 +57,24 @@ const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'
           </View>
         )}
 
-        <WebView
+        {
+          quoteDetails?.url ? <WebView
           source={{ uri: quoteDetails?.url }}
           style={styles.webView}
           startInLoadingState
           javaScriptEnabled
           domStorageEnabled
           originWhitelist={['*']}
-          scalesPageToFit
-          mixedContentMode="always"
-          showsVerticalScrollIndicator={false}
           onLoadStart={() => setLoading(true)}
           onLoadEnd={() => setLoading(false)}
           onError={event => {
             console.log('WebView Error', event.nativeEvent);
             setLoading(false);
           }}
-        />
+        /> : null
+        }
+
+        
       </View>
 
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
@@ -84,6 +95,7 @@ const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'
             buttonWidth="48.5%"
             bttnTxt="Share"
             txtColor={theme.textMuted}
+            onPress={handleShare}
           >
             <Image source={icons.ic_share} style={styles.share} />
           </ButtonComponent>

@@ -26,8 +26,7 @@ export const authServices = {
       ENDPOINTS.LOGIN,
       formData,
     );
-
-    // console.log(response.data);
+    
     return response.data;
   },
 

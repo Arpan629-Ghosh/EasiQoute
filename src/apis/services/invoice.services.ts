@@ -31,7 +31,7 @@ export const invoiceServices = {
     });
 
     const response = await apiClient.post<ApiResponse<InvoicePayload>>(
-      ENDPOINTS.CREATEINVOICE,
+      ENDPOINTS.INVOICE,
       formData,
     );
 
@@ -39,7 +39,7 @@ export const invoiceServices = {
   },
   getInvoices: async (payload: number) => {
     const response = await apiClient.get<ApiResponse<InvoiceListPayload>>(
-      ENDPOINTS.CREATEINVOICE,
+      ENDPOINTS.INVOICE,
       {
         params: { page: payload },
       },
@@ -87,7 +87,7 @@ export const invoiceServices = {
     console.log('formData: ', formData);
 
     const response = await apiClient.post<ApiResponse<InvoicePayload>>(
-      `${ENDPOINTS.CREATEINVOICE}/${payload.invoice_id}`,
+      `${ENDPOINTS.INVOICE}/${payload.invoice_id}`,
       formData,
     );
 
@@ -96,7 +96,7 @@ export const invoiceServices = {
 
   getInvoiceDetails: async (payload: number) => {
     const response = await apiClient.get<ApiResponse<InvoiceDetailsPayload>>(
-      `${ENDPOINTS.CREATEINVOICE}/${payload}`,
+      `${ENDPOINTS.INVOICE}/${payload}`,
     );
 
     return response.data;
@@ -104,7 +104,7 @@ export const invoiceServices = {
 
   deleteInvoice: async (payload: number) => {
     const response = await apiClient.delete<ApiResponse<null>>(
-      `${ENDPOINTS.CREATEINVOICE}/${payload}`,
+      `${ENDPOINTS.INVOICE}/${payload}`,
     );
 
     return response.data;

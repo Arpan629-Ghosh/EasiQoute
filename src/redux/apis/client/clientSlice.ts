@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { createClientThunk, getClientsThunk, showClientDetailsThunk } from './clientThunk';
+import { createClientThunk, deleteClientThunk, getClientsThunk, showClientDetailsThunk, updateClientThunk } from './clientThunk';
 import { Clients } from '@/types/apis/client.types';
 
 interface ClientState {
   clients: Clients[];
   client_detail: Clients | null;
   loading: boolean;
+  deleteClientLoader: boolean;
+  updateClientLoader: boolean;
   error: string | null;
   current_page: number;
   last_page: number;
@@ -15,6 +17,8 @@ const initialState: ClientState = {
   clients: [],
   client_detail: null,
   loading: false,
+  deleteClientLoader: false,
+  updateClientLoader: false,
   error: null,
   current_page: 1,
   last_page: 1,
@@ -80,6 +84,30 @@ const clientSlice = createSlice({
       .addCase(showClientDetailsThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string
+      })
+      .addCase(deleteClientThunk.pending, state => {
+        state.deleteClientLoader = true;
+        state.error = null;
+      })
+      .addCase(deleteClientThunk.fulfilled, state => {
+        state.deleteClientLoader = false;
+        state.error = null;
+      })
+      .addCase(deleteClientThunk.rejected, (state, action) => {
+        state.deleteClientLoader = false;
+        state.error = action.payload as string;
+      })
+      .addCase(updateClientThunk.pending, (state) => {
+        state.updateClientLoader = true;
+        state.error = null;
+      })
+      .addCase(updateClientThunk.fulfilled, state => {
+        state.updateClientLoader = false;
+        state.error = null;
+      })
+      .addCase(updateClientThunk.rejected, (state, action) => {
+        state.updateClientLoader = false;
+        state.error = action.payload as string;
     })
   },
 });

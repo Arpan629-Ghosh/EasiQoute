@@ -28,6 +28,10 @@ const NewQuoteScreens = ({ route }: RootScreenProps<'NewQuoteScreens'>) => {
           canAccessTabs={canAccessItems}
         />
       )}
+
+      screenOptions={{
+        swipeEnabled: canAccessItems
+      }}
     >
       <Tab.Screen name="Summury" initialParams={{quoteDetails}}>
         {props => (

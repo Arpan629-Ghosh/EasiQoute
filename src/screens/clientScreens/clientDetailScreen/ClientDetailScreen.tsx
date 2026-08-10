@@ -20,6 +20,7 @@ import CardHeader from '@/components/cardDetailsComponent/CardHeader';
 import { useClient } from '@/hooks/apis/useClient';
 import RecentClientActivity from '@/components/recentClientActivity/RecentClientActivity';
 import { RootScreenProps } from '@/types/navigation.types';
+import { useToast } from '@/hooks/useToast';
 
 const ClientDetailScreen = ({
   navigation,
@@ -28,7 +29,8 @@ const ClientDetailScreen = ({
   const [openEdit, setOpenEdit] = useState(false);
   const clientId = route.params.clientId;
   const { theme, isDark } = useAppTheme();
-  const { showClientDetail, client_detail } = useClient();
+  const { showClientDetail, deleteClient, client_detail } = useClient();
+  const { showToast } = useToast();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const navigateToBack = () => {
@@ -63,6 +65,22 @@ const ClientDetailScreen = ({
     }).start();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openEdit]);
+
+  const navigateToEdit = () => {
+    navigation.navigate('AddClientScreen', {
+      clientDetails: client_detail || null
+    })
+  }
+
+  const handleDeleteClient = async() => {
+    try {
+      await deleteClient(clientId);
+      showToast("Client deleted successfully!")
+      navigation.goBack();
+    } catch (error) {
+      showToast(String(error), 'error')
+    }
+  }
 
   return (
     <LinearGradient
@@ -109,7 +127,11 @@ const ClientDetailScreen = ({
                 },
               ]}
             >
-              <TouchableOpacity activeOpacity={0.7} style={styles.dropdownItem}>
+              <TouchableOpacity
+                onPress={navigateToEdit}
+                activeOpacity={0.7}
+                style={styles.dropdownItem}
+              >
                 <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
                   Edit
                 </InterTightMedium>
@@ -117,7 +139,11 @@ const ClientDetailScreen = ({
 
               <View style={styles.separator} />
 
-              <TouchableOpacity activeOpacity={0.7} style={styles.dropdownItem}>
+              <TouchableOpacity
+                onPress={handleDeleteClient}
+                activeOpacity={0.7}
+                style={styles.dropdownItem}
+              >
                 <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
                   Delete
                 </InterTightMedium>

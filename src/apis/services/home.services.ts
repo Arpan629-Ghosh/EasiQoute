@@ -6,7 +6,7 @@ import { HomeScreenResponse } from '@/types/apis/home.types';
 export const homeService = {
   homeScreenData: async () => {
     const respnse = await apiClient.get<ApiResponse<HomeScreenResponse>>(
-      ENDPOINTS.HOMESCREEN,
+      ENDPOINTS.HOME,
     );
 
     return respnse.data;

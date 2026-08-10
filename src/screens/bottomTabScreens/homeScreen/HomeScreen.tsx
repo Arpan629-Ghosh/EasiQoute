@@ -101,10 +101,12 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
                     <Image source={icons.ic_whiteqoute} style={styles.vector} />
                   </Icons>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate("NewInvoiceScreens")}>
+                  <Icons text="New Invoice">
+                    <Image source={icons.ic_whiteqoute} style={styles.vector} />
+                  </Icons>
+                </TouchableOpacity>
 
-                <Icons text="New Invoice">
-                  <Image source={icons.ic_whiteqoute} style={styles.vector} />
-                </Icons>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('Clients')}
                 >

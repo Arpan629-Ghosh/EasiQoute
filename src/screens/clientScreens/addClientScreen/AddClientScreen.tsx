@@ -37,25 +37,27 @@ interface ClientForm {
   country: string;
 }
 
-const AddClientScreen = ({ navigation } : RootScreenProps<'AddClientScreen'>) => {
+const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScreen'>) => {
   const [clientFormData, setClientFormData] = useState<ClientForm>({
-    clientName: '',
-    companyName: '',
-    phNo: '',
-    email: '',
+    clientName: route.params?.clientDetails?.name ||  '',
+    companyName: route.params?.clientDetails?.company_name || '',
+    phNo: route.params?.clientDetails?.phone ||  '',
+    email: route.params?.clientDetails?.email || '',
     search: '',
-    streetAddress: '',
-    city: '',
-    postcode: '',
-    country: '',
+    streetAddress: route.params?.clientDetails?.address || '',
+    city: route.params?.clientDetails?.city ||  '',
+    postcode: route.params?.clientDetails?.postcode || '',
+    country: route.params?.clientDetails?.country || '',
   });
   const [searchData, setSearchData] = useState<SearchAddressPayload[]>([]);
   const debouncedSearch = useDebounce(clientFormData.search, 500);
   const { theme } = useAppTheme();
   const { showToast } = useToast();
-  const { createClient, loading } = useClient();
+  const { createClient, updateClient, updateClientLoader, loading } = useClient();
   const { searchAddress } = useAuth();
   const insets = useSafeAreaInsets();
+  const clientDetails = route.params?.clientDetails;
+  const isEdit = !!clientDetails?.id;
 
   useEffect(() => {
     const fetchAddress = async () => {
@@ -143,9 +145,43 @@ const AddClientScreen = ({ navigation } : RootScreenProps<'AddClientScreen'>) =>
       showToast(String(error), 'error');
     }
   };
+
+  const handleEditClient = async () => {
+    try {
+      const res = await updateClient({
+        id: clientDetails?.id,
+        email: clientFormData.email,
+        name: clientFormData.clientName,
+        phone: formatPhone,
+        company_name: clientFormData.companyName,
+        address: clientFormData.streetAddress,
+        city: clientFormData.city,
+        postcode: clientFormData.postcode,
+        country: clientFormData.country,
+      });
+      showToast('Customer updated successfully.');
+      setClientFormData({
+        clientName: '',
+        companyName: '',
+        phNo: '',
+        email: '',
+        search: '',
+        streetAddress: '',
+        city: '',
+        postcode: '',
+        country: '',
+      });
+
+      navigation.navigate('ClientDetailScreen', {
+        clientId: res.id,
+      });
+    } catch (error) {
+      showToast(String(error), 'error');
+    }
+  };
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
-      <Header txt="Add Client" borderBottomEnabled={true} />
+      <Header txt={isEdit ? "Edit Client" : "Add Client"} borderBottomEnabled={true} />
       <KeyboardAvoidingView
         style={styles.keyboard}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -289,11 +325,11 @@ const AddClientScreen = ({ navigation } : RootScreenProps<'AddClientScreen'>) =>
       <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
         <View style={styles.footerContainer}>
           <ButtonComponent
-            bttnTxt="Add Client"
+            bttnTxt={isEdit ? "Update Client" : "Add Client"}
             bg={theme.primary}
             txtColor={theme.primaryText}
-            showLoader={loading}
-            onPress={handleAddClient}
+            showLoader={loading || updateClientLoader}
+            onPress={isEdit ? handleEditClient : handleAddClient}
           />
         </View>
       </View>

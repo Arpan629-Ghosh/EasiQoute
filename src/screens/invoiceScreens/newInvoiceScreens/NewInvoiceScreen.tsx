@@ -4,9 +4,9 @@ import {
   RootScreenProps,
 } from '@/types/navigation.types';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import SummuryScreen from '../tabs/summuryScreen/SummuryScreen';
-import ItemsScreen from '../tabs/itemsScreen/ItemsScreen';
-import PreviewScreen from '../tabs/previewScreen/PreviewScreen';
+import SummuryScreen from './tabs/summuryScreen/SummuryScreen';
+import ItemsScreen from './tabs/itemsScreen/ItemsScreen';
+import PreviewScreen from './tabs/previewScreen/PreviewScreen';
 import CustomTabBars from '@/components/customTopTabBar/CustomTopTabBars';
 
 const Tab = createMaterialTopTabNavigator<NewInvoiceTopTabParamList>();
@@ -33,6 +33,9 @@ const NewInvoiceScreen = ({ route }: RootScreenProps<'NewInvoiceScreens'>) => {
           canAccessTabs={canAccessItems}
         />
       )}
+      screenOptions={{
+        swipeEnabled: canAccessItems,
+      }}
     >
       {/* Summary */}
       <Tab.Screen name="Summury" initialParams={{ invoiceDetails, quoteId }}>

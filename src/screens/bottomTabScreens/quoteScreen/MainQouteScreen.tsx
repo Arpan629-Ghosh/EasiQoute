@@ -362,7 +362,7 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
           visible={openSubscriptionModal}
           onClose={handleCloseSubscriptionModal}
         />
-        <Loader visible={ loadingQuoteList} />
+        {(!refreshing && !paginationLoading) && <Loader visible={ loadingQuoteList} />}
       </LinearGradient>
     </KeyboardAvoidingView>
   );

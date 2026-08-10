@@ -1,4 +1,4 @@
-import { authServices } from '@/apis/services/authServices';
+import { authServices } from '@/apis/services/auth.services';
 import { storage } from '@/storage/asyncStorage';
 import {
   

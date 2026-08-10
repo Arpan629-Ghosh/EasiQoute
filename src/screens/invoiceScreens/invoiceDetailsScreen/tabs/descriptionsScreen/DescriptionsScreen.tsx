@@ -4,6 +4,7 @@ import {
   Image,
   TouchableOpacity,
   Linking,
+  Share,
 } from 'react-native';
 import React, { useMemo } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
@@ -43,6 +44,16 @@ const DescriptionsScreen = () => {
   const getAttachmentName = (attachment: { type: string }, index: number) => {
     return `Attachment ${index + 1}.${attachment.type}`;
   };
+
+  const handleShare = async() => {
+      try {
+        await Share.share({
+          message: `Check out this invoice ${invoiceDetails?.url}`
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    }
 
 
   return (
@@ -150,6 +161,7 @@ const DescriptionsScreen = () => {
             borderc="#082B60"
             txtColor={theme.textPrimary}
             gap={8}
+            onPress={handleShare}
           >
             <Image source={icons.ic_share} style={styles.addicon} />
           </ButtonComponent>

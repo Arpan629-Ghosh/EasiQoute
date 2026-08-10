@@ -21,6 +21,7 @@ import { FetchItemsData } from '@/types/apis/settings.types';
 import Loader from '@/components/loader/Loader';
 import { RootScreenProps } from '@/types/navigation.types';
 import { STATUS_COLORS } from '@/config/statusColors';
+import { useFocusEffect } from '@react-navigation/native';
 
 const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailScreen'>) => {
   const [open, setOpen] = useState(false)
@@ -63,6 +64,14 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
     
   }
 
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setOpenEdit(false);
+        animation.setValue(0);
+      };
+    }, [animation]),
+  );
 
   useEffect(() => {
     Animated.timing(animation, {
@@ -98,7 +107,7 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
   };
 
   const navigateToEdit = () => {
-  
+    setOpenEdit(false)
 
     navigation.navigate("NewQuoteScreens", {
       quoteDetails: quoteDetails,
@@ -151,8 +160,10 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
   const handleDeleteQuote = async() => {
     try {
       await deleteQuote(quoteId);
-      showToast(`${quoteDetails?.title} deleted successfully!`)
       navigateToBack();
+      showToast(`${quoteDetails?.title} deleted successfully!`)
+      setOpenEdit(false)
+      
     } catch (error) {
       showToast(String(error), 'error')
     }
@@ -175,7 +186,10 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
           translucent
         />
       )}
-      <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
+      
+      <View
+        style={[styles.header, { paddingTop: insets.top + 12 }]}
+      >
         <View style={styles.headerComponent}>
           <TouchableOpacity onPress={navigateToBack}>
             <Image
@@ -201,23 +215,28 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
                 },
               ]}
             >
-              {(quoteDetails?.status !== 'approved' && 'rejected') &&
-              <>
+              {quoteDetails?.status !== 'approved' &&
+                quoteDetails?.status !== 'rejected' && (
+                  <>
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={navigateToEdit}
+                      style={styles.dropdownItem}
+                    >
+                      <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
+                        Edit
+                      </InterTightMedium>
+                    </TouchableOpacity>
+
+                    <View style={styles.separator} />
+                  </>
+                )}
+
               <TouchableOpacity
+                onPress={handleDeleteQuote}
                 activeOpacity={0.7}
-                onPress={navigateToEdit}
                 style={styles.dropdownItem}
               >
-                <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
-                  Edit
-                </InterTightMedium>
-              </TouchableOpacity>
-
-                <View style={styles.separator} />
-              </>
-              }
-
-              <TouchableOpacity onPress={handleDeleteQuote} activeOpacity={0.7} style={styles.dropdownItem}>
                 <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
                   Delete
                 </InterTightMedium>
@@ -231,13 +250,20 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
           {`${quoteDetails?.title ?? ''} - ${quoteDetails?.client?.name ?? ''}`}
         </InterTightMedium>
         <ScrollView
+          onTouchStart={() => {
+            if (openEdit) {
+              setOpenEdit(false);
+            }
+          }}
           style={styles.scrollview}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.scrollview}
         >
           <View style={styles.cardContainer}>
             <Card style={styles.cardone}>
-              <View style={[styles.status, {backgroundColor: statusColors.view}]}>
+              <View
+                style={[styles.status, { backgroundColor: statusColors.view }]}
+              >
                 <InterTightMedium fsize={14} fcolor={statusColors.text}>
                   {quoteDetails?.status}
                 </InterTightMedium>
@@ -600,7 +626,11 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
         onToggleStatus={toggleStatus}
         selectedStatus={selectedStatus}
       />
-      <Loader visible={loadingQuoteDetails || loadingDuplicateQuote || loadingDeleteQuote} />
+      <Loader
+        visible={
+          loadingQuoteDetails || loadingDuplicateQuote || loadingDeleteQuote
+        }
+      />
     </LinearGradient>
   );
 };
