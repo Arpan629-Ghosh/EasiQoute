@@ -1,10 +1,10 @@
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
-import ModalComponent from '../modal/ModalComponent';
+import BottomModalComponent from '../modal/BottomModalComponent';
 import CardHeader from '../cardDetailsComponent/CardHeader';
 import { icons } from '@/config/icons';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import AppButton from '../appButton/AppButton';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { useDispatch } from 'react-redux';
 import { setTheme } from '@/redux/theme/themeSlice';
 import { useAppTheme } from '@/hooks/useAppTheme';
@@ -23,7 +23,7 @@ const AppearanceBottomSheet = ({ visible, onClose }: Prop) => {
   const { theme, mode, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   return (
-    <ModalComponent visible={visible} onClose={onClose} mheight={330}>
+    <BottomModalComponent visible={visible} onClose={onClose} mheight={330}>
       <View style={styles.container}>
         <View style={styles.header}>
           <CardHeader title="Appearance" />
@@ -83,7 +83,7 @@ const AppearanceBottomSheet = ({ visible, onClose }: Prop) => {
         </View>
         <View style={styles.footer}>
           <View style={styles.bttnContainer}>
-            <ButtonComponent
+            <AppButton
               onPress={onClose}
               bg={theme.primary}
               bttnTxt="Save Preference"
@@ -92,7 +92,7 @@ const AppearanceBottomSheet = ({ visible, onClose }: Prop) => {
           </View>
         </View>
       </View>
-    </ModalComponent>
+    </BottomModalComponent>
   );
 };
 

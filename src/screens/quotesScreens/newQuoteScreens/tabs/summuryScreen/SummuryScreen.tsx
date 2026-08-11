@@ -15,10 +15,10 @@ import React, {
   useState,
 } from 'react';
 import { createStyles } from './style';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
+import AppButton from '@/components/appButton/AppButton';
 import { icons } from '@/config/icons';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import CustomToggle from '@/components/switch/CustomToggle';
@@ -341,7 +341,7 @@ const SummuryScreen = ({
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Quote Title
               </InterTightRegular>
-              <Input
+              <AppInput
                 placeholder="e.g. Kitchen Renovation"
                 value={newQuoteFormData.title}
                 onChangeText={txt => updateField('title', txt)}
@@ -353,7 +353,7 @@ const SummuryScreen = ({
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Reference Number
               </InterTightRegular>
-              <Input
+              <AppInput
                 placeholder="QT-2025-001"
                 value={newQuoteFormData.refNumber}
                 onChangeText={txt => updateField('refNumber', txt)}
@@ -369,7 +369,7 @@ const SummuryScreen = ({
                   style={styles.inputicon}
                   onPress={handleCalenderStartPicker}
                 >
-                  <Input
+                  <AppInput
                     placeholder="DD-MM-YYYY"
                     style={styles.noBorderInput}
                     editable={false}
@@ -389,7 +389,7 @@ const SummuryScreen = ({
                   style={styles.inputicon}
                   onPress={handleCalenderEndPicker}
                 >
-                  <Input
+                  <AppInput
                     placeholder="DD-MM-YYYY"
                     style={styles.noBorderInput}
                     editable={false}
@@ -438,7 +438,7 @@ const SummuryScreen = ({
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Job Description
               </InterTightRegular>
-              <Input
+              <AppInput
                 inputHeight={100}
                 placeholder="Enter job details..."
                 multiline={true}
@@ -451,7 +451,7 @@ const SummuryScreen = ({
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Notes (Not visible on quote){' '}
               </InterTightRegular>
-              <Input
+              <AppInput
                 inputHeight={100}
                 placeholder="Add private notes"
                 multiline={true}
@@ -489,7 +489,7 @@ const SummuryScreen = ({
 
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footerContainer}>
-          <ButtonComponent
+          <AppButton
             bg={theme.primary}
             bttnTxt="Save"
             txtColor={theme.primaryText}

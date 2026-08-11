@@ -2,7 +2,7 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import React, { useMemo } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
-import InterTightMedium from '../fontComponents/InterTightMedium';
+import InterTightMedium from '../appFonts/InterTightMedium';
 import Header from '../header/Header';
 import { MaterialTopTabBarProps } from '@react-navigation/material-top-tabs';
 

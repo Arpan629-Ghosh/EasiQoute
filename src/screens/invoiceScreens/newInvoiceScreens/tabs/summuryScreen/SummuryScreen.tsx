@@ -3,18 +3,18 @@ import React, { useCallback, useMemo, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
-import InterTightLight from '@/components/fontComponents/InterTightLight';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
+import InterTightLight from '@/components/appFonts/InterTightLight';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import CustomToggle from '@/components/switch/CustomToggle';
-import Input from '@/components/inputComponent/Input';
+import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { images } from '@/config/images';
 import { pick, types } from '@react-native-documents/picker';
 import { useToast } from '@/hooks/useToast';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import { InvoiceTopTabWithRootProps } from '@/types/navigation.types';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useInvoice } from '@/hooks/apis/useInvoice';
@@ -306,7 +306,7 @@ const SummuryScreen = ({
                   style={styles.inputicon}
                   onPress={handleCalenderStartPicker}
                 >
-                  <Input
+                  <AppInput
                     placeholder="DD-MM-YYYY"
                     style={styles.noBorderInput}
                     editable={false}
@@ -326,7 +326,7 @@ const SummuryScreen = ({
                   style={styles.inputicon}
                   onPress={handleCalenderEndPicker}
                 >
-                  <Input
+                  <AppInput
                     placeholder="DD-MM-YYYY"
                     style={styles.noBorderInput}
                     editable={false}
@@ -343,7 +343,7 @@ const SummuryScreen = ({
                 Project / Services Notes
               </InterTightRegular>
 
-              <Input
+              <AppInput
                 inputHeight={100}
                 placeholder="Explain what the invoice covers"
                 multiline={true}
@@ -357,7 +357,7 @@ const SummuryScreen = ({
                 Notes (Not visible on invoice)
               </InterTightRegular>
 
-              <Input
+              <AppInput
                 inputHeight={100}
                 placeholder="Add private notes"
                 multiline={true}
@@ -396,7 +396,7 @@ const SummuryScreen = ({
       </ScrollView>
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footerContainer}>
-          <ButtonComponent
+          <AppButton
             bg={theme.primary}
             bttnTxt="Save"
             txtColor={theme.primaryText}

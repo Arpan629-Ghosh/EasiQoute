@@ -59,6 +59,7 @@ export const createStyles = (theme: Theme) =>
     },
 
     flatlistContent: {
+      flexGrow: 1,
       paddingBottom: 120,
     },
     loaderContainer: {

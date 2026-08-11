@@ -13,10 +13,10 @@ import React, {
   useCallback,
 } from 'react';
 import Card from '../cardDetailsComponent/Card';
-import InterTightMedium from '../fontComponents/InterTightMedium';
+import InterTightMedium from '../appFonts/InterTightMedium';
 import { icons } from '@/config/icons';
-import InterTightRegular from '../fontComponents/InterTightRegular';
-import InterTightSemiBold from '../fontComponents/InterTightSemiBold';
+import InterTightRegular from '../appFonts/InterTightRegular';
+import InterTightSemiBold from '../appFonts/InterTightSemiBold';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import { FetchItemsData } from '@/types/apis/settings.types';

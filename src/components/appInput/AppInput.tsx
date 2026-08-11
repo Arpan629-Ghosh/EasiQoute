@@ -21,7 +21,7 @@ interface Props extends TextInputProps {
   tv?: TextStyle['textAlignVertical'];
 }
 
-const Input = forwardRef<TextInput, Props>(
+const AppInput = forwardRef<TextInput, Props>(
   ({ containerStyle, inputWidth, bg, tv,  style, inputHeight=48, ...rest }, ref) => {
     const { theme } = useAppTheme();
     const styles = useMemo(() => createStyles(theme), [theme]);
@@ -43,7 +43,7 @@ const Input = forwardRef<TextInput, Props>(
   },
 );
 
-export default React.memo(Input);
+export default React.memo(AppInput);
 
 
 

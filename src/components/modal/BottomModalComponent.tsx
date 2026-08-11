@@ -19,7 +19,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const ModalComponent = ({ visible, mheight, mpadding, onClose, children }: Props) => {
+const BottomModalComponent = ({ visible, mheight, mpadding, onClose, children }: Props) => {
   const { theme } = useAppTheme();
    const styles = useMemo(() => createStyles(theme), [theme]);
   return (
@@ -37,7 +37,7 @@ const ModalComponent = ({ visible, mheight, mpadding, onClose, children }: Props
   );
 };
 
-export default React.memo(ModalComponent);
+export default React.memo(BottomModalComponent);
 
 const createStyles = (theme: Theme) => StyleSheet.create({
   overlay: {

@@ -11,14 +11,16 @@ import { createStyles } from './style';
 import Header from '@/components/header/Header';
 import { ActivityIndicator, FlatList, Image, View } from 'react-native';
 import { icons } from '@/config/icons';
-import Input from '@/components/inputComponent/Input';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppInput from '@/components/appInput/AppInput';
+import AppButton from '@/components/appButton/AppButton';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useSettings } from '@/hooks/apis/useSettings';
 import Loader from '@/components/loader/Loader';
 import RenderTeamMembers from '@/components/renderTeamMembers/RenderTeamMembers';
 import { MemberDetails } from '@/types/apis/settings.types';
 import { useDebounce } from '@/hooks/useDebounce';
+import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
+import { images } from '@/config/images';
 
 const TeamMembersScreen = ({
   navigation,
@@ -93,6 +95,20 @@ const TeamMembersScreen = ({
     debouncedSearch,
   ]);
 
+  const renderEmpty = useMemo(() => {
+    if (loadingTeamMembers) {
+      return null;
+    }
+    return (
+      <EmptyStateScreen
+        icon={images.img_teamEmpty}
+        primaryText="No Team Members Added"
+        message="Click on the “+ Add Member”"
+        nextMessage=" below to add team members"
+      />
+    );
+  }, [loadingTeamMembers]);
+
   const renderItem = useCallback(({ item }: { item: MemberDetails }) => {
     return <RenderTeamMembers item={item} />;
   }, []);
@@ -116,7 +132,7 @@ const TeamMembersScreen = ({
           <View style={styles.input}>
             <View style={styles.inputicon}>
               <Image source={icons.ic_whitesearch} style={styles.searchic} />
-              <Input
+              <AppInput
                 inputWidth={325}
                 bg={theme.searchInput}
                 style={styles.noBorderInput}
@@ -160,10 +176,11 @@ const TeamMembersScreen = ({
           }}
           onEndReachedThreshold={0.2}
           ListFooterComponent={renderFooter}
+          ListEmptyComponent={renderEmpty}
         />
         <View style={styles.footer}>
           <View style={styles.footerContainer}>
-            <ButtonComponent
+            <AppButton
               bg={theme.primary}
               bttnTxt="Add Member"
               txtColor={theme.primaryText}
@@ -171,11 +188,13 @@ const TeamMembersScreen = ({
               onPress={navigateToAddMember}
             >
               <Image source={icons.ic_addpeople} style={styles.icn} />
-            </ButtonComponent>
+            </AppButton>
           </View>
         </View>
       </LinearGradient>
-      {(!refreshing && !paginationLoading) && <Loader visible={loadingTeamMembers} />}
+      {!refreshing && !paginationLoading && (
+        <Loader visible={loadingTeamMembers} />
+      )}
     </View>
   );
 };

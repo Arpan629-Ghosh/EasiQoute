@@ -3,9 +3,9 @@ import React, { SetStateAction, useMemo, useRef } from 'react';
 import MiddleModalComponent from '../modal/MiddleModalComponent';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
-import InterTightMedium from '../fontComponents/InterTightMedium';
+import InterTightMedium from '../appFonts/InterTightMedium';
 import { icons } from '@/config/icons';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
+import AppButton from '../appButton/AppButton';
 import SignatureView, { SignatureViewRef } from 'react-native-signature-canvas';
 
 interface Props {
@@ -47,7 +47,7 @@ const Signature = ({
           <Image source={icons.ic_crossicn} style={styles.cross} />
         </TouchableOpacity>
       </View>
-      <View style = {styles.signContainer}>
+      <View style={styles.signContainer}>
         <View style={styles.signature}>
           <SignatureView
             ref={ref}
@@ -62,13 +62,13 @@ const Signature = ({
       </View>
 
       <View style={styles.bttnContainer}>
-        <ButtonComponent
+        <AppButton
           buttonWidth={165.5}
           bttnTxt="Clear"
           txtColor="#D23949"
           onPress={handleClear}
         />
-        <ButtonComponent
+        <AppButton
           bg={theme.primary}
           bttnTxt={isLoading ? 'Saving...' : 'Save'}
           buttonWidth={165.5}

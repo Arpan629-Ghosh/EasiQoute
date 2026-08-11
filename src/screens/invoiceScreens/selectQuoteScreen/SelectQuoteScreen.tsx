@@ -5,12 +5,14 @@ import { createStyles } from './style';
 import Header from '@/components/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ActivityIndicator, FlatList, View } from 'react-native';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import SelectQuote from '@/components/selectQuote/SelectQuote';
 import { QuoteItem } from '@/types/apis/quote.types';
 import Loader from '@/components/loader/Loader';
+import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
+import { icons } from '@/config/icons';
 
 const SelectQuoteScreen = ({
   navigation, route
@@ -65,6 +67,21 @@ const SelectQuoteScreen = ({
       onToggle={onToggle}
     />
   }, [onToggle, selectedQuote])
+
+  const renderEmpty = useCallback(() => {
+    if (loadingQuoteList) {
+      return null;
+    }
+
+    return (
+      <EmptyStateScreen
+        icon={icons.ic_boldqoute}
+        primaryText="No Quotes Found"
+        message="Create your first quote"
+        butttonEnabled={true}
+      />
+    );
+  }, [loadingQuoteList]);
 
   const hasMore = useMemo(() => {
       return current_page < last_page;
@@ -142,12 +159,13 @@ const SelectQuoteScreen = ({
               onEndReachedCalledDuringMomentum.current = true;
             }
           }}
+          ListEmptyComponent={renderEmpty}
         />
       </View>
 
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footerContainer}>
-          <ButtonComponent
+          <AppButton
             bg={theme.primary}
             bttnTxt="Continue"
             txtColor={theme.primaryText}

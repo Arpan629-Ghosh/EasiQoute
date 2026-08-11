@@ -11,8 +11,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
-import Input from '@/components/inputComponent/Input';
+import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
+import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
 import ClientSortBottomSheet from '@/components/clientSortBottomSheet/ClientSortBottomSheet';
 import { useClient } from '@/hooks/apis/useClient';
@@ -21,8 +21,9 @@ import { useToast } from '@/hooks/useToast';
 import RenderClients from '@/components/renderClients/RenderClients';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Clients, GetClients, SORT_BY } from '@/types/apis/client.types';
-import ClientEmptyScreen from '@/components/emptyScreenComponents/ClientEmptyScreen';
 import { ClientStackProps } from '@/types/navigation.types';
+import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
+import { images } from '@/config/images';
 
 const ClientScreen = ({ navigation }: ClientStackProps<'ClientScreen'>) => {
   const [open, setOpen] = useState(false);
@@ -150,7 +151,14 @@ const ClientScreen = ({ navigation }: ClientStackProps<'ClientScreen'>) => {
       return null;
     }
 
-    return <ClientEmptyScreen />;
+    return (
+      <EmptyStateScreen
+        icon={images.img_noclient}
+        primaryText="No Clients Found"
+        message="Click on the + below to create"
+        nextMessage="a new quote."
+      />
+    );
   }, [loading]);
 
   const processedData = useMemo(() => {
@@ -184,7 +192,7 @@ const ClientScreen = ({ navigation }: ClientStackProps<'ClientScreen'>) => {
               <View style={styles.inputicon}>
                 <Image source={icons.ic_whitesearch} style={styles.searchic} />
 
-                <Input
+                <AppInput
                   bg={theme.searchInput}
                   style={styles.noBorderInput}
                   placeholder="Search ‘client name’"
@@ -237,7 +245,7 @@ const ClientScreen = ({ navigation }: ClientStackProps<'ClientScreen'>) => {
         selectedSortOption={selctedSortOption}
         onToggleSort={toggleSort}
       />
-     { (!refreshing && !paginationLoading) && <Loader visible={loading} />}
+      {!refreshing && !paginationLoading && <Loader visible={loading} />}
     </LinearGradient>
   );
 };

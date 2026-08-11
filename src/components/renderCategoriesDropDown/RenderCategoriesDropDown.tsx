@@ -3,7 +3,7 @@ import { CreateCategoriesPayload } from "@/types/apis/settings.types";
 import { Theme } from "@/types/theme.types";
 import { useMemo } from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import InterTightRegular from "../fontComponents/InterTightRegular";
+import InterTightRegular from '../appFonts/InterTightRegular';
 
 interface Props {
     item: CreateCategoriesPayload;

@@ -1,8 +1,8 @@
 import { ActivityIndicator, Image, Share, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import { createStyles } from './style'
-import Input from '@/components/inputComponent/Input'
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent'
+import AppInput from '@/components/appInput/AppInput';
+import AppButton from '@/components/appButton/AppButton';
 import { icons } from '@/config/icons'
 import { useAppTheme } from '@/hooks/useAppTheme'
 import {  useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -41,7 +41,7 @@ const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'
     <View style={styles.container}>
       <View style={styles.header}>
         <View style={styles.input}>
-          <Input
+          <AppInput
             placeholder="Search or select subcategory"
             style={styles.noBorderInput}
           />
@@ -57,29 +57,27 @@ const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'
           </View>
         )}
 
-        {
-          quoteDetails?.url ? <WebView
-          source={{ uri: quoteDetails?.url }}
-          style={styles.webView}
-          startInLoadingState
-          javaScriptEnabled
-          domStorageEnabled
-          originWhitelist={['*']}
-          onLoadStart={() => setLoading(true)}
-          onLoadEnd={() => setLoading(false)}
-          onError={event => {
-            console.log('WebView Error', event.nativeEvent);
-            setLoading(false);
-          }}
-        /> : null
-        }
-
-        
+        {quoteDetails?.url ? (
+          <WebView
+            source={{ uri: quoteDetails?.url }}
+            style={styles.webView}
+            startInLoadingState
+            javaScriptEnabled
+            domStorageEnabled
+            originWhitelist={['*']}
+            onLoadStart={() => setLoading(true)}
+            onLoadEnd={() => setLoading(false)}
+            onError={event => {
+              console.log('WebView Error', event.nativeEvent);
+              setLoading(false);
+            }}
+          />
+        ) : null}
       </View>
 
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.firstBttnContainer}>
-          <ButtonComponent
+          <AppButton
             onPress={navigateToTemplatesScreen}
             borderwidth={1}
             borderc={theme.chipBorder}
@@ -88,7 +86,7 @@ const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'
           />
         </View>
         <View style={styles.secondBttnContainer}>
-          <ButtonComponent
+          <AppButton
             borderc={theme.chipBorder}
             gap={8}
             borderwidth={1}
@@ -98,8 +96,8 @@ const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'
             onPress={handleShare}
           >
             <Image source={icons.ic_share} style={styles.share} />
-          </ButtonComponent>
-          <ButtonComponent
+          </AppButton>
+          <AppButton
             bg={theme.primary}
             buttonWidth="48.5%"
             bttnTxt="Save"

@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import React from 'react'
-import InterTightMedium from '../fontComponents/InterTightMedium';
+import InterTightMedium from '../appFonts/InterTightMedium';
 import { useAppTheme } from '@/hooks/useAppTheme';
 
 interface CardHeaderProps{

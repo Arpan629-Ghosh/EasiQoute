@@ -12,10 +12,10 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import Header from '@/components/header/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
 import { images } from '@/config/images';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { useToast } from '@/hooks/useToast';
@@ -104,7 +104,7 @@ const ChangePasswordScreen = ({navigation} : RootScreenProps<'ChangePasswordScre
                   Old Password
                 </InterTightRegular>
                 <View style={styles.inputicon}>
-                  <Input
+                  <AppInput
                     ref={oldRef}
                     placeholder="Enter old password"
                     secureTextEntry={hidePassword.oldPassword}
@@ -127,7 +127,7 @@ const ChangePasswordScreen = ({navigation} : RootScreenProps<'ChangePasswordScre
                   New Password
                 </InterTightRegular>
                 <View style={styles.inputicon}>
-                  <Input
+                  <AppInput
                     ref={newRef}
                     placeholder="Enter new password"
                     secureTextEntry={hidePassword.newPassword}
@@ -150,7 +150,7 @@ const ChangePasswordScreen = ({navigation} : RootScreenProps<'ChangePasswordScre
                   Confirm New Password
                 </InterTightRegular>
                 <View style={styles.inputicon}>
-                  <Input
+                  <AppInput
                     ref={confirmRef}
                     placeholder="Confirm password"
                     secureTextEntry={hidePassword.confirmPassword}
@@ -172,7 +172,7 @@ const ChangePasswordScreen = ({navigation} : RootScreenProps<'ChangePasswordScre
 
         <View style={styles.footer}>
           <View style={styles.footerContainer}>
-            <ButtonComponent
+            <AppButton
               bg={theme.primary}
               bttnTxt="Change Password"
               txtColor={theme.primaryText}

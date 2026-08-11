@@ -10,8 +10,8 @@ import {
 } from 'react-native';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
-import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
-import Input from '@/components/inputComponent/Input';
+import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
+import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
 import FilterAndSorting from '@/components/filterAndSorting/FilterAndSorting';
 import NoSubscription from '@/components/noSubscription/NoSubscription';
@@ -22,9 +22,10 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import RenderQuotes from '@/components/renderQuotes/RenderQuotes';
 import Loader from '@/components/loader/Loader';
-import QuoteEmptyScreen from '@/components/emptyScreenComponents/QuoteEmptyScreen';
 import { QuoteItem } from '@/types/apis/quote.types';
 import { QuoteStackProps } from '@/types/navigation.types';
+import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
+import { images } from '@/config/images';
 
 interface FilterAndSortingType {
   startDate: string;
@@ -184,8 +185,16 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
       return null;
     }
 
-    return <QuoteEmptyScreen />;
-  }, [loadingQuoteList]);
+    return (
+      <EmptyStateScreen
+        icon={isDark ? images.img_darkquote : icons.ic_boldqoute}
+        primaryText="No Quotes Found"
+        message="Click on the + below to create"
+        nextMessage="a new quote."
+        
+      />
+    );
+  }, [loadingQuoteList, isDark]);
 
   const keyExtractor = useCallback((item: QuoteItem) => item.id.toString(), []);
 
@@ -286,7 +295,7 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
                     style={styles.searchic}
                   />
 
-                  <Input
+                  <AppInput
                     bg={theme.searchInput}
                     style={styles.noBorderInput}
                     placeholder="Search here"
@@ -362,7 +371,9 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
           visible={openSubscriptionModal}
           onClose={handleCloseSubscriptionModal}
         />
-        {(!refreshing && !paginationLoading) && <Loader visible={ loadingQuoteList} />}
+        {!refreshing && !paginationLoading && (
+          <Loader visible={loadingQuoteList} />
+        )}
       </LinearGradient>
     </KeyboardAvoidingView>
   );

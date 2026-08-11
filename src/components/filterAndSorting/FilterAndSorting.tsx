@@ -1,11 +1,11 @@
 import { Image,StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, {useMemo, useState } from 'react';
-import ModalComponent from '../modal/ModalComponent';
-import InterTightMedium from '../fontComponents/InterTightMedium';
-import Input from '../inputComponent/Input';
+import BottomModalComponent from '../modal/BottomModalComponent';
+import InterTightMedium from '../appFonts/InterTightMedium';
+import AppInput from '../appInput/AppInput';
 import { StatusData } from '@/config/status';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import AppButton from '../appButton/AppButton';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { icons } from '@/config/icons';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { useAppTheme } from '@/hooks/useAppTheme';
@@ -72,8 +72,8 @@ const FilterAndSorting = ({
     }
   
   return (
-    <ModalComponent visible={visible} onClose={onClose} >
-      <View style={[styles.container, { paddingBottom: insets.bottom  }]}>
+    <BottomModalComponent visible={visible} onClose={onClose}>
+      <View style={[styles.container, { paddingBottom: insets.bottom }]}>
         <View style={styles.header}>
           <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
             Filters & Sorting
@@ -85,7 +85,7 @@ const FilterAndSorting = ({
           </InterTightMedium>
           <View style={styles.inputContainer}>
             <View style={styles.inputicon}>
-              <Input
+              <AppInput
                 placeholder="Start Date"
                 value={startDate}
                 style={styles.noBorderInput}
@@ -96,7 +96,7 @@ const FilterAndSorting = ({
               </TouchableOpacity>
             </View>
             <View style={styles.inputicon}>
-              <Input
+              <AppInput
                 value={endDate}
                 placeholder="End Date"
                 style={styles.noBorderInput}
@@ -178,13 +178,13 @@ const FilterAndSorting = ({
           </View>
         </View>
         <View style={styles.bttncontainer}>
-          <ButtonComponent
+          <AppButton
             onPress={onClear}
             buttonWidth={165.5}
             bttnTxt="Clear All"
             txtColor="#D23949"
           />
-          <ButtonComponent
+          <AppButton
             onPress={onClose}
             bg={theme.primary}
             bttnTxt="Apply"
@@ -201,7 +201,7 @@ const FilterAndSorting = ({
         }}
         onCancel={() => setDatePickerVisible(false)}
       />
-    </ModalComponent>
+    </BottomModalComponent>
   );
 };
 

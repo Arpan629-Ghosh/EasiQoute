@@ -2,7 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import React, { useMemo } from 'react';
 import { FetchItemsData } from '@/types/apis/settings.types';
 import { useAppTheme } from '@/hooks/useAppTheme';
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { Theme } from '@/types/theme.types';
 
 const RenderMargin = ({ item }: { item: FetchItemsData }) => {

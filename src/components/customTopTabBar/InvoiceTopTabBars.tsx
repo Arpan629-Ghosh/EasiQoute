@@ -9,7 +9,7 @@ import {
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
-import InterTightMedium from '../fontComponents/InterTightMedium';
+import InterTightMedium from '../appFonts/InterTightMedium';
 import { icons } from '@/config/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useInvoice } from '@/hooks/apis/useInvoice';

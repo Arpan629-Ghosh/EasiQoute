@@ -8,12 +8,12 @@ import {
 } from 'react-native';
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import { icons } from '@/config/icons';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import { images } from '@/config/images';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
 import CustomToggle from '@/components/switch/CustomToggle';
 import ReactNativePhoneInput from 'react-native-phone-input';
 import ServiceChips from '@/components/servicesComponent/ServiceChips';
@@ -257,7 +257,7 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
                     Business Name
                   </InterTightRegular>
 
-                  <Input
+                  <AppInput
                     value={form.name}
                     onChangeText={txt => updateField('name', txt)}
                     placeholder="Enter business name"
@@ -336,7 +336,7 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     VAT Number
                   </InterTightRegular>
-                  <Input
+                  <AppInput
                     value={form.vatNumber}
                     onChangeText={txt => updateField('vatNumber', txt)}
                     placeholder="Enter vat number"
@@ -360,8 +360,8 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
         </KeyboardAvoidingView>
         <View style={styles.footer}>
           <View style={styles.footerContainer}>
-            <ButtonComponent
-              onPress={isEdit ? handleUpdateProfile :handleCompanyProfileSetup}
+            <AppButton
+              onPress={isEdit ? handleUpdateProfile : handleCompanyProfileSetup}
               bg={theme.primary}
               bttnTxt={isEdit ? 'Update Info' : 'Continue'}
               showLoader={loading || settingLoading}

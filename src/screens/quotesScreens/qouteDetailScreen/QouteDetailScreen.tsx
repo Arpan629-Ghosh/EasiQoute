@@ -3,14 +3,14 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createStyles } from './style';
 import { icons } from '@/config/icons';
 import LinearGradient from 'react-native-linear-gradient';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import Card from '@/components/cardDetailsComponent/Card';
 import { images } from '@/config/images';
 import CardHeader from '@/components/cardDetailsComponent/CardHeader';
 import InfoRow from '@/components/cardDetailsComponent/InfoRow';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import ExpandableItem from '@/components/cardDetailsComponent/ExpandableItem';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import StatusChanger from '@/components/statusChanger/StatusChanger';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Items from '@/components/cardDetailsComponent/Items';
@@ -186,10 +186,8 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
           translucent
         />
       )}
-      
-      <View
-        style={[styles.header, { paddingTop: insets.top + 12 }]}
-      >
+
+      <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
         <View style={styles.headerComponent}>
           <TouchableOpacity onPress={navigateToBack}>
             <Image
@@ -595,7 +593,7 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
       </View>
       <View style={styles.footer}>
         <View style={styles.footeritem}>
-          <ButtonComponent
+          <AppButton
             bg={theme.background}
             buttonWidth="48.5%"
             bttnTxt="Invoice"
@@ -605,8 +603,8 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
             gap={8}
           >
             <Image source={icons.ic_addicon} style={styles.addicon} />
-          </ButtonComponent>
-          <ButtonComponent
+          </AppButton>
+          <AppButton
             bg={theme.background}
             buttonWidth="48.5%"
             bttnTxt="Duplicate"
@@ -617,7 +615,7 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
             onPress={handleDuplicateQuote}
           >
             <Image source={icons.ic_duplicate} style={styles.addicon} />
-          </ButtonComponent>
+          </AppButton>
         </View>
       </View>
       <StatusChanger

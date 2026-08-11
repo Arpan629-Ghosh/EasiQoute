@@ -4,10 +4,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import Header from '@/components/header/Header';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
@@ -101,7 +101,7 @@ const NewSectionScreen = ({ navigation, route }: RootScreenProps<'NewSectionScre
                 Order
               </InterTightRegular>
               <View style={styles.input}>
-                <Input
+                <AppInput
                   placeholder="Enter order number"
                   style={styles.noBorderInput}
                   value={sectionFormData.order}
@@ -117,7 +117,7 @@ const NewSectionScreen = ({ navigation, route }: RootScreenProps<'NewSectionScre
             <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
               Section Title
             </InterTightRegular>
-            <Input
+            <AppInput
               placeholder="Item Name"
               value={sectionFormData.sectionTitle}
               onChangeText={txt => updateField('sectionTitle', txt)}
@@ -129,7 +129,7 @@ const NewSectionScreen = ({ navigation, route }: RootScreenProps<'NewSectionScre
             <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
               Description
             </InterTightRegular>
-            <Input
+            <AppInput
               inputHeight={200}
               placeholder="Item Description"
               multiline={true}
@@ -151,7 +151,7 @@ const NewSectionScreen = ({ navigation, route }: RootScreenProps<'NewSectionScre
 
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footerContainer}>
-          <ButtonComponent
+          <AppButton
             bg={theme.primary}
             bttnTxt={isEdit ? 'Save Changes' : 'Save'}
             txtColor={theme.primaryText}

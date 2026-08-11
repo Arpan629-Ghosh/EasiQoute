@@ -7,10 +7,10 @@ import {
 } from 'react-native';
 import React, { useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
+import AppButton from '@/components/appButton/AppButton';
+import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
 import { useAuth } from '@/hooks/apis/useAuth';
@@ -80,7 +80,7 @@ const ResetPasswordScreen = ({navigation} : RootScreenProps<'ResetPasswordScreen
                     <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                       Email
                     </InterTightRegular>
-                    <Input
+                    <AppInput
                       ref={emailRef}
                       returnKeyType="next"
                       placeholder="Enter your email"
@@ -89,7 +89,7 @@ const ResetPasswordScreen = ({navigation} : RootScreenProps<'ResetPasswordScreen
                       keyboardType="email-address"
                     />
                   </View>
-                  <ButtonComponent
+                  <AppButton
                     bg={theme.primary}
                     bttnTxt="  Send Now"
                     txtColor={theme.primaryText}

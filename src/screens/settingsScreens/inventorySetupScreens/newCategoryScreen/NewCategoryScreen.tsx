@@ -4,9 +4,9 @@ import { useAppTheme } from '@/hooks/useAppTheme'
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
 import Header from '@/components/header/Header';
-import Input from '@/components/inputComponent/Input';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
+import AppButton from '@/components/appButton/AppButton';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { useToast } from '@/hooks/useToast';
@@ -75,7 +75,7 @@ const NewCategoryScreen = ({ navigation, route }: RootScreenProps<'NewCategorySc
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Category Name
               </InterTightRegular>
-              <Input
+              <AppInput
                 value={input}
                 onChangeText={txt => setInput(txt)}
                 placeholder="Category Name"
@@ -96,7 +96,7 @@ const NewCategoryScreen = ({ navigation, route }: RootScreenProps<'NewCategorySc
 
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footerContainer}>
-          <ButtonComponent
+          <AppButton
             bg={theme.primary}
             bttnTxt="Save"
             showLoader={settingLoading}

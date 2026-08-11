@@ -1,7 +1,7 @@
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
-import InterTightMedium from '../fontComponents/InterTightMedium';
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import InterTightMedium from '../appFonts/InterTightMedium';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import { RecentActivity } from '@/types/apis/home.types';

@@ -13,8 +13,8 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
-import Input from '@/components/inputComponent/Input';
+import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
+import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
 import FilterAndSorting from '@/components/filterAndSorting/FilterAndSorting';
 import { InvoiceStackProps } from '@/types/navigation.types';
@@ -23,6 +23,8 @@ import { InvoiceListItem } from '@/types/apis/invoice.types';
 import { useInvoice } from '@/hooks/apis/useInvoice';
 import { useDebounce } from '@/hooks/useDebounce';
 import Loader from '@/components/loader/Loader';
+import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
+import { images } from '@/config/images';
 
 interface FilterAndSortingType {
   startDate: string;
@@ -156,6 +158,21 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
     }
   }, [paginationLoading, refreshing, hasMore, getInvoices]);
 
+  const renderEmpty = useCallback(() => {
+    if (loadingGetInvoice) {
+      return null;
+    }
+
+    return (
+      <EmptyStateScreen
+        icon={isDark ? images.img_darkquote :  icons.ic_boldqoute}
+        primaryText="No Invoices Found"
+        message="Click on the + below to create"
+        nextMessage="a new quote."
+      />
+    );
+  }, [loadingGetInvoice, isDark]);
+
   const renderFooter = useCallback(() => {
     if (!paginationLoading) {
       return null;
@@ -268,7 +285,7 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
                     style={styles.searchic}
                   />
 
-                  <Input
+                  <AppInput
                     bg={theme.searchInput}
                     style={styles.noBorderInput}
                     placeholder="Search here"
@@ -307,7 +324,7 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
             windowSize={5}
             onEndReachedThreshold={0.2}
             ListFooterComponent={renderFooter}
-            // ListEmptyComponent={renderEmpty}
+            ListEmptyComponent={renderEmpty}
             onMomentumScrollBegin={() => {
               onEndReachedCalledDuringMomentum.current = false;
             }}
@@ -340,7 +357,9 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
           onToggleStatus={togglestatuse}
           onToggleAmount={toggleAmount}
         />
-        {(!refreshing && !paginationLoading) && <Loader visible={loadingGetInvoice} />}
+        {!refreshing && !paginationLoading && (
+          <Loader visible={loadingGetInvoice} />
+        )}
       </LinearGradient>
     </KeyboardAvoidingView>
   );

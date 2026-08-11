@@ -15,17 +15,17 @@ import React, {
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
 import InfoRow from '@/components/cardDetailsComponent/InfoRow';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DiscountModal from '@/components/discountModal/DiscountModal';
 import { InvoiceTopTabWithRootProps } from '@/types/navigation.types';
@@ -325,7 +325,7 @@ const ItemsScreen = ({
           })}
         </View>
         <View style={styles.input}>
-          <Input
+          <AppInput
             placeholder="Search or select subcategory"
             style={styles.noBorderInput}
             value={search}
@@ -442,7 +442,7 @@ const ItemsScreen = ({
             </>
           </Animated.View>
           <View style={styles.bttnContainer}>
-            <ButtonComponent
+            <AppButton
               borderc={theme.primary}
               bttnTxt="New Item"
               txtColor={theme.textPrimary}
@@ -452,9 +452,9 @@ const ItemsScreen = ({
               gap={8}
             >
               <Image source={icons.ic_blueadd} style={styles.icn} />
-            </ButtonComponent>
+            </AppButton>
 
-            <ButtonComponent
+            <AppButton
               bg={theme.primary}
               bttnTxt="Save & Preview"
               txtColor={theme.primaryText}

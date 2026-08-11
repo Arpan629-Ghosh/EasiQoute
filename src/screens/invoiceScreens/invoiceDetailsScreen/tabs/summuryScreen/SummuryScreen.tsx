@@ -4,15 +4,15 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import Card from '@/components/cardDetailsComponent/Card';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import { images } from '@/config/images';
 import CardHeader from '@/components/cardDetailsComponent/CardHeader';
 import InfoRow from '@/components/cardDetailsComponent/InfoRow';
 import { icons } from '@/config/icons';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import ExpandableItem from '@/components/cardDetailsComponent/ExpandableItem';
 import Items from '@/components/cardDetailsComponent/Items';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useInvoice } from '@/hooks/apis/useInvoice';
 import Loader from '@/components/loader/Loader';
@@ -82,7 +82,9 @@ const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
       >
         <View style={styles.cardContainer}>
           <Card style={styles.cardone}>
-            <View style={[styles.status, {backgroundColor: statusColors.view}]}>
+            <View
+              style={[styles.status, { backgroundColor: statusColors.view }]}
+            >
               <InterTightMedium fsize={14} fcolor={statusColors.text}>
                 {invoiceDetails?.status}
               </InterTightMedium>
@@ -285,7 +287,7 @@ const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
 
       <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
         <View style={styles.footeritem}>
-          <ButtonComponent
+          <AppButton
             bg={theme.background}
             bttnTxt="Share"
             borderwidth={1}
@@ -295,7 +297,7 @@ const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
             onPress={handleShare}
           >
             <Image source={icons.ic_share} style={styles.addicon} />
-          </ButtonComponent>
+          </AppButton>
         </View>
       </View>
       <StatusChanger

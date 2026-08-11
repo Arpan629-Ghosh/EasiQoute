@@ -1,12 +1,12 @@
 import { FlatList, Image, ListRenderItem, TouchableOpacity, View } from 'react-native';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
+import AppButton from '@/components/appButton/AppButton';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
 import RenderFilterData from '@/components/renderFilterData/RenderFilterData';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import InfoRow from '@/components/cardDetailsComponent/InfoRow';
 import MarginBottomSheet from '@/components/marginBottomSheet/MarginBottomSheet';
 import { useAppTheme } from '@/hooks/useAppTheme';
@@ -299,7 +299,7 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
           })}
         </View>
         <View style={styles.input}>
-          <Input
+          <AppInput
             placeholder="Search or select subcategory"
             style={styles.noBorderInput}
             value={search}
@@ -412,20 +412,19 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
             </>
           </Animated.View>
           <View style={styles.bttnContainer}>
-            <ButtonComponent
+            <AppButton
               borderc={theme.primary}
               bttnTxt="New Item"
               txtColor={theme.textPrimary}
               onPress={navigateToNewItem}
               borderwidth={1}
               buttonWidth="48.5%"
-          
               gap={8}
             >
               <Image source={icons.ic_blueadd} style={styles.icn} />
-            </ButtonComponent>
+            </AppButton>
 
-            <ButtonComponent
+            <AppButton
               bg={theme.primary}
               bttnTxt="Save & Preview"
               txtColor={theme.primaryText}

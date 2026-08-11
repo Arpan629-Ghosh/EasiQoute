@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
 import React from 'react'
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { useAppTheme } from '@/hooks/useAppTheme';
 
 

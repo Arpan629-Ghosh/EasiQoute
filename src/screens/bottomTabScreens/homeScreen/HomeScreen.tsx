@@ -8,22 +8,22 @@ import {
 import React, { useEffect, useMemo } from 'react';
 import { createStyles } from './style';
 import { images } from '@/config/images';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import { icons } from '@/config/icons';
 import Icons from '@/components/icons/Icons';
 import AppDetails from '@/components/appDetails/AppDetails';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import RenderActivities from '@/components/renderActivities/RenderActivities';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useHomeScreenData } from '@/hooks/apis/useHomeScreenData';
-import HomeEmptyScreen from '@/components/emptyScreenComponents/HomeEmptyScreen';
 import { useAuth } from '@/hooks/apis/useAuth';
 
 import Loader from '@/components/loader/Loader';
 import { HomeStackProps } from '@/types/navigation.types';
+import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 
 const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
-  const { theme } = useAppTheme();
+  const { theme, isDark } = useAppTheme();
   const { homeScreenData, homeData, loading } = useHomeScreenData();
   const { user } = useAuth();
 
@@ -101,7 +101,9 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
                     <Image source={icons.ic_whiteqoute} style={styles.vector} />
                   </Icons>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => navigation.navigate("NewInvoiceScreens")}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('NewInvoiceScreens')}
+                >
                   <Icons text="New Invoice">
                     <Image source={icons.ic_whiteqoute} style={styles.vector} />
                   </Icons>
@@ -129,16 +131,24 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
           </InterTightMedium>
           <View style={styles.empty} />
         </View>
-        <View>
+        
           <FlatList
             data={homeData?.recentActivities || []}
             renderItem={({ item }) => <RenderActivities item={item} />}
             keyExtractor={item => item.id.toString()}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.flatlist}
-            ListEmptyComponent={<HomeEmptyScreen />}
+            ListEmptyComponent={
+              <EmptyStateScreen
+                icon={isDark ? images.img_darkrecent : images.img_homeEmpty}
+                message="Start with creating quotes and"
+                nextMessage="invoices to show here"
+                primaryText="No Recent Activity"
+                butttonEnabled={true}
+              />
+            }
           />
-        </View>
+        
       </View>
       <View style={styles.footer}>
         <InterTightRegular fsize={14} fcolor="#89909D">

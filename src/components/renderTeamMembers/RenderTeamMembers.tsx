@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Card from '../cardDetailsComponent/Card';
-import InterTightMedium from '../fontComponents/InterTightMedium';
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import InterTightMedium from '../appFonts/InterTightMedium';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import { MemberDetails } from '@/types/apis/settings.types';

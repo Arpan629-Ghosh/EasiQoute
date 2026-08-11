@@ -4,8 +4,8 @@ import { QuoteItem } from '@/types/apis/quote.types';
 import Card from '../cardDetailsComponent/Card';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
-import InterTightMedium from '../fontComponents/InterTightMedium';
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import InterTightMedium from '../appFonts/InterTightMedium';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 interface Props {

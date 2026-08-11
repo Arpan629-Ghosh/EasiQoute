@@ -8,11 +8,11 @@ import {
 } from 'react-native';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import { icons } from '@/config/icons';
 import { createStyles } from './style';
-import Input from '@/components/inputComponent/Input';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import { TextInput } from 'react-native-gesture-handler';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
@@ -140,7 +140,7 @@ const BusinessAddressScreen = ({
               <View style={styles.inputicon}>
                 <Image source={icons.ic_search} style={styles.searchic} />
 
-                <Input
+                <AppInput
                   style={styles.noBorderInput}
                   placeholder="Search postcode"
                   returnKeyType="search"
@@ -167,7 +167,7 @@ const BusinessAddressScreen = ({
                     Street Address
                   </InterTightRegular>
 
-                  <Input
+                  <AppInput
                     ref={addressRef}
                     placeholder="Enter street address"
                     value={formData.address}
@@ -182,7 +182,7 @@ const BusinessAddressScreen = ({
                     City
                   </InterTightRegular>
 
-                  <Input
+                  <AppInput
                     ref={cityRef}
                     placeholder="Enter city"
                     value={formData.city}
@@ -197,7 +197,7 @@ const BusinessAddressScreen = ({
                     Postcode
                   </InterTightRegular>
 
-                  <Input
+                  <AppInput
                     ref={postRef}
                     placeholder="Enter postcode"
                     value={formData.postcode}
@@ -212,7 +212,7 @@ const BusinessAddressScreen = ({
                     Country
                   </InterTightRegular>
 
-                  <Input
+                  <AppInput
                     ref={countryRef}
                     placeholder="Enter country"
                     value={formData.country}
@@ -228,7 +228,7 @@ const BusinessAddressScreen = ({
 
       <View style={styles.footer}>
         <View style={styles.footerContainer}>
-          <ButtonComponent
+          <AppButton
             bg={theme.primary}
             bttnTxt="Continue"
             txtColor={theme.primaryText}

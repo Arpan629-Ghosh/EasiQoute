@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import React from 'react';
-import ModalComponent from '../modal/ModalComponent';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
+import BottomModalComponent from '../modal/BottomModalComponent';
+import AppButton from '../appButton/AppButton';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import {Image} from 'react-native-compressor'
@@ -66,23 +66,23 @@ const ImagePicker = ({ visible, onClose, onImageUri, onRemoveUri }: props) => {
     onClose();
   };
   return (
-    <ModalComponent visible={visible} onClose={onClose} mheight={240}>
+    <BottomModalComponent visible={visible} onClose={onClose} mheight={240}>
       <View style={styles.container}>
         <View style={styles.bttnContainer}>
-          <ButtonComponent
+          <AppButton
             bttnTxt="Choose from gallery"
             bg={theme.primary}
             txtColor={theme.primaryText}
             onPress={openGallery}
           />
-          <ButtonComponent
+          <AppButton
             bttnTxt="Take photo"
             bg={theme.primary}
             txtColor={theme.primaryText}
             onPress={openCamera}
           />
 
-          <ButtonComponent
+          <AppButton
             bttnTxt="Remove photo"
             bg={theme.primary}
             txtColor={theme.primaryText}
@@ -90,7 +90,7 @@ const ImagePicker = ({ visible, onClose, onImageUri, onRemoveUri }: props) => {
           />
         </View>
       </View>
-    </ModalComponent>
+    </BottomModalComponent>
   );
 };
 

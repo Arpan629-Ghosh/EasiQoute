@@ -79,6 +79,7 @@ export const createStyles = (theme: Theme) =>
       paddingHorizontal: 12,
     },
     flat: {
+      flexGrow: 1,
       paddingBottom: 120,
     },
     loaderContainer: {

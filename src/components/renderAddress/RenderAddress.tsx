@@ -2,7 +2,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import React, { useMemo } from 'react';
 
 import { SearchAddressPayload } from '@/types/apis/auth.types';
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 

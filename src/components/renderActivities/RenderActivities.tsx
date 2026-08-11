@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
-import InterTightMedium from '../fontComponents/InterTightMedium';
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import InterTightMedium from '../appFonts/InterTightMedium';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { useNavigation } from '@react-navigation/native';
 import {   RootStackParamList } from '@/types/navigation.types';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';

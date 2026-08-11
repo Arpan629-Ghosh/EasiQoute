@@ -11,10 +11,10 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import Header from '@/components/header/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import Signature from '@/components/signature/Signature';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -46,11 +46,8 @@ const QuoteAndInvoicesSettingsScreen = () => {
   }, []);
 
   return (
-    <View style={[styles.container, {paddingBottom: insets.bottom}]}>
-      <Header
-        txt="Quote & Invoice Settings"
-        borderBottomEnabled={true}
-      />
+    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+      <Header txt="Quote & Invoice Settings" borderBottomEnabled={true} />
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         <KeyboardAvoidingView
           style={styles.keyboard}
@@ -70,7 +67,7 @@ const QuoteAndInvoicesSettingsScreen = () => {
                   </InterTightRegular>
                   <Image source={icons.ic_iicon} style={styles.icn} />
                 </View>
-                <Input
+                <AppInput
                   inputHeight={100}
                   placeholder="Write default terms for quotes and invoices"
                   multiline={true}
@@ -85,7 +82,7 @@ const QuoteAndInvoicesSettingsScreen = () => {
                   </InterTightRegular>
                   <Image source={icons.ic_iicon} style={styles.icn} />
                 </View>
-                <Input placeholder="Add a closing note" />
+                <AppInput placeholder="Add a closing note" />
               </View>
 
               <View style={styles.inp}>
@@ -99,13 +96,11 @@ const QuoteAndInvoicesSettingsScreen = () => {
                 <TouchableOpacity onPress={() => setOpen(true)}>
                   <View style={styles.signature}>
                     {signature ? (
-                      
-                        <Image
-                          resizeMode="contain"
-                          style={styles.sign}
-                          source={{ uri: signature }}
-                        />
-                  
+                      <Image
+                        resizeMode="contain"
+                        style={styles.sign}
+                        source={{ uri: signature }}
+                      />
                     ) : (
                       <>
                         <Image
@@ -128,7 +123,7 @@ const QuoteAndInvoicesSettingsScreen = () => {
         </KeyboardAvoidingView>
         <View style={styles.footer}>
           <View style={styles.footerContainer}>
-            <ButtonComponent
+            <AppButton
               bg={theme.primary}
               bttnTxt="Save Changes"
               txtColor={theme.primaryText}

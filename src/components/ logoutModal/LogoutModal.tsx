@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import React from 'react';
-import InterTightSemiBold from '../fontComponents/InterTightSemiBold';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
+import InterTightSemiBold from '../appFonts/InterTightSemiBold';
+import AppButton from '../appButton/AppButton';
 import MiddleModalComponent from '../modal/MiddleModalComponent';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
@@ -40,7 +40,7 @@ const LogoutModal = ({ visible, onClose }: Props) => {
   };
   return (
     <MiddleModalComponent visible={visible} onClose={onClose}>
-      <View style = {styles.container}>
+      <View style={styles.container}>
         <InterTightSemiBold
           fsize={20}
           fcolor={theme.textPrimary}
@@ -51,18 +51,14 @@ const LogoutModal = ({ visible, onClose }: Props) => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <ButtonComponent
+        <AppButton
           bg={theme.primary}
           bttnTxt="Logout"
           txtColor={theme.primaryText}
           showLoader={loading}
           onPress={handleLogout}
         />
-        <ButtonComponent
-          onPress={onClose}
-          bttnTxt="Cancel"
-          txtColor="#D23949"
-        />
+        <AppButton onPress={onClose} bttnTxt="Cancel" txtColor="#D23949" />
       </View>
     </MiddleModalComponent>
   );

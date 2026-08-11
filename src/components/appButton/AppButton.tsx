@@ -1,6 +1,6 @@
 import React from 'react';
 import { ActivityIndicator, StyleSheet, TouchableOpacity, TouchableOpacityProps } from 'react-native'
-import InterTightMedium from '../fontComponents/InterTightMedium';
+import InterTightMedium from '../appFonts/InterTightMedium';
 
 
 interface Props extends TouchableOpacityProps {
@@ -15,7 +15,7 @@ interface Props extends TouchableOpacityProps {
   flex?: number 
 
 }
-const ButtonComponent: React.FC<Props> = ({
+const AppButton: React.FC<Props> = ({
 
   bg,
   borderc,
@@ -54,7 +54,7 @@ const ButtonComponent: React.FC<Props> = ({
 };
 
 
-export default React.memo(ButtonComponent);
+export default React.memo(AppButton);
 
 const styles = StyleSheet.create({
   bttn: {

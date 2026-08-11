@@ -61,6 +61,7 @@ export const createStyles = (theme: Theme) =>
       resizeMode: 'cover',
     },
     flatlist: {
+      flexGrow: 1,
       paddingBottom: 120,
     },
     card: {

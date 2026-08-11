@@ -20,7 +20,7 @@ import Animated, {
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { runOnJS } from 'react-native-worklets';
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { icons } from '@/config/icons';
 
 const { width } = Dimensions.get('window');

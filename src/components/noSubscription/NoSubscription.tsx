@@ -2,10 +2,9 @@ import { Image, StyleSheet, View } from 'react-native'
 import React, { useMemo } from 'react'
 import MiddleModalComponent from '../modal/MiddleModalComponent'
 import { images } from '@/config/images';
-import InterTightSemiBold from '../fontComponents/InterTightSemiBold';
-import InterTightRegular from '../fontComponents/InterTightRegular';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
-import InterTightMedium from '../fontComponents/InterTightMedium';
+import InterTightSemiBold from '../appFonts/InterTightSemiBold';
+import InterTightRegular from '../appFonts/InterTightRegular';
+import AppButton from '../appButton/AppButton';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 
@@ -21,25 +20,34 @@ const NoSubscription = ({ visible, onClose }: Props) => {
     <MiddleModalComponent visible={visible} onClose={onClose}>
       <Image source={images.img_subscription} style={styles.img} />
       <View style={styles.txtView}>
-        <InterTightSemiBold fsize={20} fcolor={theme.textPrimary} textAlign="center">
+        <InterTightSemiBold
+          fsize={20}
+          fcolor={theme.textPrimary}
+          textAlign="center"
+        >
           Subscription Required
         </InterTightSemiBold>
-        <InterTightRegular fsize={14} fcolor={theme.textSecondary} textAlign='center'>
+        <InterTightRegular
+          fsize={14}
+          fcolor={theme.textSecondary}
+          textAlign="center"
+        >
           To continue using EaziQuote, please activate or renew your
           subscription.
         </InterTightRegular>
       </View>
       <View style={styles.bttnView}>
-        <ButtonComponent style={styles.bttn1}>
-          <InterTightMedium fsize={16} fcolor={theme.primaryText}>
-            Activate Subscription
-          </InterTightMedium>
-        </ButtonComponent>
-        <ButtonComponent onPress={onClose} style= {styles.bttn2}>
-          <InterTightMedium fsize={16} fcolor="#D23949">
-            Not Now
-          </InterTightMedium>
-        </ButtonComponent>
+        <AppButton
+          bttnTxt="Activate Subscription"
+          txtColor={theme.primaryText}
+          bg={theme.primary}
+        />
+        <AppButton
+          onPress={onClose}
+          bttnTxt="Not Now"
+          bg={theme.background}
+          txtColor="#D23949"
+        />
       </View>
     </MiddleModalComponent>
   );

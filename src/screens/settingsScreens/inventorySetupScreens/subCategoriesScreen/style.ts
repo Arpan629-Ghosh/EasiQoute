@@ -62,6 +62,7 @@ export const createStyles = (theme: Theme) =>
       width: 12,
     },
     flatlist: {
+      flexGrow: 1,
       marginTop: 16,
       paddingHorizontal: 12,
       paddingBottom: 120,

@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native'
 import React, { useMemo } from 'react'
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { SubCategoriesPayload } from '@/types/apis/settings.types';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';

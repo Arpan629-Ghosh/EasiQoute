@@ -1,7 +1,7 @@
 import { FlatList, Image, View } from 'react-native'
 import React, { useEffect, useMemo, useState } from 'react'
 import RenderSectionTabData from '@/components/renderSectionTabData/RenderSectionTabData'
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent'
+import AppButton from '@/components/appButton/AppButton';
 import { icons } from '@/config/icons'
 import { useAppTheme } from '@/hooks/useAppTheme'
 import {createStyles} from './style'
@@ -85,7 +85,7 @@ const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Section
       />
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footeritem}>
-          <ButtonComponent
+          <AppButton
             borderwidth={1}
             gap={8}
             borderc={theme.chipBorder}
@@ -95,8 +95,8 @@ const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Section
             onPress={navigateToNewSection}
           >
             <Image source={icons.ic_addicon} style={styles.addicon} />
-          </ButtonComponent>
-          <ButtonComponent
+          </AppButton>
+          <AppButton
             bg={theme.primary}
             buttonWidth="48.5%"
             bttnTxt="Save & Preview"

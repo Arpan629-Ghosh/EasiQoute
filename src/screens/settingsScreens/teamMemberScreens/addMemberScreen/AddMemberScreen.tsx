@@ -11,9 +11,9 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import Header from '@/components/header/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
+import AppButton from '@/components/appButton/AppButton';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
@@ -92,7 +92,7 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
                   Name
                 </InterTightRegular>
 
-                <Input
+                <AppInput
                   ref={nameRef}
                   placeholder="Enter name"
                   keyboardType="name-phone-pad"
@@ -109,7 +109,7 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
                   Email
                 </InterTightRegular>
 
-                <Input
+                <AppInput
                   ref={emailRef}
                   placeholder="Enter Email"
                   keyboardType="email-address"
@@ -126,7 +126,7 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
                   Password
                 </InterTightRegular>
 
-                <Input
+                <AppInput
                   ref={passwordRef}
                   placeholder="Enter Password"
                   textContentType="password"
@@ -142,9 +142,9 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
 
         <View style={styles.footer}>
           <View style={styles.footerContainer}>
-            <ButtonComponent
+            <AppButton
               bg={theme.primary}
-              bttnTxt={editId ? "Update Member" : "Add Member"}
+              bttnTxt={editId ? 'Update Member' : 'Add Member'}
               txtColor={theme.primaryText}
               showLoader={settingLoading}
               onPress={handleAddMember}

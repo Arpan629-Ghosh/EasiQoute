@@ -9,10 +9,10 @@ import {
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
 import { icons } from '@/config/icons';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import { images } from '@/config/images';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -157,7 +157,7 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
                     <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                       Name
                     </InterTightRegular>
-                    <Input
+                    <AppInput
                       ref={nameRef}
                       onSubmitEditing={() => phRef.current?.focus()}
                       returnKeyType="next"
@@ -171,7 +171,7 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
                     <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                       Phone
                     </InterTightRegular>
-                    <Input
+                    <AppInput
                       ref={phRef}
                       returnKeyType="next"
                       placeholder="Enter phone no."
@@ -188,7 +188,7 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
 
         <View style={styles.footer}>
           <View style={styles.footerComponent}>
-            <ButtonComponent
+            <AppButton
               onPress={handleProfleSetup}
               bg={theme.primary}
               bttnTxt={isEdit ? 'Update Profile' : 'Continue'}

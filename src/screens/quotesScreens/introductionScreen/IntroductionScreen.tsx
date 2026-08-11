@@ -4,9 +4,9 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import LinearGradient from 'react-native-linear-gradient';
 import { createStyles } from './style';
 import { icons } from '@/config/icons';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import Card from '@/components/cardDetailsComponent/Card';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RootScreenProps } from '@/types/navigation.types';
 

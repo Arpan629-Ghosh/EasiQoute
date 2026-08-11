@@ -1,8 +1,8 @@
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
-import ModalComponent from '../modal/ModalComponent';
-import InterTightMedium from '../fontComponents/InterTightMedium';
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import BottomModalComponent from '../modal/BottomModalComponent';
+import InterTightMedium from '../appFonts/InterTightMedium';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { InvoiceStatus, StatusData } from '@/config/status';
 import { icons } from '@/config/icons';
 import { useAppTheme } from '@/hooks/useAppTheme';
@@ -32,7 +32,7 @@ const StatusChanger = ({
   const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   return (
-    <ModalComponent visible={visible} onClose={onClose} mpadding={insets.bottom + 12}>
+    <BottomModalComponent visible={visible} onClose={onClose} mpadding={insets.bottom + 12}>
       <View style={styles.modal}>
         <View style={styles.header}>
           <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
@@ -112,7 +112,7 @@ const StatusChanger = ({
         </View>
         <Loader visible={ loadingUpdateStatus} />
       </View>
-    </ModalComponent>
+    </BottomModalComponent>
   );
 };
 

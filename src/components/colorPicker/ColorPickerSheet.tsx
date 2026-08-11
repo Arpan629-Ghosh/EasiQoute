@@ -6,7 +6,7 @@ import ColorPicker, {
   HueSlider,
   Panel1,
 } from 'reanimated-color-picker';
-import ModalComponent from '../modal/ModalComponent';
+import BottomModalComponent from '../modal/BottomModalComponent';
 
 import { runOnJS } from 'react-native-worklets';
 
@@ -20,7 +20,7 @@ const ColorPickerSheet = ({ visible, onClose, onSelect }: Props) => {
 
 
   return (
-    <ModalComponent visible={visible} onClose={onClose} mheight={350} mpadding={16}>
+    <BottomModalComponent visible={visible} onClose={onClose} mheight={350} mpadding={16}>
       <ColorPicker
         onComplete={color => {
           'worklet';
@@ -32,7 +32,7 @@ const ColorPickerSheet = ({ visible, onClose, onSelect }: Props) => {
 
      
       </ColorPicker>
-    </ModalComponent>
+    </BottomModalComponent>
   );
 };
 

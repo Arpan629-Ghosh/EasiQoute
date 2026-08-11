@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { View, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 import { SERVICES } from '@/config/services';
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 

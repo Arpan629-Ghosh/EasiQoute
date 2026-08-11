@@ -10,12 +10,12 @@ import {
 import React, { useMemo, useRef, useState } from 'react';
 import { createStyles } from './styles';
 import GradientHeader from '@components/gradient/GradientHeader';
-import InterTightSemiBold from '@components/fontComponents/InterTightSemiBold';
-import InterTightRegular from '@components/fontComponents/InterTightRegular';
-import Input from '@components/inputComponent/Input';
+import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
 import { images } from '@config/images';
-import InterTightMedium from '@components/fontComponents/InterTightMedium';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
+import AppButton from '@/components/appButton/AppButton';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useSelector } from 'react-redux';
@@ -123,7 +123,7 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Email
                   </InterTightRegular>
-                  <Input
+                  <AppInput
                     ref={emailRef}
                     onSubmitEditing={() => passwordRef.current?.focus()}
                     returnKeyType="next"
@@ -139,7 +139,7 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
                     Password
                   </InterTightRegular>
                   <View style={styles.inputicon}>
-                    <Input
+                    <AppInput
                       ref={passwordRef}
                       placeholder="Enter password"
                       value={formData.password}
@@ -155,7 +155,7 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
                     </TouchableOpacity>
                   </View>
                 </View>
-                <ButtonComponent
+                <AppButton
                   onPress={handleLogin}
                   bg={theme.primary}
                   bttnTxt="Login"

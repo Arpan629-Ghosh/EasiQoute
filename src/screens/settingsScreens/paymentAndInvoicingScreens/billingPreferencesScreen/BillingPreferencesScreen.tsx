@@ -10,10 +10,10 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import Header from '@/components/header/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const BillingPreferencesScreen = () => {
@@ -21,8 +21,8 @@ const BillingPreferencesScreen = () => {
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
   return (
-    <View style={[styles.container, {paddingBottom: insets.bottom}]}>
-      <Header txt="Billing Preferences" borderBottomEnabled={true}  />
+    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
+      <Header txt="Billing Preferences" borderBottomEnabled={true} />
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         <KeyboardAvoidingView
           style={styles.keyboard}
@@ -40,7 +40,10 @@ const BillingPreferencesScreen = () => {
                   Default VAT Rate (%)
                 </InterTightRegular>
                 <View style={styles.inputicon}>
-                  <Input style={styles.noBorderInput} placeholder="e.g. 18%" />
+                  <AppInput
+                    style={styles.noBorderInput}
+                    placeholder="e.g. 18%"
+                  />
                   <Image source={icons.ic_down} style={styles.img} />
                 </View>
               </View>
@@ -48,20 +51,20 @@ const BillingPreferencesScreen = () => {
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                   Quote Expiry (Days)
                 </InterTightRegular>
-                <Input placeholder="e.g. 30 days" />
+                <AppInput placeholder="e.g. 30 days" />
               </View>
               <View style={styles.inp}>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                   Payment Terms (Days)
                 </InterTightRegular>
-                <Input placeholder="e.g. 30 days" />
+                <AppInput placeholder="e.g. 30 days" />
               </View>
             </View>
           </ScrollView>
         </KeyboardAvoidingView>
         <View style={styles.footer}>
           <View style={styles.footerContainer}>
-            <ButtonComponent
+            <AppButton
               bg={theme.primary}
               bttnTxt="Save Changes"
               txtColor={theme.primaryText}

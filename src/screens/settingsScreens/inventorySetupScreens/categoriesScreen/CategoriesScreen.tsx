@@ -16,10 +16,9 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '@/components/header/Header';
-import Input from '@/components/inputComponent/Input';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppInput from '@/components/appInput/AppInput';
+import AppButton from '@/components/appButton/AppButton';
 import RenderCategories from '@/components/renderCategories/RenderCategories';
-import CategoryEmptyScreen from '@/components/emptyScreenComponents/CategoryEmptyScreen';
 import { icons } from '@/config/icons';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -27,10 +26,12 @@ import { useSettings } from '@/hooks/apis/useSettings';
 import { createStyles } from './style';
 import { CreateCategoriesPayload } from '@/types/apis/settings.types';
 import { RootScreenProps } from '@/types/navigation.types';
+import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
+import { images } from '@/config/images';
 
 const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) => {
   const [paginationLoading, setPaginationLoading] = useState(false);
-  const { theme } = useAppTheme();
+  const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const insets = useSafeAreaInsets();
 
@@ -127,7 +128,14 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
     if (settingLoading) {
       return null;
     }
-    return <CategoryEmptyScreen />;
+    return (
+      <EmptyStateScreen
+        icon={images.img_categoryempty}
+        primaryText="No Categories Found"
+        message="Click on the “+ New Category”"
+        nextMessage=" below to add new item."
+      />
+    );
   }, [settingLoading]);
 
   return (
@@ -138,7 +146,7 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
         <View style={styles.inpContainer}>
           <View style={styles.inputicon}>
             <Image source={icons.ic_search} style={styles.searchic} />
-            <Input
+            <AppInput
               style={styles.noBorderInput}
               placeholder="Search ‘Categories’"
               returnKeyType="search"
@@ -148,40 +156,40 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
           </View>
         </View>
       </View>
- 
-        <FlatList
-          data={processedData}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
-          contentContainerStyle={styles.flatlist}
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-          keyboardDismissMode="on-drag"
-          refreshing={refreshing}
-          onRefresh={handleRefresh}
-          removeClippedSubviews={false}
-          maxToRenderPerBatch={10}
-          updateCellsBatchingPeriod={50}
-          initialNumToRender={8}
-          windowSize={5}
-          maintainVisibleContentPosition={{
-            minIndexForVisible: 0,
-          }}
-          onMomentumScrollBegin={() => {
-            onEndReachedCalledDuringMomentum.current = false;
-          }}
-          onEndReached={() => {
-            if (!onEndReachedCalledDuringMomentum.current) {
-              handleLoadMore();
 
-              onEndReachedCalledDuringMomentum.current = true;
-            }
-          }}
-          onEndReachedThreshold={0.2}
-          ListFooterComponent={renderFooter}
-          ListEmptyComponent={renderEmpty}
-        />
-      
+      <FlatList
+        data={processedData}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
+        contentContainerStyle={styles.flatlist}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
+        keyboardDismissMode="on-drag"
+        refreshing={refreshing}
+        onRefresh={handleRefresh}
+        removeClippedSubviews={false}
+        maxToRenderPerBatch={10}
+        updateCellsBatchingPeriod={50}
+        initialNumToRender={8}
+        windowSize={5}
+        maintainVisibleContentPosition={{
+          minIndexForVisible: 0,
+        }}
+        onMomentumScrollBegin={() => {
+          onEndReachedCalledDuringMomentum.current = false;
+        }}
+        onEndReached={() => {
+          if (!onEndReachedCalledDuringMomentum.current) {
+            handleLoadMore();
+
+            onEndReachedCalledDuringMomentum.current = true;
+          }
+        }}
+        onEndReachedThreshold={0.2}
+        ListFooterComponent={renderFooter}
+        ListEmptyComponent={renderEmpty}
+      />
+
       <View
         style={[
           styles.footer,
@@ -191,7 +199,7 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
         ]}
       >
         <View style={styles.footerContainer}>
-          <ButtonComponent
+          <AppButton
             bg={theme.primary}
             bttnTxt="New Category"
             txtColor={theme.primaryText}
@@ -199,7 +207,7 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
             onPress={navigateToNewCategory}
           >
             <Image source={icons.ic_whiteadd} style={styles.icn} />
-          </ButtonComponent>
+          </AppButton>
         </View>
       </View>
     </LinearGradient>

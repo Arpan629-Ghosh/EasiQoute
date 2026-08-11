@@ -4,10 +4,10 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
 import Header from '@/components/header/Header';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
-import Input from '@/components/inputComponent/Input';
+import AppButton from '@/components/appButton/AppButton';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
+import AppInput from '@/components/appInput/AppInput';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomDropdown, { Item } from '@/components/dropdown/CustomDropdown';
 import { useSettings } from '@/hooks/apis/useSettings';
@@ -238,7 +238,7 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
                 Item Name
               </InterTightRegular>
 
-              <Input
+              <AppInput
                 placeholder="Item Name"
                 value={itemData.itemName}
                 onChangeText={txt => updateField('itemName', txt)}
@@ -263,7 +263,7 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
                 Price per Unit
               </InterTightRegular>
 
-              <Input
+              <AppInput
                 placeholder="e.g. 10"
                 value={itemData.pricePerUnit}
                 onChangeText={txt => updateField('pricePerUnit', txt)}
@@ -275,7 +275,7 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
                 Unit Cost
               </InterTightRegular>
 
-              <Input
+              <AppInput
                 placeholder="e.g. 5"
                 value={itemData.unitCost}
                 onChangeText={txt => updateField('unitCost', txt)}
@@ -301,7 +301,7 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
         ]}
       >
         <View style={styles.footerContainer}>
-          <ButtonComponent
+          <AppButton
             bg={theme.primary}
             bttnTxt={isEdit ? 'Save Changes' : 'Save'}
             txtColor={theme.primaryText}

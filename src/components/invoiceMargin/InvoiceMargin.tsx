@@ -1,11 +1,11 @@
 import { StyleSheet, View } from 'react-native'
 import React, { useMemo } from 'react'
 import MiddleModalComponent from '../modal/MiddleModalComponent';
-import InterTightMedium from '../fontComponents/InterTightMedium';
+import InterTightMedium from '../appFonts/InterTightMedium';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
-import InterTightRegular from '../fontComponents/InterTightRegular';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
+import InterTightRegular from '../appFonts/InterTightRegular';
+import AppButton from '../appButton/AppButton';
 
 
 interface Props {
@@ -52,15 +52,15 @@ const InvoiceMargin = ({ visible, onClose }: Props) => {
             </InterTightRegular>
           </View>
         </View>
-          </View>
-          <View style = {styles.footer}>
-              <ButtonComponent
-                  bttnTxt='Got It!'
-                  bg={theme.primary}
-                  txtColor={theme.primaryText}
-                  onPress={onClose}
-              />
-          </View>
+      </View>
+      <View style={styles.footer}>
+        <AppButton
+          bttnTxt="Got It!"
+          bg={theme.primary}
+          txtColor={theme.primaryText}
+          onPress={onClose}
+        />
+      </View>
     </MiddleModalComponent>
   );
 }

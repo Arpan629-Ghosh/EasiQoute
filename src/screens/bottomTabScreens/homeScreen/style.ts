@@ -105,6 +105,7 @@ export const createStyles = (theme: Theme) =>  StyleSheet.create({
     backgroundColor: '#F5F6FB',
   },
   flatlist: {
+    flexGrow: 1,
     paddingBottom: 20
   },
   pic: {

@@ -1,9 +1,9 @@
 import { FlatList, ListRenderItem, StyleSheet, View } from 'react-native';
 import React, { useCallback, useMemo } from 'react';
-import ModalComponent from '../modal/ModalComponent';
-import InterTightMedium from '../fontComponents/InterTightMedium';
-import InterTightSemiBold from '../fontComponents/InterTightSemiBold';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
+import BottomModalComponent from '../modal/BottomModalComponent';
+import InterTightMedium from '../appFonts/InterTightMedium';
+import InterTightSemiBold from '../appFonts/InterTightSemiBold';
+import AppButton from '../appButton/AppButton';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import { FetchItemsData } from '@/types/apis/settings.types';
@@ -50,11 +50,11 @@ const MarginBottomSheet = ({ visible, onClose, margin_data }: Props) => {
   }, [totalMargin, totalRevenue]);
 
   return (
-    <ModalComponent visible={visible} onClose={onClose} mheight={500}>
+    <BottomModalComponent visible={visible} onClose={onClose} mheight={500}>
       <View style={styles.container}>
         <View style={styles.header}>
           <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
-            Margin 
+            Margin
           </InterTightMedium>
         </View>
 
@@ -122,8 +122,13 @@ const MarginBottomSheet = ({ visible, onClose, margin_data }: Props) => {
           </View>
         </View>
 
-        <View style={[styles.buttonContainer, {paddingBottom: insets.bottom + 12}]}>
-          <ButtonComponent
+        <View
+          style={[
+            styles.buttonContainer,
+            { paddingBottom: insets.bottom + 12 },
+          ]}
+        >
+          <AppButton
             bg={theme.primary}
             onPress={onClose}
             bttnTxt="Got It"
@@ -132,7 +137,7 @@ const MarginBottomSheet = ({ visible, onClose, margin_data }: Props) => {
           />
         </View>
       </View>
-    </ModalComponent>
+    </BottomModalComponent>
   );
 };
 

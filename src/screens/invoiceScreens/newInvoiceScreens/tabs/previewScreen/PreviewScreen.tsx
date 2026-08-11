@@ -4,7 +4,7 @@ import { InvoiceTopTabWithRootProps } from '@/types/navigation.types'
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import WebView from 'react-native-webview';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import { icons } from '@/config/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -55,7 +55,7 @@ const PreviewScreen = ({ route }: InvoiceTopTabWithRootProps<'Preview'>) => {
       </View>
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.firstBttnContainer}>
-          <ButtonComponent
+          <AppButton
             borderwidth={1}
             borderc={theme.chipBorder}
             bttnTxt="Templates"
@@ -63,7 +63,7 @@ const PreviewScreen = ({ route }: InvoiceTopTabWithRootProps<'Preview'>) => {
           />
         </View>
         <View style={styles.secondBttnContainer}>
-          <ButtonComponent
+          <AppButton
             borderc={theme.chipBorder}
             gap={8}
             borderwidth={1}
@@ -73,8 +73,8 @@ const PreviewScreen = ({ route }: InvoiceTopTabWithRootProps<'Preview'>) => {
             onPress={handleShare}
           >
             <Image source={icons.ic_share} style={styles.share} />
-          </ButtonComponent>
-          <ButtonComponent
+          </AppButton>
+          <AppButton
             bg={theme.primary}
             buttonWidth="48.5%"
             bttnTxt="Save"

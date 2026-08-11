@@ -4,9 +4,9 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
 import Header from '@/components/header/Header';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
+import AppButton from '@/components/appButton/AppButton';
 import { icons } from '@/config/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSettings } from '@/hooks/apis/useSettings';
@@ -127,7 +127,7 @@ const NewSubCategoryScreen = ({
                 Category
               </InterTightRegular>
               <View style={styles.inputicon}>
-                <Input
+                <AppInput
                   style={styles.noBorderInput}
                   placeholder="Search or select category"
                   value={search}
@@ -158,7 +158,7 @@ const NewSubCategoryScreen = ({
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Subcategory Name
               </InterTightRegular>
-              <Input
+              <AppInput
                 placeholder="Subcategory Name"
                 value={input}
                 onChangeText={txt => setInput(txt)}
@@ -178,7 +178,7 @@ const NewSubCategoryScreen = ({
       </View>
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footerContainer}>
-          <ButtonComponent
+          <AppButton
             bg={theme.primary}
             bttnTxt="Save"
             txtColor={theme.primaryText}

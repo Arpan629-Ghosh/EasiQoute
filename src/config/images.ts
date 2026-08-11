@@ -24,5 +24,10 @@ export const images = {
   img_categoryempty: require('@assets/images/img_categoryempty.png'),
   img_subcatempty: require('@assets/images/img_subcatempty.png'),
   img_itemempty: require('@assets/images/img_itemempty.png'),
-  img_noclient: require('@assets/images/img_noclient.png')
+  img_noclient: require('@assets/images/img_noclient.png'),
+  img_teamEmpty: require('@assets/images/img_teamEmpty.png'),
+  img_darkteam: require('@assets/images/img_darkteam.png'),
+  img_darkquote: require('@assets/images/img_darkquote.png'),
+  img_darkdetails: require('@assets/images/img_darkdetails.png'),
+  img_darkrecent: require('@assets/images/img_darkrecent.png')
 };

@@ -1,5 +1,5 @@
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
+import AppButton from '@/components/appButton/AppButton';
+import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
 import React, { useMemo, useRef, useState } from 'react';
 import {
   View,
@@ -15,17 +15,14 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RootScreenProps } from '@/types/navigation.types';
 
-
 const { width } = Dimensions.get('window');
 
-
-
-const IntroScreen = ({navigation} : RootScreenProps<'IntroScreen'>) => {
+const IntroScreen = ({ navigation }: RootScreenProps<'IntroScreen'>) => {
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { theme, isDark } = useAppTheme();
   const insets = useSafeAreaInsets();
-  const styles = useMemo(() => createStyles(theme), [theme])
+  const styles = useMemo(() => createStyles(theme), [theme]);
 
   const DATA = useOnBoardingData();
 
@@ -36,12 +33,12 @@ const IntroScreen = ({navigation} : RootScreenProps<'IntroScreen'>) => {
       });
     }
   };
-    
-    const handleNavigation = () => {
-      navigation.navigate("ProfileScreen", {
-          isEdit: false
-        })
-    }
+
+  const handleNavigation = () => {
+    navigation.navigate('ProfileScreen', {
+      isEdit: false,
+    });
+  };
 
   const renderItem = ({ item }: { item: OnboardingItem }) => {
     return (
@@ -49,17 +46,27 @@ const IntroScreen = ({navigation} : RootScreenProps<'IntroScreen'>) => {
         <Text>
           {item.textParts.map((part, index) =>
             part.highlight ? (
-              <InterTightSemiBold key={index} fsize={24} fcolor={theme.textMuted} textAlign="center">
+              <InterTightSemiBold
+                key={index}
+                fsize={24}
+                fcolor={theme.textMuted}
+                textAlign="center"
+              >
                 {part.text}
               </InterTightSemiBold>
             ) : (
-              <InterTightSemiBold key={index} fsize={24} fcolor={theme.textPrimary} textAlign="center">
+              <InterTightSemiBold
+                key={index}
+                fsize={24}
+                fcolor={theme.textPrimary}
+                textAlign="center"
+              >
                 {part.text}
               </InterTightSemiBold>
             ),
           )}
         </Text>
-          
+
         <Image source={item.image} style={styles.image} />
       </View>
     );
@@ -108,7 +115,7 @@ const IntroScreen = ({navigation} : RootScreenProps<'IntroScreen'>) => {
         <View style={styles.bttnContainer}>
           {currentIndex === 0 ? (
             <>
-              <ButtonComponent
+              <AppButton
                 onPress={handleNext}
                 borderc={theme.border}
                 bttnTxt="Skip"
@@ -117,7 +124,7 @@ const IntroScreen = ({navigation} : RootScreenProps<'IntroScreen'>) => {
                 txtColor={theme.textPrimary}
               />
 
-              <ButtonComponent
+              <AppButton
                 onPress={handleNext}
                 bg={theme.primary}
                 bttnTxt="Next"
@@ -126,7 +133,7 @@ const IntroScreen = ({navigation} : RootScreenProps<'IntroScreen'>) => {
               />
             </>
           ) : (
-            <ButtonComponent
+            <AppButton
               bg={theme.primary}
               onPress={handleNavigation}
               bttnTxt=" Let's Go"
@@ -141,4 +148,3 @@ const IntroScreen = ({navigation} : RootScreenProps<'IntroScreen'>) => {
 };
 
 export default IntroScreen;
-

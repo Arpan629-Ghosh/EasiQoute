@@ -12,11 +12,11 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '@/components/header/Header';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppButton from '@/components/appButton/AppButton';
 import { SearchAddressPayload } from '@/types/apis/auth.types';
 import { useDebounce } from '@/hooks/useDebounce';
 import AddressList from '@/components/addressList/AddressList';
@@ -181,7 +181,10 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
   };
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
-      <Header txt={isEdit ? "Edit Client" : "Add Client"} borderBottomEnabled={true} />
+      <Header
+        txt={isEdit ? 'Edit Client' : 'Add Client'}
+        borderBottomEnabled={true}
+      />
       <KeyboardAvoidingView
         style={styles.keyboard}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -200,7 +203,7 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Client Name
               </InterTightRegular>
-              <Input
+              <AppInput
                 placeholder="Full name"
                 value={clientFormData.clientName}
                 onChangeText={txt => updateField('clientName', txt)}
@@ -213,7 +216,7 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Company Name
               </InterTightRegular>
-              <Input
+              <AppInput
                 placeholder="Company name"
                 value={clientFormData.companyName}
                 onChangeText={txt => updateField('companyName', txt)}
@@ -231,7 +234,7 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Phone Number
               </InterTightRegular>
-              <Input
+              <AppInput
                 placeholder="Phone number"
                 value={clientFormData.phNo}
                 onChangeText={txt => updateField('phNo', txt)}
@@ -243,7 +246,7 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Email Address
               </InterTightRegular>
-              <Input
+              <AppInput
                 placeholder="Email Address"
                 value={clientFormData.email}
                 onChangeText={txt => updateField('email', txt)}
@@ -257,7 +260,7 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
             <View style={styles.searchWrapper}>
               <View style={styles.inputicon}>
                 <Image source={icons.ic_search} style={styles.searchic} />
-                <Input
+                <AppInput
                   style={styles.noBorderInput}
                   placeholder="Search postcode"
                   returnKeyType="search"
@@ -278,7 +281,7 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Street Address
               </InterTightRegular>
-              <Input
+              <AppInput
                 placeholder="Street Address"
                 value={clientFormData.streetAddress}
                 onChangeText={txt => updateField('streetAddress', txt)}
@@ -289,7 +292,7 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 City
               </InterTightRegular>
-              <Input
+              <AppInput
                 placeholder="City"
                 value={clientFormData.city}
                 onChangeText={txt => updateField('city', txt)}
@@ -301,7 +304,7 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Postcode
               </InterTightRegular>
-              <Input
+              <AppInput
                 placeholder="Postcode"
                 value={clientFormData.postcode}
                 onChangeText={txt => updateField('postcode', txt)}
@@ -312,7 +315,7 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                 Country
               </InterTightRegular>
-              <Input
+              <AppInput
                 placeholder="Country"
                 value={clientFormData.country}
                 onChangeText={txt => updateField('country', txt)}
@@ -324,8 +327,8 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
       </KeyboardAvoidingView>
       <View style={[styles.footer, { paddingBottom: insets.bottom + 12 }]}>
         <View style={styles.footerContainer}>
-          <ButtonComponent
-            bttnTxt={isEdit ? "Update Client" : "Add Client"}
+          <AppButton
+            bttnTxt={isEdit ? 'Update Client' : 'Add Client'}
             bg={theme.primary}
             txtColor={theme.primaryText}
             showLoader={loading || updateClientLoader}

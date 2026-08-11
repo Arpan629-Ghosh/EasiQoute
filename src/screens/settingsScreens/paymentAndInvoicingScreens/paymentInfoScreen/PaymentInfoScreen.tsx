@@ -4,10 +4,10 @@ import { useAppTheme } from '@/hooks/useAppTheme'
 import { createStyles } from './style';
 import Header from '@/components/header/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
-import Input from '@/components/inputComponent/Input';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
+import AppInput from '@/components/appInput/AppInput';
+import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const PaymentInfoScreen = () => {
@@ -15,7 +15,7 @@ const PaymentInfoScreen = () => {
   const insets = useSafeAreaInsets();
     const styles = useMemo(() => createStyles(theme), [theme])
   return (
-    <View style={[styles.container, {paddingBottom: insets.bottom}]}>
+    <View style={[styles.container, { paddingBottom: insets.bottom }]}>
       <Header txt="Payment Info" borderBottomEnabled={true} />
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         <KeyboardAvoidingView
@@ -37,7 +37,7 @@ const PaymentInfoScreen = () => {
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     PayPal, Stripe, or other
                   </InterTightRegular>
-                  <Input placeholder="sarah.johnson@paypal.com" />
+                  <AppInput placeholder="sarah.johnson@paypal.com" />
                 </View>
               </View>
               <View style={styles.formContainer}>
@@ -48,25 +48,25 @@ const PaymentInfoScreen = () => {
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Bank Name
                   </InterTightRegular>
-                  <Input placeholder="Barclays UK" />
+                  <AppInput placeholder="Barclays UK" />
                 </View>
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Account Name
                   </InterTightRegular>
-                  <Input placeholder="Alpha Renovates Pvt. Ltd." />
+                  <AppInput placeholder="Alpha Renovates Pvt. Ltd." />
                 </View>
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Account Number
                   </InterTightRegular>
-                  <Input placeholder="65301942" />
+                  <AppInput placeholder="65301942" />
                 </View>
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Sort Code
                   </InterTightRegular>
-                  <Input placeholder="20-14-60" />
+                  <AppInput placeholder="20-14-60" />
                 </View>
               </View>
             </View>
@@ -74,7 +74,7 @@ const PaymentInfoScreen = () => {
         </KeyboardAvoidingView>
         <View style={styles.footer}>
           <View style={styles.footerContainer}>
-            <ButtonComponent
+            <AppButton
               bg={theme.primary}
               bttnTxt="Save Changes"
               txtColor={theme.primaryText}

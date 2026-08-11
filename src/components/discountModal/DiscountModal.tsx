@@ -1,11 +1,11 @@
 import { StyleSheet, View } from 'react-native'
 import React, { useMemo, useState } from 'react'
 import MiddleModalComponent from '../modal/MiddleModalComponent'
-import InterTightMedium from '../fontComponents/InterTightMedium';
+import InterTightMedium from '../appFonts/InterTightMedium';
 import { useAppTheme } from '@/hooks/useAppTheme';
-import InterTightRegular from '../fontComponents/InterTightRegular';
-import Input from '../inputComponent/Input';
-import ButtonComponent from '../buttonComponent/ButtonComponent';
+import InterTightRegular from '../appFonts/InterTightRegular';
+import AppInput from '../appInput/AppInput';
+import AppButton from '../appButton/AppButton';
 import { Theme } from '@/types/theme.types';
 
 
@@ -38,22 +38,22 @@ const DiscountModal = ({ visible, onClose, onDiscount }: Props) => {
           <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
             Discount (in %)
           </InterTightRegular>
-          <Input
+          <AppInput
             placeholder="e.g. 20"
             value={input}
             onChangeText={setInput}
-            keyboardType='numeric'
+            keyboardType="numeric"
           />
         </View>
       </View>
       <View style={styles.footer}>
-        <ButtonComponent
+        <AppButton
           bg={theme.primary}
           bttnTxt="Apply"
           txtColor={theme.primaryText}
           onPress={handleDiscount}
         />
-        <ButtonComponent
+        <AppButton
           bg={theme.background}
           bttnTxt="Cancel"
           txtColor="#D23949"

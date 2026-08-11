@@ -32,6 +32,7 @@ export const createStyles = (theme: Theme) =>
       marginTop: 16,
     },
     flat: {
+      flexGrow: 1,
       paddingBottom: 120,
     },
     loaderContainer: {

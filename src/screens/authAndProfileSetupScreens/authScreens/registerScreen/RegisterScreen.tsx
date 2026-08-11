@@ -1,11 +1,11 @@
 import { View, TextInput, ScrollView, KeyboardAvoidingView, Platform, Image, TouchableOpacity } from 'react-native'
 import React, {  useMemo, useRef, useState } from 'react'
 import GradientHeader from '@/components/gradient/GradientHeader';
-import InterTightSemiBold from '@/components/fontComponents/InterTightSemiBold';
-import InterTightRegular from '@/components/fontComponents/InterTightRegular';
-import Input from '@/components/inputComponent/Input';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
-import InterTightMedium from '@/components/fontComponents/InterTightMedium';
+import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/appInput/AppInput';
+import AppButton from '@/components/appButton/AppButton';
+import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import { createStyles } from './style';
 import { images } from '@/config/images';
 import { useAppTheme } from '@/hooks/useAppTheme';
@@ -95,7 +95,7 @@ const RegisterScreen = ({navigation} : RootScreenProps<'RegisterScreen'>) => {
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     Email
                   </InterTightRegular>
-                  <Input
+                  <AppInput
                     ref={emailRef}
                     onSubmitEditing={() => passwordRef.current?.focus()}
                     returnKeyType="next"
@@ -111,7 +111,7 @@ const RegisterScreen = ({navigation} : RootScreenProps<'RegisterScreen'>) => {
                     Password
                   </InterTightRegular>
                   <View style={styles.inputicon}>
-                    <Input
+                    <AppInput
                       ref={passwordRef}
                       placeholder="Enter password"
                       value={formData.password}
@@ -127,7 +127,7 @@ const RegisterScreen = ({navigation} : RootScreenProps<'RegisterScreen'>) => {
                     </TouchableOpacity>
                   </View>
                 </View>
-                <ButtonComponent
+                <AppButton
                   bg={theme.primary}
                   bttnTxt="Create Account"
                   txtColor={theme.primaryText}

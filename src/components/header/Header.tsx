@@ -10,7 +10,7 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import { icons } from '@/config/icons';
 import { useNavigation } from '@react-navigation/native';
-import InterTightMedium from '../fontComponents/InterTightMedium';
+import InterTightMedium from '../appFonts/InterTightMedium';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Props {

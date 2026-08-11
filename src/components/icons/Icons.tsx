@@ -1,6 +1,6 @@
 import { Image, StyleSheet, View } from 'react-native';
 import React from 'react';
-import InterTightLight from '../fontComponents/InterTightLight';
+import InterTightLight from '../appFonts/InterTightLight';
 import { icons } from '@/config/icons';
 
 interface Prop {

@@ -15,10 +15,9 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Header from '@/components/header/Header';
-import Input from '@/components/inputComponent/Input';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppInput from '@/components/appInput/AppInput';
+import AppButton from '@/components/appButton/AppButton';
 import RenderSubCategories from '@/components/renderSubCategories/RenderSubCategories';
-import SubCategoryEmptyScreen from '@/components/emptyScreenComponents/SubCategoryEmptyScreen';
 import { icons } from '@/config/icons';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -26,6 +25,8 @@ import { useSettings } from '@/hooks/apis/useSettings';
 import { createStyles } from './style';
 import { SubCategoriesPayload } from '@/types/apis/settings.types';
 import { RootScreenProps } from '@/types/navigation.types';
+import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
+import { images } from '@/config/images';
 
 const SubCategoriesScreen = ({
   navigation,
@@ -39,6 +40,7 @@ const SubCategoriesScreen = ({
     subcat_data,
     subcat_current_page,
     subcat_last_page,
+    settingLoading
   } = useSettings();
   const [search, setSearch] = useState('');
   const [refreshing, setRefreshing] = useState(false);
@@ -91,6 +93,20 @@ const SubCategoriesScreen = ({
     setRefreshing(false);
   }, [refreshing, fetchSubCategories]);
 
+  const renderEmpty = useMemo(() => {
+    if (settingLoading) {
+      return null;
+    }
+    return (
+      <EmptyStateScreen
+        icon={images.img_subcatempty}
+        primaryText="No Subcategories Found"
+        message="Click on the “+ New Category”"
+        nextMessage=" below to add new item."
+      />
+    );
+  }, [settingLoading]);
+
   const processedData = useMemo(() => {
     const q = debouncedSearch?.trim()?.toLowerCase();
 
@@ -127,7 +143,7 @@ const SubCategoriesScreen = ({
           <View style={styles.inputicon}>
             <Image source={icons.ic_search} style={styles.searchic} />
 
-            <Input
+            <AppInput
               style={styles.noBorderInput}
               placeholder="Search 'Subcategories'"
               value={search}
@@ -157,12 +173,13 @@ const SubCategoriesScreen = ({
         }}
         onEndReachedThreshold={0.2}
         ListFooterComponent={renderFooter}
-        ListEmptyComponent={<SubCategoryEmptyScreen />}
+        ListEmptyComponent={renderEmpty}
+
       />
 
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footerContainer}>
-          <ButtonComponent
+          <AppButton
             bg={theme.primary}
             bttnTxt="New Subcategory"
             txtColor={theme.primaryText}
@@ -170,7 +187,7 @@ const SubCategoriesScreen = ({
             onPress={() => navigation.navigate('NewSubCategoryScreen')}
           >
             <Image source={icons.ic_whiteadd} style={styles.icn} />
-          </ButtonComponent>
+          </AppButton>
         </View>
       </View>
     </LinearGradient>

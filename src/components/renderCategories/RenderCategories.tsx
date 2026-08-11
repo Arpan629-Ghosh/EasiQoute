@@ -6,7 +6,7 @@ import CardHeader from '../cardDetailsComponent/CardHeader'
 import { icons } from '@/config/icons'
 import { useAppTheme } from '@/hooks/useAppTheme'
 import { Theme } from '@/types/theme.types'
-import InterTightRegular from '../fontComponents/InterTightRegular'
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { useNavigation } from '@react-navigation/native'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@/types/navigation.types'

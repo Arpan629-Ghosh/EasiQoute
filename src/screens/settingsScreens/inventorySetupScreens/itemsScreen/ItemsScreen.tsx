@@ -11,15 +11,16 @@ import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
 import Header from '@/components/header/Header';
 import { icons } from '@/config/icons';
-import Input from '@/components/inputComponent/Input';
-import ButtonComponent from '@/components/buttonComponent/ButtonComponent';
+import AppInput from '@/components/appInput/AppInput';
+import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { useDebounce } from '@/hooks/useDebounce';
 import { FetchItemsData } from '@/types/apis/settings.types';
 import RenderItems from '@/components/renderItems/RenderItems';
-import ItemEmptyScreen from '@/components/emptyScreenComponents/ItemEmptyScreen';
 import { RootScreenProps } from '@/types/navigation.types';
+import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
+import { images } from '@/config/images';
 
 const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
   const [paginationLoading, setPaginationLoading] = useState(false);
@@ -110,7 +111,14 @@ const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
     if (settingLoading) {
       return null;
     }
-    return <ItemEmptyScreen />;
+    return (
+      <EmptyStateScreen
+        icon={images.img_itemempty}
+        primaryText="No Items Found"
+        message="Click on the “+ New Items"
+        nextMessage=" below to add new item."
+      />
+    );
   }, [settingLoading]);
 
   return (
@@ -120,7 +128,7 @@ const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
         <View style={styles.inpContainer}>
           <View style={styles.inputicon}>
             <Image source={icons.ic_search} style={styles.searchic} />
-            <Input
+            <AppInput
               style={styles.noBorderInput}
               placeholder="Search ‘Items’"
               returnKeyType="search"
@@ -164,7 +172,7 @@ const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
       />
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footerContainer}>
-          <ButtonComponent
+          <AppButton
             bg={theme.primary}
             bttnTxt="New Item"
             txtColor={theme.primaryText}
@@ -172,7 +180,7 @@ const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
             onPress={navigateToNewItem}
           >
             <Image source={icons.ic_whiteadd} style={styles.icn} />
-          </ButtonComponent>
+          </AppButton>
         </View>
       </View>
     </LinearGradient>

@@ -1,11 +1,11 @@
 import { Image, ImageSourcePropType, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
-import ModalComponent from '../modal/ModalComponent';
+import BottomModalComponent from '../modal/BottomModalComponent';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
-import InterTightMedium from '../fontComponents/InterTightMedium';
+import InterTightMedium from '../appFonts/InterTightMedium';
 import { icons } from '@/config/icons';
-import InterTightRegular from '../fontComponents/InterTightRegular';
+import InterTightRegular from '../appFonts/InterTightRegular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Props {
@@ -49,7 +49,7 @@ const ClientSortBottomSheet = ({
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   return (
-    <ModalComponent visible={visible} onClose={onClose}>
+    <BottomModalComponent visible={visible} onClose={onClose}>
       <View style={[styles.container, { paddingBottom: insets.bottom + 16 }]}>
         <View style={styles.header}>
           <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
@@ -90,7 +90,7 @@ const ClientSortBottomSheet = ({
           })}
         </View>
       </View>
-    </ModalComponent>
+    </BottomModalComponent>
   );
 };
 

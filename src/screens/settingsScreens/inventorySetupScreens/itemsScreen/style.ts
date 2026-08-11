@@ -67,6 +67,7 @@ export const createStyles = (theme: Theme) =>
       alignItems: 'center',
     },
     flatlist: {
+      flexGrow: 1,
       marginTop: 16,
       paddingHorizontal: 12,
       paddingBottom: 120,
