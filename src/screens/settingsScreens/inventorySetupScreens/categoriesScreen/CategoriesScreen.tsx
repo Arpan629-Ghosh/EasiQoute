@@ -31,7 +31,7 @@ import { images } from '@/config/images';
 
 const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) => {
   const [paginationLoading, setPaginationLoading] = useState(false);
-  const { theme, isDark } = useAppTheme();
+  const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const insets = useSafeAreaInsets();
 
