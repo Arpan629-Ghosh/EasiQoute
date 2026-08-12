@@ -251,6 +251,7 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
                 value={clientFormData.email}
                 onChangeText={txt => updateField('email', txt)}
                 returnKeyType="next"
+                autoCapitalize='none'
                 textContentType="emailAddress"
                 keyboardType="email-address"
               />

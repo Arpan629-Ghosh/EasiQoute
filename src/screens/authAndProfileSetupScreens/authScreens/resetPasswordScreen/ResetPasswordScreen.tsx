@@ -84,6 +84,7 @@ const ResetPasswordScreen = ({navigation} : RootScreenProps<'ResetPasswordScreen
                       ref={emailRef}
                       returnKeyType="next"
                       placeholder="Enter your email"
+                      autoCapitalize='none'
                       value={input}
                       onChangeText={(txt: string) => handleInput(txt)}
                       keyboardType="email-address"

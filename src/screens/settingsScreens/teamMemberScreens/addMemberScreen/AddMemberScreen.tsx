@@ -115,6 +115,7 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
                   keyboardType="email-address"
                   textContentType="emailAddress"
                   returnKeyType="next"
+                  autoCapitalize='none'
                   value={addMemberForm.email}
                   onChangeText={txt => handleInput('email', txt)}
                   onSubmitEditing={() => passwordRef.current?.focus()}

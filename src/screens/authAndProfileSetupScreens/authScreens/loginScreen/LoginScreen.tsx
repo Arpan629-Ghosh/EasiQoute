@@ -128,6 +128,7 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
                     onSubmitEditing={() => passwordRef.current?.focus()}
                     returnKeyType="next"
                     placeholder="Enter your email"
+                    autoCapitalize='none'
                     value={formData.email}
                     onChangeText={(txt: string) => handleInput('email', txt)}
                     keyboardType="email-address"
