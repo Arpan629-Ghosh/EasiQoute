@@ -13,6 +13,8 @@ import { fontFamily } from '@/constants/fontFamily';
 import HomeStack from './mainStack/HomeStack';
 import { MainTabParamList } from '@/types/navigation.types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import PaymentIcon from '@/components/tabBarIcons/paymentIcon/PaymentIcon';
+import PaymentsStack from './mainStack/PaymentsStack';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 const MainTabs = () => {
@@ -92,6 +94,23 @@ const MainTabs = () => {
           },
         }}
       />
+      <Tab.Screen
+        name="Payments"
+        component={PaymentsStack}
+        options={{
+          headerShown: false,
+          tabBarActiveTintColor: '#082B60',
+          tabBarIcon: ({ focused, color, size }) => (
+            <PaymentIcon focused={focused} color={color} size={size} />
+          ),
+
+          tabBarLabelStyle: {
+            fontFamily: fontFamily.INTER_TIGHT.regular,
+            fontSize: 12,
+          },
+        }}
+      />
+
       <Tab.Screen
         name="Settings"
         component={SettingsStack}

@@ -18,6 +18,8 @@ import { setFCMToken } from '@/redux/apis/notification/notificationSlice';
 import ToastProvider from '@/components/toast/ToastContext';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { navigationRef } from '@/utils/navigationRef';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from '@/config/queryClient';
 
 
 const AppContent = () => {
@@ -63,9 +65,11 @@ function App() {
     <SafeAreaProvider>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <ToastProvider>
-            <AppContent />
-          </ToastProvider>
+          <QueryClientProvider client={queryClient}>
+            <ToastProvider>
+              <AppContent />
+            </ToastProvider>
+          </QueryClientProvider>
         </PersistGate>
       </Provider>
     </SafeAreaProvider>

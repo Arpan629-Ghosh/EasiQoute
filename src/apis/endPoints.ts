@@ -18,4 +18,6 @@ export const ENDPOINTS = {
   CLIENT: '/api/clients',
   INVOICE: '/api/invoices',
   TEAMMEMBER: '/api/company/users',
+  PAYMENT: '/api/payments',
+  PAYMENTDETAILS: '/api/payments/deposits',
 };

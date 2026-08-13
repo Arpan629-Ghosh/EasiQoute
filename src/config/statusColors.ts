@@ -44,3 +44,15 @@ export const STATUS_COLORS = {
     text: '#F05353',
   },
 } as const;
+
+
+export const PAYMENT_STATUS_COLORS = {
+  pending: {
+    view: '#F0535312',
+    text: '#F05353',
+  },
+  received: {
+    view: '#3AB48912',
+    text: '#3AB489',
+  },
+};

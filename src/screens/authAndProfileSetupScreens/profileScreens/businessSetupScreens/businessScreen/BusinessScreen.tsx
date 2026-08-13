@@ -130,7 +130,7 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
       console.log('COMPANY PROFILE SETUP ERROR', error);
     }
   }
-  const updateField = useCallback((key: keyof BusinessForm, value: any) => {
+  const updateField =  useCallback(<K extends keyof BusinessForm>(key: K, value: BusinessForm[K]) => {
     setForm(prev => ({
       ...prev,
       [key]: value,

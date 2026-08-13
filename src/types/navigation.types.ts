@@ -134,6 +134,9 @@ export type RootStackParamList = {
   InvoiceDetailsScreens: {
     invoiceId: number;
   };
+  PaymentDetailsScreen: {
+    paymentId: number
+  }
 };
 
 export type MainTabParamList = {
@@ -141,6 +144,7 @@ export type MainTabParamList = {
   Qoute: undefined;
   Invoices: undefined;
   Clients: undefined;
+  Payments: undefined;
   Settings: NavigatorScreenParams<SettingStackParamList>;
 };
 
@@ -163,6 +167,10 @@ export type InvoiceStackParamList = {
 export type SettingStackParamList = {
   SettingScreen: undefined;
 };
+
+export type PaymentStackParamList = {
+  PaymentsScreen: undefined;
+}
 
 export type NewQuoteTopTabParamList = {
   Summury: { quoteDetails?: CreateQuotePayload | null};

@@ -1,5 +1,6 @@
 import { AttachmentFile } from "@/screens/quotesScreens/newQuoteScreens/tabs/summuryScreen/SummuryScreen";
 import { FetchItemsData } from "./settings.types";
+import { Links, Meta } from "./common.types";
 
 export interface QuoteSummary {
   total_count: number;
@@ -45,30 +46,11 @@ export interface PaginationLink {
   label: string;
   active: boolean;
 }
-
-export interface QuoteLinks {
-  first: string;
-  last: string;
-  prev: string | null;
-  next: string | null;
-}
-
-export interface QuoteMeta {
-  current_page: number;
-  from: number;
-  last_page: number;
-  links: PaginationLink[];
-  path: string;
-  per_page: number;
-  to: number;
-  total: number;
-}
-
 export interface QuotesPayload {
   summary: QuoteSummary;
   data: QuoteItem[];
-  links: QuoteLinks;
-  meta: QuoteMeta;
+  links: Links;
+  meta: Meta;
 }
 
 export interface Client {
