@@ -1,6 +1,7 @@
 import { apiClient } from '@/apis/axiosInstance';
 import { ApiResponse } from '@/types/apis/common.types';
 import {
+  GetInvoiceParams,
   InvoiceCreate,
   InvoiceDetailsPayload,
   InvoiceListPayload,
@@ -37,11 +38,22 @@ export const invoiceServices = {
 
     return response.data;
   },
-  getInvoices: async (payload: number) => {
+
+  getInvoices: async (payload: GetInvoiceParams) => {
+    const params = {
+      page: payload.page,
+      ...(payload.is_not_paid === 1 && {
+        is_not_paid: 1,
+      }),
+      ...(payload.search && {
+      search: payload.search
+    })
+    };
+
     const response = await apiClient.get<ApiResponse<InvoiceListPayload>>(
       ENDPOINTS.INVOICE,
       {
-        params: { page: payload },
+        params,
       },
     );
 

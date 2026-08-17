@@ -1,27 +1,29 @@
 import React from 'react';
-import { ActivityIndicator, StyleSheet, TouchableOpacity, TouchableOpacityProps } from 'react-native'
+import {
+  ActivityIndicator,
+  StyleSheet,
+  TouchableOpacity,
+  TouchableOpacityProps,
+} from 'react-native';
 import InterTightMedium from '../appFonts/InterTightMedium';
-
 
 interface Props extends TouchableOpacityProps {
   bg?: string;
   borderc?: string;
   gap?: number;
   borderwidth?: number;
-  buttonWidth?: number |`${number}%`; 
+  buttonWidth?: number | `${number}%`;
   showLoader?: boolean;
   txtColor: string;
   bttnTxt: string;
-  flex?: number 
-
+  flex?: number;
 }
 const AppButton: React.FC<Props> = ({
-
   bg,
   borderc,
   gap,
   borderwidth,
-  showLoader=false,
+  showLoader = false,
   txtColor,
   bttnTxt,
   children,
@@ -35,7 +37,7 @@ const AppButton: React.FC<Props> = ({
       style={[
         styles.bttn,
         {
-          flex: flex ,
+          flex: flex,
           backgroundColor: bg,
           gap: gap,
           borderColor: borderc,
@@ -43,27 +45,29 @@ const AppButton: React.FC<Props> = ({
           width: buttonWidth,
         },
       ]}
+      disabled={showLoader}
     >
       {children}
-      <InterTightMedium fsize={16} fcolor={txtColor}>
-        {bttnTxt}
-      </InterTightMedium>
-      {showLoader && <ActivityIndicator color="#FFFFFF" />}
+      {showLoader ? (
+        <ActivityIndicator color="#FFFFFF" />
+      ) : (
+        <InterTightMedium fsize={16} fcolor={txtColor}>
+          {bttnTxt}
+        </InterTightMedium>
+      )}
     </TouchableOpacity>
   );
 };
-
 
 export default React.memo(AppButton);
 
 const styles = StyleSheet.create({
   bttn: {
-
     flexDirection: 'row',
     height: 46,
     borderRadius: 12,
     padding: 12,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

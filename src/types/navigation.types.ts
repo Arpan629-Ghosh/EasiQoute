@@ -136,7 +136,8 @@ export type RootStackParamList = {
   };
   PaymentDetailsScreen: {
     paymentId: number
-  }
+  };
+  RecordPaymentScreen: undefined;
 };
 
 export type MainTabParamList = {
@@ -271,6 +272,12 @@ export type ClientStackProps<T extends keyof ClientStackParamList> =
 export type InvoiceStackProps<T extends keyof InvoiceStackParamList> =
   CompositeScreenProps<
     NativeStackScreenProps<InvoiceStackParamList, T>,
+    NativeStackScreenProps<RootStackParamList>
+  >;
+
+export type PaymentStackProps<T extends keyof PaymentStackParamList> =
+  CompositeScreenProps<
+    NativeStackScreenProps<PaymentStackParamList, T>,
     NativeStackScreenProps<RootStackParamList>
   >;
 

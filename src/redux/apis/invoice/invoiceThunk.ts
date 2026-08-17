@@ -1,5 +1,5 @@
 import { invoiceServices } from '@/apis/services/invoice.services';
-import { InvoiceCreate, UpdateInvoicePayload } from '@/types/apis/invoice.types';
+import { GetInvoiceParams, InvoiceCreate, UpdateInvoicePayload } from '@/types/apis/invoice.types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 export const createInvoiceThunk = createAsyncThunk(
@@ -19,7 +19,7 @@ export const createInvoiceThunk = createAsyncThunk(
 
 export const getInvoicesThunk = createAsyncThunk(
   '/get/invoices',
-  async (payload: number, thunkAPI) => {
+  async (payload: GetInvoiceParams, thunkAPI) => {
     try {
       const response = await invoiceServices.getInvoices(payload);
       if (!response.result) {

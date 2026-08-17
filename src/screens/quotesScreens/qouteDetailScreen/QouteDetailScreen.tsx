@@ -601,6 +601,9 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
             borderc="#082B60"
             txtColor={theme.textPrimary}
             gap={8}
+            onPress={() => navigation.navigate("NewInvoiceScreens", {
+              quoteId: quoteId
+            })}
           >
             <Image source={icons.ic_addicon} style={styles.addicon} />
           </AppButton>

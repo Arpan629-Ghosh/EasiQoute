@@ -169,7 +169,7 @@ const ClientDetailScreen = ({
                   {client_detail?.total_quotes}
                 </InterTightMedium>
                 <InterTightMedium fsize={14} fcolor={theme.textMuted}>
-                  £{client_detail?.total_quotes_amount}
+                  £{(client_detail?.total_quotes_amount)?.toFixed(2)}
                 </InterTightMedium>
               </View>
               <InterTightRegular fsize={12} fcolor={theme.textSecondary}>

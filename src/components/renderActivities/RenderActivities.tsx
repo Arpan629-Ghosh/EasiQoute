@@ -128,7 +128,7 @@ export default React.memo(RenderActivities);
 const createStyles = (theme: Theme) =>  StyleSheet.create({
   container: {
     flex: 1,
-    marginVertical: 8,
+    marginBottom: 8,
   },
   card: {
     width: '100%',

@@ -1,8 +1,11 @@
 import { paymentServices } from '@/apis/services/payment.services';
+import { RecordPaymentProps } from '@/screens/paymentScreens/recordPaymentScreen/RecordPaymentScreen';
 import { PaymentQueryParams } from '@/types/apis/payments.types';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 export const usePayments = (params?: PaymentQueryParams) => {
+
+  const queryClient = useQueryClient();
   const paymentListing = useInfiniteQuery({
     queryKey: ['payments', params],
 
@@ -39,6 +42,17 @@ export const usePayments = (params?: PaymentQueryParams) => {
   const latestPage =
     paymentListing.data?.pages[paymentListing.data.pages.length - 1];
   
+    const createPaymentMutation = useMutation({
+      mutationFn: (payload: RecordPaymentProps) =>
+        paymentServices.createPayment(payload),
+
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: ['payments'],
+        });
+      },
+    });
+  
     
     
 
@@ -61,6 +75,10 @@ export const usePayments = (params?: PaymentQueryParams) => {
     isError: paymentListing.isError,
     paymentListsError: paymentListing.error,
 
-   
+    createPayment: createPaymentMutation.mutate,
+    createPaymentAsync: createPaymentMutation.mutateAsync,
+    isCreatingPayment: createPaymentMutation.isPending,
+    createPaymentError: createPaymentMutation.error,
+    isCreatePaymentError: createPaymentMutation.isError
   };
 };

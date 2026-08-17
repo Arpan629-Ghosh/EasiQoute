@@ -223,3 +223,9 @@ export interface UpdateInvoiceStatus {
   status: string;
   invoice_id: number;
 }
+
+export interface GetInvoiceParams {
+  page?: number;
+  is_not_paid?: number;
+  search?: string
+}

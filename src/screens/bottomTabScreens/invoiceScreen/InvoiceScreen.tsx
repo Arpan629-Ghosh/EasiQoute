@@ -66,7 +66,9 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
 
   useEffect(() => {
     page.current = 1;
-    getInvoices(1);
+    getInvoices({
+      page: 1
+    });
   }, [getInvoices])
 
   const navigateToSelectQuoteScreen = () => {
@@ -138,7 +140,9 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
     try {
       setRefreshing(true);
       page.current = 1;
-      await getInvoices(1);
+      await getInvoices({
+        page: 1
+      });
     } finally {
       setRefreshing(false);
     }
@@ -152,7 +156,9 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
       setPaginationLoading(true);
       const nextPage = page.current + 1;
       page.current = nextPage;
-      await getInvoices(nextPage);
+      await getInvoices({
+        page: nextPage
+      });
     } finally {
       setPaginationLoading(false);
     }

@@ -20,8 +20,11 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { Data } from '@/types/apis/payments.types';
 import RenderPaymentList from '@/components/renderPaymentList/RenderPaymentList';
 import Loader from '@/components/loader/Loader';
+import { PaymentStackProps } from '@/types/navigation.types';
+import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
+import { images } from '@/config/images';
 
-const PaymentsScreen = () => {
+const PaymentsScreen = ({navigation} : PaymentStackProps<"PaymentsScreen">) => {
   const [search, setSearch] = useState('');
 
   const debouncedSearch = useDebounce(search);
@@ -113,10 +116,21 @@ const PaymentsScreen = () => {
               <ActivityIndicator size="small" style={styles.footer} />
             ) : null
           }
+          ListEmptyComponent={
+            <EmptyStateScreen
+              icon={images.img_paymentEmpty}
+              primaryText="No Payments Recorded"
+              message="Click on the + below to record"
+              nextMessage="new payment."
+            />
+          }
         />
 
         <View style={styles.add}>
-          <TouchableOpacity activeOpacity={0.8}>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={() => navigation.navigate('RecordPaymentScreen')}
+          >
             <Image source={icons.ic_add} style={styles.ic} />
           </TouchableOpacity>
         </View>

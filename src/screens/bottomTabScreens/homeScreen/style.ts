@@ -94,11 +94,11 @@ export const createStyles = (theme: Theme) =>  StyleSheet.create({
   empty: {
     height: 0,
     borderWidth: 1,
-    width: 219,
+    width: "67.5%",
     borderColor: '#0000000A',
   },
   footer: {
-    height: 41,
+    // height: 41,
     padding: 12,
     gap: 10,
     alignItems: 'center',
@@ -112,5 +112,8 @@ export const createStyles = (theme: Theme) =>  StyleSheet.create({
     height: 40,
     width: 40,
     borderRadius: 40
+  },
+  flat: {
+    flex : 1
   }
 });

@@ -137,7 +137,8 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
             renderItem={({ item }) => <RenderActivities item={item} />}
             keyExtractor={item => item.id.toString()}
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.flatlist}
+          contentContainerStyle={styles.flatlist}
+          style = {styles.flat}
             ListEmptyComponent={
               <EmptyStateScreen
                 icon={isDark ? images.img_darkrecent : images.img_homeEmpty}

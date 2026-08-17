@@ -46,7 +46,14 @@ const LogoutModal = ({ visible, onClose }: Props) => {
           fcolor={theme.textPrimary}
           textAlign="center"
         >
-          Are you sure you want to{'            '} Logout?
+          Are you sure you want to
+        </InterTightSemiBold>
+        <InterTightSemiBold
+          fsize={20}
+          fcolor={theme.textPrimary}
+          textAlign="center"
+        >
+          Logout?
         </InterTightSemiBold>
       </View>
 
