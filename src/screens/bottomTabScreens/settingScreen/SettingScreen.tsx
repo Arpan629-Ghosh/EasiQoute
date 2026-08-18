@@ -22,14 +22,20 @@ import LogoutModal from '@/components/ logoutModal/LogoutModal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { SettingStackProps } from '@/types/navigation.types';
+import { useAppLanguage } from '@/hooks/useAppLanguage';
+import LanguageBottomSheet from '@/components/languageBottomSheet/LanguageBottomSheet';
+import { useTranslation } from 'react-i18next';
 
 const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
   const [enabledStripe, setEnabledStripe] = useState<boolean>(false);
   const [pushNotification, setPushNotification] = useState<boolean>(true);
   const [emailUpdate, setEmailUpdate] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+  const [openLangSheet, setOpenLangSheet] = useState(false);
   const [openLogoutModal, setOpenLogoutModal] = useState<boolean>(false);
   const { theme, isDark, mode } = useAppTheme();
+  const { language, languageMode, isDeviceLanguage } = useAppLanguage();
+  const { t } = useTranslation();
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -65,18 +71,31 @@ const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
   };
   const navigateToProfile = () => {
     navigation.navigate('ProfileScreen', {
-      isEdit: true
+      isEdit: true,
+      name: user?.name,
+      phone: user?.phone,
+      url: user?.avatar
     })
   }
 
   const navigateToBusiness = () => {
     navigation.navigate('BusinessScreen', {
-      isEdit: true
+      isEdit: true,
+      name: user?.company?.name,
+      phone: user?.company?.phone_number,
+      color: user?.company?.brand_color,
+      profileImage: user?.company?.logo,
+      vatNumber: user?.company?.vat_number,
+      services: null,
+      address: user?.company?.address
     })
   }
 
   const handleClose = useCallback(() => {
     setOpen(false);
+  },[]);
+  const handleCloseLang = useCallback(() => {
+    setOpenLangSheet(false);
   },[]);
   const handleLogoutModalClose = useCallback(() => {
     setOpenLogoutModal(false);
@@ -100,7 +119,7 @@ const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
 
       <View style={[styles.header, { paddingTop: insets.top }]}>
         <InterTightSemiBold fsize={24} fcolor={theme.textPrimary}>
-          Settings
+          {t('settings.title')}
         </InterTightSemiBold>
       </View>
 
@@ -167,6 +186,14 @@ const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
               <SettingInfoRow icon={icons.ic_appearance} txt="Appearance">
                 <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
                   {mode}
+                </InterTightMedium>
+              </SettingInfoRow>
+            </TouchableOpacity>
+            <View style={styles.borderLine} />
+            <TouchableOpacity onPress={() => setOpenLangSheet(true)}>
+              <SettingInfoRow icon={icons.ic_appearance} txt="Language">
+                <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
+                  {languageMode}
                 </InterTightMedium>
               </SettingInfoRow>
             </TouchableOpacity>
@@ -271,6 +298,7 @@ const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
         </View>
       </ScrollView>
       <AppearanceBottomSheet visible={open} onClose={handleClose} />
+      <LanguageBottomSheet visible={openLangSheet} onClose={handleCloseLang} />
       <LogoutModal visible={openLogoutModal} onClose={handleLogoutModalClose} />
     </LinearGradient>
   );

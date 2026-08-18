@@ -2,7 +2,7 @@ import { logoutThunk, searchAddressThunk } from './../../redux/apis/auth/authThu
 
 import { companyProfileSetupThunk, forgotPasswordThunk, loginThunk, profileSetupThunk, signupThunk } from '@/redux/apis/auth/authThunks';
 import { AppDispatch, RootState } from '@/redux/store';
-import {  Company, ForgotPasswordPayload, LoginPayload, ProfileSetupPayload, SignupPayload } from '@/types/apis/auth.types';
+import {  CompanyPayload, ForgotPasswordPayload, LoginPayload, ProfileSetupPayload, SignupPayload } from '@/types/apis/auth.types';
 import { useDispatch, useSelector } from 'react-redux';
 
 export const useAuth = () => {
@@ -25,7 +25,7 @@ export const useAuth = () => {
     return dispatch(profileSetupThunk(payload)).unwrap();
   }
 
-  const companyProfileSetup = async (payload: Company) => {
+  const companyProfileSetup = async (payload: CompanyPayload) => {
     return dispatch(companyProfileSetupThunk(payload)).unwrap();
   }
 

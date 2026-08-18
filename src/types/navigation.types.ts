@@ -14,6 +14,8 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { CreateQuotePayload } from './apis/quote.types';
 import { InvoiceDetailsPayload, InvoiceItem } from './apis/invoice.types';
 import { Clients } from './apis/client.types';
+import { CompanyAddress } from './apis/auth.types';
+
 
 /* -------------------------------------------------------------------------- */
 /*                               PARAM LISTS                                  */
@@ -27,10 +29,20 @@ export type RootStackParamList = {
 
   ProfileScreen: {
     isEdit: boolean;
+    name?: string;
+    phone?: string | null;
+    url?: string | null;
   };
 
   BusinessScreen: {
     isEdit: boolean;
+    name?: string | undefined;
+    phone?: string | null;
+    color?: string;
+    profileImage?: string | null;
+    vatNumber?: string | null;
+    services?: null;
+    address?: CompanyAddress;
   };
 
   BusinessAddressScreen: {
@@ -58,19 +70,21 @@ export type RootStackParamList = {
 
   NewQuoteScreens:
     | {
-    quoteDetails?: CreateQuotePayload | null;
-    previewUrl?: string;
+        quoteDetails?: CreateQuotePayload | null;
+        previewUrl?: string;
       }
     | undefined;
 
   TemplatesScreen: undefined;
 
   TeamMembersScreen: undefined;
-  AddMemberScreen: | {
-    editId: number,
-    email: string,
-    name: string
-  } | undefined;
+  AddMemberScreen:
+    | {
+        editId: number;
+        email: string;
+        name: string;
+      }
+    | undefined;
   ChangePasswordScreen: undefined;
   QuoteAndInvoicesSettingScreen: undefined;
   BillingPreferencesScreen: undefined;
@@ -118,24 +132,26 @@ export type RootStackParamList = {
       }
     | undefined;
 
-  AddClientScreen: {clientDetails: Clients | null} | undefined;
+  AddClientScreen: { clientDetails: Clients | null } | undefined;
 
   ClientDetailScreen: {
     clientId: number;
   };
 
-  SelectQuoteScreen: {invoiceDetails: InvoiceDetailsPayload} | undefined;
+  SelectQuoteScreen: { invoiceDetails: InvoiceDetailsPayload } | undefined;
 
-  NewInvoiceScreens: {
-    invoiceDetails?: InvoiceDetailsPayload;
-    quoteId?: number
-  } | undefined;
+  NewInvoiceScreens:
+    | {
+        invoiceDetails?: InvoiceDetailsPayload;
+        quoteId?: number;
+      }
+    | undefined;
 
   InvoiceDetailsScreens: {
     invoiceId: number;
   };
   PaymentDetailsScreen: {
-    paymentId: number
+    paymentId: number;
   };
   RecordPaymentScreen: undefined;
 };

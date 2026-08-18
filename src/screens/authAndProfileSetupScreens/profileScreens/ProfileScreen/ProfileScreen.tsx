@@ -33,9 +33,14 @@ interface ProfileForm {
 
 const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) => {
   const [formData, setFormData] = useState<ProfileForm>({
-    name: '',
-    phone: '',
-    imageUri: null,
+    name: route.params.name ?? '',
+    phone: route.params.phone ?? '',
+    imageUri: route.params.url ?
+      {
+        uri: route.params.url,
+        type: 'image/jpeg',
+        fileName: 'profile.jpg',
+      } : null,
   });
   const [openOptions, setOpenOptions] = useState<boolean>(false);
 

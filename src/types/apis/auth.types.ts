@@ -12,21 +12,28 @@ export interface Address {
   country: string 
 }
 
+export interface CompanyAddress {
+  id: number;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  latitude: string | null;
+  longitude: string | null;
+  postcode: string;
+}
+
 export interface Company {
   id?: number;
   name: string;
   email?: string | null;
   phone_number: string;
-  logo: {
-    uri: string;
-    type: string;
-    fileName?: string;
-  } | null;
+  logo: string | null;
   brand_color: string;
   vat_number: string | null;
   currency?: string;
   is_company_name_show?: boolean;
-  address: string | undefined;
+  address: CompanyAddress | undefined;
   city?: string | null;
   country?: string | null;
   latitude?: string | null;
@@ -36,6 +43,22 @@ export interface Company {
   created_at?: string;
   updated_at?: string;
 } 
+
+export interface CompanyPayload {
+  name: string;
+  logo?: {
+    uri: string;
+    type: string;
+    fileName?: string;
+  } | null;
+  address?: string | null;
+  postcode?: string | null;
+  country?: string | null;
+  city?: string | null;
+  phone_number: string;
+  vat_number: string | null;
+  brand_color: string;
+}
 
 export interface User {
   id: number;

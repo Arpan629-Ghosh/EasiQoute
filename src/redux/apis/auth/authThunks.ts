@@ -1,8 +1,7 @@
 import { authServices } from '@/apis/services/auth.services';
 import { storage } from '@/storage/asyncStorage';
 import {
-  
-  Company,
+  CompanyPayload,
   ForgotPasswordPayload,
   LoginPayload,
   ProfileSetupPayload,
@@ -86,7 +85,7 @@ export const profileSetupThunk = createAsyncThunk(
 export const companyProfileSetupThunk = createAsyncThunk(
   '/api/company',
 
-  async (payload: Company, thunkAPI) => {
+  async (payload: CompanyPayload, thunkAPI) => {
     try {
       const response = await authServices.companyProfileSetup(payload);
       if (!response.result) {

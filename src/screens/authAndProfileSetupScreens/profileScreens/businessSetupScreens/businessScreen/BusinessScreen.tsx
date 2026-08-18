@@ -50,15 +50,26 @@ interface BusinessForm {
 
 const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>) => {
   const [form, setForm] = useState<BusinessForm>({
-    name: '',
-    phone: '',
-    color: '#00AAFF',
-    vatNumber: '',
+    name: route.params.name ?? '',
+    phone: `${"+44"}${route.params.phone}` || '',
+    color: route.params.color ?? '#00AAFF',
+    vatNumber: route.params.vatNumber ?? '',
     services: [],
-    address: null,
-    profileImage: null,
+    address: route.params.address ? {
+      address: route.params.address?.address,
+      city: route.params.address?.city,
+      country: route.params.address?.country,
+      postcode: route.params.address?.postcode
+    } : null,
+    profileImage: route.params.profileImage
+      ? {
+          uri: route.params.profileImage,
+          type: 'image/jpeg',
+          fileName: 'profile.jpg',
+        }
+      : null,
   });
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(Boolean(route.params?.vatNumber));
   const [open, setOpen] = useState(false);
   const [openOptions, setOpenOptions] = useState<boolean>(false);
   const phoneRef = useRef<ReactNativePhoneInput>(null);
@@ -192,6 +203,13 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
       profileImage: null,
     }));
   }, []);
+
+  
+
+  const handleToggle = useCallback(() => {
+    setEnabled(prev => !prev);
+  }, []);
+  
 
   // console.log(user)
 
@@ -328,10 +346,10 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
                 <InterTightRegular fsize={16} fcolor={theme.textPrimary}>
                   Are you VAT registered?
                 </InterTightRegular>
-                <CustomToggle value={enabled} onToggle={setEnabled} />
+                <CustomToggle value={enabled} onToggle={handleToggle} />
               </View>
 
-              {enabled && (
+              {(enabled) && (
                 <View style={styles.vatinpcontainer}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
                     VAT Number

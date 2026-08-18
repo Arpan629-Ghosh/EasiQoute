@@ -11,8 +11,8 @@ export const parseApiError = (error: unknown): string => {
       if (message) {
       return message;
     }
-    if (error.message === 'Network Error') {
-      return 'No internet connection';
+    if (!error.message) {
+      return 'Unable to connect server';
     }
     if (error.code === 'ECONNABORTED') {
       return 'Request timeout';

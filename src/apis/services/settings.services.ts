@@ -1,5 +1,5 @@
 import { apiClient } from '@/apis/axiosInstance';
-import { Company } from '@/types/apis/auth.types';
+import { Company, CompanyPayload } from '@/types/apis/auth.types';
 import { ApiResponse } from '@/types/apis/common.types';
 import { ENDPOINTS } from '../endPoints';
 import {
@@ -18,7 +18,7 @@ import {
 } from '@/types/apis/settings.types';
 
 export const settingsServices = {
-  companyProfileUpdate: async (payload: Company) => {
+  companyProfileUpdate: async (payload: CompanyPayload) => {
     const formData = new FormData();
     formData.append('_method', 'PUT');
     formData.append('name', payload.name);

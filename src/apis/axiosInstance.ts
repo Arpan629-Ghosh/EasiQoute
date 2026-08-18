@@ -1,17 +1,16 @@
 import { parseApiError } from '@/utils/errorHandler';
 import { storage } from '../storage/asyncStorage';
 import axios from 'axios';
-import { X_API_Key } from '@/constants/apis/xApiKey';
+import { API_BASE_URL, X_API_Key } from '@/constants/apis/sandBox';
 import { store } from '@/redux/store';
 import { clearAuth } from '@/redux/apis/auth/authSlice';
 import { resetToAuth } from '@/utils/navigationRef';
 
 export const apiClient = axios.create({
-  baseURL: 'https://sandbox.eaziquote.com',
+  baseURL: API_BASE_URL,
   timeout: 10000,
   headers: {
     Accept: 'application/json',
-    'Content-Type': 'multipart/form-data',
     'X-API-Key': X_API_Key,
   },
 });
@@ -20,8 +19,10 @@ apiClient.interceptors.request.use(
   async config => {
     const token = await storage.getAccessToken();
 
-    if(token)
+    if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+    }
+      
 
     return config;
   },

@@ -1,7 +1,7 @@
 import { apiClient } from '@/apis/axiosInstance';
 import {
   AuthPayload,
-  Company,
+  CompanyPayload,
   ForgotPasswordPayload,
   LoginPayload,
   ProfileSetupPayload,
@@ -26,7 +26,7 @@ export const authServices = {
       ENDPOINTS.LOGIN,
       formData,
     );
-    
+
     return response.data;
   },
 
@@ -89,7 +89,7 @@ export const authServices = {
     return response.data;
   },
 
-  companyProfileSetup: async (payload: Company) => {
+  companyProfileSetup: async (payload: CompanyPayload) => {
     const formData = new FormData();
     formData.append('name', payload.name);
     formData.append('phone', payload.phone_number);

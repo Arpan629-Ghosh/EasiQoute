@@ -1,5 +1,5 @@
 import { settingsServices } from '@/apis/services/settings.services';
-import { Company } from '@/types/apis/auth.types';
+import { CompanyPayload } from '@/types/apis/auth.types';
 import {
   ChangePassword,
   CreateCategories,
@@ -13,7 +13,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 export const updateProfileThunk = createAsyncThunk(
   '/api/company',
 
-  async (payload: Company, thunkAPI) => {
+  async (payload: CompanyPayload, thunkAPI) => {
     try {
       const response = await settingsServices.companyProfileUpdate(payload);
       if (!response.result) {

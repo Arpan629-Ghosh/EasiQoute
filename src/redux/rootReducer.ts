@@ -7,6 +7,7 @@ import quotesReducer from './apis/quotes/quotesSlice'
 import settingsReducer from './apis/settings/settingsSlice'
 import clientsReducer from './apis/client/clientSlice'
 import invoiceReducer from './apis/invoice/invoiceSlice'
+import languageReducer from './language/languageSlice'
 
 const rootReducer = combineReducers({
   theme: themeReducer,
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
   quotes: quotesReducer,
   settings: settingsReducer,
   clients: clientsReducer,
-  invoice: invoiceReducer
+  invoice: invoiceReducer,
+  language: languageReducer,
 });
 
 export default rootReducer;
