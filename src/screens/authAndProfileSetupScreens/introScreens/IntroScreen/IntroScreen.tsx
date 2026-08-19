@@ -14,6 +14,7 @@ import { OnboardingItem, useOnBoardingData } from '@/config/onBoardingData';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RootScreenProps } from '@/types/navigation.types';
+import { useTranslation } from 'react-i18next';
 
 const { width } = Dimensions.get('window');
 
@@ -21,6 +22,7 @@ const IntroScreen = ({ navigation }: RootScreenProps<'IntroScreen'>) => {
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const { theme, isDark } = useAppTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -118,7 +120,7 @@ const IntroScreen = ({ navigation }: RootScreenProps<'IntroScreen'>) => {
               <AppButton
                 onPress={handleNext}
                 borderc={theme.border}
-                bttnTxt="Skip"
+                bttnTxt={t('button.skip')}
                 borderwidth={1}
                 buttonWidth={165.5}
                 txtColor={theme.textPrimary}
@@ -127,7 +129,7 @@ const IntroScreen = ({ navigation }: RootScreenProps<'IntroScreen'>) => {
               <AppButton
                 onPress={handleNext}
                 bg={theme.primary}
-                bttnTxt="Next"
+                bttnTxt={t('button.next')}
                 buttonWidth={165.5}
                 txtColor={theme.primaryText}
               />
@@ -136,7 +138,7 @@ const IntroScreen = ({ navigation }: RootScreenProps<'IntroScreen'>) => {
             <AppButton
               bg={theme.primary}
               onPress={handleNavigation}
-              bttnTxt=" Let's Go"
+              bttnTxt={t('button.letGo')}
               buttonWidth={343}
               txtColor={theme.primaryText}
             />

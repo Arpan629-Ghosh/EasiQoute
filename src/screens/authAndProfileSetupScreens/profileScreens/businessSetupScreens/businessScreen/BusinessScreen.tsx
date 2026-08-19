@@ -28,6 +28,7 @@ import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { RootScreenProps } from '@/types/navigation.types';
+import { useTranslation } from 'react-i18next';
 
 interface BusinessForm {
   name: string;
@@ -50,18 +51,20 @@ interface BusinessForm {
 
 const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>) => {
   const [form, setForm] = useState<BusinessForm>({
-    name: route.params.name ?? '',
-    phone: `${"+44"}${route.params.phone}` || '',
-    color: route.params.color ?? '#00AAFF',
-    vatNumber: route.params.vatNumber ?? '',
+    name: route.params?.name ?? '',
+    phone: route.params?.phone ? `${'+44'}${route.params?.phone}` :  '',
+    color: route.params?.color ?? '#00AAFF',
+    vatNumber: route.params?.vatNumber ?? '',
     services: [],
-    address: route.params.address ? {
-      address: route.params.address?.address,
-      city: route.params.address?.city,
-      country: route.params.address?.country,
-      postcode: route.params.address?.postcode
-    } : null,
-    profileImage: route.params.profileImage
+    address: route.params?.address
+      ? {
+          address: route.params?.address?.address,
+          city: route.params?.address?.city,
+          country: route.params?.address?.country,
+          postcode: route.params?.address?.postcode,
+        }
+      : null,
+    profileImage: route.params?.profileImage
       ? {
           uri: route.params.profileImage,
           type: 'image/jpeg',
@@ -77,6 +80,7 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
   const {isEdit} = route.params || false
   const { theme, isDark } = useAppTheme();
   const { showToast } = useToast();
+  const { t } = useTranslation();
   const { companyProfileSetup, loading } = useAuth();
   const { updateCompanyProfile, settingLoading } = useSettings();
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -223,7 +227,11 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
           keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
         >
           <Header
-            txt={isEdit ? 'Business Information' : 'Business Profile Setup'}
+            txt={
+              isEdit
+                ? t('auth.businessProfile.edit')
+                : t('auth.businessProfile.header')
+            }
             borderBottomEnabled={true}
           />
           <ScrollView
@@ -252,7 +260,7 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
                   </TouchableOpacity>
                 </View>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                  Your logo will appear on quotes, invoices, and client emails.
+                  {t('auth.businessProfile.mssg')}
                 </InterTightRegular>
               </View>
               <View style={styles.colorpicker}>
@@ -272,13 +280,13 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
               <View style={styles.businessComponent}>
                 <View style={styles.businessInp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Business Name
+                    {t('inputs.businessName.label')}
                   </InterTightRegular>
 
                   <AppInput
                     value={form.name}
                     onChangeText={txt => updateField('name', txt)}
-                    placeholder="Enter business name"
+                    placeholder={t('inputs.businessName.placeholder')}
                     onSubmitEditing={() => phoneRef.current?.focus()}
                     keyboardType="name-phone-pad"
                     returnKeyType="next"
@@ -287,7 +295,7 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
 
                 <View style={styles.businessInp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Business Phone number
+                    {t('inputs.businessPno')}
                   </InterTightRegular>
                   <CountryPickerComponent
                     ref={phoneRef}
@@ -344,20 +352,20 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
             <View style={styles.vatContainer}>
               <View style={styles.toggleContainer}>
                 <InterTightRegular fsize={16} fcolor={theme.textPrimary}>
-                  Are you VAT registered?
+                  {t('auth.businessProfile.vatRegister')}
                 </InterTightRegular>
                 <CustomToggle value={enabled} onToggle={handleToggle} />
               </View>
 
-              {(enabled) && (
+              {enabled && (
                 <View style={styles.vatinpcontainer}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    VAT Number
+                    {t('inputs.vatNumber.label')}
                   </InterTightRegular>
                   <AppInput
                     value={form.vatNumber}
                     onChangeText={txt => updateField('vatNumber', txt)}
-                    placeholder="Enter vat number"
+                    placeholder={t('inputs.vatNumber.placeholder')}
                   />
                 </View>
               )}
@@ -381,7 +389,7 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
             <AppButton
               onPress={isEdit ? handleUpdateProfile : handleCompanyProfileSetup}
               bg={theme.primary}
-              bttnTxt={isEdit ? 'Update Info' : 'Continue'}
+              bttnTxt={isEdit ? t('auth.businessProfile.updateInfo') : t('button.continue')}
               showLoader={loading || settingLoading}
               gap={4}
               txtColor={theme.primaryText}

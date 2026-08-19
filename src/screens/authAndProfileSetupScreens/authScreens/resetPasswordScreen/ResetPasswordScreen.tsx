@@ -16,6 +16,7 @@ import Header from '@/components/header/Header';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
+import { useTranslation } from 'react-i18next';
 
 const ResetPasswordScreen = ({navigation} : RootScreenProps<'ResetPasswordScreen'>) => {
   const [input, setInput] = useState<string>('');
@@ -23,6 +24,7 @@ const ResetPasswordScreen = ({navigation} : RootScreenProps<'ResetPasswordScreen
   const { theme } = useAppTheme();
   const { forgotPassword, loading } = useAuth();
   const { showToast } = useToast();
+  const { t } = useTranslation();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const handleInput = (txt: string) => {
@@ -66,25 +68,24 @@ const ResetPasswordScreen = ({navigation} : RootScreenProps<'ResetPasswordScreen
                     fcolor={theme.textPrimary}
                     textAlign="left"
                   >
-                    Forgot Password?
+                    {t('auth.forgotPassword.title')}
                   </InterTightSemiBold>
 
                   <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
-                    No worries! Just enter your email, and we’ll help you reset
-                    your password.
+                    {t('auth.forgotPassword.mssg')}
                   </InterTightRegular>
                 </View>
 
                 <View style={styles.inpbttnView}>
                   <View style={styles.input}>
                     <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                      Email
+                      {t('inputs.email.label')}
                     </InterTightRegular>
                     <AppInput
                       ref={emailRef}
                       returnKeyType="next"
-                      placeholder="Enter your email"
-                      autoCapitalize='none'
+                      placeholder={t('inputs.email.placeholder')} 
+                      autoCapitalize="none"
                       value={input}
                       onChangeText={(txt: string) => handleInput(txt)}
                       keyboardType="email-address"
@@ -92,7 +93,7 @@ const ResetPasswordScreen = ({navigation} : RootScreenProps<'ResetPasswordScreen
                   </View>
                   <AppButton
                     bg={theme.primary}
-                    bttnTxt="  Send Now"
+                    bttnTxt={t('button.sendNow')}
                     txtColor={theme.primaryText}
                     showLoader={loading}
                     gap={4}

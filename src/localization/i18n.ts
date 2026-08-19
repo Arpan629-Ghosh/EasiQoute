@@ -1,10 +1,10 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import en from './locales/en';
-import hi from './locales/hi';
-import bn from './locales/bn';
-import gu from './locales/gu';
+import en from './locales/en.json'
+import bn from './locales/bn.json'
+import hi from './locales/hi.json'
+import gu from './locales/gu.json'
 
 i18n.use(initReactI18next).init({
   compatibilityJSON: 'v4',

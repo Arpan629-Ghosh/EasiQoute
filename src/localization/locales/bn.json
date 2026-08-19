@@ -1,0 +1,194 @@
+{
+  "common": {
+    "auth": {
+      "footerMssg": "চালিয়ে যাওয়ার মাধ্যমে, আপনি আমাদের",
+      "tos": "পরিষেবার শর্তাবলীতে",
+      "and": "এবং",
+      "privacy": "গোপনীয়তা নীতিতে সম্মত হচ্ছেন"
+    },
+    "home": "হোম",
+    "quote": "কোট",
+    "invoices": "ইনভয়েস",
+    "clients": "ক্লায়েন্ট",
+    "payments": "পেমেন্ট",
+    "settings": "সেটিংস"
+  },
+  "header": {
+    "teamMembers": "টিম সদস্য",
+    "paymentInfo": "পেমেন্টের তথ্য",
+    "addMembers": "সদস্য যোগ করুন",
+    "editMembers": "সদস্য সম্পাদনা করুন",
+    "billingPreferences": "বিলিং পছন্দসমূহ"
+  },
+  "inputs": {
+    "email": {
+      "label": "ইমেল",
+      "placeholder": "আপনার ইমেল লিখুন"
+    },
+    "password": {
+      "label": "পাসওয়ার্ড",
+      "placeholder": "পাসওয়ার্ড লিখুন"
+    },
+    "name": {
+      "label": "নাম",
+      "placeholder": "আপনার নাম লিখুন"
+    },
+    "phone": {
+      "label": "ফোন নম্বর",
+      "placeholder": "ফোন নম্বর লিখুন"
+    },
+    "businessName": {
+      "label": "ব্যবসার নাম",
+      "placeholder": "ব্যবসার নাম লিখুন"
+    },
+    "vatNumber": {
+      "label": "VAT নম্বর",
+      "placeholder": "VAT নম্বর লিখুন"
+    },
+    "businessPno": "ব্যবসার ফোন নম্বর",
+    "search": {
+      "placeholder": "পোস্টকোড অনুসন্ধান করুন",
+      "tmSearchPlaceholder": "'টিম সদস্য' অনুসন্ধান করুন"
+    },
+    "streetAddress": {
+      "label": "রাস্তার ঠিকানা",
+      "placeholder": "রাস্তার ঠিকানা লিখুন"
+    },
+    "city": {
+      "label": "শহর",
+      "placeholder": "শহরের নাম লিখুন"
+    },
+    "postcode": {
+      "label": "পোস্টকোড",
+      "placeholder": "পোস্টকোড লিখুন"
+    },
+    "country": {
+      "label": "দেশ",
+      "placeholder": "দেশের নাম লিখুন"
+    },
+    "paymentLink": {
+      "name": "পেমেন্ট লিঙ্ক",
+      "label": "PayPal, Stripe, অথবা অন্যান্য"
+    },
+    "bankInfo": {
+      "bankName": "ব্যাঙ্কের নাম",
+      "accountName": "অ্যাকাউন্টের নাম",
+      "accountNumber": "অ্যাকাউন্ট নম্বর",
+      "sortCode": "সোর্ট কোড"
+    },
+    "billing": {
+      "defaultVatRate": "ডিফল্ট VAT হার (%)",
+      "quoteExpiry": "কোটের মেয়াদ (দিন)",
+      "pamentTerms": "পেমেন্টের শর্তাবলি (দিন)"
+    }
+  },
+  "button": {
+    "login": "লগ ইন",
+    "createAccount": "অ্যাকাউন্ট তৈরি করুন",
+    "sendNow": "এখনই পাঠান",
+    "skip": "এড়িয়ে যান",
+    "next": "পরবর্তী",
+    "letGo": "চলুন শুরু করি!",
+    "continue": "চালিয়ে যান",
+    "addMembers": "সদস্য যোগ করুন",
+    "updateMembers": "সদস্য আপডেট করুন",
+    "saveChanges": "পরিবর্তনগুলি সংরক্ষণ করুন"
+  },
+  "auth": {
+    "login": {
+      "welcomeBack": "আবারও স্বাগতম",
+      "loginMssg": "সহজে আপনার কোট এবং ইনভয়েস পরিচালনা করতে লগ ইন করুন।",
+      "forgotPassword": "পাসওয়ার্ড ভুলে গেছেন?",
+      "reset": "রিসেট করুন",
+      "accntMssg": "অ্যাকাউন্ট নেই? "
+    },
+    "signup": {
+      "getStart": "চলুন শুরু করা যাক",
+      "startMssg": "সাইন আপ করুন এবং আপনার কোট ও ইনভয়েস তৈরির প্রক্রিয়া সহজ করুন।",
+      "accntMssg": "ইতিমধ্যেই অ্যাকাউন্ট আছে?"
+    },
+    "forgotPassword": {
+      "title": "পাসওয়ার্ড ভুলে গেছেন?",
+      "mssg": "কোনো চিন্তা নেই! শুধু আপনার ইমেল লিখুন, আমরা আপনাকে পাসওয়ার্ড রিসেট করতে সাহায্য করব।"
+    },
+    "onBoarding1": {
+      "sy": "আপনার ",
+      "clients": "ক্লায়েন্টদের ",
+      "quotes": "কোট ",
+      "invoice": "ইনভয়েস"
+    },
+    "onBoarding2": {
+      "everything": "সবকিছু ",
+      "mssg1": "কাজটি জিততে আপনার যা প্রয়োজন",
+      "mssg2": "কাজটি এবং ",
+      "getPaid": "পারিশ্রমিক পাওয়া"
+    },
+    "profile": {
+      "header": "প্রোফাইল সেটআপ",
+      "edit": "প্রোফাইল সম্পাদনা করুন"
+    },
+
+    "businessProfile": {
+      "header": "ব্যবসায়িক প্রোফাইল সেটআপ",
+      "edit": "ব্যবসায়িক তথ্য",
+      "mssg": "আপনার লোগো কোট, ইনভয়েস এবং ক্লায়েন্টদের ইমেলে প্রদর্শিত হবে।",
+      "brandColour": "ব্র্যান্ডের রং",
+      "vatRegister": "আপনি কি VAT নিবন্ধিত?",
+      "service": "আপনি কী কাজ করেন?",
+      "addressHeader": "ব্যবসার ঠিকানা",
+      "updateInfo": "তথ্য আপডেট করুন"
+    }
+  },
+
+  "profile": {
+    "profile": "প্রোফাইল",
+    "name": "নাম",
+    "phone": "ফোন নম্বর",
+    "company": "কোম্পানি"
+  },
+  "settings": {
+    "title": "সেটিংস",
+    "profile": {
+      "businessInformation": "ব্যবসায়িক তথ্য",
+      "editProfile": "প্রোফাইল সম্পাদনা করুন"
+    },
+    "personalisation": {
+      "title": "ব্যক্তিগতকরণ",
+      "subscriptionBilling": "সাবস্ক্রিপশন ও বিলিং",
+      "teamMembers": "টিম সদস্য",
+      "appearance": "চেহারা",
+      "language": "ভাষা"
+    },
+    "paymentsInvoicing": {
+      "title": "পেমেন্ট ও ইনভয়েসিং",
+      "connectStripe": "Stripe সংযুক্ত করুন",
+      "paymentInfo": "পেমেন্টের তথ্য",
+      "billingPreferences": "বিলিং পছন্দসমূহ",
+      "quoteInvoiceSettings": "কোট ও ইনভয়েস সেটিংস"
+    },
+    "inventorySetup": {
+      "title": "ইনভেন্টরি সেটআপ",
+      "categories": "ক্যাটাগরি",
+      "subcategories": "সাবক্যাটাগরি",
+      "items": "আইটেম"
+    },
+    "notifications": {
+      "title": "বিজ্ঞপ্তি",
+      "pushNotifications": "পুশ বিজ্ঞপ্তি",
+      "emailUpdates": "ইমেল আপডেট"
+    },
+    "supportLegal": {
+      "title": "সহায়তা ও আইনি",
+      "vendorTutorials": "বিক্রেতা টিউটোরিয়াল",
+      "contactSupport": "সহায়তার সাথে যোগাযোগ করুন",
+      "termsOfService": "পরিষেবার শর্তাবলি",
+      "privacyPolicy": "গোপনীয়তা নীতি"
+    },
+    "accountSettings": {
+      "title": "অ্যাকাউন্ট সেটিংস",
+      "changePassword": "পাসওয়ার্ড পরিবর্তন করুন",
+      "deleteAccount": "অ্যাকাউন্ট মুছে দিন",
+      "logout": "লগ আউট"
+    }
+  }
+}

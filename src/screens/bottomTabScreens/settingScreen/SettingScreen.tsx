@@ -101,6 +101,11 @@ const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
     setOpenLogoutModal(false);
   }, []);
 
+  console.log("language: ", language);
+  console.log("languageMode: ", languageMode);
+  console.log("isDeviceLanguage: ", isDeviceLanguage);
+
+
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       {isDark ? (
@@ -152,7 +157,7 @@ const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
                   onPress={navigateToProfile}
                 >
                   <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
-                    Edit Profile
+                    {t('settings.profile.editProfile')}
                   </InterTightMedium>
                   <Image source={icons.ic_arrowicn} style={styles.icn} />
                 </TouchableOpacity>
@@ -162,28 +167,34 @@ const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
             <TouchableOpacity onPress={navigateToBusiness}>
               <SettingInfoRow
                 icon={icons.ic_business}
-                txt="Business Information"
+                txt={t('settings.profile.businessInformation')}
               />
             </TouchableOpacity>
           </Card>
 
           <Card style={styles.card}>
-            <CardHeader title="Personalisation" />
+            <CardHeader title={t('settings.personalisation.title')} />
             <View style={styles.borderLine} />
 
             <SettingInfoRow
               icon={icons.ic_subscription}
-              txt="Subscription & Billing"
+              txt={t('settings.personalisation.subscriptionBilling')}
             />
             <View style={styles.borderLine} />
 
             <TouchableOpacity onPress={navigateToTeamMember}>
-              <SettingInfoRow icon={icons.ic_teams} txt="Team Members" />
+              <SettingInfoRow
+                icon={icons.ic_teams}
+                txt={t('settings.personalisation.teamMembers')}
+              />
             </TouchableOpacity>
 
             <View style={styles.borderLine} />
             <TouchableOpacity onPress={() => setOpen(true)}>
-              <SettingInfoRow icon={icons.ic_appearance} txt="Appearance">
+              <SettingInfoRow
+                icon={icons.ic_appearance}
+                txt={t('settings.personalisation.appearance')}
+              >
                 <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
                   {mode}
                 </InterTightMedium>
@@ -191,33 +202,47 @@ const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
             </TouchableOpacity>
             <View style={styles.borderLine} />
             <TouchableOpacity onPress={() => setOpenLangSheet(true)}>
-              <SettingInfoRow icon={icons.ic_appearance} txt="Language">
+              <SettingInfoRow
+                icon={icons.ic_appearance}
+                txt={t('settings.personalisation.language')}
+              >
                 <InterTightMedium fsize={14} fcolor={theme.textSecondary}>
-                  {languageMode}
+                  {languageMode === 'Device'
+                    ? 'Device'
+                    : languageMode === 'bn'
+                    ? 'বাংলা'
+                    : languageMode === 'en'
+                    ? 'English'
+                    : languageMode === 'hi'
+                    ? 'हिन्दी'
+                    : ' ગુજરાતી'}
                 </InterTightMedium>
               </SettingInfoRow>
             </TouchableOpacity>
           </Card>
           <Card style={styles.card}>
-            <CardHeader title="Payments & Invoicing" />
+            <CardHeader title={t('settings.paymentsInvoicing.title')} />
             <View style={styles.borderLine} />
             <SettingInfoRow
               icon={icons.ic_stripe}
-              txt="Connect Stripe"
+              txt={t('settings.paymentsInvoicing.connectStripe')}
               arrowEnabled={false}
             >
               <CustomToggle value={enabledStripe} onToggle={setEnabledStripe} />
             </SettingInfoRow>
             <View style={styles.borderLine} />
             <TouchableOpacity onPress={navigateToPaymentInfo}>
-              <SettingInfoRow icon={icons.ic_pinfo} txt="Payment Info" />
+              <SettingInfoRow
+                icon={icons.ic_pinfo}
+                txt={t('settings.paymentsInvoicing.paymentInfo')}
+              />
             </TouchableOpacity>
 
             <View style={styles.borderLine} />
             <TouchableOpacity onPress={navigateToBillingPreferences}>
               <SettingInfoRow
                 icon={icons.ic_billing}
-                txt="Billing Preferences"
+                txt={t('settings.paymentsInvoicing.billingPreferences')}
               />
             </TouchableOpacity>
 
@@ -225,35 +250,41 @@ const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
             <TouchableOpacity onPress={navigateToQIScreen}>
               <SettingInfoRow
                 icon={icons.ic_qtinv}
-                txt="Quote & Invoice Settings"
+                txt={t('settings.paymentsInvoicing.quoteInvoiceSettings')}
               />
             </TouchableOpacity>
           </Card>
           <Card style={styles.card}>
-            <CardHeader title="Inventory Setup" />
+            <CardHeader title={t('settings.inventorySetup.title')} />
             <View style={styles.borderLine} />
             <TouchableOpacity onPress={navigateToCategories}>
-              <SettingInfoRow icon={icons.ic_categories} txt="Categories" />
+              <SettingInfoRow
+                icon={icons.ic_categories}
+                txt={t('settings.inventorySetup.categories')}
+              />
             </TouchableOpacity>
             <View style={styles.borderLine} />
             <TouchableOpacity onPress={navigateToSubCategory}>
               <SettingInfoRow
                 icon={icons.ic_subcategories}
-                txt="Subcategories"
+                txt={t('settings.inventorySetup.subcategories')}
               />
             </TouchableOpacity>
 
             <View style={styles.borderLine} />
             <TouchableOpacity onPress={navigateToItems}>
-              <SettingInfoRow icon={icons.ic_itemsicn} txt="Items" />
+              <SettingInfoRow
+                icon={icons.ic_itemsicn}
+                txt={t('settings.inventorySetup.items')}
+              />
             </TouchableOpacity>
           </Card>
           <Card style={styles.card}>
-            <CardHeader title="Notifications" />
+            <CardHeader title={t('settings.notifications.title')} />
             <View style={styles.borderLine} />
             <SettingInfoRow
               icon={icons.ic_push}
-              txt="Push Notifications"
+              txt={t('settings.notifications.pushNotifications')}
               arrowEnabled={false}
             >
               <CustomToggle
@@ -264,35 +295,56 @@ const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
             <View style={styles.borderLine} />
             <SettingInfoRow
               icon={icons.ic_emailicn}
-              txt="Email Updates"
+              txt={t('settings.notifications.emailUpdates')}
               arrowEnabled={false}
             >
               <CustomToggle value={emailUpdate} onToggle={setEmailUpdate} />
             </SettingInfoRow>
           </Card>
           <Card style={styles.card}>
-            <CardHeader title="Support & Legal" />
+            <CardHeader title={t('settings.supportLegal.title')} />
             <View style={styles.borderLine} />
-            <SettingInfoRow icon={icons.ic_video} txt="Video Tutorials" />
+            <SettingInfoRow
+              icon={icons.ic_video}
+              txt={t('settings.supportLegal.vendorTutorials')}
+            />
             <View style={styles.borderLine} />
-            <SettingInfoRow icon={icons.ic_contacticn} txt="Contact Support" />
+            <SettingInfoRow
+              icon={icons.ic_contacticn}
+              txt={t('settings.supportLegal.contactSupport')}
+            />
             <View style={styles.borderLine} />
-            <SettingInfoRow icon={icons.ic_tos} txt="Terms of Service" />
+            <SettingInfoRow
+              icon={icons.ic_tos}
+              txt={t('settings.supportLegal.termsOfService')}
+            />
             <View style={styles.borderLine} />
-            <SettingInfoRow icon={icons.ic_pp} txt="Privacy Policy" />
+            <SettingInfoRow
+              icon={icons.ic_pp}
+              txt={t('settings.supportLegal.privacyPolicy')}
+            />
           </Card>
 
           <Card style={styles.card}>
-            <CardHeader title="Account Settings" />
+            <CardHeader title={t('settings.accountSettings.title')} />
             <View style={styles.borderLine} />
             <TouchableOpacity onPress={navigateToChangePassword}>
-              <SettingInfoRow icon={icons.ic_cp} txt="Change Password" />
+              <SettingInfoRow
+                icon={icons.ic_cp}
+                txt={t('settings.accountSettings.changePassword')}
+              />
             </TouchableOpacity>
             <View style={styles.borderLine} />
-            <SettingInfoRow icon={icons.ic_deleteicn} txt="Delete Account" />
+            <SettingInfoRow
+              icon={icons.ic_deleteicn}
+              txt={t('settings.accountSettings.deleteAccount')}
+            />
             <View style={styles.borderLine} />
             <TouchableOpacity onPress={() => setOpenLogoutModal(true)}>
-              <SettingInfoRow icon={icons.ic_logout} txt="Logout" />
+              <SettingInfoRow
+                icon={icons.ic_logout}
+                txt={t('settings.accountSettings.logout')}
+              />
             </TouchableOpacity>
           </Card>
         </View>

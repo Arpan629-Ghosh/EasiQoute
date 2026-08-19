@@ -1,0 +1,193 @@
+{
+  "common": {
+    "auth": {
+      "footerMssg": "ચાલુ રાખીને, તમે અમારી",
+      "tos": "સેવાની શરતો",
+      "and": "અને",
+      "privacy": "ગોપનીયતા નીતિ સાથે સંમત થાઓ છો"
+    },
+    "home": "હોમ",
+    "quote": "ક્વોટ",
+    "invoices": "ઇન્વૉઇસ",
+    "clients": "ક્લાયન્ટ્સ",
+    "payments": "ચુકવણીઓ",
+    "settings": "સેટિંગ્સ"
+  },
+  "header": {
+    "teamMembers": "ટીમ સભ્યો",
+    "paymentInfo": "ચુકવણીની માહિતી",
+    "addMembers": "સભ્યો ઉમેરો",
+    "editMembers": "સભ્યો સંપાદિત કરો",
+    "billingPreferences": "બિલિંગ પસંદગીઓ"
+  },
+  "inputs": {
+    "email": {
+      "label": "ઇમેઇલ",
+      "placeholder": "તમારો ઇમેઇલ દાખલ કરો"
+    },
+    "password": {
+      "label": "પાસવર્ડ",
+      "placeholder": "પાસવર્ડ દાખલ કરો"
+    },
+    "name": {
+      "label": "નામ",
+      "placeholder": "તમારું નામ દાખલ કરો"
+    },
+    "phone": {
+      "label": "ફોન નંબર",
+      "placeholder": "ફોન નંબર દાખલ કરો"
+    },
+    "businessName": {
+      "label": "વ્યવસાયનું નામ",
+      "placeholder": "વ્યવસાયનું નામ દાખલ કરો"
+    },
+    "vatNumber": {
+      "label": "VAT નંબર",
+      "placeholder": "VAT નંબર દાખલ કરો"
+    },
+    "businessPno": "વ્યવસાયનો ફોન નંબર",
+    "search": {
+      "placeholder": "પોસ્ટકોડ શોધો",
+      "tmSearchPlaceholder": "'ટીમ સભ્યો' શોધો"
+    },
+    "streetAddress": {
+      "label": "શેરીનું સરનામું",
+      "placeholder": "શેરીનું સરનામું દાખલ કરો"
+    },
+    "city": {
+      "label": "શહેર",
+      "placeholder": "શહેરનું નામ દાખલ કરો"
+    },
+    "postcode": {
+      "label": "પોસ્ટકોડ",
+      "placeholder": "પોસ્ટકોડ દાખલ કરો"
+    },
+    "country": {
+      "label": "દેશ",
+      "placeholder": "દેશનું નામ દાખલ કરો"
+    },
+    "paymentLink": {
+      "name": "પેમેન્ટ લિંક",
+      "label": "PayPal, Stripe અથવા અન્ય"
+    },
+    "bankInfo": {
+      "bankName": "બેંકનું નામ",
+      "accountName": "એકાઉન્ટનું નામ",
+      "accountNumber": "એકાઉન્ટ નંબર",
+      "sortCode": "સોર્ટ કોડ"
+    },
+    "billing": {
+      "defaultVatRate": "ડિફૉલ્ટ VAT દર (%)",
+      "quoteExpiry": "ક્વોટની સમયસીમા (દિવસ)",
+      "pamentTerms": "ચુકવણીની શરતો (દિવસ)"
+    }
+  },
+  "button": {
+    "login": "લૉગિન",
+    "createAccount": "એકાઉન્ટ બનાવો",
+    "sendNow": "હમણાં મોકલો",
+    "skip": "છોડી દો",
+    "next": "આગળ",
+    "letGo": "ચાલો શરૂ કરીએ!",
+    "continue": "ચાલુ રાખો",
+    "addMembers": "સભ્યો ઉમેરો",
+    "updateMembers": "સભ્યો અપડેટ કરો",
+    "saveChanges": "ફેરફારો સાચવો"
+  },
+  "auth": {
+    "login": {
+      "welcomeBack": "ફરીથી સ્વાગત છે",
+      "loginMssg": "તમારા કોટ અને ઇન્વૉઇસ સરળતાથી મેનેજ કરવા માટે લૉગિન કરો.",
+      "forgotPassword": "પાસવર્ડ ભૂલી ગયા છો?",
+      "reset": "રીસેટ કરો",
+      "accntMssg": "એકાઉન્ટ નથી? "
+    },
+    "signup": {
+      "getStart": "ચાલો શરૂઆત કરીએ",
+      "startMssg": "સાઇન અપ કરો અને તમારી કોટિંગ અને ઇન્વૉઇસિંગ પ્રક્રિયાને સરળ બનાવો.",
+      "accntMssg": "પહેલેથી જ એકાઉન્ટ છે?"
+    },
+    "forgotPassword": {
+      "title": "પાસવર્ડ ભૂલી ગયા છો?",
+      "mssg": "કોઈ ચિંતા નહીં! ફક્ત તમારો ઇમેઇલ દાખલ કરો અને અમે તમારો પાસવર્ડ રીસેટ કરવામાં તમારી મદદ કરીશું."
+    },
+    "onBoarding1": {
+      "sy": "તમારા ",
+      "clients": "ક્લાયન્ટ્સ",
+      "quotes": "ક્વોટ્સ ",
+      "invoice": "ઇન્વૉઇસ"
+    },
+    "onBoarding2": {
+      "everything": "બધી વસ્તુઓ ",
+      "mssg1": "কામ જીતવા માટે તમને જે જોઈએ",
+      "mssg2": "કામ અને",
+      "getPaid": "ચુકવણી મેળવવા માટે જરૂરી"
+    },
+    "profile": {
+      "header": "પ્રોફાઇલ સેટઅપ",
+      "edit": "પ્રોફાઇલ સંપાદિત કરો"
+    },
+    "businessProfile": {
+      "header": "વ્યવસાયિક પ્રોફાઇલ સેટઅપ",
+      "edit": "વ્યવસાયિક માહિતી",
+      "mssg": "તમારો લોગો ક્વોટ્સ, ઇન્વૉઇસ અને ક્લાયન્ટના ઇમેઇલમાં દેખાશે.",
+      "brandColour": "બ્રાન્ડનો રંગ",
+      "vatRegister": "શું તમે VAT માટે નોંધાયેલા છો?",
+      "service": "તમે શું કામ કરો છો?",
+      "addressHeader": "વ્યવસાયનું સરનામું",
+      "updateInfo": "માહિતી અપડેટ કરો"
+    }
+  },
+
+  "profile": {
+    "profile": "પ્રોફાઇલ",
+    "name": "નામ",
+    "phone": "ફોન નંબર",
+    "company": "કંપની"
+  },
+  "settings": {
+    "title": "સેટિંગ્સ",
+    "profile": {
+      "businessInformation": "વ્યવસાયની માહિતી",
+      "editProfile": "પ્રોફાઇલ સંપાદિત કરો"
+    },
+    "personalisation": {
+      "title": "વ્યક્તિગતકરણ",
+      "subscriptionBilling": "સબ્સ્ક્રિપ્શન અને બિલિંગ",
+      "teamMembers": "ટીમ સભ્યો",
+      "appearance": "દેખાવ",
+      "language": "ભાષા"
+    },
+    "paymentsInvoicing": {
+      "title": "ચુકવણી અને ઇન્વૉઇસિંગ",
+      "connectStripe": "Stripe કનેક્ટ કરો",
+      "paymentInfo": "ચુકવણીની માહિતી",
+      "billingPreferences": "બિલિંગ પસંદગીઓ",
+      "quoteInvoiceSettings": "ક્વોટ અને ઇન્વૉઇસ સેટિંગ્સ"
+    },
+    "inventorySetup": {
+      "title": "ઇન્વેન્ટરી સેટઅપ",
+      "categories": "શ્રેણીઓ",
+      "subcategories": "ઉપ-શ્રેણીઓ",
+      "items": "આઇટમ્સ"
+    },
+    "notifications": {
+      "title": "સૂચનાઓ",
+      "pushNotifications": "પુશ સૂચનાઓ",
+      "emailUpdates": "ઇમેઇલ અપડેટ્સ"
+    },
+    "supportLegal": {
+      "title": "સહાય અને કાનૂની",
+      "vendorTutorials": "વિક્રેતા ટ્યુટોરિયલ્સ",
+      "contactSupport": "સહાયનો સંપર્ક કરો",
+      "termsOfService": "સેવાની શરતો",
+      "privacyPolicy": "ગોપનીયતા નીતિ"
+    },
+    "accountSettings": {
+      "title": "એકાઉન્ટ સેટિંગ્સ",
+      "changePassword": "પાસવર્ડ બદલો",
+      "deleteAccount": "એકાઉન્ટ કાઢી નાખો",
+      "logout": "લૉગ આઉટ"
+    }
+  }
+}

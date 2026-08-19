@@ -1,0 +1,198 @@
+{
+  "common": {
+    "auth": {
+      "footerMssg": "जारी रखकर, आप हमारी",
+      "tos": "सेवा की शर्तों",
+      "and": "और",
+      "privacy": "गोपनीयता नीति से सहमत होते हैं"
+    },
+    "home": "होम",
+    "quote": "कोट",
+    "invoices": "चालान",
+    "clients": "क्लाइंट्स",
+    "payments": "भुगतान",
+    "settings": "सेटिंग्स"
+  },
+  "header": {
+    "teamMembers": "टीम सदस्य",
+    "paymentInfo": "भुगतान की जानकारी",
+    "addMembers": "सदस्य जोड़ें",
+    "editMembers": "सदस्य संपादित करें",
+    "billingPreferences": "बिलिंग प्राथमिकताएँ"
+  },
+  "inputs": {
+    "email": {
+      "label": "ईमेल",
+      "placeholder": "अपना ईमेल दर्ज करें"
+    },
+    "password": {
+      "label": "पासवर्ड",
+      "placeholder": "पासवर्ड दर्ज करें"
+    },
+    "name": {
+      "label": "नाम",
+      "placeholder": "अपना नाम दर्ज करें"
+    },
+    "phone": {
+      "label": "फ़ोन नंबर",
+      "placeholder": "फ़ोन नंबर दर्ज करें"
+    },
+    "businessName": {
+      "label": "व्यवसाय का नाम",
+      "placeholder": "व्यवसाय का नाम दर्ज करें"
+    },
+    "vatNumber": {
+      "label": "VAT नंबर",
+      "placeholder": "VAT नंबर दर्ज करें"
+    },
+    "businessPno": "व्यवसाय का फ़ोन नंबर",
+    "search": {
+      "placeholder": "पोस्टकोड खोजें",
+
+      "tmSearchPlaceholder": "'टीम सदस्यों' को खोजें"
+    },
+    "streetAddress": {
+      "label": "सड़क का पता",
+      "placeholder": "सड़क का पता दर्ज करें"
+    },
+    "city": {
+      "label": "शहर",
+      "placeholder": "शहर का नाम दर्ज करें"
+    },
+    "postcode": {
+      "label": "पोस्टकोड",
+      "placeholder": "पोस्टकोड दर्ज करें"
+    },
+    "country": {
+      "label": "देश",
+      "placeholder": "देश का नाम दर्ज करें"
+    },
+    "paymentLink": {
+      "name": "भुगतान लिंक",
+      "label": "PayPal, Stripe या अन्य"
+    },
+    "bankInfo": {
+      "bankName": "बैंक का नाम",
+      "accountName": "खाता धारक का नाम",
+      "accountNumber": "खाता नंबर",
+      "sortCode": "सॉर्ट कोड"
+    },
+    "billing": {
+      "defaultVatRate": "डिफ़ॉल्ट VAT दर (%)",
+      "quoteExpiry": "कोट की समय-सीमा (दिन)",
+      "pamentTerms": "भुगतान की शर्तें (दिन)"
+    }
+  },
+
+  "button": {
+    "login": "लॉग इन",
+    "createAccount": "खाता बनाएँ",
+    "sendNow": "अभी भेजें",
+    "skip": "छोड़ें",
+    "next": "अगला",
+    "letGo": "चलिए शुरू करते हैं!",
+    "continue": "जारी रखें",
+    "addMembers": "सदस्य जोड़ें",
+    "updateMembers": "सदस्य अपडेट करें",
+    "saveChanges": "परिवर्तन सहेजें"
+  },
+  "auth": {
+    "login": {
+      "welcomeBack": "वापसी पर स्वागत है",
+      "loginMssg": "अपने कोट और चालान आसानी से प्रबंधित करने के लिए लॉग इन करें।",
+      "forgotPassword": "पासवर्ड भूल गए?",
+      "reset": "रीसेट करें",
+      "accntMssg": "क्या आपका खाता नहीं है? "
+    },
+    "signup": {
+      "getStart": "चलिए शुरू करते हैं",
+      "startMssg": "साइन अप करें और अपनी कोटिंग और चालान प्रक्रिया को आसान बनाएँ।",
+      "accntMssg": "क्या आपके पास पहले से खाता है?"
+    },
+    "forgotPassword": {
+      "title": "पासवर्ड भूल गए?",
+      "mssg": "कोई चिंता नहीं! बस अपना ईमेल दर्ज करें और हम आपका पासवर्ड रीसेट करने में आपकी मदद करेंगे।"
+    },
+    "onBoarding1": {
+      "sy": "अपने ",
+      "clients": "क्लाइंट्स",
+      "quotes": "कोट्स ",
+      "invoice": "चालान"
+    },
+    "onBoarding2": {
+      "everything": "वह सब कुछ",
+      "mssg1": "काम जीतने के लिए आपको चाहिए ",
+      "mssg2": "काम और",
+
+      "getPaid": "भुगतान पाने के लिए आपको चाहिए"
+    },
+    "profile": {
+      "header": "प्रोफ़ाइल सेटअप",
+      "edit": "प्रोफ़ाइल संपादित करें"
+    },
+    "businessProfile": {
+      "header": "व्यवसायिक प्रोफ़ाइल सेटअप",
+      "edit": "व्यवसाय की जानकारी",
+      "mssg": "आपका लोगो कोट्स, चालान और क्लाइंट के ईमेल में दिखाई देगा।",
+      "brandColour": "ब्रांड का रंग",
+      "vatRegister": "क्या आप VAT के लिए पंजीकृत हैं?",
+      "service": "आप क्या काम करते हैं?",
+      "addressHeader": "व्यवसाय का पता",
+      "upload": "मेरी अपनी सूची अपलोड करें",
+
+      "updateInfo": "जानकारी अपडेट करें"
+    }
+  },
+
+  "profile": {
+    "profile": "प्रोफ़ाइल",
+    "name": "नाम",
+    "phone": "फ़ोन नंबर",
+    "company": "कंपनी"
+  },
+  "settings": {
+    "title": "सेटिंग्स",
+    "profile": {
+      "businessInformation": "व्यवसाय की जानकारी",
+      "editProfile": "प्रोफ़ाइल संपादित करें"
+    },
+    "personalisation": {
+      "title": "व्यक्तिकरण",
+      "subscriptionBilling": "सब्सक्रिप्शन और बिलिंग",
+      "teamMembers": "टीम सदस्य",
+      "appearance": "दिखावट",
+      "language": "भाषा"
+    },
+    "paymentsInvoicing": {
+      "title": "भुगतान और चालान",
+      "connectStripe": "Stripe कनेक्ट करें",
+      "paymentInfo": "भुगतान की जानकारी",
+      "billingPreferences": "बिलिंग प्राथमिकताएँ",
+      "quoteInvoiceSettings": "कोट और चालान सेटिंग्स"
+    },
+    "inventorySetup": {
+      "title": "इन्वेंटरी सेटअप",
+      "categories": "श्रेणियाँ",
+      "subcategories": "उप-श्रेणियाँ",
+      "items": "आइटम"
+    },
+    "notifications": {
+      "title": "सूचनाएँ",
+      "pushNotifications": "पुश सूचनाएँ",
+      "emailUpdates": "ईमेल अपडेट"
+    },
+    "supportLegal": {
+      "title": "सहायता और कानूनी",
+      "vendorTutorials": "विक्रेता ट्यूटोरियल",
+      "contactSupport": "सहायता से संपर्क करें",
+      "termsOfService": "सेवा की शर्तें",
+      "privacyPolicy": "गोपनीयता नीति"
+    },
+    "accountSettings": {
+      "title": "खाता सेटिंग्स",
+      "changePassword": "पासवर्ड बदलें",
+      "deleteAccount": "खाता हटाएँ",
+      "logout": "लॉग आउट"
+    }
+  }
+}

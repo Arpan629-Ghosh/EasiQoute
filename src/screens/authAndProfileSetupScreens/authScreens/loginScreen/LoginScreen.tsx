@@ -22,6 +22,8 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
+import { useTranslation } from 'react-i18next';
+import { useAppLanguage } from '@/hooks/useAppLanguage';
 
 interface LoginForm {
   email: string;
@@ -42,6 +44,8 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
   const { theme } = useAppTheme();
   const { login, loading } = useAuth();
   const { showToast } = useToast();
+  const { t } = useTranslation();
+  const { languageMode } = useAppLanguage();
   const pushToken = useSelector((state: RootState) => state.notification.fcmToken)
   const styles = useMemo(() => createStyles(theme), [theme]);
   const handleInput = (name: string, value: string) => {
@@ -91,7 +95,7 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
       showToast(String(error), 'error')
     }
   }
-
+  console.log(languageMode)
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
@@ -111,24 +115,24 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
                   fcolor={theme.textPrimary}
                   textAlign="left"
                 >
-                  Welcome Back 👋
+                  {t('auth.login.welcomeBack')} 👋
                 </InterTightSemiBold>
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
-                  Log in to manage your quotes and invoices with ease.
+                  {t('auth.login.loginMssg')}
                 </InterTightRegular>
               </View>
 
               <View style={styles.formView}>
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Email
+                    {t('inputs.email.label')}
                   </InterTightRegular>
                   <AppInput
                     ref={emailRef}
                     onSubmitEditing={() => passwordRef.current?.focus()}
                     returnKeyType="next"
-                    placeholder="Enter your email"
-                    autoCapitalize='none'
+                    placeholder={t('inputs.email.placeholder')}
+                    autoCapitalize="none"
                     value={formData.email}
                     onChangeText={(txt: string) => handleInput('email', txt)}
                     keyboardType="email-address"
@@ -137,12 +141,12 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
 
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Password
+                    {t('inputs.password.label')}
                   </InterTightRegular>
                   <View style={styles.inputicon}>
                     <AppInput
                       ref={passwordRef}
-                      placeholder="Enter password"
+                      placeholder={t('inputs.password.placeholder')}
                       value={formData.password}
                       onChangeText={(txt: string) =>
                         handleInput('password', txt)
@@ -159,18 +163,18 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
                 <AppButton
                   onPress={handleLogin}
                   bg={theme.primary}
-                  bttnTxt="Login"
+                  bttnTxt={t('button.login')}
                   showLoader={loading}
                   gap={4}
                   txtColor={theme.primaryText}
                 />
                 <View style={styles.forgotpasswordView}>
                   <InterTightRegular fsize={16} fcolor={theme.textSecondary}>
-                    Forgot password?{' '}
+                    {t('auth.login.forgotPassword')}{' '}
                   </InterTightRegular>
                   <TouchableOpacity onPress={resetPassword}>
                     <InterTightMedium fsize={16} fcolor={theme.textMuted}>
-                      Reset
+                      {t('auth.login.reset')}
                     </InterTightMedium>
                   </TouchableOpacity>
                 </View>
@@ -182,31 +186,31 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
             <View style={styles.footerTxtView}>
               <View style={styles.createaccountView}>
                 <InterTightRegular fsize={16} fcolor={theme.textSecondary}>
-                  Don't have an account?{' '}
+                  {t('auth.login.accntMssg')}
                 </InterTightRegular>
                 <TouchableOpacity onPress={createAccount}>
                   <InterTightMedium fsize={16} fcolor={theme.textMuted}>
-                    Create Account
+                    {t('button.createAccount')}
                   </InterTightMedium>
                 </TouchableOpacity>
               </View>
               <View style={styles.borderLine} />
               <View style={styles.createaccountView}>
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
-                  By continuing, you agree to our{' '}
+                  {t('common.auth.footerMssg')}
                 </InterTightRegular>
                 <TouchableOpacity>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Terms of Service{' '}
+                    {t('common.auth.tos')}{' '}
                   </InterTightRegular>
                 </TouchableOpacity>
 
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
-                  and{' '}
+                  {t('common.auth.and')}{' '}
                 </InterTightRegular>
                 <TouchableOpacity>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Privacy Policy
+                   {t('common.auth.privacy')}
                   </InterTightRegular>
                 </TouchableOpacity>
               </View>

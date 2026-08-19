@@ -21,6 +21,7 @@ import { MemberDetails } from '@/types/apis/settings.types';
 import { useDebounce } from '@/hooks/useDebounce';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
+import { useTranslation } from 'react-i18next';
 
 const TeamMembersScreen = ({
   navigation,
@@ -34,6 +35,7 @@ const TeamMembersScreen = ({
 
   const debouncedSearch = useDebounce(search);
   const { theme } = useAppTheme();
+  const { t } = useTranslation();
   const {
     loadingTeamMembers,
     teamMembers,
@@ -128,7 +130,7 @@ const TeamMembersScreen = ({
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Header txt="Team Members" borderBottomEnabled={true}>
+        <Header txt={t('header.teamMembers')} borderBottomEnabled={true}>
           <View style={styles.input}>
             <View style={styles.inputicon}>
               <Image source={icons.ic_whitesearch} style={styles.searchic} />
@@ -136,7 +138,7 @@ const TeamMembersScreen = ({
                 inputWidth={325}
                 bg={theme.searchInput}
                 style={styles.noBorderInput}
-                placeholder="Search ‘Team Members’"
+                placeholder={t('inputs.search.tmSearchPlaceholder')}
                 value={search}
                 onChangeText={setSearch}
               />
@@ -182,7 +184,7 @@ const TeamMembersScreen = ({
           <View style={styles.footerContainer}>
             <AppButton
               bg={theme.primary}
-              bttnTxt="Add Member"
+              bttnTxt={t('button.addMembers')}
               txtColor={theme.primaryText}
               gap={8}
               onPress={navigateToAddMember}

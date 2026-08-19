@@ -20,6 +20,7 @@ const Tab = createBottomTabNavigator<MainTabParamList>();
 const MainTabs = () => {
 
   const insets = useSafeAreaInsets();
+  
 
   return (
     <Tab.Navigator

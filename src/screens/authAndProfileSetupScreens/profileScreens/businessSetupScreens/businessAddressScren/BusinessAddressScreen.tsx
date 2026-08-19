@@ -23,6 +23,7 @@ import { useToast } from '@/hooks/useToast';
 import { SearchAddressPayload } from '@/types/apis/auth.types';
 import AddressList from '@/components/addressList/AddressList';
 import { RootScreenProps } from '@/types/navigation.types';
+import { useTranslation } from 'react-i18next';
 
 export interface FormData {
   address: string;
@@ -62,6 +63,7 @@ const BusinessAddressScreen = ({
   const { searchAddress } = useAuth();
 
   const { showToast } = useToast();
+  const { t } = useTranslation();
 
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -132,7 +134,10 @@ const BusinessAddressScreen = ({
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
         style={styles.keyboardContainer}
       >
-        <Header txt="Business Address" borderBottomEnabled={true} />
+        <Header
+          txt={t('auth.businessProfile.addressHeader')}
+          borderBottomEnabled={true}
+        />
 
         <View style={styles.formContainer}>
           <View style={styles.inputContainer}>
@@ -142,7 +147,7 @@ const BusinessAddressScreen = ({
 
                 <AppInput
                   style={styles.noBorderInput}
-                  placeholder="Search postcode"
+                  placeholder={t('inputs.search.placeholder')}
                   returnKeyType="search"
                   value={searchAddressInput}
                   onChangeText={setSearchAddressInput}
@@ -164,12 +169,12 @@ const BusinessAddressScreen = ({
               <View style={styles.inputContainer}>
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Street Address
+                    {t('inputs.streetAddress.label')}
                   </InterTightRegular>
 
                   <AppInput
                     ref={addressRef}
-                    placeholder="Enter street address"
+                    placeholder={t('inputs.streetAddress.placeholder')}
                     value={formData.address}
                     onChangeText={txt => handleInput('address', txt)}
                     onSubmitEditing={() => cityRef.current?.focus()}
@@ -179,12 +184,12 @@ const BusinessAddressScreen = ({
 
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    City
+                    {t('inputs.city.label')}
                   </InterTightRegular>
 
                   <AppInput
                     ref={cityRef}
-                    placeholder="Enter city"
+                    placeholder={t('inputs.city.placeholder')}
                     value={formData.city}
                     onChangeText={txt => handleInput('city', txt)}
                     onSubmitEditing={() => postRef.current?.focus()}
@@ -194,12 +199,12 @@ const BusinessAddressScreen = ({
 
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Postcode
+                    {t('inputs.postcode.label')}
                   </InterTightRegular>
 
                   <AppInput
                     ref={postRef}
-                    placeholder="Enter postcode"
+                    placeholder={t('inputs.postcode.placeholder')}
                     value={formData.postcode}
                     onChangeText={txt => handleInput('postcode', txt)}
                     onSubmitEditing={() => countryRef.current?.focus()}
@@ -209,12 +214,12 @@ const BusinessAddressScreen = ({
 
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Country
+                    {t('inputs.country.label')}
                   </InterTightRegular>
 
                   <AppInput
                     ref={countryRef}
-                    placeholder="Enter country"
+                    placeholder={t('inputs.country.placeholder')}
                     value={formData.country}
                     onChangeText={txt => handleInput('country', txt)}
                     returnKeyType="done"
@@ -230,7 +235,7 @@ const BusinessAddressScreen = ({
         <View style={styles.footerContainer}>
           <AppButton
             bg={theme.primary}
-            bttnTxt="Continue"
+            bttnTxt={t('button.continue')}
             txtColor={theme.primaryText}
             onPress={handleSave}
           />

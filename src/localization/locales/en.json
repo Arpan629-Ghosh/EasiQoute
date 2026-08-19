@@ -1,0 +1,203 @@
+{
+  "common": {
+    "auth": {
+      "footerMssg": "By continuing, you agree to our",
+      "tos": "Terms of Service",
+      "and": "and",
+      "privacy": "Privacy Policy",
+      "home": "Home",
+      "quote": "Quote",
+      "invoices": "Invoices",
+      "clients": "Clients",
+      "payments": "Payments",
+      "settings": "Settings"
+    }
+  },
+  "header": {
+    "teamMembers":"Team Members",
+    "paymentInfo":"Payment Info",
+    "addMembers": "Add Members",
+    "editMembers": "Edit Members",
+    "billingPreferences":"Billing Preferences"
+  },
+
+  "inputs": {
+    "email": {
+      "label": "Email",
+      "placeholder": "Enter your email"
+    },
+    "password": {
+      "label": "Password",
+      "placeholder": "Enter password"
+    },
+    "name": {
+      "label": "Name",
+      "placeholder": "Enter your name"
+    },
+    "phone": {
+      "label": "Phone",
+      "placeholder": "Enter phone no."
+    },
+    "businessName": {
+      "label": "Business Name",
+      "placeholder": "Enter business name"
+    },
+    "vatNumber": {
+      "label": "Vat Number",
+      "placeholder": "Enter vat number"
+    },
+    "businessPno": "Business Phone Number",
+    "search": {
+      "placeholder": "Search postcode",
+      "tmSearchPlaceholder": "Search ‘Team Members’"
+    },
+    "streetAddress": {
+      "label": "Street Address",
+      "placeholder": "Enter street address"
+    },
+    "city": {
+      "label": "City",
+      "placeholder": "Enter city"
+    },
+    "postcode": {
+      "label": "Postcode",
+      "placeholder": "Enter postcode"
+    },
+    "country": {
+      "label": "Country",
+      "placeholder": "Enter country"
+    },
+
+    "paymentLink": {
+      "name": "Pament Link",
+      "label": "PayPal, Stripe, or other"
+    },
+
+    "bankInfo": {
+      "bankName": "Bank Name",
+      "accountName": "Account Name",
+      "accountNumber": "Account Number",
+      "sortCode": "Sort Code"
+    },
+    "billing": {
+      "defaultVatRate": "Default VAT Rate (%)",
+      "quoteExpiry": "Quote Expiry (Days)",
+      "pamentTerms": "Payment Terms (Days)"
+    }
+
+
+
+  },
+
+  "button": {
+    "login": "Login",
+    "createAccount": "Create Account",
+    "sendNow": "Send Now",
+    "skip": "Skip",
+    "next": "Next",
+    "letGo": "Let’s Go!",
+    "continue": "Continue",
+    "addMembers": "Add Members",
+    "updateMembers": "Update Members",
+    "saveChanges": "Save Changes"
+  },
+
+  "auth": {
+    "login": {
+      "welcomeBack" : "Welcome Back",
+      "loginMssg" : "Log in to manage your quotes and invoices with ease.",
+      "forgotPassword": "Forgot Password?",
+      "reset": "Reset",
+      "accntMssg": "Don’t have an account? "
+      
+    },
+    "signup": {
+      "getStart": "Let’s Get Started",
+      "startMssg": "Sign up and simplify your quoting and invoicing process.",
+      "accntMssg": "Already have an account?"
+      
+    },
+    "forgotPassword": {
+      "title": "Forgot Password?",
+      "mssg": "No worries! Just enter your email, and we’ll help you reset your password."
+    },
+    "onBoarding1": {
+      "sy": "Streamline Your ",
+      "clients": "Clients",
+      "quotes": "Quotes ",
+      "invoice": "Invoice"
+    },
+    "onBoarding2": {
+      "everything": "Everything ",
+      "mssg1": "You Need to Win ",
+      "mssg2": "the Job and",
+      "getPaid": "Get Paid"
+    },
+    "profile": {
+      "header": "Profile Setup",
+      "edit": "Edit Profile"
+    },
+    "businessProfile": {
+      "header": "Business Profile Setup",
+      "edit": "Business Information",
+      "mssg": "Your logo will appear on quotes, invoices, and client emails.",
+      "brandColour": "Brand Colour",
+      "vatRegister": "Are you VAT registered?",
+      "service": "What do you do?",
+      "updateInfo": "Update Info",
+      "addressHeader": "Business Address"
+    }
+  },
+
+  "profile": {
+    "profile": "Profile",
+    "name": "Name",
+    "phone": "Phone Number",
+    "company": "Company"
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": {
+      "businessInformation": "Business Information",
+      "editProfile": "Edit Profile"
+    },
+    "personalisation": {
+      "title": "Personalisation",
+      "subscriptionBilling": "Subscription & Billing",
+      "teamMembers": "Team Members",
+      "appearance": "Appearance",
+      "language": "Language"
+    },
+    "paymentsInvoicing": {
+      "title": "Payments & Invoicing",
+      "connectStripe": "Connect Stripe",
+      "paymentInfo": "Payment Info",
+      "billingPreferences": "Billing Preferences",
+      "quoteInvoiceSettings": "Quote & Invoice Settings"
+    },
+    "inventorySetup": {
+      "title": "Inventory Setup",
+      "categories": "Categories",
+      "subcategories": "Subcategories",
+      "items": "Items"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "pushNotifications": "Push Notifications",
+      "emailUpdates": "Email Updates"
+    },
+    "supportLegal": {
+      "title": "Support & Legal",
+      "vendorTutorials": "Vendor Tutorials",
+      "contactSupport": "Contact Support",
+      "termsOfService": "Terms of Service",
+      "privacyPolicy": "Privacy Policy"
+    },
+    "accountSettings": {
+      "title": "Account Settings",
+      "changePassword": "Change Password",
+      "deleteAccount": "Delete Account",
+      "logout": "Logout"
+    }
+  }
+}

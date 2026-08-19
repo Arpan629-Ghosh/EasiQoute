@@ -14,6 +14,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
+import { useTranslation } from 'react-i18next';
 
 
 
@@ -34,7 +35,8 @@ const RegisterScreen = ({navigation} : RootScreenProps<'RegisterScreen'>) => {
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const { signup, loading } = useAuth();
-  const {showToast} = useToast()
+  const { showToast } = useToast();
+  const { t } = useTranslation();
   const pushToken = useSelector((state: RootState) => state.notification.fcmToken)
   
     const handleInput = (name: string, value: string) => {
@@ -83,24 +85,24 @@ const RegisterScreen = ({navigation} : RootScreenProps<'RegisterScreen'>) => {
                   fcolor={theme.textPrimary}
                   textAlign="left"
                 >
-                  Let’s Get Started 🚀
+                  {t('auth.signup.getStart')} 🚀
                 </InterTightSemiBold>
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
-                  Sign up and simplify your quoting and invoicing process.
+                  {t('auth.signup.startMssg')}
                 </InterTightRegular>
               </View>
 
               <View style={styles.formView}>
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Email
+                    {t('inputs.email.label')}
                   </InterTightRegular>
                   <AppInput
                     ref={emailRef}
                     onSubmitEditing={() => passwordRef.current?.focus()}
                     returnKeyType="next"
-                    placeholder="Enter your email"
-                    autoCapitalize='none'
+                    placeholder={t('inputs.email.placeholder')}
+                    autoCapitalize="none"
                     value={formData.email}
                     onChangeText={(txt: string) => handleInput('email', txt)}
                     keyboardType="email-address"
@@ -109,12 +111,12 @@ const RegisterScreen = ({navigation} : RootScreenProps<'RegisterScreen'>) => {
 
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Password
+                    {t('inputs.password.label')}
                   </InterTightRegular>
                   <View style={styles.inputicon}>
                     <AppInput
                       ref={passwordRef}
-                      placeholder="Enter password"
+                      placeholder={t('inputs.password.placeholder')}
                       value={formData.password}
                       onChangeText={(txt: string) =>
                         handleInput('password', txt)
@@ -130,7 +132,7 @@ const RegisterScreen = ({navigation} : RootScreenProps<'RegisterScreen'>) => {
                 </View>
                 <AppButton
                   bg={theme.primary}
-                  bttnTxt="Create Account"
+                  bttnTxt={t('button.createAccount')}
                   txtColor={theme.primaryText}
                   showLoader={loading}
                   gap={4}
@@ -144,31 +146,31 @@ const RegisterScreen = ({navigation} : RootScreenProps<'RegisterScreen'>) => {
             <View style={styles.footerTxtView}>
               <View style={styles.createaccountView}>
                 <InterTightRegular fsize={16} fcolor={theme.textSecondary}>
-                  Already have an account?{' '}
+                  {t('auth.signup.accntMssg')}
                 </InterTightRegular>
                 <TouchableOpacity onPress={goLoginScreen}>
                   <InterTightMedium fsize={16} fcolor={theme.textMuted}>
-                    Login
+                    {t('button.login')}
                   </InterTightMedium>
                 </TouchableOpacity>
               </View>
               <View style={styles.borderLine} />
               <View style={styles.createaccountView}>
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
-                  By continuing, you agree to our{' '}
+                  {t('common.auth.footerMssg')}
                 </InterTightRegular>
                 <TouchableOpacity>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Terms of Service{' '}
+                    {t('common.auth.tos')}{' '}
                   </InterTightRegular>
                 </TouchableOpacity>
 
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
-                  and{' '}
+                  {t('common.auth.and')}{' '}
                 </InterTightRegular>
                 <TouchableOpacity>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Privacy Policy
+                    {t('common.auth.privacy')}
                   </InterTightRegular>
                 </TouchableOpacity>
               </View>

@@ -18,6 +18,7 @@ import { useSettings } from '@/hooks/apis/useSettings';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
 import { CreateTeamMemberPayload } from '@/types/apis/settings.types';
+import { useTranslation } from 'react-i18next';
 
 interface AddMemberForm {
   name: string;
@@ -38,7 +39,8 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
 
   const { theme } = useAppTheme();
   const { showToast } = useToast();
-  const {createTeamMembers, settingLoading} = useSettings()
+  const { createTeamMembers, settingLoading } = useSettings();
+  const { t } = useTranslation();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const editId = route.params?.editId;
   const isEdit = !!editId
@@ -71,7 +73,7 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
   return (
     <View style={styles.container}>
       <Header
-        txt={editId ? 'Edit Members' : 'Add Members'}
+        txt={editId ? t('header.editMembers') : t('header.addMembers')}
         borderBottomEnabled={true}
       />
 
@@ -89,12 +91,12 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
             <View style={styles.formContainer}>
               <View style={styles.inp}>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                  Name
+                  {t('inputs.name.label')}
                 </InterTightRegular>
 
                 <AppInput
                   ref={nameRef}
-                  placeholder="Enter name"
+                  placeholder={t('inputs.name.placeholder')}
                   keyboardType="name-phone-pad"
                   returnKeyType="next"
                   textContentType="name"
@@ -106,16 +108,16 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
 
               <View style={styles.inp}>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                  Email
+                  {t('inputs.email.label')}
                 </InterTightRegular>
 
                 <AppInput
                   ref={emailRef}
-                  placeholder="Enter Email"
+                  placeholder={t('inputs.email.placeholder')}
                   keyboardType="email-address"
                   textContentType="emailAddress"
                   returnKeyType="next"
-                  autoCapitalize='none'
+                  autoCapitalize="none"
                   value={addMemberForm.email}
                   onChangeText={txt => handleInput('email', txt)}
                   onSubmitEditing={() => passwordRef.current?.focus()}
@@ -124,12 +126,12 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
 
               <View style={styles.inp}>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                  Password
+                  {t('inputs.password.label')}
                 </InterTightRegular>
 
                 <AppInput
                   ref={passwordRef}
-                  placeholder="Enter Password"
+                  placeholder={t('inputs.password.placeholder')}
                   textContentType="password"
                   secureTextEntry={true}
                   returnKeyType="done"
@@ -145,7 +147,7 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
           <View style={styles.footerContainer}>
             <AppButton
               bg={theme.primary}
-              bttnTxt={editId ? 'Update Member' : 'Add Member'}
+              bttnTxt={editId ? t('button.updateMembers') : t('button.addMembers')}
               txtColor={theme.primaryText}
               showLoader={settingLoading}
               onPress={handleAddMember}

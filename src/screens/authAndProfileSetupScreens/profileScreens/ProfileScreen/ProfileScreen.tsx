@@ -20,6 +20,7 @@ import ImagePicker from '@/components/imagePicker/ImagePicker';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
+import { useTranslation } from 'react-i18next';
 
 interface ProfileForm {
   name: string;
@@ -51,6 +52,7 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
   const { theme, isDark } = useAppTheme();
   const { profileSetup, loading, user } = useAuth();
   const { showToast } = useToast();
+  const { t } = useTranslation();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const handleInput = (name: string, value: string) => {
@@ -132,7 +134,7 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
           <View style={styles.mainContainer}>
             <Header
               borderBottomEnabled={true}
-              txt={isEdit ? 'Edit Profile' : 'Profile Setup'}
+              txt={isEdit ? t('auth.profile.edit') : t('auth.profile.header')}
             />
             <ScrollView
               keyboardShouldPersistTaps="handled"
@@ -160,13 +162,13 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
                 <View style={styles.inputContainer}>
                   <View style={styles.inp}>
                     <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                      Name
+                      {t('inputs.name.label')}
                     </InterTightRegular>
                     <AppInput
                       ref={nameRef}
                       onSubmitEditing={() => phRef.current?.focus()}
                       returnKeyType="next"
-                      placeholder="Enter your name"
+                      placeholder={t('inputs.name.placeholder')}
                       value={formData.name}
                       onChangeText={(txt: string) => handleInput('name', txt)}
                       keyboardType="name-phone-pad"
@@ -174,12 +176,12 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
                   </View>
                   <View style={styles.inp}>
                     <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                      Phone
+                      {t('inputs.phone.label')}
                     </InterTightRegular>
                     <AppInput
                       ref={phRef}
                       returnKeyType="next"
-                      placeholder="Enter phone no."
+                      placeholder={t('inputs.phone.placeholder')}
                       value={formData.phone}
                       onChangeText={(txt: string) => handleInput('phone', txt)}
                       keyboardType="numeric"
