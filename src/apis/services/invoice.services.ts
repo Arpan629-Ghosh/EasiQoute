@@ -34,6 +34,11 @@ export const invoiceServices = {
     const response = await apiClient.post<ApiResponse<InvoicePayload>>(
       ENDPOINTS.INVOICE,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
 
     return response.data;
@@ -101,6 +106,11 @@ export const invoiceServices = {
     const response = await apiClient.post<ApiResponse<InvoicePayload>>(
       `${ENDPOINTS.INVOICE}/${payload.invoice_id}`,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
 
     return response.data;

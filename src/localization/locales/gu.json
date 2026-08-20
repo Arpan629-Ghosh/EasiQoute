@@ -18,7 +18,8 @@
     "paymentInfo": "ચુકવણીની માહિતી",
     "addMembers": "સભ્યો ઉમેરો",
     "editMembers": "સભ્યો સંપાદિત કરો",
-    "billingPreferences": "બિલિંગ પસંદગીઓ"
+    "billingPreferences": "બિલિંગ પસંદગીઓ",
+    "quote&invoice": "ક્વોટ અને ઇન્વૉઇસ સેટિંગ્સ"
   },
   "inputs": {
     "email": {
@@ -48,7 +49,10 @@
     "businessPno": "વ્યવસાયનો ફોન નંબર",
     "search": {
       "placeholder": "પોસ્ટકોડ શોધો",
-      "tmSearchPlaceholder": "'ટીમ સભ્યો' શોધો"
+      "tmSearchPlaceholder": "'ટીમ સભ્યો' શોધો",
+      "categories": "‘કૅટેગરીઝ’ શોધો",
+      "subcategories": "‘સબકૅટેગરીઝ’ શોધો",
+      "items": "‘આઇટમ્સ’ શોધો"
     },
     "streetAddress": {
       "label": "શેરીનું સરનામું",
@@ -80,6 +84,18 @@
       "defaultVatRate": "ડિફૉલ્ટ VAT દર (%)",
       "quoteExpiry": "ક્વોટની સમયસીમા (દિવસ)",
       "pamentTerms": "ચુકવણીની શરતો (દિવસ)"
+    },
+    "termsAndCondition": {
+      "label": "નિયમો અને શરતો",
+      "placeholder": "ક્વોટ અને ઇન્વૉઇસ માટે ડિફૉલ્ટ શરતો લખો"
+    },
+    "footerMssg": {
+      "label": "ફૂટર સંદેશ",
+      "placeholder": "સમાપન સંદેશ ઉમેરો"
+    },
+    "signature": {
+      "name": "સહી",
+      "addSignature": "સહી ઉમેરો"
     }
   },
   "button": {
@@ -92,7 +108,12 @@
     "continue": "ચાલુ રાખો",
     "addMembers": "સભ્યો ઉમેરો",
     "updateMembers": "સભ્યો અપડેટ કરો",
-    "saveChanges": "ફેરફારો સાચવો"
+    "saveChanges": "ફેરફારો સાચવો",
+    "clear": "સાફ કરો",
+    "save": "સાચવો",
+    "newCategory": "નવી કૅટેગરી",
+    "subCategory": "નવી સબકૅટેગરી",
+    "newItems": "નવી આઇટમ"
   },
   "auth": {
     "login": {

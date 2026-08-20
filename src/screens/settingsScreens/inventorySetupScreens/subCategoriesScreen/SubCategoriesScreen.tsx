@@ -27,11 +27,13 @@ import { SubCategoriesPayload } from '@/types/apis/settings.types';
 import { RootScreenProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
+import { useTranslation } from 'react-i18next';
 
 const SubCategoriesScreen = ({
   navigation,
 }: RootScreenProps<'SubCategoriesScreen'>) => {
   const { theme } = useAppTheme();
+  const { t } = useTranslation();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const insets = useSafeAreaInsets();
   const {
@@ -137,7 +139,10 @@ const SubCategoriesScreen = ({
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       <View style={styles.header}>
-        <Header txt="Subcategories" borderBottomEnabled />
+        <Header
+          txt={t('settings.inventorySetup.subcategories')}
+          borderBottomEnabled
+        />
 
         <View style={styles.inpContainer}>
           <View style={styles.inputicon}>
@@ -145,7 +150,7 @@ const SubCategoriesScreen = ({
 
             <AppInput
               style={styles.noBorderInput}
-              placeholder="Search 'Subcategories'"
+              placeholder={t('inputs.search.subcategories')}
               value={search}
               onChangeText={setSearch}
             />
@@ -174,14 +179,13 @@ const SubCategoriesScreen = ({
         onEndReachedThreshold={0.2}
         ListFooterComponent={renderFooter}
         ListEmptyComponent={renderEmpty}
-
       />
 
       <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
         <View style={styles.footerContainer}>
           <AppButton
             bg={theme.primary}
-            bttnTxt="New Subcategory"
+            bttnTxt={t('button.subCategory')}
             txtColor={theme.primaryText}
             gap={8}
             onPress={() => navigation.navigate('NewSubCategoryScreen')}

@@ -28,10 +28,12 @@ import { CreateCategoriesPayload } from '@/types/apis/settings.types';
 import { RootScreenProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
+import { useTranslation } from 'react-i18next';
 
 const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) => {
   const [paginationLoading, setPaginationLoading] = useState(false);
   const { theme } = useAppTheme();
+  const { t } = useTranslation();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const insets = useSafeAreaInsets();
 
@@ -141,14 +143,17 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       <View style={styles.header}>
-        <Header txt="Categories" borderBottomEnabled />
+        <Header
+          txt={t('settings.inventorySetup.categories')}
+          borderBottomEnabled
+        />
 
         <View style={styles.inpContainer}>
           <View style={styles.inputicon}>
             <Image source={icons.ic_search} style={styles.searchic} />
             <AppInput
               style={styles.noBorderInput}
-              placeholder="Search ‘Categories’"
+              placeholder={t('inputs.search.categories')}
               returnKeyType="search"
               value={search}
               onChangeText={setSearch}
@@ -201,7 +206,7 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
         <View style={styles.footerContainer}>
           <AppButton
             bg={theme.primary}
-            bttnTxt="New Category"
+            bttnTxt={t('button.newCategory')}
             txtColor={theme.primaryText}
             gap={8}
             onPress={navigateToNewCategory}

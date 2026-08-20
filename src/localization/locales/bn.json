@@ -18,7 +18,8 @@
     "paymentInfo": "পেমেন্টের তথ্য",
     "addMembers": "সদস্য যোগ করুন",
     "editMembers": "সদস্য সম্পাদনা করুন",
-    "billingPreferences": "বিলিং পছন্দসমূহ"
+    "billingPreferences": "বিলিং পছন্দসমূহ",
+    "quote&invoice": "কোট ও ইনভয়েস সেটিংস"
   },
   "inputs": {
     "email": {
@@ -48,7 +49,10 @@
     "businessPno": "ব্যবসার ফোন নম্বর",
     "search": {
       "placeholder": "পোস্টকোড অনুসন্ধান করুন",
-      "tmSearchPlaceholder": "'টিম সদস্য' অনুসন্ধান করুন"
+      "tmSearchPlaceholder": "'টিম সদস্য' অনুসন্ধান করুন",
+      "categories": "‘ক্যাটাগরি’ অনুসন্ধান করুন",
+      "subcategories": "‘সাবক্যাটাগরি’ অনুসন্ধান করুন",
+      "items": "‘আইটেম’ অনুসন্ধান করুন"
     },
     "streetAddress": {
       "label": "রাস্তার ঠিকানা",
@@ -80,6 +84,18 @@
       "defaultVatRate": "ডিফল্ট VAT হার (%)",
       "quoteExpiry": "কোটের মেয়াদ (দিন)",
       "pamentTerms": "পেমেন্টের শর্তাবলি (দিন)"
+    },
+    "termsAndCondition": {
+      "label": "শর্তাবলি",
+      "placeholder": "কোট এবং ইনভয়েসের জন্য ডিফল্ট শর্তাবলি লিখুন"
+    },
+    "footerMssg": {
+      "label": "ফুটার বার্তা",
+      "placeholder": "একটি সমাপ্তি বার্তা যোগ করুন"
+    },
+    "signature": {
+      "name": "স্বাক্ষর",
+      "addSignature": "স্বাক্ষর যোগ করুন"
     }
   },
   "button": {
@@ -92,7 +108,12 @@
     "continue": "চালিয়ে যান",
     "addMembers": "সদস্য যোগ করুন",
     "updateMembers": "সদস্য আপডেট করুন",
-    "saveChanges": "পরিবর্তনগুলি সংরক্ষণ করুন"
+    "saveChanges": "পরিবর্তনগুলি সংরক্ষণ করুন",
+    "clear": "পরিষ্কার করুন",
+    "save": "সংরক্ষণ করুন",
+    "newCategory": "নতুন ক্যাটাগরি",
+    "subCategory": "নতুন সাবক্যাটাগরি",
+    "newItems": "নতুন আইটেম"
   },
   "auth": {
     "login": {

@@ -9,14 +9,16 @@ import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import AppInput from '@/components/appInput/AppInput';
 import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 const PaymentInfoScreen = () => {
   const { theme } = useAppTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
     const styles = useMemo(() => createStyles(theme), [theme])
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
-      <Header txt="Payment Info" borderBottomEnabled={true} />
+      <Header txt={t('header.paymentInfo')} borderBottomEnabled={true} />
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         <KeyboardAvoidingView
           style={styles.keyboard}
@@ -31,11 +33,11 @@ const PaymentInfoScreen = () => {
             <View style={styles.content}>
               <View style={styles.header}>
                 <InterTightMedium fsize={16} fcolor={theme.textPrimary}>
-                  Payment Link
+                  {t('inputs.paymentLink.name')}
                 </InterTightMedium>
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    PayPal, Stripe, or other
+                    {t('inputs.paymentLink.label')}
                   </InterTightRegular>
                   <AppInput placeholder="sarah.johnson@paypal.com" />
                 </View>
@@ -46,25 +48,25 @@ const PaymentInfoScreen = () => {
                 </InterTightMedium>
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Bank Name
+                    {t('inputs.bankInfo.bankName')}
                   </InterTightRegular>
                   <AppInput placeholder="Barclays UK" />
                 </View>
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Account Name
+                    {t('inputs.bankInfo.accountName')}
                   </InterTightRegular>
                   <AppInput placeholder="Alpha Renovates Pvt. Ltd." />
                 </View>
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Account Number
+                    {t('inputs.bankInfo.accountNumber')}
                   </InterTightRegular>
                   <AppInput placeholder="65301942" />
                 </View>
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Sort Code
+                    {t('inputs.bankInfo.sortCode')}
                   </InterTightRegular>
                   <AppInput placeholder="20-14-60" />
                 </View>
@@ -76,7 +78,7 @@ const PaymentInfoScreen = () => {
           <View style={styles.footerContainer}>
             <AppButton
               bg={theme.primary}
-              bttnTxt="Save Changes"
+              bttnTxt={t('button.saveChanges')}
               txtColor={theme.primaryText}
             />
           </View>

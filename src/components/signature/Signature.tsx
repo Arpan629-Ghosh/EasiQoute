@@ -7,6 +7,7 @@ import InterTightMedium from '../appFonts/InterTightMedium';
 import { icons } from '@/config/icons';
 import AppButton from '../appButton/AppButton';
 import SignatureView, { SignatureViewRef } from 'react-native-signature-canvas';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   visible: boolean;
@@ -28,6 +29,7 @@ const Signature = ({
   const ref = useRef<SignatureViewRef>(null);
 
   const { theme } = useAppTheme();
+  const { t } = useTranslation();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const handleEnd = () => {
@@ -41,7 +43,7 @@ const Signature = ({
     <MiddleModalComponent visible={visible} onClose={onClose}>
       <View style={styles.header}>
         <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
-          Add Signature
+         {t('inputs.signature.addSignature')}
         </InterTightMedium>
         <TouchableOpacity onPress={onClose}>
           <Image source={icons.ic_crossicn} style={styles.cross} />
@@ -64,13 +66,13 @@ const Signature = ({
       <View style={styles.bttnContainer}>
         <AppButton
           buttonWidth={165.5}
-          bttnTxt="Clear"
+          bttnTxt={t('button.clear')}
           txtColor="#D23949"
           onPress={handleClear}
         />
         <AppButton
           bg={theme.primary}
-          bttnTxt={isLoading ? 'Saving...' : 'Save'}
+          bttnTxt={isLoading ? 'Saving...' : t('button.save')}
           buttonWidth={165.5}
           txtColor={theme.primaryText}
           onPress={handleEnd}

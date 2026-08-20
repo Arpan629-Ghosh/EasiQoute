@@ -23,6 +23,11 @@ export const clientServices = {
     const response = await apiClient.post<ApiResponse<Clients>>(
       ENDPOINTS.CLIENT,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
 
     return response.data;

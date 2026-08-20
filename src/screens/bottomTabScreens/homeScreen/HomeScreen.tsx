@@ -80,7 +80,7 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
             <View style={styles.details}>
               <View style={styles.invoiceqoute}>
                 <AppDetails
-                  price={`£${homeData?.invoiceDetails.outstanding_invoices_amount}`}
+                  price={`£${homeData?.invoiceDetails?.outstanding_invoices_amount}`}
                   type="Outstanding Invoices"
                   numberDueActive={`${homeData?.invoiceDetails.overdue_invoices} Overdue`}
                 />

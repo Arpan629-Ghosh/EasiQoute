@@ -50,10 +50,10 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
   
 
   useEffect(() => {
-    fetchQuoteDetails(quoteId)
-    getSelectedSections(quoteId)
-  }, [quoteId, fetchQuoteDetails, getSelectedSections])
-
+    fetchQuoteDetails(quoteId);
+    getSelectedSections(quoteId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quoteId])
   const handleDuplicateQuote = () => {
     try {
       duplicateQuote(quoteId);

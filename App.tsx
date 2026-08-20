@@ -43,7 +43,7 @@ const AppContent = () => {
 
       const token = await notificationService.getFCMToken();
 
-      // console.log('FCM TOKEN', token);
+      console.log('FCM TOKEN', token);
       if (token) {
         dispatch(setFCMToken(token));
       }

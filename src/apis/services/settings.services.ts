@@ -41,6 +41,11 @@ export const settingsServices = {
     const response = await apiClient.post<ApiResponse<Company>>(
       ENDPOINTS.COMPANYPROFILESETUP,
       formData,
+      {
+        headers: {
+          "Content-Type": 'multipart/form-data'
+        }
+      }
     );
 
     return response.data;
@@ -54,6 +59,11 @@ export const settingsServices = {
     const response = await apiClient.post<ApiResponse<null>>(
       ENDPOINTS.CHANGEPASSWORD,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
 
     return response.data;
@@ -70,6 +80,11 @@ export const settingsServices = {
     const response = await apiClient.post<ApiResponse<CreateCategoriesPayload>>(
       ENDPOINTS.CATEGORIES,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
 
     return response.data;
@@ -104,6 +119,11 @@ export const settingsServices = {
     const response = await apiClient.post<ApiResponse<SubCategoriesPayload>>(
       ENDPOINTS.SUBCATEGORIES,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
     return response.data;
   },
@@ -174,6 +194,11 @@ export const settingsServices = {
     const response = await apiClient.post<ApiResponse<CreateTeamMemberPayload>>(
       ENDPOINTS.TEAMMEMBER,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
 
     return response.data;

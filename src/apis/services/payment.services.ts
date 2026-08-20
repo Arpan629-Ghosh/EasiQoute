@@ -40,9 +40,13 @@ export const paymentServices = {
         formData.append('payment_date', payload.date);
 
         if(payload.clientId) formData.append("client_id", payload.clientId)
-        const response = await apiClient.post<ApiResponse<CreatePaymentPayload>>(
-            ENDPOINTS.PAYMENT, formData
-        )
+        const response = await apiClient.post<
+          ApiResponse<CreatePaymentPayload>
+        >(ENDPOINTS.PAYMENT, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
 
         return response.data
     }

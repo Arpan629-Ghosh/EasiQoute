@@ -33,16 +33,18 @@ export const createStyles = (theme: Theme) =>
       padding: 12,
       overflow: 'hidden',
       gap: 12,
+      height: 50
     },
     searchic: {
       height: 24,
       width: 24,
     },
     noBorderInput: {
-      flex: 1,
+      // flex: 1,
       borderWidth: 0,
       height: '100%',
       paddingHorizontal: 0,
+      
     },
     add: {
       height: 48,

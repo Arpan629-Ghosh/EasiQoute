@@ -62,10 +62,14 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
     }));
   };
 
-  const formatPhone = formData.phone.startsWith('+44')
-    ? formData.phone
-    : `${'+44'}${formData.phone}`;
-  // console.log(formatPhone)
+  const formatPhone = (phone: string) => {
+    const digits = phone.replace(/\D/g, '');
+
+    // Remove 44 if already present
+    const number = digits.startsWith('44') ? digits.slice(2) : digits;
+
+    return `+44${number}`;
+  };
 
   const handleClose = useCallback(() => {
     setOpenOptions(false);
@@ -93,7 +97,7 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
     try {
       await profileSetup({
         name: formData.name,
-        phone: formatPhone,
+        phone: formatPhone(formData.phone),
         avatar: formData.imageUri || null,
       });
       showToast('Profile updated successfully.');

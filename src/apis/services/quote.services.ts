@@ -54,6 +54,11 @@ export const quoteServices = {
     const response = await apiClient.post<ApiResponse<CreateQuotePayload>>(
       ENDPOINTS.QUOTE,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
 
     return response.data;
@@ -143,6 +148,11 @@ export const quoteServices = {
     const response = await apiClient.post<ApiResponse<CreateQuotePayload>>(
       `${ENDPOINTS.QUOTE}/${payload.quote_id}`,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
 
     return response.data;

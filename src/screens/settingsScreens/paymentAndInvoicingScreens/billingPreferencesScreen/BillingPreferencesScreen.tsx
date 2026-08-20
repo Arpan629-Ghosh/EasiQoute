@@ -15,14 +15,16 @@ import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
 import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 const BillingPreferencesScreen = () => {
   const { theme } = useAppTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
-      <Header txt="Billing Preferences" borderBottomEnabled={true} />
+      <Header txt={t('header.billingPreferences')} borderBottomEnabled={true} />
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         <KeyboardAvoidingView
           style={styles.keyboard}
@@ -37,7 +39,7 @@ const BillingPreferencesScreen = () => {
             <View style={styles.formContainer}>
               <View style={styles.inp}>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                  Default VAT Rate (%)
+                  {t('inputs.billing.defaultVatRate')}
                 </InterTightRegular>
                 <View style={styles.inputicon}>
                   <AppInput
@@ -49,13 +51,13 @@ const BillingPreferencesScreen = () => {
               </View>
               <View style={styles.inp}>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                  Quote Expiry (Days)
+                  {t('inputs.billing.quoteExpiry')}
                 </InterTightRegular>
                 <AppInput placeholder="e.g. 30 days" />
               </View>
               <View style={styles.inp}>
                 <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                  Payment Terms (Days)
+                  {t('inputs.billing.pamentTerms')}
                 </InterTightRegular>
                 <AppInput placeholder="e.g. 30 days" />
               </View>
@@ -66,7 +68,7 @@ const BillingPreferencesScreen = () => {
           <View style={styles.footerContainer}>
             <AppButton
               bg={theme.primary}
-              bttnTxt="Save Changes"
+              bttnTxt={t('button.saveChanges')}
               txtColor={theme.primaryText}
             />
           </View>

@@ -30,7 +30,10 @@ const CustomDropdown = ({ data, value, placeholder, flatListProps, onChange, onS
       <Dropdown
         style={styles.dropdown}
         placeholderStyle={styles.placeholderStyle}
+        containerStyle={styles.dropdownContainer}
+        itemContainerStyle={styles.itemContainer}
         selectedTextStyle={styles.selectedTextStyle}
+        activeColor={theme.background}
         itemTextStyle={styles.itemTextStyle}
         data={data}
         search
@@ -62,7 +65,13 @@ const createStyles = (theme: Theme) =>
       borderColor: theme.border,
       borderRadius: 14,
       paddingHorizontal: 14,
-      backgroundColor: theme.card,
+      backgroundColor: theme.background,
+    },
+
+    dropdownContainer: {
+      backgroundColor: theme.background,
+      borderColor: theme.border,
+      borderRadius: 14,
     },
 
     placeholderStyle: {
@@ -78,5 +87,8 @@ const createStyles = (theme: Theme) =>
     itemTextStyle: {
       color: theme.textPrimary,
       fontSize: 14,
+    },
+    itemContainer: {
+      backgroundColor: theme.background,
     },
   });

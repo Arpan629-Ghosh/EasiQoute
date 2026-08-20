@@ -21,6 +21,7 @@ import RenderItems from '@/components/renderItems/RenderItems';
 import { RootScreenProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
+import { useTranslation } from 'react-i18next';
 
 const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
   const [paginationLoading, setPaginationLoading] = useState(false);
@@ -28,6 +29,7 @@ const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
   const [search, setSearch] = useState<string>('');
   const page = useRef(1);
   const { theme } = useAppTheme();
+  const { t } = useTranslation();
   const {
     fetchItems,
     isStale,
@@ -124,13 +126,13 @@ const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       <View style={styles.header}>
-        <Header txt="Items" borderBottomEnabled={true} />
+        <Header txt={t('settings.inventorySetup.items')} borderBottomEnabled={true} />
         <View style={styles.inpContainer}>
           <View style={styles.inputicon}>
             <Image source={icons.ic_search} style={styles.searchic} />
             <AppInput
               style={styles.noBorderInput}
-              placeholder="Search ‘Items’"
+              placeholder={t('inputs.search.items')}
               returnKeyType="search"
               value={search}
               onChangeText={txt => setSearch(txt)}
@@ -174,7 +176,7 @@ const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
         <View style={styles.footerContainer}>
           <AppButton
             bg={theme.primary}
-            bttnTxt="New Item"
+            bttnTxt={t('button.newItems')}
             txtColor={theme.primaryText}
             gap={8}
             onPress={navigateToNewItem}

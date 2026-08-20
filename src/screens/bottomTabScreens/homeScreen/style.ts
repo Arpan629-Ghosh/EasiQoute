@@ -80,7 +80,7 @@ export const createStyles = (theme: Theme) =>  StyleSheet.create({
     marginTop: -68,
     borderTopEndRadius: 12,
     borderTopStartRadius: 12,
-    paddingVertical: 16,
+    paddingTop: 16,
     paddingHorizontal: 12,
     gap: 16,
     backgroundColor: theme.surface,
@@ -106,7 +106,7 @@ export const createStyles = (theme: Theme) =>  StyleSheet.create({
   },
   flatlist: {
     flexGrow: 1,
-    paddingBottom: 20
+    
   },
   pic: {
     height: 40,

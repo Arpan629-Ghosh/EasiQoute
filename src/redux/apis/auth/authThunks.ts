@@ -14,6 +14,7 @@ export const loginThunk = createAsyncThunk(
 
   async (payload: LoginPayload, thunkAPI) => {
     try {
+      console.log('login');
       const response = await authServices.login(payload);
 
       if (!response.result) {

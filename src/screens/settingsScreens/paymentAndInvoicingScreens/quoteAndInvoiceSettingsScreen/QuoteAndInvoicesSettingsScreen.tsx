@@ -17,6 +17,7 @@ import { icons } from '@/config/icons';
 import AppButton from '@/components/appButton/AppButton';
 import Signature from '@/components/signature/Signature';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 const QuoteAndInvoicesSettingsScreen = () => {
   const [open, setOpen] = useState(false);
@@ -25,6 +26,7 @@ const QuoteAndInvoicesSettingsScreen = () => {
 
   const insets = useSafeAreaInsets();
   const { theme } = useAppTheme();
+  const { t } = useTranslation();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const handleClose = useCallback(() => {
@@ -47,7 +49,7 @@ const QuoteAndInvoicesSettingsScreen = () => {
 
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom }]}>
-      <Header txt="Quote & Invoice Settings" borderBottomEnabled={true} />
+      <Header txt={t('header.quote&invoice')} borderBottomEnabled={true} />
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         <KeyboardAvoidingView
           style={styles.keyboard}
@@ -63,13 +65,13 @@ const QuoteAndInvoicesSettingsScreen = () => {
               <View style={styles.inp}>
                 <View style={styles.inpHeader}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Terms & Conditions
+                    {t('inputs.termsAndCondition.label')}
                   </InterTightRegular>
                   <Image source={icons.ic_iicon} style={styles.icn} />
                 </View>
                 <AppInput
                   inputHeight={100}
-                  placeholder="Write default terms for quotes and invoices"
+                  placeholder={t('inputs.termsAndCondition.placeholder')}
                   multiline={true}
                   tv="top"
                 />
@@ -78,17 +80,17 @@ const QuoteAndInvoicesSettingsScreen = () => {
               <View style={styles.inp}>
                 <View style={styles.inpHeader}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Footer Message
+                    {t('inputs.footerMssg.label')}
                   </InterTightRegular>
                   <Image source={icons.ic_iicon} style={styles.icn} />
                 </View>
-                <AppInput placeholder="Add a closing note" />
+                <AppInput placeholder={t('inputs.footerMssg.placeholder')} />
               </View>
 
               <View style={styles.inp}>
                 <View style={styles.inpHeader}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    Signature
+                    {t('inputs.signature.name')}
                   </InterTightRegular>
 
                   <Image source={icons.ic_iicon} style={styles.icn} />
@@ -125,7 +127,7 @@ const QuoteAndInvoicesSettingsScreen = () => {
           <View style={styles.footerContainer}>
             <AppButton
               bg={theme.primary}
-              bttnTxt="Save Changes"
+              bttnTxt={t('button.saveChanges')}
               txtColor={theme.primaryText}
             />
           </View>

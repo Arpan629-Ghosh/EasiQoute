@@ -18,7 +18,8 @@
     "paymentInfo":"Payment Info",
     "addMembers": "Add Members",
     "editMembers": "Edit Members",
-    "billingPreferences":"Billing Preferences"
+    "billingPreferences":"Billing Preferences",
+    "quote&invoice": "Quote & Invoice Settings"
   },
 
   "inputs": {
@@ -49,7 +50,10 @@
     "businessPno": "Business Phone Number",
     "search": {
       "placeholder": "Search postcode",
-      "tmSearchPlaceholder": "Search ‘Team Members’"
+      "tmSearchPlaceholder": "Search ‘Team Members’",
+      "categories": "Search ‘Categories’",
+      "subcategories": "Search ‘Subcategories’",
+      "items": "Search ‘Items’"
     },
     "streetAddress": {
       "label": "Street Address",
@@ -83,6 +87,19 @@
       "defaultVatRate": "Default VAT Rate (%)",
       "quoteExpiry": "Quote Expiry (Days)",
       "pamentTerms": "Payment Terms (Days)"
+    },
+    "termsAndCondition": {
+      "label": "Terms & Conditions",
+      "placeholder": "Write default terms for quotes and invoices"
+    },
+    "footerMssg": {
+      "label":"Footer Message",
+      "placeholder": "Add a closing note"
+    },
+
+    "signature": {
+      "name": "Signature",
+      "addSignature": "Add Signature"
     }
 
 
@@ -99,7 +116,12 @@
     "continue": "Continue",
     "addMembers": "Add Members",
     "updateMembers": "Update Members",
-    "saveChanges": "Save Changes"
+    "saveChanges": "Save Changes",
+    "clear": "Clear",
+    "save": "Save",
+    "newCategory": "New Category",
+    "subCategory": "New Subcategory",
+    "newItems": "New Item"
   },
 
   "auth": {

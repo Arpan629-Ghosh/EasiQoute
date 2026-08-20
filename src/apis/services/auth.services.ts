@@ -22,10 +22,17 @@ export const authServices = {
     if (payload.push_token) {
       formData.append('push_token', payload.push_token);
     }
+   
     const response = await apiClient.post<ApiResponse<AuthPayload>>(
       ENDPOINTS.LOGIN,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
+    console.log(response)
 
     return response.data;
   },
@@ -46,6 +53,11 @@ export const authServices = {
     const response = await apiClient.post<ApiResponse<AuthPayload>>(
       ENDPOINTS.SIGNUP,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
     // console.log(response);
     return response.data;
@@ -57,6 +69,11 @@ export const authServices = {
     const response = await apiClient.post<ApiResponse<null>>(
       ENDPOINTS.FORGOTPASSWORD,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
     // console.log(response.data);
     return response.data;
@@ -84,6 +101,11 @@ export const authServices = {
     const response = await apiClient.post<ApiResponse<User>>(
       ENDPOINTS.PROFILESETUP,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
 
     return response.data;
@@ -111,6 +133,11 @@ export const authServices = {
     const response = await apiClient.post<ApiResponse<User>>(
       ENDPOINTS.COMPANYPROFILESETUP,
       formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
 
     return response.data;

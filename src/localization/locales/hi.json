@@ -18,7 +18,8 @@
     "paymentInfo": "भुगतान की जानकारी",
     "addMembers": "सदस्य जोड़ें",
     "editMembers": "सदस्य संपादित करें",
-    "billingPreferences": "बिलिंग प्राथमिकताएँ"
+    "billingPreferences": "बिलिंग प्राथमिकताएँ",
+    "quote&invoice": "कोट और चालान सेटिंग्स"
   },
   "inputs": {
     "email": {
@@ -49,7 +50,10 @@
     "search": {
       "placeholder": "पोस्टकोड खोजें",
 
-      "tmSearchPlaceholder": "'टीम सदस्यों' को खोजें"
+      "tmSearchPlaceholder": "'टीम सदस्यों' को खोजें",
+      "categories": "‘श्रेणियाँ’ खोजें",
+      "subcategories": "‘उप-श्रेणियाँ’ खोजें",
+      "items": "‘आइटम’ खोजें"
     },
     "streetAddress": {
       "label": "सड़क का पता",
@@ -81,6 +85,18 @@
       "defaultVatRate": "डिफ़ॉल्ट VAT दर (%)",
       "quoteExpiry": "कोट की समय-सीमा (दिन)",
       "pamentTerms": "भुगतान की शर्तें (दिन)"
+    },
+    "termsAndCondition": {
+      "label": "नियम और शर्तें",
+      "placeholder": "कोट और चालान के लिए डिफ़ॉल्ट शर्तें लिखें"
+    },
+    "footerMssg": {
+      "label": "फुटर संदेश",
+      "placeholder": "एक समापन संदेश जोड़ें"
+    },
+    "signature": {
+      "name": "हस्ताक्षर",
+      "addSignature": "हस्ताक्षर जोड़ें"
     }
   },
 
@@ -94,7 +110,12 @@
     "continue": "जारी रखें",
     "addMembers": "सदस्य जोड़ें",
     "updateMembers": "सदस्य अपडेट करें",
-    "saveChanges": "परिवर्तन सहेजें"
+    "saveChanges": "परिवर्तन सहेजें",
+    "clear": "साफ़ करें",
+    "save": "सहेजें",
+    "newCategory": "नई श्रेणी",
+    "subCategory": "नई उप-श्रेणी",
+    "newItems": "नया आइटम"
   },
   "auth": {
     "login": {

@@ -17,7 +17,7 @@ export const parseApiError = (error: unknown): string => {
     if (error.code === 'ECONNABORTED') {
       return 'Request timeout';
     }
-
+    console.log(error)
     return 'Something went wrong';
   }
 

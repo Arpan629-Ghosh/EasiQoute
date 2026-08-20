@@ -23,7 +23,6 @@ import { RootState } from '@/redux/store';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useTranslation } from 'react-i18next';
-import { useAppLanguage } from '@/hooks/useAppLanguage';
 
 interface LoginForm {
   email: string;
@@ -45,7 +44,6 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
   const { login, loading } = useAuth();
   const { showToast } = useToast();
   const { t } = useTranslation();
-  const { languageMode } = useAppLanguage();
   const pushToken = useSelector((state: RootState) => state.notification.fcmToken)
   const styles = useMemo(() => createStyles(theme), [theme]);
   const handleInput = (name: string, value: string) => {
@@ -68,7 +66,9 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
   }
 
   const handleLogin = async () => {
+    // console.log("login")
     try {
+      console.log('login');
       const response = await login({
         email: formData.email,
         password: formData.password,
@@ -95,7 +95,7 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
       showToast(String(error), 'error')
     }
   }
-  console.log(languageMode)
+  
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
