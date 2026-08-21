@@ -28,7 +28,7 @@ export const settingsServices = {
     formData.append('country', payload.country);
     formData.append('postcode', payload.postcode);
     if (payload.logo) {
-      formData.append('avatar', {
+      formData.append('logo', {
         uri: payload.logo.uri,
 
         name: payload.logo.fileName || 'profile.jpg',

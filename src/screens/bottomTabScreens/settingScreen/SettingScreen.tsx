@@ -4,6 +4,7 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
+  
 } from 'react-native';
 import React, { useCallback, useMemo, useState } from 'react';
 import { createStyles } from './style';
@@ -11,7 +12,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
 import Card from '@/components/cardDetailsComponent/Card';
-import { images } from '@/config/images';
 import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import { icons } from '@/config/icons';
 import SettingInfoRow from '@/components/cardDetailsComponent/SettingInfoRow';
@@ -20,11 +20,12 @@ import CustomToggle from '@/components/switch/CustomToggle';
 import AppearanceBottomSheet from '@/components/appearanceBottomSheet/AppearanceBottomSheet';
 import LogoutModal from '@/components/ logoutModal/LogoutModal';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useAuth } from '@/hooks/apis/useAuth';
 import { SettingStackProps } from '@/types/navigation.types';
 import { useAppLanguage } from '@/hooks/useAppLanguage';
 import LanguageBottomSheet from '@/components/languageBottomSheet/LanguageBottomSheet';
 import { useTranslation } from 'react-i18next';
+import AppImage from '@/components/appImage/AppImage';
+import { useGetUserDetails } from '@/hooks/apis/useGetUserDetails';
 
 const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
   const [enabledStripe, setEnabledStripe] = useState<boolean>(false);
@@ -36,7 +37,7 @@ const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
   const { theme, isDark, mode } = useAppTheme();
   const { language, languageMode, isDeviceLanguage } = useAppLanguage();
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { userDetails } = useGetUserDetails();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -72,22 +73,22 @@ const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
   const navigateToProfile = () => {
     navigation.navigate('ProfileScreen', {
       isEdit: true,
-      name: user?.name,
-      phone: user?.phone,
-      url: user?.avatar
+      name: userDetails?.name,
+      phone: userDetails?.phone,
+      url: userDetails?.avatar
     })
   }
 
   const navigateToBusiness = () => {
     navigation.navigate('BusinessScreen', {
       isEdit: true,
-      name: user?.company?.name,
-      phone: user?.company?.phone_number,
-      color: user?.company?.brand_color,
-      profileImage: user?.company?.logo,
-      vatNumber: user?.company?.vat_number,
+      name: userDetails?.company?.name,
+      phone: userDetails?.company?.phone_number,
+      color: userDetails?.company?.brand_color,
+      profileImage: userDetails?.company?.logo,
+      vatNumber: userDetails?.company?.vat_number,
       services: null,
-      address: user?.company?.address
+      address: userDetails?.company?.address
     })
   }
 
@@ -137,20 +138,15 @@ const SettingScreen = ({ navigation }: SettingStackProps<'SettingScreen'>) => {
           <Card style={styles.card}>
             <View style={styles.profile}>
               <View style={styles.profilepic}>
-                <Image
-                  source={
-                    user?.avatar
-                      ? {
-                          uri: user.avatar,
-                        }
-                      : images.img_profile
-                  }
+                <AppImage
+                  uri={userDetails?.avatar}
                   style={styles.profilepic}
+                  
                 />
               </View>
               <View style={styles.txt}>
                 <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
-                  {user?.name}
+                  {userDetails?.name}
                 </InterTightMedium>
                 <TouchableOpacity
                   style={styles.editproflie}

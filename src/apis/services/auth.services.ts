@@ -8,6 +8,7 @@ import {
   SearchAddressPayload,
   SignupPayload,
   User,
+  UserDeatails,
 } from '@/types/apis/auth.types';
 import { ApiResponse } from '@/types/apis/common.types';
 import { ENDPOINTS } from '../endPoints';
@@ -120,7 +121,7 @@ export const authServices = {
     formData.append('country', payload.country);
     formData.append('postcode', payload.postcode);
     if (payload.logo) {
-      formData.append('avatar', {
+      formData.append('logo', {
         uri: payload.logo.uri,
 
         name: payload.logo.fileName || 'profile.jpg',
@@ -138,6 +139,14 @@ export const authServices = {
           'Content-Type': 'multipart/form-data',
         },
       },
+    );
+
+    return response.data;
+  },
+
+  getUserDetails: async () => {
+    const response = await apiClient.get<ApiResponse<UserDeatails>>(
+      ENDPOINTS.USER
     );
 
     return response.data;

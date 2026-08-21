@@ -5,6 +5,7 @@ export const ENDPOINTS = {
   PROFILESETUP: '/api/user/profile-setup',
   COMPANYPROFILESETUP: '/api/company',
   LOGOUT: '/api/auth/logout',
+  USER: '/api/user/detail',
   SEARCHADDRESS: '/api/address/search',
   HOME: '/api/home',
   QUOTE: '/api/quotes',

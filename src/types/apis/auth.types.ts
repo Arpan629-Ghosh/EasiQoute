@@ -16,7 +16,7 @@ export interface CompanyAddress {
   id: number;
   address: string;
   city: string;
-  state: string;
+  state: string | null;
   country: string;
   latitude: string | null;
   longitude: string | null;
@@ -137,3 +137,69 @@ export interface AuthPayload extends User {
     access_token: string;
 }
 
+export interface UserDeatails {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  role: string;
+  is_email_verified: boolean;
+  is_active: boolean;
+  avatar: string;
+  company: CompanyDetails;
+  email_notification_enabled: boolean;
+  push_notification_enabled: boolean;
+  is_profile_setup: boolean;
+  is_company_profile_setup: boolean;
+  created_at: string;
+  updated_at: string;
+  is_subscription_active: boolean;
+  subscription_ended_at: null;
+  is_trial_period: boolean;
+  subscription_amount: null;
+  hasBankAccountDetailAdded: boolean;
+  hasSignatureAdded: boolean;
+  is_team_member: boolean;
+  default_payment_method: string;
+  stripe_connected: boolean;
+  stripe_account_status: string;
+}
+
+interface CompanyDetails {
+  id: number;
+  name: string;
+  email: string;
+  phone_number: string;
+  logo: null;
+  brand_color: string;
+  vat_number: string;
+  currency: string;
+  is_company_name_show: boolean;
+  address: AddressDetails;
+  billing_details: Billingdetails;
+  created_at: string;
+  updated_at: string;
+}
+
+interface Billingdetails {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  bank_name: string;
+  sort_code: string;
+  account_number: string;
+  created_at: null;
+  updated_at: null;
+}
+
+interface AddressDetails {
+  id: number;
+  address: string;
+  city: string;
+  state: string | null;
+  country: string;
+  latitude: string | null;
+  longitude: string | null;
+  postcode: string;
+}

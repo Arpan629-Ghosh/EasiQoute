@@ -21,6 +21,9 @@ import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useTranslation } from 'react-i18next';
+import AppImage from '@/components/appImage/AppImage';
+import { useGetUserDetails } from '@/hooks/apis/useGetUserDetails';
+import { ProfileSetupPayload } from '@/types/apis/auth.types';
 
 interface ProfileForm {
   name: string;
@@ -50,7 +53,8 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
   const insets = useSafeAreaInsets();
   const { isEdit } = route.params || false;
   const { theme, isDark } = useAppTheme();
-  const { profileSetup, loading, user } = useAuth();
+  const {  user } = useAuth();
+  const { isProfileUpdating, updateProfileAsync } = useGetUserDetails();
   const { showToast } = useToast();
   const { t } = useTranslation();
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -94,12 +98,13 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
   }, []);
 
   const handleProfleSetup = async () => {
+    let payload: ProfileSetupPayload = {
+      name: formData.name,
+      phone: formatPhone(formData.phone),
+      avatar: formData.imageUri || null,
+    };
     try {
-      await profileSetup({
-        name: formData.name,
-        phone: formatPhone(formData.phone),
-        avatar: formData.imageUri || null,
-      });
+      await updateProfileAsync(payload);
       showToast('Profile updated successfully.');
       if (isEdit) {
         navigation.navigate('MainTabs', {
@@ -147,7 +152,13 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
               <View style={styles.formContainer}>
                 <View style={styles.profilePic}>
                   <TouchableOpacity onPress={() => setOpenOptions(true)}>
-                    <Image
+                    <AppImage
+                      uri={formData.imageUri?.uri}
+                      fallbackImage={isDark ? images.img_darkprofile : images.img_profile}
+                      style={styles.profileImg}
+                    />
+                    
+                    {/* <Image
                       source={
                         formData.imageUri
                           ? { uri: formData.imageUri.uri }
@@ -156,7 +167,7 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
                           : images.img_profile
                       }
                       style={styles.profileImg}
-                    />
+                    /> */}
                     <Image
                       source={isDark ? icons.ic_darkadd : icons.ic_add}
                       style={styles.icon}
@@ -203,7 +214,7 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
               onPress={handleProfleSetup}
               bg={theme.primary}
               bttnTxt={isEdit ? 'Update Profile' : 'Continue'}
-              showLoader={loading}
+              showLoader={isProfileUpdating}
               gap={4}
               txtColor={theme.primaryText}
             />

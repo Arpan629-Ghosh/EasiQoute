@@ -16,16 +16,16 @@ import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import RenderActivities from '@/components/renderActivities/RenderActivities';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useHomeScreenData } from '@/hooks/apis/useHomeScreenData';
-import { useAuth } from '@/hooks/apis/useAuth';
-
 import Loader from '@/components/loader/Loader';
 import { HomeStackProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
+import AppImage from '@/components/appImage/AppImage';
+import { useGetUserDetails } from '@/hooks/apis/useGetUserDetails';
 
 const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
   const { theme, isDark } = useAppTheme();
   const { homeScreenData, homeData, loading } = useHomeScreenData();
-  const { user } = useAuth();
+  const { userDetails } = useGetUserDetails();
 
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -59,20 +59,13 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
             <View style={styles.headerTxt}>
               <View style={styles.profile}>
                 <View style={styles.profilepic}>
-                  <Image
-                    source={
-                      user?.avatar
-                        ? {
-                            uri: user.avatar,
-                          }
-                        : images.img_profile
-                    }
+                  <AppImage
+                    uri={userDetails?.avatar}
                     style={styles.pic}
-                    resizeMode="cover"
                   />
                 </View>
                 <InterTightMedium fsize={18} fcolor="#FFFFFF">
-                  Welcome, {user?.name.split(' ')[0]}!
+                  Welcome, {userDetails?.name.split(' ')[0]}!
                 </InterTightMedium>
               </View>
               <Image source={images.img_pro} style={styles.pro} />

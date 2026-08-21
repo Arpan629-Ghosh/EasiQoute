@@ -17,7 +17,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { notificationService } from '@/firebase/notification';
 import { setFCMToken } from '@/redux/apis/notification/notificationSlice';
 import ToastProvider from '@/components/toast/ToastContext';
-import { useAuth } from '@/hooks/apis/useAuth';
 import { navigationRef } from '@/utils/navigationRef';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/config/queryClient';
@@ -25,9 +24,8 @@ import { useTranslation } from 'react-i18next';
 
 const AppContent = () => {
   const { theme, isDark } = useAppTheme();
-  const { user } = useAuth();
   const dispatch = useDispatch<AppDispatch>();
-  console.log(user);
+  
 
   const { i18n } = useTranslation();
 

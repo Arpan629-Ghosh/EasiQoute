@@ -26,9 +26,11 @@ import CountryPickerComponent from '@/components/countryPicker/CountryPickerComp
 import { FormData } from '../businessAddressScren/BusinessAddressScreen';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
-import { useSettings } from '@/hooks/apis/useSettings';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useTranslation } from 'react-i18next';
+import AppImage from '@/components/appImage/AppImage';
+import { useGetUserDetails } from '@/hooks/apis/useGetUserDetails';
+import { CompanyPayload } from '@/types/apis/auth.types';
 
 interface BusinessForm {
   name: string;
@@ -82,7 +84,7 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
   const { showToast } = useToast();
   const { t } = useTranslation();
   const { companyProfileSetup, loading } = useAuth();
-  const { updateCompanyProfile, settingLoading } = useSettings();
+  const {updateCompanyProfileAsync, isUpdating} = useGetUserDetails()
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const navigateToAddress = () => {
@@ -93,6 +95,7 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
   };
 
   const handleCompanyProfileSetup = async () => {
+    
     try {
       await companyProfileSetup({
         name: form.name,
@@ -120,26 +123,22 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
   };
 
   const handleUpdateProfile = async () => {
-    try {
-      await updateCompanyProfile({
-        name: form.name,
-        logo: form.profileImage || null,
-        address: form.address?.address,
-        postcode: form.address?.postcode,
-        country: form.address?.country,
-        city: form.address?.city,
-        phone_number: form.phone,
-        vat_number: form.vatNumber || null,
-        brand_color: form.color,
-      });
-      showToast('Company profile updated successfully.');
-      navigation.navigate('MainTabs', {
-        screen: 'Settings',
 
-        params: {
-          screen: 'SettingScreen',
-        },
-      });
+    let payload: CompanyPayload = {
+      name: form.name,
+      logo: form.profileImage || null,
+      address: form.address?.address,
+      postcode: form.address?.postcode,
+      country: form.address?.country,
+      city: form.address?.city,
+      phone_number: form.phone,
+      vat_number: form.vatNumber || null,
+      brand_color: form.color,
+    };
+    try {
+      await updateCompanyProfileAsync(payload)
+      showToast('Company profile updated successfully.');
+      navigation.goBack();
     } catch (error) {
       showToast(String(error), 'error');
       console.log('COMPANY PROFILE SETUP ERROR', error);
@@ -216,6 +215,7 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
   
 
   // console.log(user)
+  console.log(isEdit)
 
   return (
     <View style={[styles.safeareaview, { paddingBottom: insets.bottom }]}>
@@ -243,13 +243,10 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
               <View style={styles.logoContainer}>
                 <View style={styles.profilePic}>
                   <TouchableOpacity onPress={() => setOpenOptions(true)}>
-                    <Image
-                      source={
-                        form.profileImage
-                          ? { uri: form.profileImage.uri }
-                          : isDark
-                          ? images.img_darkcamera
-                          : images.img_camera
+                    <AppImage
+                      uri={form.profileImage?.uri}
+                      fallbackImage={
+                        isDark ? images.img_darkprofile : images.img_profile
                       }
                       style={styles.profileImg}
                     />
@@ -389,8 +386,12 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
             <AppButton
               onPress={isEdit ? handleUpdateProfile : handleCompanyProfileSetup}
               bg={theme.primary}
-              bttnTxt={isEdit ? t('auth.businessProfile.updateInfo') : t('button.continue')}
-              showLoader={loading || settingLoading}
+              bttnTxt={
+                isEdit
+                  ? t('auth.businessProfile.updateInfo')
+                  : t('button.continue')
+              }
+              showLoader={loading || isUpdating}
               gap={4}
               txtColor={theme.primaryText}
             />
