@@ -1,5 +1,4 @@
 import {
-  Image,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
@@ -15,15 +14,14 @@ import Header from '@/components/header/Header';
 import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import AppInput from '@/components/appInput/AppInput';
-import { icons } from '@/config/icons';
 import AppButton from '@/components/appButton/AppButton';
 import { SearchAddressPayload } from '@/types/apis/auth.types';
 import { useDebounce } from '@/hooks/useDebounce';
-import AddressList from '@/components/addressList/AddressList';
 import { useToast } from '@/hooks/useToast';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useClient } from '@/hooks/apis/useClient';
 import { RootScreenProps } from '@/types/navigation.types';
+import AddressDropdown from '@/components/adressDropdown/AddressDropdown';
 
 interface ClientForm {
   clientName: string;
@@ -37,23 +35,29 @@ interface ClientForm {
   country: string;
 }
 
-const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScreen'>) => {
+const AddClientScreen = ({
+  navigation,
+  route,
+}: RootScreenProps<'AddClientScreen'>) => {
   const [clientFormData, setClientFormData] = useState<ClientForm>({
-    clientName: route.params?.clientDetails?.name ||  '',
+    clientName: route.params?.clientDetails?.name || '',
     companyName: route.params?.clientDetails?.company_name || '',
-    phNo: route.params?.clientDetails?.phone ||  '',
+    phNo: route.params?.clientDetails?.phone || '',
     email: route.params?.clientDetails?.email || '',
     search: '',
     streetAddress: route.params?.clientDetails?.address || '',
-    city: route.params?.clientDetails?.city ||  '',
+    city: route.params?.clientDetails?.city || '',
     postcode: route.params?.clientDetails?.postcode || '',
     country: route.params?.clientDetails?.country || '',
   });
   const [searchData, setSearchData] = useState<SearchAddressPayload[]>([]);
-  const debouncedSearch = useDebounce(clientFormData.search, 500);
+  const [searchAddressInput, setSearchAddressInput] = useState('');
+  const [addressLoading, setAddressLoading] = useState<boolean>(false);
+  const debouncedSearch = useDebounce(searchAddressInput, 500);
   const { theme } = useAppTheme();
   const { showToast } = useToast();
-  const { createClient, updateClient, updateClientLoader, loading } = useClient();
+  const { createClient, updateClient, updateClientLoader, loading } =
+    useClient();
   const { searchAddress } = useAuth();
   const insets = useSafeAreaInsets();
   const clientDetails = route.params?.clientDetails;
@@ -67,6 +71,7 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
       }
 
       try {
+        setAddressLoading(true)
         const data = await searchAddress(debouncedSearch);
 
         if (Array.isArray(data)) {
@@ -77,8 +82,11 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
           setSearchData([]);
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
         setSearchData([]);
+        setAddressLoading(false);
+      } finally {
+        setAddressLoading(false);
       }
     };
 
@@ -135,12 +143,10 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
         postcode: '',
         country: '',
       });
-      
-      navigation.navigate("ClientDetailScreen", {
-          clientId: res.id
-      })
-      
 
+      navigation.navigate('ClientDetailScreen', {
+        clientId: res.id,
+      });
     } catch (error) {
       showToast(String(error), 'error');
     }
@@ -179,6 +185,7 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
       showToast(String(error), 'error');
     }
   };
+
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       <Header
@@ -251,7 +258,7 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
                 value={clientFormData.email}
                 onChangeText={txt => updateField('email', txt)}
                 returnKeyType="next"
-                autoCapitalize='none'
+                autoCapitalize="none"
                 textContentType="emailAddress"
                 keyboardType="email-address"
               />
@@ -259,23 +266,13 @@ const AddClientScreen = ({ navigation, route } : RootScreenProps<'AddClientScree
           </View>
           <View style={styles.form}>
             <View style={styles.searchWrapper}>
-              <View style={styles.inputicon}>
-                <Image source={icons.ic_search} style={styles.searchic} />
-                <AppInput
-                  style={styles.noBorderInput}
-                  placeholder="Search postcode"
-                  returnKeyType="search"
-                  value={clientFormData.search}
-                  onChangeText={txt => updateField('search', txt)}
-                />
-              </View>
-
-              {searchData.length > 0 && (
-                <AddressList
-                  response={searchData}
-                  onSelect={handleSelectAddress}
-                />
-              )}
+              <AddressDropdown
+                data={searchData}
+                value={debouncedSearch}
+                loader={addressLoading}
+                onText={setSearchAddressInput}
+                onSelect={handleSelectAddress}
+              />
             </View>
 
             <View style={styles.inp}>

@@ -1,6 +1,12 @@
-import { logoutThunk, searchAddressThunk } from './../../redux/apis/auth/authThunks';
-
-import { companyProfileSetupThunk, forgotPasswordThunk, loginThunk, profileSetupThunk, signupThunk } from '@/redux/apis/auth/authThunks';
+import {
+  logoutThunk,
+  searchAddressThunk,
+  companyProfileSetupThunk,
+  forgotPasswordThunk,
+  loginThunk,
+  profileSetupThunk,
+  signupThunk,
+} from '@/redux/apis/auth/authThunks';
 import { AppDispatch, RootState } from '@/redux/store';
 import {  CompanyPayload, ForgotPasswordPayload, LoginPayload, ProfileSetupPayload, SignupPayload } from '@/types/apis/auth.types';
 import { useDispatch, useSelector } from 'react-redux';

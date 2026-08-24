@@ -1,15 +1,19 @@
 import {
-  Image,
   Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   View,
 } from 'react-native';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import AppButton from '@/components/appButton/AppButton';
-import { icons } from '@/config/icons';
 import { createStyles } from './style';
 import AppInput from '@/components/appInput/AppInput';
 import InterTightRegular from '@/components/appFonts/InterTightRegular';
@@ -19,11 +23,10 @@ import Header from '@/components/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useAuth } from '@/hooks/apis/useAuth';
-import { useToast } from '@/hooks/useToast';
 import { SearchAddressPayload } from '@/types/apis/auth.types';
-import AddressList from '@/components/addressList/AddressList';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useTranslation } from 'react-i18next';
+import AddressDropdown from '@/components/adressDropdown/AddressDropdown';
 
 export interface FormData {
   address: string;
@@ -48,7 +51,7 @@ const BusinessAddressScreen = ({
   const [searchAddressInput, setSearchAddressInput] = useState('');
 
   const [searchData, setSearchData] = useState<SearchAddressPayload[]>([]);
-
+   const [addressLoading, setAddressLoading] = useState<boolean>(false);
   const addressRef = useRef<TextInput | null>(null);
   const cityRef = useRef<TextInput | null>(null);
   const postRef = useRef<TextInput | null>(null);
@@ -61,8 +64,6 @@ const BusinessAddressScreen = ({
   const { theme } = useAppTheme();
 
   const { searchAddress } = useAuth();
-
-  const { showToast } = useToast();
   const { t } = useTranslation();
 
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -88,6 +89,7 @@ const BusinessAddressScreen = ({
       }
 
       try {
+        setAddressLoading(true)
         const data = await searchAddress(debouncedSearch);
 
         if (Array.isArray(data)) {
@@ -99,14 +101,15 @@ const BusinessAddressScreen = ({
         }
       } catch (error) {
         console.log('SEARCH ERROR', error);
-
-        showToast(String(error), 'error');
-
         setSearchData([]);
+        setAddressLoading(false)
+      } finally {
+        setAddressLoading(false)
       }
     };
 
     fetchAddress();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
 
@@ -117,7 +120,10 @@ const BusinessAddressScreen = ({
       postcode: item.postcode || '',
       country: item.country || '',
     });
+
+    setSearchAddressInput('');
     setSearchData([]);
+
     Keyboard.dismiss();
   }, []);
 
@@ -138,49 +144,36 @@ const BusinessAddressScreen = ({
           txt={t('auth.businessProfile.addressHeader')}
           borderBottomEnabled={true}
         />
+        <ScrollView
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={styles.scrollContent}
+        >
+          <View style={styles.formContainer}>
+            <View style={styles.inputContainer}>
+              <AddressDropdown
+                data={searchData}
+                value={debouncedSearch}
+                loader={addressLoading}
+                onText={setSearchAddressInput}
+                onSelect={handleSelectAddress}
+              />
+            </View>
 
-        <View style={styles.formContainer}>
-          <View style={styles.inputContainer}>
-            <View style={styles.searchWrapper}>
-              <View style={styles.inputicon}>
-                <Image source={icons.ic_search} style={styles.searchic} />
+            <View style={styles.inputContainer}>
+              <View style={styles.inp}>
+                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
+                  {t('inputs.streetAddress.label')}
+                </InterTightRegular>
 
                 <AppInput
-                  style={styles.noBorderInput}
-                  placeholder={t('inputs.search.placeholder')}
-                  returnKeyType="search"
-                  value={searchAddressInput}
-                  onChangeText={setSearchAddressInput}
+                  ref={addressRef}
+                  placeholder={t('inputs.streetAddress.placeholder')}
+                  value={formData.address}
+                  onChangeText={txt => handleInput('address', txt)}
+                  onSubmitEditing={() => cityRef.current?.focus()}
+                  returnKeyType="next"
                 />
-              </View>
-
-              {searchData.length > 0 && (
-                <AddressList
-                  response={searchData}
-                  onSelect={handleSelectAddress}
-                />
-              )}
-            </View>
-            <ScrollView
-              keyboardShouldPersistTaps="handled"
-              showsVerticalScrollIndicator={false}
-              contentContainerStyle={styles.scrollContent}
-            >
-              <View style={styles.inputContainer}>
-                <View style={styles.inp}>
-                  <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                    {t('inputs.streetAddress.label')}
-                  </InterTightRegular>
-
-                  <AppInput
-                    ref={addressRef}
-                    placeholder={t('inputs.streetAddress.placeholder')}
-                    value={formData.address}
-                    onChangeText={txt => handleInput('address', txt)}
-                    onSubmitEditing={() => cityRef.current?.focus()}
-                    returnKeyType="next"
-                  />
-                </View>
 
                 <View style={styles.inp}>
                   <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
@@ -226,9 +219,9 @@ const BusinessAddressScreen = ({
                   />
                 </View>
               </View>
-            </ScrollView>
+            </View>
           </View>
-        </View>
+        </ScrollView>
       </KeyboardAvoidingView>
 
       <View style={styles.footer}>

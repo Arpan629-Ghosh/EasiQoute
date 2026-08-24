@@ -158,16 +158,6 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
                       style={styles.profileImg}
                     />
                     
-                    {/* <Image
-                      source={
-                        formData.imageUri
-                          ? { uri: formData.imageUri.uri }
-                          : isDark
-                          ? images.img_darkprofile
-                          : images.img_profile
-                      }
-                      style={styles.profileImg}
-                    /> */}
                     <Image
                       source={isDark ? icons.ic_darkadd : icons.ic_add}
                       style={styles.icon}

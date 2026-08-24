@@ -36,6 +36,7 @@ const AppButton: React.FC<Props> = ({
       {...rest}
       style={[
         styles.bttn,
+        showLoader && styles.loading,
         {
           flex: flex,
           backgroundColor: bg,
@@ -69,5 +70,9 @@ const styles = StyleSheet.create({
     padding: 12,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+
+  loading: {
+    opacity: 0.6,
   },
 });

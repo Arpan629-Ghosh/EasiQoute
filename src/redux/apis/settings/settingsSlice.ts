@@ -12,7 +12,6 @@ import {
   fetchTeamMembersThunk,
   newCategoriesThunk,
   newSubCategoriesThunk,
-  updateProfileThunk,
 } from './settingsThunk';
 import {
   CreateCategoriesPayload,
@@ -27,6 +26,7 @@ export interface SettingsState {
   members_current_page: number;
   members_last_page: number;
   loading: boolean;
+  categoryLoading: boolean;
   isStale: boolean;
   isSubCatStale: boolean;
   error: string | null;
@@ -47,6 +47,7 @@ const initialState: SettingsState = {
   members_current_page: 1,
   members_last_page: 1,
   loading: false,
+  categoryLoading: false,
   isStale: false,
   isSubCatStale: false,
   error: null,
@@ -68,18 +69,6 @@ const settingsSlice = createSlice({
 
   extraReducers: builder => {
     builder
-      .addCase(updateProfileThunk.pending, state => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(updateProfileThunk.fulfilled, state => {
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(updateProfileThunk.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      })
       .addCase(ChangePasswordThunk.pending, state => {
         state.loading = true;
         state.error = null;
@@ -108,11 +97,11 @@ const settingsSlice = createSlice({
         state.isStale = false;
       })
       .addCase(fetchCategoriesThunk.pending, state => {
-        state.loading = true;
+        state.categoryLoading = true;
         state.error = null;
       })
       .addCase(fetchCategoriesThunk.fulfilled, (state, action) => {
-        state.loading = false;
+        state.categoryLoading = false;
         state.error = null;
 
         const incomingData = action.payload.data;
@@ -134,7 +123,7 @@ const settingsSlice = createSlice({
         state.last_page = action.payload.meta.last_page;
       })
       .addCase(fetchCategoriesThunk.rejected, (state, action) => {
-        state.loading = false;
+        state.categoryLoading = false;
         state.error = action.payload as string;
       })
       .addCase(deleteCategoryThunk.pending, state => {

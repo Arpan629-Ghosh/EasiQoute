@@ -72,7 +72,7 @@ const CountryPickerComponent = forwardRef<
   );
 });
 
-export default CountryPickerComponent;
+export default React.memo(CountryPickerComponent);
 
 const createStyles = (theme: Theme) => StyleSheet.create({
   container: {

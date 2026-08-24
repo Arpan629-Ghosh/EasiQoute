@@ -37,10 +37,7 @@ export const createStyles = (theme: Theme) =>
       height: '100%',
       paddingHorizontal: 0,
     },
-    searchic: {
-      height: 18,
-      width: 18,
-    },
+    
     footer: {
       width: '100%',
 
@@ -65,4 +62,6 @@ export const createStyles = (theme: Theme) =>
       position: 'relative',
       zIndex: 999,
     },
+
+     
   });

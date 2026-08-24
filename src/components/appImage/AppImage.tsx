@@ -66,6 +66,8 @@ const AppImage = ({
     </View>
   );
 };
+export default React.memo(AppImage);
+
 
 const styles = StyleSheet.create({
   container: {
@@ -86,4 +88,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AppImage;
+

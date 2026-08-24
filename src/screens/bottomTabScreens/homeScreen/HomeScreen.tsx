@@ -29,9 +29,6 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
 
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-
-  
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,7 +42,7 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
   }, [homeScreenData]);
 
   return (
-    <View style={styles.safeareaview}>
+    <View style={[styles.safeareaview]}>
       <StatusBar
         barStyle="light-content"
         backgroundColor="transparent"

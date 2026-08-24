@@ -36,7 +36,7 @@ const SettingInfoRow: React.FC<Props> = ({
   );
 };
 
-export default SettingInfoRow;
+export default React.memo(SettingInfoRow);
 
 const styles = StyleSheet.create({
   container: {

@@ -15,6 +15,7 @@ import {
   FetchItemsPayload,
   CreateTeamMemberPayload,
   FetchTeamMembersPayload,
+  FetchTeamMembers,
 } from '@/types/apis/settings.types';
 
 export const settingsServices = {
@@ -213,7 +214,7 @@ export const settingsServices = {
       params.search = payload.search.trim();
     }
 
-    const response = await apiClient.get<ApiResponse<FetchTeamMembersPayload>>(
+    const response = await apiClient.get<ApiResponse<FetchTeamMembers>>(
       ENDPOINTS.TEAMMEMBER,
       { params },
     );

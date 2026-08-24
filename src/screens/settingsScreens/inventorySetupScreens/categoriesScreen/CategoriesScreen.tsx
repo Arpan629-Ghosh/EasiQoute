@@ -29,6 +29,7 @@ import { RootScreenProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
 import { useTranslation } from 'react-i18next';
+import Loader from '@/components/loader/Loader';
 
 const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) => {
   const [paginationLoading, setPaginationLoading] = useState(false);
@@ -39,6 +40,7 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
 
   const {
     fetchCategories,
+    categoryLoading,
     data,
     current_page,
     last_page,
@@ -215,6 +217,7 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
           </AppButton>
         </View>
       </View>
+      {!refreshing && <Loader visible={ categoryLoading } />}
     </LinearGradient>
   );
 };

@@ -28,6 +28,7 @@ import { RootScreenProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
 import { useTranslation } from 'react-i18next';
+import Loader from '@/components/loader/Loader';
 
 const SubCategoriesScreen = ({
   navigation,
@@ -194,6 +195,7 @@ const SubCategoriesScreen = ({
           </AppButton>
         </View>
       </View>
+      {!refreshing && <Loader visible={ settingLoading } />}
     </LinearGradient>
   );
 };

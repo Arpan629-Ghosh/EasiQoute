@@ -1,3 +1,4 @@
+import { fontFamily } from '@/constants/fontFamily';
 import { Theme } from '@/types/theme.types';
 import { StyleSheet } from 'react-native';
 
@@ -36,15 +37,15 @@ export const createStyles = (theme: Theme) =>
       width: 28,
     },
     formContainer: {
-      flex:1,
+      flex: 1,
       paddingVertical: 20,
       paddingHorizontal: 12,
       gap: 24,
-      overflow: "visible"
+      // overflow: 'visible',
     },
     inputContainer: {
       gap: 24,
-      overflow: "visible"
+      // overflow: 'visible',
     },
     inputicon: {
       height: 50,
@@ -96,4 +97,48 @@ export const createStyles = (theme: Theme) =>
       position: 'relative',
       zIndex: 999,
     },
+    dropdown: {
+      height: 52,
+      borderWidth: 1,
+      borderColor: theme.border,
+      borderRadius: 12,
+      paddingHorizontal: 14,
+      backgroundColor: theme.background,
+    },
+
+    dropdownContainer: {
+      backgroundColor: theme.background,
+      borderColor: theme.border,
+      borderRadius: 14,
+      top: 4,
+      paddingBottom: 10
+    },
+    placeholderStyle: {
+      color: theme.textSecondary,
+      fontSize: 14,
+      left: 5
+    },
+    emptyContainer: {
+      paddingVertical: 20,
+      paddingHorizontal: 16,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    selectedTextStyle: {
+      color: theme.textPrimary,
+      fontSize: 14,
+    },
+
+    itemTextStyle: {
+      color: theme.textPrimary,
+      fontSize: 14,
+    },
+    itemContainer: {
+      backgroundColor: theme.background,
+    },
+    inputSearchStyle: {
+      color: theme.textPrimary,
+      fontFamily: fontFamily.INTER_TIGHT.regular,
+      fontSize: 14
+    }
   });

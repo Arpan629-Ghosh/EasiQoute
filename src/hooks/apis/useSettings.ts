@@ -1,6 +1,5 @@
-import { ChangePasswordThunk, createItemsThunk, createTeamMemberThunk, deleteCategoryThunk, deleteItemThunk, deleteSubCategoryThunk, fetchCategoriesThunk, fetchItemsThunk, fetchSubCategoriesThunk, fetchTeamMembersThunk, newCategoriesThunk, newSubCategoriesThunk, updateProfileThunk } from "@/redux/apis/settings/settingsThunk"
+import { ChangePasswordThunk, createItemsThunk, createTeamMemberThunk, deleteCategoryThunk, deleteItemThunk, deleteSubCategoryThunk, fetchCategoriesThunk, fetchItemsThunk, fetchSubCategoriesThunk, fetchTeamMembersThunk, newCategoriesThunk, newSubCategoriesThunk } from "@/redux/apis/settings/settingsThunk"
 import { AppDispatch, RootState } from "@/redux/store"
-import {  CompanyPayload } from "@/types/apis/auth.types"
 import { ChangePassword, CreateCategories, CreateItems, CreateSubCategories, CreateTeamMemberPayload, FetchTeamMembersPayload } from "@/types/apis/settings.types"
 import { useCallback } from "react"
 import { useDispatch, useSelector } from "react-redux"
@@ -9,10 +8,6 @@ import { useDispatch, useSelector } from "react-redux"
 export const useSettings = () => {
     const dispatch = useDispatch<AppDispatch>()
     const settings = useSelector((state: RootState) => state.settings)
-    const updateCompanyProfile = async (payload: CompanyPayload) => {
-        return dispatch(updateProfileThunk(payload)).unwrap();
-        
-    }
 
     const changePassword = async (payload: ChangePassword) => {
        return dispatch(ChangePasswordThunk(payload)).unwrap();
@@ -65,7 +60,6 @@ export const useSettings = () => {
     }, [dispatch])
 
     return {
-        updateCompanyProfile,
         changePassword,
         newCategories,
         fetchCategories,
@@ -80,6 +74,7 @@ export const useSettings = () => {
         fetchTeamMembers,
 
         settingLoading: settings.loading,
+        categoryLoading: settings.categoryLoading,
         isStale: settings.isStale,
         isSubcatStale: settings.isSubCatStale,
         error: settings.error,

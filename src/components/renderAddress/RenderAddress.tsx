@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import React, { useMemo } from 'react';
 
 import { SearchAddressPayload } from '@/types/apis/auth.types';
@@ -8,34 +8,22 @@ import { Theme } from '@/types/theme.types';
 
 interface RenderAddressProps {
   item: SearchAddressPayload;
-  onPress?: () => void;
 }
 
-const RenderAddress: React.FC<RenderAddressProps> = ({ item, onPress }) => {
+const RenderAddress: React.FC<RenderAddressProps> = ({ item }) => {
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   return (
-    <Pressable
-      onPress={onPress}
-      android_ripple={{
-        color: theme.border,
-      }}
-      style={({ pressed }) => [
-        styles.container,
-        pressed && styles.pressedContainer,
-      ]}
-    >
-      <View style={styles.topRow}>
-        <InterTightRegular
-          fsize={14}
-          fcolor={theme.textPrimary}
-          style={styles.address}
-          numberOfLines={1}
-        >
-          {item.address_line_1}
-        </InterTightRegular>
-      </View>
+    <View style={styles.container}>
+      <InterTightRegular
+        fsize={14}
+        fcolor={theme.textPrimary}
+        style={styles.address}
+        numberOfLines={1}
+      >
+        {item.address_line_1}
+      </InterTightRegular>
 
       <View style={styles.bottomRow}>
         <InterTightRegular
@@ -66,7 +54,7 @@ const RenderAddress: React.FC<RenderAddressProps> = ({ item, onPress }) => {
           {item.country}
         </InterTightRegular>
       </View>
-    </Pressable>
+    </View>
   );
 };
 
