@@ -123,9 +123,7 @@ export const authServices = {
     if (payload.logo) {
       formData.append('logo', {
         uri: payload.logo.uri,
-
         name: payload.logo.fileName || 'profile.jpg',
-
         type: payload.logo.type || 'image/jpeg',
       });
     }

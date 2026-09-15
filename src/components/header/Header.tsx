@@ -31,7 +31,6 @@ const Header: React.FC<Props> = ({ txt, borderBottomEnabled, children }) => {
   return (
     <View
       style={[
-
         styles.container,
         borderBottomEnabled && styles.bottomBorder,
         { paddingTop: insets.top + 12}

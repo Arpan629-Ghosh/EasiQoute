@@ -16,6 +16,7 @@ import {
   CreateTeamMemberPayload,
   FetchTeamMembersPayload,
   FetchTeamMembers,
+  QuoteInvoiceSettingsPayload,
 } from '@/types/apis/settings.types';
 
 export const settingsServices = {
@@ -44,9 +45,9 @@ export const settingsServices = {
       formData,
       {
         headers: {
-          "Content-Type": 'multipart/form-data'
-        }
-      }
+          'Content-Type': 'multipart/form-data',
+        },
+      },
     );
 
     return response.data;
@@ -218,6 +219,14 @@ export const settingsServices = {
       ENDPOINTS.TEAMMEMBER,
       { params },
     );
+
+    return response.data;
+  },
+
+  getAppConfig: async () => {
+    const response = await apiClient.get<
+      ApiResponse<QuoteInvoiceSettingsPayload>
+    >(ENDPOINTS.APPCONFIG);
 
     return response.data;
   },

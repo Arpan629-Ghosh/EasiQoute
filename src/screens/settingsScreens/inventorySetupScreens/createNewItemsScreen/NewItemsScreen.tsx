@@ -15,29 +15,8 @@ import { useToast } from '@/hooks/useToast';
 import { images } from '@/config/images';
 import { CreateItems } from '@/types/apis/settings.types';
 import { RootScreenProps } from '@/types/navigation.types';
-const FilterOptions = ['Materials', 'Labour', 'Services', 'Miscellaneous'];
-const unitOptions: Item[] = [
-  {
-    label: 'Item',
-    value: 'item',
-  },
-  {
-    label: 'Hour',
-    value: 'hour',
-  },
-  {
-    label: 'Kg',
-    value: 'kg',
-  },
-  {
-    label: 'Meter',
-    value: 'meter',
-  },
-  {
-    label: 'Ft',
-    value: 'ft'
-  }
-];
+import { useAppConfig } from '@/hooks/apis/useAppConfig';
+
 
 interface ItemForm {
   category: string;
@@ -70,6 +49,7 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
   const { showToast } = useToast();
   const isEdit = !!editId
   const { subcat_data, data, settingLoading, error, createItems, deleteItem } = useSettings();
+  const {appConfigData} = useAppConfig();
 
   const updateField = useCallback(
     <K extends keyof ItemForm>(key: K, value: ItemForm[K]) => {
@@ -95,67 +75,52 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
     );
   }, [subcat_data]);
 
-  // const validateForm = () => {
-  //   if (!itemData.category) {
-  //     showToast('Please select category', 'error');
-  //     return false;
-  //   }
-
-  //   if (!itemData.subcategory) {
-  //     showToast('Please select subcategory', 'error');
-  //     return false;
-  //   }
-
-  //   if (!itemData.itemName.trim()) {
-  //     showToast('Please enter item name', 'error');
-  //     return false;
-  //   }
-
-  //   if (!itemData.unit) {
-  //     showToast('Please select unit', 'error');
-  //     return false;
-  //   }
-
-  //   if (!itemData.pricePerUnit.trim()) {
-  //     showToast('Please enter price per unit', 'error');
-  //     return false;
-  //   }
-
-  //   if (!itemData.unitCost.trim()) {
-  //     showToast('Please enter unit cost', 'error');
-  //     return false;
-  //   }
-
-  //   return true;
-  // };
-
   const handleItem = async () => {
-
     try {
-      const category_from_input = itemData.category.toLowerCase();
-      const category_from_api = data.filter(
-        item => item.name.toLowerCase() === category_from_input,
+      const category = appConfigData?.quote_categories.find(
+        item =>
+          item.name.toLowerCase() === itemData.category.trim().toLowerCase(),
       );
-     
-      
-      const category_id = category_from_api[0].id;
+
+      console.log(data)
+
+      if (!category) {
+        showToast('Please select a valid category', 'error');
+        return;
+      }
+
+      if (!itemData.subcategory) {
+        showToast('Please select a subcategory', 'error');
+        return;
+      }
+
+      if (!itemData.unit) {
+        showToast('Please select a unit', 'error');
+        return;
+      }
+
       const payload: CreateItems = {
-        category_id: category_id,
-        subcategory_id: Number(itemData.subcategory?.value),
+        category_id: category.id,
+        subcategory_id: Number(itemData.subcategory.value),
         name: itemData.itemName.trim(),
-        unit: String(itemData.unit?.value),
+        unit: String(itemData.unit.value),
         price: Number(itemData.pricePerUnit),
         cost: Number(itemData.unitCost),
         type: 'product',
       };
 
-      if(isEdit) payload.id = editId
+      if (editId) {
+        payload.id = editId;
+      }
+
       await createItems(payload);
 
-      showToast(isEdit ? "Item updated successfully" : 'Item created successfully');
+      showToast(
+        isEdit ? 'Item updated successfully' : 'Item created successfully',
+      );
+
       navigation.goBack();
     } catch (err) {
-     
       showToast(String(err), 'error');
     }
   };
@@ -172,6 +137,16 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
       navigation.goBack()
     }
   }
+
+  const measurementUnitOptions = useMemo<Item[]>(() => {
+    return (
+      appConfigData?.measurement_units?.map(unit => ({
+        label: unit.description,
+        value: unit.id,
+      })) || []
+    );
+  }, [appConfigData?.measurement_units]);
+
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
       <View style={styles.header}>
@@ -194,14 +169,14 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
               </InterTightMedium>
 
               <View style={styles.filter}>
-                {FilterOptions.map(item => {
-                  const isSelected = itemData.category === item;
+                {appConfigData?.quote_categories.map(item => {
+                  const isSelected = itemData.category === item.name;
 
                   return (
                     <TouchableOpacity
-                      key={item}
+                      key={item.id}
                       activeOpacity={0.8}
-                      onPress={() => handleFilterOption(item)}
+                      onPress={() => handleFilterOption(item.name)}
                       style={[
                         styles.filterbttn,
                         isSelected && styles.slectedfilterbttn,
@@ -211,7 +186,7 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
                         fsize={14}
                         fcolor={isSelected ? '#082B60' : '#89909D'}
                       >
-                        {item}
+                        {item.name}
                       </InterTightRegular>
                     </TouchableOpacity>
                   );
@@ -252,7 +227,7 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
               </InterTightRegular>
 
               <CustomDropdown
-                data={unitOptions}
+                data={measurementUnitOptions}
                 value={itemData.unit?.label || ''}
                 placeholder="Select unit"
                 onChange={(item: Item) => updateField('unit', item)}

@@ -1,6 +1,6 @@
-export interface ChangePassword{
-    old_password: string;
-    new_password: string;
+export interface ChangePassword {
+  old_password: string;
+  new_password: string;
 }
 
 export interface CreateCategoriesPayload {
@@ -40,9 +40,9 @@ export interface Meta {
 }
 
 export interface FetchCategoriesPayload {
-    data: CreateCategoriesPayload[] | [];
-    links: Links;
-    meta: Meta;
+  data: CreateCategoriesPayload[] | [];
+  links: Links;
+  meta: Meta;
 }
 
 export interface CreateSubCategories {
@@ -59,7 +59,7 @@ export interface SubCategoriesPayload {
     id: number;
     name: string;
     subcategories_count: number | null;
-    items_count: number | null
+    items_count: number | null;
   };
 }
 
@@ -90,7 +90,7 @@ export interface CreateItems {
   id?: number;
   type: string;
   category_id: number;
-  subcategory_id: number
+  subcategory_id: number;
   name: string;
   unit: string;
   price: number;
@@ -138,14 +138,14 @@ export interface CreateTeamMember {
   active: boolean;
   created_at: string;
   updated_at: string;
-} 
+}
 
 export interface CreateTeamMemberPayload {
   id?: number;
   name: string;
   email: string;
   password: string;
-  active?: boolean
+  active?: boolean;
 }
 
 export interface MemberDetails {
@@ -167,4 +167,70 @@ export interface FetchTeamMembers {
 export interface FetchTeamMembersPayload {
   search?: string;
   page: number;
+}
+
+export interface MeasurementUnit {
+  id: string;
+  description: string;
+}
+
+export interface QuoteCategory {
+  id: number;
+  name: string;
+}
+
+export interface QuoteInvoiceSettings {
+  terms_and_conditions: string;
+  footer_message: string;
+  signature: string;
+}
+
+export interface VatSetting {
+  id: number;
+  name: string;
+  description: string;
+  value: string;
+}
+
+export interface BillingPreferences {
+  vat: VatSetting;
+  quote_expiration: number;
+  payment_expiration: number;
+}
+
+export interface NotificationSettings {
+  email_notification_enabled: boolean;
+  push_notification_enabled: boolean;
+}
+
+export interface VerticalMarket {
+  id: number | string;
+  title: string;
+  icon: string;
+}
+
+export interface DocumentSetting {
+  categories: {
+    by_item: string;
+    by_category: string;
+    by_subcategory: string;
+    by_category_subcategory_item: string;
+  };
+  templates: {
+    classic: string;
+    modern: string;
+    elegant: string;
+  };
+}
+
+export interface QuoteInvoiceSettingsPayload {
+  measurement_units: MeasurementUnit[];
+  quote_categories: QuoteCategory[];
+  quote_invoice_settings: QuoteInvoiceSettings;
+  billing_preferences: BillingPreferences;
+  notification_settings: NotificationSettings;
+  vat_settings: VatSetting[];
+  vertical_markets: VerticalMarket[];
+  support_ticket_areas: unknown[];
+  document_setting: DocumentSetting;
 }

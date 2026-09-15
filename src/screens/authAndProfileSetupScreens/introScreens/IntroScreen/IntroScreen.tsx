@@ -143,6 +143,7 @@ const IntroScreen = ({ navigation }: RootScreenProps<'IntroScreen'>) => {
               txtColor={theme.primaryText}
             />
           )}
+          
         </View>
       </View>
     </View>

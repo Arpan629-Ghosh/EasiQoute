@@ -21,5 +21,6 @@ export const ENDPOINTS = {
   TEAMMEMBER: '/api/company/users',
   PAYMENT: '/api/payments',
   PAYMENTDETAILS: '/api/payments/deposits',
-  PAYMENTDEPOSITQUOTES: '/api/payment-deposit-quotes'
+  PAYMENTDEPOSITQUOTES: '/api/payment-deposit-quotes',
+  APPCONFIG: '/api/auth/config',
 };
