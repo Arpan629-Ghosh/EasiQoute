@@ -1,4 +1,4 @@
-package com.eaziqoute
+package com.eaziquote
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

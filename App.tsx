@@ -37,17 +37,75 @@ const AppContent = () => {
 
   useEffect(() => {
     const setupFCM = async () => {
-      await notificationService.requestPermission();
+      const permission = await notificationService.requestPermission();
+
+      console.log('Notification permission:', permission);
+
+      if (!permission) {
+        console.log('Notification permission denied');
+        return;
+      }
 
       const token = await notificationService.getFCMToken();
 
-      console.log('FCM TOKEN', token);
       if (token) {
         dispatch(setFCMToken(token));
       }
     };
 
     setupFCM();
+
+    // App is OPEN and notification arrives
+    const unsubscribeForeground = notificationService.onForegroundMessage(
+      message => {
+        console.log('FOREGROUND NOTIFICATION:', message);
+
+        // Handle your UI here
+        // Example:
+        // showToast(message.notification?.title);
+      },
+    );
+
+    // App is in BACKGROUND and user taps notification
+    const unsubscribeOpened = notificationService.onNotificationOpened(
+      message => {
+        console.log('BACKGROUND NOTIFICATION OPENED:', message);
+
+        // Navigate here if needed
+        // Example:
+        // navigation.navigate('NotificationDetails', {
+        //   id: message.data?.id,
+        // });
+      },
+    );
+
+    // App was completely KILLED and user taps notification
+    const checkInitialNotification = async () => {
+      const message = await notificationService.getInitialNotification();
+
+      if (message) {
+        console.log('KILLED APP OPENED FROM NOTIFICATION:', message);
+
+        // Navigate here if needed
+      }
+    };
+
+    checkInitialNotification();
+
+    // FCM token changes
+    const unsubscribeToken = notificationService.onTokenRefresh(token => {
+      console.log('FCM TOKEN REFRESHED:', token);
+
+      if (token) {
+        dispatch(setFCMToken(token));
+      }
+    });
+
+    return () => {
+      unsubscribeForeground();
+      unsubscribeOpened();
+      unsubscribeToken();
+    };
   }, [dispatch]);
 
   return (

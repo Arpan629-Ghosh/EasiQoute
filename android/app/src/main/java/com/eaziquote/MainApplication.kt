@@ -1,4 +1,4 @@
-package com.eaziqoute
+package com.eaziquote
 
 import android.app.Application
 import com.facebook.react.PackageList

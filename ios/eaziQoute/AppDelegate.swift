@@ -3,7 +3,8 @@ import React
 import React_RCTAppDelegate
 import ReactAppDependencyProvider
 import Firebase
-
+import FirebaseMessaging
+import UserNotifications
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -16,9 +17,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
-      FirebaseApp.configure()
+
+    // Initialize Firebase
+    FirebaseApp.configure()
+
+    // Set notification delegate
+    UNUserNotificationCenter.current().delegate = self
+
+    // Register with APNs
+    application.registerForRemoteNotifications()
+
     let delegate = ReactNativeDelegate()
     let factory = RCTReactNativeFactory(delegate: delegate)
+
     delegate.dependencyProvider = RCTAppDependencyProvider()
 
     reactNativeDelegate = delegate
@@ -34,6 +45,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     return true
   }
+
+  // APNs token received
+  func application(
+    _ application: UIApplication,
+    didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
+  ) {
+    Messaging.messaging().apnsToken = deviceToken
+
+    print("✅ APNS TOKEN RECEIVED")
+  }
+
+  // APNs registration failed
+  func application(
+    _ application: UIApplication,
+    didFailToRegisterForRemoteNotificationsWithError error: Error
+  ) {
+    print("❌ APNS REGISTRATION FAILED:", error.localizedDescription)
+  }
+}
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 
 class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
@@ -45,7 +77,10 @@ class ReactNativeDelegate: RCTDefaultReactNativeFactoryDelegate {
 #if DEBUG
     RCTBundleURLProvider.sharedSettings().jsBundleURL(forBundleRoot: "index")
 #else
-    Bundle.main.url(forResource: "main", withExtension: "jsbundle")
+    Bundle.main.url(
+      forResource: "main",
+      withExtension: "jsbundle"
+    )
 #endif
   }
 }
