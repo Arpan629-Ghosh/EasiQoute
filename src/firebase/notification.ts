@@ -1,12 +1,21 @@
-import messaging, {
-  FirebaseMessagingTypes,
+import {
   AuthorizationStatus,
+  getAPNSToken,
+  getMessaging,
+  getToken,
+  onMessage,
+  onTokenRefresh,
+  registerDeviceForRemoteMessages,
+  requestPermission,
+  type FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
 import { Platform } from 'react-native';
 
+const messaging = getMessaging();
+
 export const notificationService = {
   requestPermission: async () => {
-    const authStatus = await messaging().requestPermission();
+    const authStatus = await requestPermission(messaging);
 
     const enabled =
       authStatus === AuthorizationStatus.AUTHORIZED ||
@@ -17,10 +26,10 @@ export const notificationService = {
 
   getFCMToken: async () => {
     try {
-      await messaging().registerDeviceForRemoteMessages();
+      await registerDeviceForRemoteMessages(messaging);
 
       if (Platform.OS === 'ios') {
-        const apnsToken = await messaging().getAPNSToken();
+        const apnsToken = await getAPNSToken(messaging);
 
         console.log('APNS TOKEN:', apnsToken);
 
@@ -29,13 +38,14 @@ export const notificationService = {
         }
       }
 
-      const token = await messaging().getToken();
+      const token = await getToken(messaging);
 
       console.log('FCM TOKEN:', token);
 
       return token;
     } catch (error) {
-      console.log('FCM token error:', error);
+      console.log('FCM TOKEN ERROR:', error);
+
       return '';
     }
   },
@@ -43,20 +53,10 @@ export const notificationService = {
   onForegroundMessage: (
     callback: (message: FirebaseMessagingTypes.RemoteMessage) => void,
   ) => {
-    return messaging().onMessage(callback);
-  },
-
-  onNotificationOpened: (
-    callback: (message: FirebaseMessagingTypes.RemoteMessage) => void,
-  ) => {
-    return messaging().onNotificationOpenedApp(callback);
-  },
-
-  getInitialNotification: async () => {
-    return messaging().getInitialNotification();
+    return onMessage(messaging, callback);
   },
 
   onTokenRefresh: (callback: (token: string) => void) => {
-    return messaging().onTokenRefresh(callback);
+    return onTokenRefresh(messaging, callback);
   },
 };

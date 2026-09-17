@@ -3,7 +3,9 @@ import {
   createNavigationContainerRef,
 } from '@react-navigation/native';
 
-export const navigationRef = createNavigationContainerRef();
+import { RootStackParamList } from '@/types/navigation.types';
+
+export const navigationRef = createNavigationContainerRef<RootStackParamList>();
 
 export const resetToAuth = () => {
   if (!navigationRef.isReady()) {
