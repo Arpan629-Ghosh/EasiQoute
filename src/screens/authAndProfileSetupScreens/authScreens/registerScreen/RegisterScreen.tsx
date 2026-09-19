@@ -1,4 +1,4 @@
-import { View, TextInput, ScrollView, KeyboardAvoidingView, Platform, Image, TouchableOpacity } from 'react-native'
+import { View, TextInput, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native'
 import React, {  useMemo, useRef, useState } from 'react'
 import GradientHeader from '@/components/gradient/GradientHeader';
 import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
@@ -7,7 +7,6 @@ import AppInput from '@/components/appInput/AppInput';
 import AppButton from '@/components/appButton/AppButton';
 import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import { createStyles } from './style';
-import { images } from '@/config/images';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useAuth } from '@/hooks/apis/useAuth';
 import { useSelector } from 'react-redux';
@@ -15,6 +14,7 @@ import { RootState } from '@/redux/store';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useTranslation } from 'react-i18next';
+import { Eye, EyeOff } from 'lucide-react-native';
 
 
 
@@ -27,7 +27,9 @@ const RegisterScreen = ({navigation} : RootScreenProps<'RegisterScreen'>) => {
   const [formData, setFormData] = useState<LoginForm>({
       email: '',
       password: '',
-    });
+  });
+  const [secureTextEntry, setSecureTextEntry] = useState<boolean>(true)
+  
   
     const emailRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
@@ -44,6 +46,10 @@ const RegisterScreen = ({navigation} : RootScreenProps<'RegisterScreen'>) => {
         ...prev,
         [name]: value,
       }));
+    };
+  
+    const handleSecureTextEntry = () => {
+      setSecureTextEntry(!secureTextEntry);
     };
   
     const handleSignup = async () => {
@@ -121,13 +127,23 @@ const RegisterScreen = ({navigation} : RootScreenProps<'RegisterScreen'>) => {
                       onChangeText={(txt: string) =>
                         handleInput('password', txt)
                       }
-                      secureTextEntry
+                      secureTextEntry = {secureTextEntry}
                       textContentType="password"
                       style={styles.noBorderInput}
                     />
-                    <TouchableOpacity>
-                      <Image source={images.img_vector} style={styles.img} />
-                    </TouchableOpacity>
+                    {secureTextEntry ? (
+                      <EyeOff
+                        size={24}
+                        color={theme.textPrimary}
+                        onPress={handleSecureTextEntry}
+                      />
+                    ) : (
+                      <Eye
+                        size={24}
+                        color={theme.textPrimary}
+                        onPress={handleSecureTextEntry}
+                      />
+                    )}
                   </View>
                 </View>
                 <AppButton

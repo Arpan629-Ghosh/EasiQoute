@@ -1,5 +1,4 @@
 import {
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -13,7 +12,7 @@ import GradientHeader from '@components/gradient/GradientHeader';
 import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
 import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import AppInput from '@/components/appInput/AppInput';
-import { images } from '@config/images';
+import {Eye, EyeOff} from "lucide-react-native"
 import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import AppButton from '@/components/appButton/AppButton';
 import { useAppTheme } from '@/hooks/useAppTheme';
@@ -155,9 +154,9 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
                       textContentType="password"
                       style={styles.noBorderInput}
                     />
-                    <TouchableOpacity onPress={handleSecureTextEntry}>
-                      <Image source={images.img_vector} style={styles.img} />
-                    </TouchableOpacity>
+                    {
+                      secureTextEntry ? <EyeOff  size={24} color={theme.textPrimary} onPress={handleSecureTextEntry}/> : <Eye size={24} color={theme.textPrimary} onPress={handleSecureTextEntry}/>
+                    }
                   </View>
                 </View>
                 <AppButton

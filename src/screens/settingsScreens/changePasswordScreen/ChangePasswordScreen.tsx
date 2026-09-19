@@ -1,10 +1,8 @@
 import {
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import React, { useMemo, useRef, useState } from 'react';
@@ -14,12 +12,12 @@ import Header from '@/components/header/Header';
 import LinearGradient from 'react-native-linear-gradient';
 import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import AppInput from '@/components/appInput/AppInput';
-import { images } from '@/config/images';
 import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useSettings } from '@/hooks/apis/useSettings';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
+import { Eye, EyeOff } from 'lucide-react-native';
 
 interface ChangePasswordForm {
   oldPassword: string;
@@ -115,11 +113,19 @@ const ChangePasswordScreen = ({navigation} : RootScreenProps<'ChangePasswordScre
                     onSubmitEditing={() => newRef.current?.focus()}
                     returnKeyType="next"
                   />
-                  <TouchableOpacity
-                    onPress={() => togglePasswordVisibility('oldPassword')}
-                  >
-                    <Image source={images.img_vector} style={styles.img} />
-                  </TouchableOpacity>
+                  {hidePassword.oldPassword ? (
+                    <EyeOff
+                      size={24}
+                      color={theme.textPrimary}
+                      onPress={() => togglePasswordVisibility('oldPassword')}
+                    />
+                  ) : (
+                    <Eye
+                      size={24}
+                      color={theme.textPrimary}
+                      onPress={() => togglePasswordVisibility('oldPassword')}
+                    />
+                  )}
                 </View>
               </View>
               <View style={styles.inp}>
@@ -138,11 +144,19 @@ const ChangePasswordScreen = ({navigation} : RootScreenProps<'ChangePasswordScre
                     onSubmitEditing={() => confirmRef.current?.focus()}
                     returnKeyType="next"
                   />
-                  <TouchableOpacity
-                    onPress={() => togglePasswordVisibility('newPassword')}
-                  >
-                    <Image source={images.img_vector} style={styles.img} />
-                  </TouchableOpacity>
+                  {hidePassword.newPassword ? (
+                    <EyeOff
+                      size={24}
+                      color={theme.textPrimary}
+                      onPress={() => togglePasswordVisibility('newPassword')}
+                    />
+                  ) : (
+                    <Eye
+                      size={24}
+                      color={theme.textPrimary}
+                      onPress={() => togglePasswordVisibility('newPassword')}
+                    />
+                  )}
                 </View>
               </View>
               <View style={styles.inp}>
@@ -159,11 +173,19 @@ const ChangePasswordScreen = ({navigation} : RootScreenProps<'ChangePasswordScre
                     value={changePasswordData.confirmPassword}
                     onChangeText={txt => handleInput('confirmPassword', txt)}
                   />
-                  <TouchableOpacity
-                    onPress={() => togglePasswordVisibility('confirmPassword')}
-                  >
-                    <Image source={images.img_vector} style={styles.img} />
-                  </TouchableOpacity>
+                  {hidePassword.confirmPassword ? (
+                    <EyeOff
+                      size={24}
+                      color={theme.textPrimary}
+                      onPress={() => togglePasswordVisibility('confirmPassword')}
+                    />
+                  ) : (
+                    <Eye
+                      size={24}
+                      color={theme.textPrimary}
+                      onPress={() => togglePasswordVisibility('confirmPassword')}
+                    />
+                  )}
                 </View>
               </View>
             </View>
