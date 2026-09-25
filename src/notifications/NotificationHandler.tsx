@@ -7,67 +7,7 @@ import { AppDispatch } from '@/redux/store';
 import { setFCMToken } from '@/redux/apis/notification/notificationSlice';
 import { notificationService } from '@/firebase/notification';
 import { notifeeService } from './notifeeService';
-import { navigationRef } from '@/utils/navigationRef';
-
-type NotificationData = {
-  landing_screen?: string;
-  relevant_id?: string;
-  relevant_type?: string;
-};
-
-const handleNotificationNavigation = (data?: NotificationData) => {
-    if (!data) {
-      return;
-    }
-
-    const { landing_screen, relevant_id } = data;
-
-    if (!navigationRef.isReady()) {
-      console.log('Navigation is not ready');
-      return;
-    }
-
-    if (!relevant_id) {
-      console.log('Missing notification relevant_id');
-      return;
-    }
-
-    const id = Number(relevant_id);
-
-    if (!id) {
-      console.log('Invalid notification relevant_id:', relevant_id);
-      return;
-    }
-
-    switch (landing_screen) {
-      case 'invoice':
-        navigationRef.navigate('InvoiceDetailsScreens', {
-          invoiceId: id,
-        });
-        break;
-
-      case 'payment':
-        navigationRef.navigate('PaymentDetailsScreen', {
-          paymentId: id,
-        });
-        break;
-
-      case 'quote':
-        navigationRef.navigate('QouteDetailScreen', {
-          quoteId: id,
-        });
-        break;
-
-      case 'client':
-        navigationRef.navigate('ClientDetailScreen', {
-          clientId: id,
-        });
-        break;
-
-      default:
-        console.log('UNKNOWN NOTIFICATION LANDING SCREEN:', landing_screen);
-    }
-};
+import { handleNotificationNavigation } from '@/utils/notificationNavigation';
 
 const NotificationHandler = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -76,14 +16,11 @@ const NotificationHandler = () => {
     const initializeNotifications = async () => {
       try {
         await notifeeService.createChannel();
-
         const permission = await notificationService.requestPermission();
-
         console.log('FCM Permission:', permission);
 
         if (Platform.OS === 'ios') {
           const notifeePermission = await notifee.requestPermission();
-
           console.log('NOTIFEE IOS PERMISSION:', notifeePermission);
         }
 
@@ -93,7 +30,6 @@ const NotificationHandler = () => {
         }
 
         const token = await notificationService.getFCMToken();
-
         console.log('FCM TOKEN:', token);
 
         if (token) {
@@ -106,16 +42,15 @@ const NotificationHandler = () => {
 
     initializeNotifications();
 
-    // fcm received when app is opened in forground
+    // FCM received while app is in foreground
     const unsubscribeMessage = notificationService.onForegroundMessage(
       async message => {
         console.log('FOREGROUND FCM:', message);
-
         await notifeeService.displayForegroundNotification(message);
       },
     );
 
-    // App is open and user taps on notification
+    // App is open and user taps notification
     const unsubscribeNotifee = notifeeService.onForegroundEvent(
       ({ type, detail }) => {
         if (type !== EventType.PRESS) {
@@ -123,13 +58,12 @@ const NotificationHandler = () => {
         }
 
         console.log('NOTIFICATION PRESSED:', detail.notification);
-
-        handleNotificationNavigation(detail.notification?.data);
+        handleNotificationNavigation(detail?.notification?.data);
       },
     );
 
-   // App was killed but opened after user clicks on notification
-    const checkInitialNotification = async () => {
+    // App was killed and opened by notification tap
+    const checkInitialNotification = async (): Promise<void> => {
       try {
         const initialNotification =
           await notifeeService.getInitialNotification();
@@ -139,7 +73,6 @@ const NotificationHandler = () => {
         }
 
         console.log('APP OPENED FROM NOTIFICATION:', initialNotification);
-
         handleNotificationNavigation(initialNotification.notification.data);
       } catch (error) {
         console.log('INITIAL NOTIFICATION ERROR:', error);
@@ -148,9 +81,7 @@ const NotificationHandler = () => {
 
     checkInitialNotification();
 
-    /**
-     * FCM TOKEN REFRESH
-     */
+    // FCM token refresh
     const unsubscribeToken = notificationService.onTokenRefresh(token => {
       console.log('FCM TOKEN REFRESHED:', token);
 

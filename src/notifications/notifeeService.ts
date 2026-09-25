@@ -1,5 +1,4 @@
 import notifee, { AndroidImportance } from '@notifee/react-native';
-
 import type { FirebaseMessagingTypes } from '@react-native-firebase/messaging';
 
 const CHANNEL_ID = 'default';
@@ -22,9 +21,7 @@ export const notifeeService = {
     if (!title && !body) {
       return;
     }
-
-    // console.log('DISPLAYING NOTIFEE NOTIFICATION');
-
+    
     await notifee.displayNotification({
       title: title ?? 'eaziQoute',
       body: body ?? '',

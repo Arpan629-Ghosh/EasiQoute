@@ -156,6 +156,7 @@ export type RootStackParamList = {
   RecordPaymentScreen: undefined;
 };
 
+
 export type MainTabParamList = {
   Home: NavigatorScreenParams<HomeStackParamList>;
   Qoute: undefined;

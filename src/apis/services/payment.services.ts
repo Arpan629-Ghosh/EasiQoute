@@ -31,8 +31,10 @@ export const paymentServices = {
     createPayment: async (payload: RecordPaymentProps) => {
 
         const formData = new FormData();
-        if(payload.invoiceId)
-            formData.append("invoice_id", payload.invoiceId);
+        if (payload.invoiceId) {
+            formData.append('invoice_id', payload.invoiceId);
+        }
+        
         formData.append('amount_type', payload.amtType);
         formData.append('payment_method', payload.method);
         formData.append('amount', payload.amt);

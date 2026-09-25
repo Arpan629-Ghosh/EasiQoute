@@ -30,7 +30,6 @@ export const notificationService = {
 
       if (Platform.OS === 'ios') {
         const apnsToken = await getAPNSToken(messaging);
-
         console.log('APNS TOKEN:', apnsToken);
 
         if (!apnsToken) {
@@ -39,13 +38,11 @@ export const notificationService = {
       }
 
       const token = await getToken(messaging);
-
       console.log('FCM TOKEN:', token);
-
       return token;
+
     } catch (error) {
       console.log('FCM TOKEN ERROR:', error);
-
       return '';
     }
   },
