@@ -25,7 +25,6 @@ import CustomToggle from '@/components/switch/CustomToggle';
 import { images } from '@/config/images';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
 import { pick, types } from '@react-native-documents/picker';
 import { QuoteTopTabWithRootProps } from '@/types/navigation.types';
@@ -34,6 +33,8 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { GetClients } from '@/types/apis/client.types';
 import CustomDropdown, { Item } from '@/components/dropdown/CustomDropdown';
 import { formatDateForInput } from '@/utils/formatDate';
+import { useQuoteList } from '@/hooks/apis/quotes/useQuoteList';
+import { useUpdateQuote } from '@/hooks/apis/quotes/useUpdateQuote';
 
 export interface AttachmentFile {
   uri: string;
@@ -81,8 +82,8 @@ const SummuryScreen = ({
 
   const page = useRef(1);
   const { theme } = useAppTheme();
-  const { createQuote, updateQuote, loadingCreateQuote, loadingUpdateQuote } =
-    useQuotes();
+  const { createQuoteMutationAsync, isCreatingQuote } = useQuoteList();
+  const { updateQuoteAsync, isUpdatingQuote } = useUpdateQuote();
   const { clients, current_page, last_page, getClients } = useClient();
   const { showToast } = useToast();
   const debouncedSearch = useDebounce(search);
@@ -260,7 +261,7 @@ const SummuryScreen = ({
 
   const handleCreateQuote = async () => {
     try {
-      const res = await createQuote({
+      const res = await createQuoteMutationAsync({
         title: newQuoteFormData.title,
         description: newQuoteFormData.description,
         quote_date: newQuoteFormData.quote_date,
@@ -281,10 +282,10 @@ const SummuryScreen = ({
         notes: '',
         file: [],
       });
-      onQuoteCreated(res.id);
+      onQuoteCreated(res.payload.id);
 
       navigation.jumpTo('Items', {
-        quoteDetails: res
+        quoteDetails: res.payload,
       });
     } catch (error) {
       showToast(String(error), 'error');
@@ -293,7 +294,7 @@ const SummuryScreen = ({
 
   const handleUpdateInvoice = async () => {
     try {
-      await updateQuote({
+      await updateQuoteAsync({
         quote_id: quoteId,
         quote_summury: newQuoteFormData,
         is_company_phone_number_show: enabled,
@@ -317,7 +318,6 @@ const SummuryScreen = ({
     }
   };
 
-  console.log(loadingCreateQuote, loadingUpdateQuote);
   return (
     <View style={styles.container}>
       <KeyboardAvoidingView
@@ -493,7 +493,7 @@ const SummuryScreen = ({
             bg={theme.primary}
             bttnTxt="Save"
             txtColor={theme.primaryText}
-            showLoader={loadingUpdateQuote || loadingCreateQuote}
+            showLoader={isUpdatingQuote || isCreatingQuote}
             onPress={isEdit ? handleUpdateInvoice : handleCreateQuote}
           />
         </View>

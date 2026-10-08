@@ -17,10 +17,10 @@ import { useDebounce } from '@/hooks/useDebounce';
 import DiscountModal from '@/components/discountModal/DiscountModal';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 import { FetchItemsData } from '@/types/apis/settings.types';
-import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
 import { QuoteTopTabWithRootProps } from '@/types/navigation.types';
 import { InvoiceItem } from '@/types/apis/invoice.types';
+import { useUpdateQuote } from '@/hooks/apis/quotes/useUpdateQuote';
 
 
 
@@ -58,7 +58,7 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
     items_current_page,
     items_last_page,
   } = useSettings();
-  const { updateQuote, loadingUpdateQuote } = useQuotes();
+  const { updateQuoteAsync, isUpdatingQuote } = useUpdateQuote();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   useEffect(() => {
@@ -260,14 +260,14 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
       return;
     }
     try {
-      const res = await updateQuote({
+      const res = await updateQuoteAsync({
         quote_id: quoteId,
         quote_items: selectedItems,
       });
       showToast('Quote updated successfully!');
       navigation.jumpTo('Sections', {
-        quoteDetails: route.params.quoteDetails || res
-      })
+        quoteDetails: route.params.quoteDetails || res.payload,
+      });
     } catch (error) {
       showToast(String(error), 'error');
     }
@@ -429,7 +429,7 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
               bttnTxt="Save & Preview"
               txtColor={theme.primaryText}
               buttonWidth="48.5%"
-              showLoader={loadingUpdateQuote}
+              showLoader={isUpdatingQuote}
               onPress={handleUpdateQuote}
             />
           </View>

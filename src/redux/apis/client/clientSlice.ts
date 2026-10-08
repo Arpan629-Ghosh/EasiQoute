@@ -10,7 +10,7 @@ interface ClientState {
   updateClientLoader: boolean;
   error: string | null;
   current_page: number;
-  last_page: number;
+  last_page: number;                    
 }
 
 const initialState: ClientState = {
@@ -59,7 +59,7 @@ const clientSlice = createSlice({
         } else {
           const existingIds = new Set(state.clients.map(item => item.id));
 
-          const uniqueItems = incomingData.filter(
+          const uniqueItems = incomingData.filter(  
             item => !existingIds.has(item.id),
           );
           state.clients.push(...uniqueItems);

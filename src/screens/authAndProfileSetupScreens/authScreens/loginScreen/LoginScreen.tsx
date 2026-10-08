@@ -29,8 +29,6 @@ interface LoginForm {
 }
 const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
 
-  
-
   const [formData, setFormData] = useState<LoginForm>({
     email: '',
     password: '',

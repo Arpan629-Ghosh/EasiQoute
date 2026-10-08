@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { createStyles } from './style';
 import { images } from '@/config/images';
 import InterTightMedium from '@/components/appFonts/InterTightMedium';
@@ -15,7 +15,7 @@ import AppDetails from '@/components/appDetails/AppDetails';
 import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import RenderActivities from '@/components/renderActivities/RenderActivities';
 import { useAppTheme } from '@/hooks/useAppTheme';
-import { useHomeScreenData } from '@/hooks/apis/useHomeScreenData';
+import { useHomeScreenData } from '@/hooks/apis/home/useHomeScreenData';
 import Loader from '@/components/loader/Loader';
 import { HomeStackProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
@@ -24,22 +24,17 @@ import { useGetUserDetails } from '@/hooks/apis/useGetUserDetails';
 
 const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
   const { theme, isDark } = useAppTheme();
-  const { homeScreenData, homeData, loading } = useHomeScreenData();
   const { userDetails } = useGetUserDetails();
 
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await homeScreenData();
-        console.log('home', data);
-      } catch (error) {
-        console.log('HOME SCREEN DATA FETCH ERROR', error);
-      }
-    };
-    fetchData();
-  }, [homeScreenData]);
+  const {
+    homeScreenData,
+    isPending,
+    isError
+  } = useHomeScreenData();
+
+  console.log(isError)
 
   return (
     <View style={[styles.safeareaview]}>
@@ -70,17 +65,17 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
             <View style={styles.details}>
               <View style={styles.invoiceqoute}>
                 <AppDetails
-                  price={`£${homeData?.invoiceDetails?.outstanding_invoices_amount}`}
+                  price={`£${homeScreenData?.invoiceDetails?.outstanding_invoices_amount}`}
                   type="Outstanding Invoices"
-                  numberDueActive={`${homeData?.invoiceDetails.overdue_invoices} Overdue`}
+                  numberDueActive={`${homeScreenData?.invoiceDetails.overdue_invoices} Overdue`}
                 />
 
                 <View style={styles.emptyView} />
 
                 <AppDetails
-                  price={`£${homeData?.quoteDetails.pending_quotes_amount}`}
+                  price={`£${homeScreenData?.quoteDetails.pending_quotes_amount}`}
                   type="Pending Quotes"
-                  numberDueActive={`${homeData?.quoteDetails.active_quotes} Active`}
+                  numberDueActive={`${homeScreenData?.quoteDetails.active_quotes} Active`}
                 />
               </View>
               <View style={styles.icons}>
@@ -123,7 +118,7 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
         </View>
         
           <FlatList
-            data={homeData?.recentActivities || []}
+            data={homeScreenData?.recentActivities || []}
             renderItem={({ item }) => <RenderActivities item={item} />}
             keyExtractor={item => item.id.toString()}
             showsVerticalScrollIndicator={false}
@@ -146,7 +141,7 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
           Free trial ends on November 20, 2025
         </InterTightRegular>
       </View>
-      <Loader visible={loading} />
+      <Loader visible={isPending} />
     </View>
   );
 };

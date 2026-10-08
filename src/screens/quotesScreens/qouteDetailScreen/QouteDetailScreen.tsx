@@ -22,6 +22,10 @@ import Loader from '@/components/loader/Loader';
 import { RootScreenProps } from '@/types/navigation.types';
 import { STATUS_COLORS } from '@/config/statusColors';
 import { useFocusEffect } from '@react-navigation/native';
+import { useQuoteDetails } from '@/hooks/apis/quotes/useQuoteDetails';
+import { useDeleteQuote } from '@/hooks/apis/quotes/useDeleteQuote';
+import { useDuplicateQuote } from '@/hooks/apis/quotes/useDuplicateQuote';
+import { useUpdateQuoteStatus } from '@/hooks/apis/quotes/useUpdateQuoteStatus';
 
 const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailScreen'>) => {
   const [open, setOpen] = useState(false)
@@ -30,19 +34,13 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
   const { showToast } = useToast();
-  const {
-    fetchQuoteDetails,
-    getSelectedSections,
-    updateStatus,
-    duplicateQuote,
-    deleteQuote,
-    quoteDetails,
-    loadingQuoteDetails,
-    loadingDuplicateQuote,
-    loadingDeleteQuote,
-    selectedSections,
-  } = useQuotes();
+  const { getSelectedSections, selectedSections } = useQuotes();
   const quoteId = route.params.quoteId; 
+  const { quoteDetails, isFetching } = useQuoteDetails(quoteId);
+  const { mutateAsync: deleteQuote, isPending: isDeleting } = useDeleteQuote();
+  const { mutateAsync: duplicateQuote, isPending: isDuplicating } =
+    useDuplicateQuote();
+  const { updateQuoteStatusAsync, isUpdatingQuote } = useUpdateQuoteStatus();
   const styles = useMemo(() => createStyles(theme), [theme])
 
   const animation = useRef(new Animated.Value(0)).current;
@@ -50,18 +48,17 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
   
 
   useEffect(() => {
-    fetchQuoteDetails(quoteId);
     getSelectedSections(quoteId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quoteId])
-  const handleDuplicateQuote = () => {
+  }, [quoteId]);
+  
+  const handleDuplicateQuote = async () => {
     try {
-      duplicateQuote(quoteId);
+      await duplicateQuote(quoteId);
       showToast('Quote duplcated successfully!');
     } catch (error) {
-      showToast(String(error), 'error')
-    }
-    
+      showToast(String(error), 'error');
+    } 
   }
 
   useFocusEffect(
@@ -121,11 +118,11 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
 
   const toggleStatus = useCallback(async (type: string) => {
     try {
-      await updateStatus({
+      await updateQuoteStatusAsync({
         quote_id: quoteId,
         status: type.toLowerCase(),
       });
-      await fetchQuoteDetails(quoteId);
+      // await fetchQuoteDetails(quoteId);
       setSelectedStatus(prev => {
         const isSelected = prev.includes(type);
         const updatedStatus = isSelected ? '' : type;
@@ -601,9 +598,11 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
             borderc="#082B60"
             txtColor={theme.textPrimary}
             gap={8}
-            onPress={() => navigation.navigate("NewInvoiceScreens", {
-              quoteId: quoteId
-            })}
+            onPress={() =>
+              navigation.navigate('NewInvoiceScreens', {
+                quoteId: quoteId,
+              })
+            }
           >
             <Image source={icons.ic_addicon} style={styles.addicon} />
           </AppButton>
@@ -628,9 +627,7 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
         selectedStatus={selectedStatus}
       />
       <Loader
-        visible={
-          loadingQuoteDetails || loadingDuplicateQuote || loadingDeleteQuote
-        }
+        visible={isDuplicating || isDeleting || isUpdatingQuote || isFetching}
       />
     </LinearGradient>
   );

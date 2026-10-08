@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { createStyles } from './style';
 import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
 import AppInput from '@/components/appInput/AppInput';
@@ -19,13 +19,13 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useQuotes } from '@/hooks/apis/useQuotes';
 import RenderQuotes from '@/components/renderQuotes/RenderQuotes';
 import Loader from '@/components/loader/Loader';
 import { QuoteItem } from '@/types/apis/quote.types';
 import { QuoteStackProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
+import { useQuoteList } from '@/hooks/apis/quotes/useQuoteList';
 
 interface FilterAndSortingType {
   startDate: string;
@@ -49,31 +49,27 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
   const [openFilterModal, setOpenFilterModal] = useState(false);
   const [openSubscriptionModal, setOpenSubscriptionModal] = useState(false);
   const [search, setSearch] = useState<string>('');
-  const [paginationLoading, setPaginationLoading] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const page = useRef(1);
-  const onEndReachedCalledDuringMomentum = useRef(false);
+
+  const {
+    quoteListData,
+    isPending,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useQuoteList();
 
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
-
-  const {
-    fetchQuotesScreenData,
-    quoteList,
-    loadingQuoteList,
-    current_page,
-    last_page,
-  } = useQuotes();
 
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const debouncedSearch = useDebounce(search);
 
-  useEffect(() => {
-    page.current = 1;
-    fetchQuotesScreenData(1);
-  }, [fetchQuotesScreenData])
+ 
 
   const navigateToNewQuote = useCallback(() => {
     navigation.navigate('NewQuoteScreens');
@@ -138,50 +134,29 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
     }));
   }, []);
 
-  const hasMore = useMemo(() => {
-    return current_page < last_page;
-  }, [current_page, last_page]);
-
   const handleRefresh = useCallback(async () => {
-    if (refreshing) {
-      return;
-    }
     try {
-      setRefreshing(true);
-      page.current = 1;
-      await fetchQuotesScreenData(1);
+      setIsRefreshing(true);
+      await refetch();
     } finally {
-      setRefreshing(false);
+      setIsRefreshing(false);
     }
-  }, [refreshing, fetchQuotesScreenData]);
+  }, [refetch]);
 
   const handleLoadMore = useCallback(async () => {
-    if (paginationLoading || refreshing || !hasMore) {
+    if (!hasNextPage || isFetchingNextPage || isFetching) {
       return;
     }
-    try {
-      setPaginationLoading(true);
-      const nextPage = page.current + 1;
-      page.current = nextPage;
-      await fetchQuotesScreenData(nextPage);
-    } finally {
-      setPaginationLoading(false);
-    }
-  }, [paginationLoading, refreshing, hasMore, fetchQuotesScreenData]);
+
+    fetchNextPage();
+  }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
   const renderFooter = useCallback(() => {
-    if (!paginationLoading) {
-      return null;
-    }
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }, [paginationLoading, styles.loaderContainer]);
+    return isFetchingNextPage && <ActivityIndicator size="small" />;
+  }, [isFetchingNextPage]);
 
   const renderEmpty = useCallback(() => {
-    if (loadingQuoteList) {
+    if (isFetching) {
       return null;
     }
 
@@ -191,10 +166,9 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
         primaryText="No Quotes Found"
         message="Click on the + below to create"
         nextMessage="a new quote."
-        
       />
     );
-  }, [loadingQuoteList, isDark]);
+  }, [isFetching, isDark]);
 
   const keyExtractor = useCallback((item: QuoteItem) => item.id.toString(), []);
 
@@ -202,8 +176,9 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
     return <RenderQuotes item={item} />;
   }, []);
 
+
   const processedData = useMemo(() => {
-    let result = quoteList;
+    let result = quoteListData;
     if (!appliedData && !debouncedSearch.trim()) {
       return result;
     }
@@ -263,7 +238,7 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
       });
     }
     return result;
-  }, [appliedData, debouncedSearch, quoteList]);
+  }, [appliedData, debouncedSearch, quoteListData]);
 
   return (
     <KeyboardAvoidingView
@@ -326,7 +301,7 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.flat}
             style={styles.flatlist}
-            refreshing={refreshing}
+            refreshing={isRefreshing}
             onRefresh={handleRefresh}
             removeClippedSubviews
             initialNumToRender={10}
@@ -335,15 +310,7 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
             onEndReachedThreshold={0.2}
             ListFooterComponent={renderFooter}
             ListEmptyComponent={renderEmpty}
-            onMomentumScrollBegin={() => {
-              onEndReachedCalledDuringMomentum.current = false;
-            }}
-            onEndReached={() => {
-              if (!onEndReachedCalledDuringMomentum.current) {
-                handleLoadMore();
-                onEndReachedCalledDuringMomentum.current = true;
-              }
-            }}
+            onEndReached={handleLoadMore}
           />
 
           <View style={styles.add}>
@@ -371,9 +338,7 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
           visible={openSubscriptionModal}
           onClose={handleCloseSubscriptionModal}
         />
-        {!refreshing && !paginationLoading && (
-          <Loader visible={loadingQuoteList} />
-        )}
+        <Loader visible={isPending} />
       </LinearGradient>
     </KeyboardAvoidingView>
   );

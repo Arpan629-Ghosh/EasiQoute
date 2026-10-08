@@ -5,10 +5,10 @@ import { HomeScreenResponse } from '@/types/apis/home.types';
 
 export const homeService = {
   homeScreenData: async () => {
-    const respnse = await apiClient.get<ApiResponse<HomeScreenResponse>>(
+    const response = await apiClient.get<ApiResponse<HomeScreenResponse>>(
       ENDPOINTS.HOME,
     );
 
-    return respnse.data;
+    return response.data;
   },
 };

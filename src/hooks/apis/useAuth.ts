@@ -18,7 +18,7 @@ export const useAuth = () => {
     return dispatch(loginThunk(payload)).unwrap();
   };
 
-    const signup = async (payload: SignupPayload) => {
+  const signup = async (payload: SignupPayload) => {
       // console.log(payload)
     return dispatch(signupThunk(payload)).unwrap();
   };

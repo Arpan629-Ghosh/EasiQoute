@@ -8,7 +8,6 @@ import {
   fetchQuoteDetailsThunk,
   getSectionsThunk,
   getSelectedSectionsThunk,
-  quoteListThunk,
   updateQuoteThunk,
   updateStatusThunk,
 } from '@/redux/apis/quotes/quotesThunk';
@@ -30,21 +29,14 @@ export const useQuotes = () => {
   const dispatch = useDispatch<AppDispatch>();
 
   const quote = useSelector((state: RootState) => state.quotes);
-
-  const fetchQuotesScreenData = useCallback(
-    (payload: number) => {
-      return dispatch(quoteListThunk(payload)).unwrap();
-    },
-    [dispatch],
-  );
-
+//done
   const createQuote = useCallback(
     (payload: CreateQuote) => {
       return dispatch(createQuoteThunk(payload)).unwrap();
     },
     [dispatch],
   );
-
+  // done
   const fetchQuoteDetails = useCallback(
     (payload: number) => {
       return dispatch(fetchQuoteDetailsThunk(payload)).unwrap();
@@ -69,14 +61,14 @@ export const useQuotes = () => {
     },
     [dispatch],
   );
-
+  // done
   const updateQuote = useCallback(
     (payload: UpdateQuotePayload) => {
       return dispatch(updateQuoteThunk(payload)).unwrap();
     },
     [dispatch],
   );
-
+  // done
   const updateStatus = useCallback(
     (payload: UpdateStatus | UpdateInvoiceStatus) => {
       return dispatch(updateStatusThunk(payload)).unwrap();
@@ -101,14 +93,14 @@ export const useQuotes = () => {
   const duplicateQuote = useCallback((payload: number) => {
     return dispatch(duplicateQuoteThunk(payload)).unwrap();
   }, [dispatch])
-  
+
+  //done
   const deleteQuote = useCallback((payload: number) => {
     return dispatch(deleteQuoteThunk(payload)).unwrap();
   }, [dispatch])
 
   return {
     // actions
-    fetchQuotesScreenData,
     createQuote,
     fetchQuoteDetails,
     createSections,
@@ -122,7 +114,6 @@ export const useQuotes = () => {
     deleteQuote,
 
     // state
-    quoteList: quote.quoteList,
     sections: quote.sections,
     quoteDetails: quote.quoteDetails,
     selectedSections: quote.selectedSections,
