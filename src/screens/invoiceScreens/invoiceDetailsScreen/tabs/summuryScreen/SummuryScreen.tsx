@@ -14,23 +14,23 @@ import ExpandableItem from '@/components/cardDetailsComponent/ExpandableItem';
 import Items from '@/components/cardDetailsComponent/Items';
 import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useInvoice } from '@/hooks/apis/useInvoice';
 import Loader from '@/components/loader/Loader';
 import { InvoiceItem } from '@/types/apis/invoice.types';
 import StatusChanger from '@/components/statusChanger/StatusChanger';
 import { InvoiceDetailsScreenProps } from '@/types/navigation.types';
 import { useToast } from '@/hooks/useToast';
-import { useQuotes } from '@/hooks/apis/useQuotes';
 import { formatDate } from '@/utils/formatDate';
 import { STATUS_COLORS } from '@/config/statusColors';
+import { useUpdateQuoteStatus } from '@/hooks/apis/quotes/useUpdateQuoteStatus';
+import { useInvoiceDetails } from '@/hooks/apis/invoice/useInvoiceDetails';
 
 const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
   const [open, setOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState<string>('');
   const { showToast } = useToast();
-  const { invoiceDetails, loadingInvoiceDetails, getInvoiceDetails } =
-    useInvoice();
-  const { updateStatus } = useQuotes();
+  const { invoiceDetails, isFetching, isPending  } =
+    useInvoiceDetails(route.params.invoiceId);
+  const { updateQuoteStatusAsync} = useUpdateQuoteStatus();
   const { theme, isDark } = useAppTheme();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -48,11 +48,10 @@ const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
 
   const toggleStatus = useCallback(async (type: string) => {
     try {
-      await updateStatus({
+      await updateQuoteStatusAsync({
         invoice_id: route.params.invoiceId,
         status: type.toLowerCase(),
       });
-      getInvoiceDetails(route.params.invoiceId);
       setSelectedStatus(prev => {
         const isSelected = prev.includes(type);
         const updatedStatus = isSelected ? '' : type;
@@ -307,7 +306,7 @@ const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
         selectedStatus={selectedStatus}
         screen="Invoice"
       />
-      <Loader visible={loadingInvoiceDetails} />
+      <Loader visible={isPending || isFetching} />
     </LinearGradient>
   );
 };

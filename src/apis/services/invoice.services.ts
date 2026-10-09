@@ -12,6 +12,7 @@ import { ENDPOINTS } from '../endPoints';
 import { FetchItemsData } from '@/types/apis/settings.types';
 
 export const invoiceServices = {
+  //done
   createInvoice: async (payload: InvoiceCreate) => {
     const formData = new FormData();
     formData.append('quote_id', payload.quote_id);
@@ -44,6 +45,8 @@ export const invoiceServices = {
     return response.data;
   },
 
+  //done
+
   getInvoices: async (payload: GetInvoiceParams) => {
     const params = {
       page: payload.page,
@@ -65,6 +68,7 @@ export const invoiceServices = {
     return response.data;
   },
 
+  // done
   updateInvoice: async (payload: UpdateInvoicePayload) => {
     const formData = new FormData();
     formData.append('_method', 'PUT');
@@ -115,7 +119,7 @@ export const invoiceServices = {
 
     return response.data;
   },
-
+  //done
   getInvoiceDetails: async (payload: number) => {
     const response = await apiClient.get<ApiResponse<InvoiceDetailsPayload>>(
       `${ENDPOINTS.INVOICE}/${payload}`,

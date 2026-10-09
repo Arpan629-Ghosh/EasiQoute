@@ -205,7 +205,7 @@ export type NewInvoiceTopTabParamList = {
 
 export type InvoiceDetailsTopTabParamList = {
   Summury: {invoiceId: number};
-  Description: undefined;
+  Description: {invoiceId: number};
   Payments: undefined
 }
 

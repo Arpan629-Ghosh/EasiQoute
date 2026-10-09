@@ -2,20 +2,16 @@ import { combineReducers } from '@reduxjs/toolkit';
 import themeReducer from './theme/themeSlice';
 import authReducer from './apis/auth/authSlice';
 import notificationReducer from './apis/notification/notificationSlice'
-import quotesReducer from './apis/quotes/quotesSlice'
 import settingsReducer from './apis/settings/settingsSlice'
 import clientsReducer from './apis/client/clientSlice'
-import invoiceReducer from './apis/invoice/invoiceSlice'
 import languageReducer from './language/languageSlice'
 
 const rootReducer = combineReducers({
   theme: themeReducer,
   auth: authReducer,
   notification: notificationReducer,
-  quotes: quotesReducer,
   settings: settingsReducer,
   clients: clientsReducer,
-  invoice: invoiceReducer,
   language: languageReducer,
 });
 

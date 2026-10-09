@@ -34,9 +34,11 @@ import { useSettings } from '@/hooks/apis/useSettings';
 import { useDebounce } from '@/hooks/useDebounce';
 import RenderFilterData from '@/components/renderFilterData/RenderFilterData';
 import { FetchItemsData } from '@/types/apis/settings.types';
-import { useInvoice } from '@/hooks/apis/useInvoice';
 import { useToast } from '@/hooks/useToast';
 import MarginBottomSheet from '@/components/marginBottomSheet/MarginBottomSheet';
+import { useInvoiceDetails } from '@/hooks/apis/invoice/useInvoiceDetails';
+import { useUpdateInvoice } from '@/hooks/apis/invoice/useUpdateInvoice';
+import { useFocusEffect } from '@react-navigation/native';
 
 interface FinancialBreakDown {
   subtotal: string;
@@ -49,6 +51,8 @@ const ItemsScreen = ({
   navigation,
   route,
 }: InvoiceTopTabWithRootProps<'Items'>) => {
+
+  const invoiceId = route.params?.invoiceId;
   const [selectedFilterOption, setSelectFilterOption] = useState<string>('');
   const [selectedItems, setSelectedItems] = useState<FetchItemsData[]>([]);
 
@@ -74,18 +78,17 @@ const ItemsScreen = ({
     subcat_data,
     items_current_page,
     items_last_page,
-    isStale,
     fetchItems,
   } = useSettings();
-  const { loadingInvoiceUpdate, invoiceDetails, updateInvoice, getInvoiceDetails } = useInvoice();
+ 
+  const { invoiceDetails } = useInvoiceDetails(invoiceId as number);
+  const {updateInvoiceMutate, isUpdatingInvoice } = useUpdateInvoice();
   const { showToast } = useToast();
   const debouncedSearch = useDebounce(search);
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const invoiceId = route.params?.invoiceId;
   const invoiceItems = route.params?.invoiceItems;
-  console.log('invoiceId: ', invoiceId);
-  console.log('items: ', invoiceItems);
+
 
   useEffect(() => {
     height.value = withTiming(openFinancialBreakdown ? 500 : 0, {
@@ -98,12 +101,15 @@ const ItemsScreen = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openFinancialBreakdown]);
 
-  useEffect(() => {
-      if (isStale) {
-        page.current = 1;
-        fetchItems(1);
-      }
-    }, [fetchItems, isStale]);
+ 
+useFocusEffect(
+  useCallback(() => {
+    page.current = 1;
+     fetchItems(1);
+  }, [fetchItems]),
+);
+
+
 
   useEffect(() => {
     if (!invoiceItems?.length) return;
@@ -279,13 +285,13 @@ const ItemsScreen = ({
       return;
     }
     try {
-      await updateInvoice({
+      await updateInvoiceMutate({
         invoice_id: invoiceId,
         discount: discountPrice,
         invoice_items: selectedItems,
       });
       showToast('Invoice updated successfully!');
-      await getInvoiceDetails(invoiceId);
+      
       navigation.navigate('Preview', {
         previewUrl: invoiceDetails?.url
       })
@@ -459,7 +465,7 @@ const ItemsScreen = ({
               bttnTxt="Save & Preview"
               txtColor={theme.primaryText}
               buttonWidth="48.5%"
-              showLoader={loadingInvoiceUpdate}
+              showLoader={isUpdatingInvoice}
               onPress={handleUpdateInvoice}
             />
           </View>

@@ -9,11 +9,13 @@ import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
 import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
 import { images } from '@/config/images';
 import { Sections } from '@/types/apis/quote.types';
 import { RootScreenProps } from '@/types/navigation.types';
+import { useCreateSection } from '@/hooks/apis/quotes/useCreateSection';
+import { useDeleteSections } from '@/hooks/apis/quotes/useDeleteSections';
+import Loader from '@/components/loader/Loader';
 
 interface SectionForm {
   order: string;
@@ -32,7 +34,10 @@ const NewSectionScreen = ({ navigation, route }: RootScreenProps<'NewSectionScre
     description: content || '',
   });
   const { theme } = useAppTheme();
-  const { createSections, deleteSections, loadingSections } = useQuotes();
+  // const { createSections, deleteSections, loadingSections } = useQuotes();
+  const { createSectionMutateAsync, isCreatingSection } = useCreateSection();
+  const { mutateAsync: deleteSections, isPending: isDeletingSections } =
+    useDeleteSections(editId as number);
   const { showToast } = useToast();
   const insets = useSafeAreaInsets();
   
@@ -59,7 +64,7 @@ const NewSectionScreen = ({ navigation, route }: RootScreenProps<'NewSectionScre
         payload.sort = Number(sort);
       }
 
-      await createSections(payload);
+      await createSectionMutateAsync(payload);
       showToast(
         isEdit
           ? 'Proposal document section updated successfully.'
@@ -155,11 +160,12 @@ const NewSectionScreen = ({ navigation, route }: RootScreenProps<'NewSectionScre
             bg={theme.primary}
             bttnTxt={isEdit ? 'Save Changes' : 'Save'}
             txtColor={theme.primaryText}
-            showLoader={loadingSections}
+            showLoader={isCreatingSection}
             onPress={handleSection}
           />
         </View>
       </View>
+      <Loader visible={ isDeletingSections} />
     </LinearGradient>
   );
 };

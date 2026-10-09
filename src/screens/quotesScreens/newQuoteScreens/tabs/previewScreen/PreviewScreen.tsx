@@ -1,5 +1,5 @@
 import { ActivityIndicator, Image, Share, TouchableOpacity, View } from 'react-native'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { createStyles } from './style'
 import AppInput from '@/components/appInput/AppInput';
 import AppButton from '@/components/appButton/AppButton';
@@ -8,24 +8,22 @@ import { useAppTheme } from '@/hooks/useAppTheme'
 import {  useSafeAreaInsets } from 'react-native-safe-area-context'
 import { QuoteTopTabWithRootProps } from '@/types/navigation.types'
 import WebView from 'react-native-webview'
-import { useQuotes } from '@/hooks/apis/useQuotes'
+import { useQuoteDetails } from '@/hooks/apis/quotes/useQuoteDetails';
 
 const PreviewScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Preview'>) => {
+  const quoteId = route.params?.quoteId;
   const [loading, setLoading] = useState(true);
   const { theme } = useAppTheme();
-  const { fetchQuoteDetails, quoteDetails} = useQuotes();
+  const { quoteDetails } = useQuoteDetails(quoteId);
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const navigateToTemplatesScreen = () => {
     navigation.navigate('TemplatesScreen');
   };
 
-  const quoteId = route.params?.quoteId
+ 
 
-  useEffect(() => {
-    if(quoteId)
-     fetchQuoteDetails(quoteId)
-  }, [fetchQuoteDetails, quoteId])
+  
 
   const handleShare = async () => {
     try {

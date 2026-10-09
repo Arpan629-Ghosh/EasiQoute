@@ -18,15 +18,15 @@ import InfoRow from '@/components/cardDetailsComponent/InfoRow';
 import AppButton from '@/components/appButton/AppButton';
 import { ScrollView } from 'react-native-gesture-handler';
 import CustomDropdown, { Item } from '@/components/dropdown/CustomDropdown';
-import { useInvoice } from '@/hooks/apis/useInvoice';
 import { useDebounce } from '@/hooks/useDebounce';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { formatDateForInput } from '@/utils/formatDate';
 import { useClient } from '@/hooks/apis/useClient';
 import { GetClients } from '@/types/apis/client.types';
-import { usePayments } from '@/hooks/apis/usePayments';
+import { usePayments } from '@/hooks/apis/payments/usePayments';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
+import { useInvoiceList } from '@/hooks/apis/invoice/useInvoiceList';
 
 export interface RecordPaymentProps {
   amtType: 'deposit' | 'invoice';
@@ -67,7 +67,8 @@ const RecordPaymentScreen = ({
   const [paginationLoading, setPaginationLoading] = useState(false);
   const page = useRef(1);
   const { createPaymentAsync, isCreatingPayment } = usePayments();
-  const { getInvoices, invoiceList } = useInvoice();
+  const { invoiceListData } = useInvoiceList();
+
   const { clients, current_page, last_page, getClients } = useClient();
   const { theme } = useAppTheme();
   const { showToast } = useToast();
@@ -91,14 +92,6 @@ const RecordPaymentScreen = ({
     }
   }, [getClients, debouncedSearch, recordPaymentData.amtType]);
 
-  useEffect(() => {
-    if (recordPaymentData.amtType === 'invoice') {
-      getInvoices({
-        is_not_paid: 1,
-        search: debouncedSearch,
-      });
-    }
-  }, [recordPaymentData.amtType, getInvoices, debouncedSearch]);
 
   const updateField = useCallback(
     <K extends keyof RecordPaymentProps>(
@@ -148,11 +141,11 @@ const RecordPaymentScreen = ({
   }, [paginationLoading, styles.loaderContainer]);
 
   const shapedDataForDropdown = useMemo(() => {
-    return invoiceList.map(invoice => ({
+    return invoiceListData.map(invoice => ({
       label: `${invoice.reference_number} - ${invoice.title}`,
       value: invoice.id,
     }));
-  }, [invoiceList]);
+  }, [invoiceListData]);
 
   const fillInput = (stratDate: string) => {
     setRecordPaymentData(prev => {
@@ -173,7 +166,7 @@ const RecordPaymentScreen = ({
     setDatePickerVisible(false);
   };
 
-  const findInvoice = invoiceList.find(
+  const findInvoice = invoiceListData.find(
     invoice => invoice.id === recordPaymentData.invoiceId,
   );
 

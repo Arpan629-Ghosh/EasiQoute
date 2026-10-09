@@ -8,7 +8,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -20,11 +20,11 @@ import FilterAndSorting from '@/components/filterAndSorting/FilterAndSorting';
 import { InvoiceStackProps } from '@/types/navigation.types';
 import RenderInvoices from '@/components/renderInvoices/RenderInvoices';
 import { InvoiceListItem } from '@/types/apis/invoice.types';
-import { useInvoice } from '@/hooks/apis/useInvoice';
 import { useDebounce } from '@/hooks/useDebounce';
 import Loader from '@/components/loader/Loader';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
+import { useInvoiceList } from '@/hooks/apis/invoice/useInvoiceList';
 
 interface FilterAndSortingType {
   startDate: string;
@@ -45,31 +45,22 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
   const [appliedData, setAppliedData] = useState<FilterAndSortingType | null>(
     null,
   );
-  const [paginationLoading, setPaginationLoading] = useState(false);
+
   const [refreshing, setRefreshing] = useState(false);
-  const page = useRef(1);
-  const onEndReachedCalledDuringMomentum = useRef(false);
 
   const { theme, isDark } = useAppTheme();
   const {
-    getInvoices,
-    invoiceList,
-    loadingGetInvoice,
-    current_page,
-    last_page,
-  } = useInvoice();
+    invoiceListData,
+    isPending,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useInvoiceList();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const debouncedSearch = useDebounce(search);
-
- 
-
-  useEffect(() => {
-    page.current = 1;
-    getInvoices({
-      page: 1
-    });
-  }, [getInvoices])
 
   const navigateToSelectQuoteScreen = () => {
     navigation.navigate('SelectQuoteScreen');
@@ -129,66 +120,40 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
     setOpenFilterModal(false);
   }, []);
 
-  const hasMore = useMemo(() => {
-    return current_page < last_page;
-  }, [current_page, last_page]);
-
   const handleRefresh = useCallback(async () => {
-    if (refreshing) {
-      return;
-    }
     try {
       setRefreshing(true);
-      page.current = 1;
-      await getInvoices({
-        page: 1
-      });
+      await refetch();
     } finally {
       setRefreshing(false);
     }
-  }, [refreshing, getInvoices]);
+  }, [refetch]);
 
   const handleLoadMore = useCallback(async () => {
-    if (paginationLoading || refreshing || !hasMore) {
+    if (!hasNextPage || isFetchingNextPage || isFetching) {
       return;
     }
-    try {
-      setPaginationLoading(true);
-      const nextPage = page.current + 1;
-      page.current = nextPage;
-      await getInvoices({
-        page: nextPage
-      });
-    } finally {
-      setPaginationLoading(false);
-    }
-  }, [paginationLoading, refreshing, hasMore, getInvoices]);
+    fetchNextPage();
+  }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
   const renderEmpty = useCallback(() => {
-    if (loadingGetInvoice) {
+    if (isFetching) {
       return null;
     }
 
     return (
       <EmptyStateScreen
-        icon={isDark ? images.img_darkquote :  icons.ic_boldqoute}
+        icon={isDark ? images.img_darkquote : icons.ic_boldqoute}
         primaryText="No Invoices Found"
         message="Click on the + below to create"
         nextMessage="a new quote."
       />
     );
-  }, [loadingGetInvoice, isDark]);
+  }, [isFetching, isDark]);
 
   const renderFooter = useCallback(() => {
-    if (!paginationLoading) {
-      return null;
-    }
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }, [paginationLoading, styles.loaderContainer]);
+    return isFetchingNextPage && <ActivityIndicator size="small" />;
+  }, [isFetchingNextPage]);
 
   const keyExtractor = useCallback(
     (item: InvoiceListItem) => item.id.toString(),
@@ -200,7 +165,7 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
   }, []);
 
   const processedData = useMemo(() => {
-    let result = invoiceList;
+    let result = invoiceListData;
     if (!appliedData && !debouncedSearch.trim()) {
       return result;
     }
@@ -260,7 +225,7 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
       });
     }
     return result;
-  }, [appliedData, debouncedSearch, invoiceList]);
+  }, [appliedData, debouncedSearch, invoiceListData]);
 
   return (
     <KeyboardAvoidingView
@@ -331,15 +296,7 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
             onEndReachedThreshold={0.2}
             ListFooterComponent={renderFooter}
             ListEmptyComponent={renderEmpty}
-            onMomentumScrollBegin={() => {
-              onEndReachedCalledDuringMomentum.current = false;
-            }}
-            onEndReached={() => {
-              if (!onEndReachedCalledDuringMomentum.current) {
-                handleLoadMore();
-                onEndReachedCalledDuringMomentum.current = true;
-              }
-            }}
+            onEndReached={handleLoadMore}
           />
           <View style={styles.add}>
             <TouchableOpacity
@@ -363,9 +320,7 @@ const InvoiceScreen = ({ navigation }: InvoiceStackProps<'InvoiceScreen'>) => {
           onToggleStatus={togglestatuse}
           onToggleAmount={toggleAmount}
         />
-        {!refreshing && !paginationLoading && (
-          <Loader visible={loadingGetInvoice} />
-        )}
+        <Loader visible={isPending} />
       </LinearGradient>
     </KeyboardAvoidingView>
   );

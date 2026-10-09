@@ -153,7 +153,7 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
 
   const renderFooter = useCallback(() => {
     return isFetchingNextPage && <ActivityIndicator size="small" />;
-  }, [isFetchingNextPage]);
+  }, [ isFetchingNextPage ]);
 
   const renderEmpty = useCallback(() => {
     if (isFetching) {

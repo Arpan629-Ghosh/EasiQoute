@@ -1,7 +1,7 @@
 import { View, StatusBar, TouchableOpacity, Image, FlatList } from 'react-native';
 import React, { useMemo } from 'react';
 import { RootScreenProps } from '@/types/navigation.types';
-import { usePaymentDetails } from '@/hooks/apis/usePaymentDetails';
+import { usePaymentDetails } from '@/hooks/apis/payments/usePaymentDetails';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';

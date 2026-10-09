@@ -15,7 +15,6 @@ import StatusChanger from '@/components/statusChanger/StatusChanger';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Items from '@/components/cardDetailsComponent/Items';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useQuotes } from '@/hooks/apis/useQuotes';
 import { useToast } from '@/hooks/useToast';
 import { FetchItemsData } from '@/types/apis/settings.types';
 import Loader from '@/components/loader/Loader';
@@ -26,6 +25,7 @@ import { useQuoteDetails } from '@/hooks/apis/quotes/useQuoteDetails';
 import { useDeleteQuote } from '@/hooks/apis/quotes/useDeleteQuote';
 import { useDuplicateQuote } from '@/hooks/apis/quotes/useDuplicateQuote';
 import { useUpdateQuoteStatus } from '@/hooks/apis/quotes/useUpdateQuoteStatus';
+import { useGetSelectedSection } from '@/hooks/apis/quotes/useGetSelectedSections';
 
 const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailScreen'>) => {
   const [open, setOpen] = useState(false)
@@ -34,23 +34,16 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
   const { showToast } = useToast();
-  const { getSelectedSections, selectedSections } = useQuotes();
   const quoteId = route.params.quoteId; 
   const { quoteDetails, isFetching } = useQuoteDetails(quoteId);
   const { mutateAsync: deleteQuote, isPending: isDeleting } = useDeleteQuote();
   const { mutateAsync: duplicateQuote, isPending: isDuplicating } =
     useDuplicateQuote();
   const { updateQuoteStatusAsync, isUpdatingQuote } = useUpdateQuoteStatus();
+  const { selectedSections } = useGetSelectedSection(quoteId);
   const styles = useMemo(() => createStyles(theme), [theme])
 
   const animation = useRef(new Animated.Value(0)).current;
-
-  
-
-  useEffect(() => {
-    getSelectedSections(quoteId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quoteId]);
   
   const handleDuplicateQuote = async () => {
     try {
@@ -455,8 +448,8 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
                 <CardHeader title="Sections" />
               </View>
               <View style={styles.expand}>
-                {selectedSections?.length > 0 ? (
-                  selectedSections.map((section, index) => (
+                {selectedSections.length > 0 ? (
+                  selectedSections?.map((section, index) => (
                     <View key={section.id}>
                       <TouchableOpacity
                         style={styles.intro}

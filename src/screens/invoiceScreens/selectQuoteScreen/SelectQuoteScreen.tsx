@@ -7,12 +7,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ActivityIndicator, FlatList, View } from 'react-native';
 import AppButton from '@/components/appButton/AppButton';
 import { RootScreenProps } from '@/types/navigation.types';
-import { useQuotes } from '@/hooks/apis/useQuotes';
 import SelectQuote from '@/components/selectQuote/SelectQuote';
 import { QuoteItem } from '@/types/apis/quote.types';
 import Loader from '@/components/loader/Loader';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { icons } from '@/config/icons';
+import { useQuoteList } from '@/hooks/apis/quotes/useQuoteList';
 
 const SelectQuoteScreen = ({
   navigation, route
@@ -20,31 +20,19 @@ const SelectQuoteScreen = ({
 
   const [selectedQuote, setSelectedQuote] = useState<number | undefined>()
   const [refreshing, setRefreshing] = useState<boolean>(false);
-  const [paginationLoading, setPaginationLoading] = useState(false)
-  const page = useRef(1);
   const onEndReachedCalledDuringMomentum = useRef(false);
   const { theme } = useAppTheme();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const {
-    fetchQuotesScreenData,
-    quoteList,
-    loadingQuoteList,
-    current_page,
-    last_page,
-  } = useQuotes();
-
+  const { quoteListData, hasNextPage, isFetchingNextPage, isFetching, isPending, refetch, fetchNextPage } = useQuoteList();
 
   const invoiceDetails = route.params?.invoiceDetails;
   const linkedQuoteId = route.params?.invoiceDetails?.quote?.id
 
   console.log("invoiceDetails: ", invoiceDetails)
 
-  useEffect(() => {
-    page.current = 1;
-    fetchQuotesScreenData(1)
-  }, [fetchQuotesScreenData])
+
 
   useEffect(() => {
     if (linkedQuoteId !== undefined) {
@@ -69,7 +57,7 @@ const SelectQuoteScreen = ({
   }, [onToggle, selectedQuote])
 
   const renderEmpty = useCallback(() => {
-    if (loadingQuoteList) {
+    if (isFetching) {
       return null;
     }
 
@@ -81,49 +69,28 @@ const SelectQuoteScreen = ({
         butttonEnabled={true}
       />
     );
-  }, [loadingQuoteList]);
-
-  const hasMore = useMemo(() => {
-      return current_page < last_page;
-    }, [current_page, last_page]);
+  }, [isFetching]);
 
   const handleRefresh = useCallback(async () => {
-      if (refreshing) {
-        return;
-      }
       try {
         setRefreshing(true);
-        page.current = 1;
-        await fetchQuotesScreenData(1);
+        await refetch();
       } finally {
         setRefreshing(false);
       }
-  }, [refreshing, fetchQuotesScreenData])
+  }, [refetch])
   
   const handleLoadMore = useCallback( async () => {
-    if (paginationLoading || refreshing || !hasMore) {
+    if (!hasNextPage || isFetchingNextPage || isFetching) {
       return;
     }
     
-    try {
-      setPaginationLoading(true);
-      page.current = page.current + 1;
-      await fetchQuotesScreenData(page.current)
-    } finally {
-      setPaginationLoading(false)
-    }
-  }, [fetchQuotesScreenData, refreshing, hasMore, paginationLoading])
+    fetchNextPage();
+  }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage])
   
   const renderFooter = useCallback(() => {
-      if (!paginationLoading) {
-        return null;
-      }
-      return (
-        <View style={styles.loaderContainer}>
-          <ActivityIndicator size="small" />
-        </View>
-      );
-    }, [paginationLoading, styles.loaderContainer]);
+    return isFetchingNextPage && <ActivityIndicator size="small" />;
+  }, [isFetchingNextPage]);
 
   const navigateToNewInvoiceScreens = () => {
     navigation.navigate('NewInvoiceScreens', {
@@ -137,7 +104,7 @@ const SelectQuoteScreen = ({
 
       <View style={styles.content}>
         <FlatList
-          data={quoteList}
+          data={quoteListData}
           renderItem={renderItem}
           keyExtractor={keyExtractor}
           refreshing={refreshing}
@@ -173,7 +140,7 @@ const SelectQuoteScreen = ({
           />
         </View>
       </View>
-      <Loader visible={ loadingQuoteList} />
+      <Loader visible={ isPending} />
     </LinearGradient>
   );
 };

@@ -15,7 +15,7 @@ import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
 import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
 import { createStyles } from './Styles';
-import { usePayments } from '@/hooks/apis/usePayments';
+import { usePayments } from '@/hooks/apis/payments/usePayments';
 import { useDebounce } from '@/hooks/useDebounce';
 import { Data } from '@/types/apis/payments.types';
 import RenderPaymentList from '@/components/renderPaymentList/RenderPaymentList';

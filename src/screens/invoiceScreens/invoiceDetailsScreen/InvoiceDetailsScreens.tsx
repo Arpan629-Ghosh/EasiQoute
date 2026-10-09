@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import {
   InvoiceDetailsTopTabParamList,
   RootScreenProps,
@@ -8,18 +8,13 @@ import InvoiceTopTabBars from '@/components/customTopTabBar/InvoiceTopTabBars';
 import SummuryScreen from './tabs/summuryScreen/SummuryScreen';
 import DescriptionsScreen from './tabs/descriptionsScreen/DescriptionsScreen';
 import PaymentScreen from './tabs/paymentScreen/PaymentScreen';
-import { useInvoice } from '@/hooks/apis/useInvoice';
+import { useInvoiceDetails } from '@/hooks/apis/invoice/useInvoiceDetails';
 
 const Tab = createMaterialTopTabNavigator<InvoiceDetailsTopTabParamList>();
 const InvoiceDetailsScreens = ({ route }: RootScreenProps<'InvoiceDetailsScreens'>) => {
   const invoiceId = route.params?.invoiceId;
-  const { getInvoiceDetails, invoiceDetails } = useInvoice();
-
-
-  useEffect(() => {
-    getInvoiceDetails(invoiceId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [invoiceId])
+  
+  const { invoiceDetails} = useInvoiceDetails(invoiceId);
 
   return (
     <Tab.Navigator
@@ -30,7 +25,7 @@ const InvoiceDetailsScreens = ({ route }: RootScreenProps<'InvoiceDetailsScreens
         component={SummuryScreen}
         initialParams={{ invoiceId }}
       />
-      <Tab.Screen name="Description" component={DescriptionsScreen}/>
+      <Tab.Screen name="Description" component={DescriptionsScreen} initialParams={{invoiceId}}/>
       <Tab.Screen name="Payments" component={PaymentScreen} />
     </Tab.Navigator>
   );

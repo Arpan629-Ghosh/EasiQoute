@@ -17,11 +17,13 @@ import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import { useToast } from '@/hooks/useToast';
 import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useInvoice } from '@/hooks/apis/useInvoice';
+import { InvoiceDetailsScreenProps } from '@/types/navigation.types';
+import { useInvoiceDetails } from '@/hooks/apis/invoice/useInvoiceDetails';
 
-const DescriptionsScreen = () => {
+const DescriptionsScreen = ({ route }: InvoiceDetailsScreenProps<'Description'>) => {
+  const invoiceId = route.params.invoiceId
   const insets = useSafeAreaInsets();
-  const { invoiceDetails } = useInvoice();
+  const { invoiceDetails } = useInvoiceDetails(invoiceId);
   const { showToast } = useToast();
   const { theme, isDark } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -45,16 +47,15 @@ const DescriptionsScreen = () => {
     return `Attachment ${index + 1}.${attachment.type}`;
   };
 
-  const handleShare = async() => {
-      try {
-        await Share.share({
-          message: `Check out this invoice ${invoiceDetails?.url}`
-        })
-      } catch (error) {
-        console.error(error)
-      }
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `Check out this invoice ${invoiceDetails?.url}`,
+      });
+    } catch (error) {
+      console.error(error);
     }
-
+  };
 
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.content}>

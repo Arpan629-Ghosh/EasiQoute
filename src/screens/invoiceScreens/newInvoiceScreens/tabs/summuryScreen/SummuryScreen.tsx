@@ -16,9 +16,10 @@ import { useToast } from '@/hooks/useToast';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import AppButton from '@/components/appButton/AppButton';
 import { InvoiceTopTabWithRootProps } from '@/types/navigation.types';
-import { useQuotes } from '@/hooks/apis/useQuotes';
-import { useInvoice } from '@/hooks/apis/useInvoice';
 import { formatDateForInput, formatDateForPrifill } from '@/utils/formatDate';
+import { useQuoteList } from '@/hooks/apis/quotes/useQuoteList';
+import { useCreateInvoice } from '@/hooks/apis/invoice/useCreateInvoice';
+import { useUpdateInvoice } from '@/hooks/apis/invoice/useUpdateInvoice';
 
 export interface AttachmentFile {
   uri: string;
@@ -54,15 +55,12 @@ const SummuryScreen = ({
     notes: route.params?.invoiceDetails?.notes || '',
     file: route.params?.invoiceDetails?.attachments || [],
   });
-  const { quoteList } = useQuotes();
+  const { quoteListData } = useQuoteList();
   const { theme } = useAppTheme();
   const { showToast } = useToast();
-  const {
-    createInvoice,
-    updateInvoice,
-    loadingInvoiceUpdate,
-    loadingCreateInvoice,
-  } = useInvoice();
+
+  const { createInvoiceMutateAsync, isCreatingInvoice } = useCreateInvoice();
+  const { isUpdatingInvoice, updateInvoiceMutate } = useUpdateInvoice();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -73,11 +71,11 @@ const SummuryScreen = ({
   const MAX_FILES = 10;
 
   const extractQuote = useMemo(() => {
-    const extractedQuote = quoteList.filter(
+    const extractedQuote = quoteListData.filter(
       quote => quote.id === route.params?.quoteId,
     );
     return extractedQuote;
-  }, [quoteList, route.params?.quoteId]);
+  }, [quoteListData, route.params?.quoteId]);
 
   const updateField = useCallback(
     (key: keyof NewInvoiceProp, value: string) => {
@@ -193,7 +191,7 @@ const SummuryScreen = ({
   const handleCreateInvoice = async () => {
     // console.log(newQuoteFormData);
     try {
-      const response = await createInvoice({
+      const response = await createInvoiceMutateAsync({
         quote_id: route.params?.quoteId,
         invoice_date: newInvoiceFormData.invoice_date,
         due_date: newInvoiceFormData.due_date,
@@ -210,10 +208,10 @@ const SummuryScreen = ({
         notes: '',
         file: [],
       });
-      onInvoiceCreated(response.id);
+      onInvoiceCreated(response.payload.id);
       navigation.jumpTo('Items', {
         invoiceItems: route.params?.invoiceDetails?.items,
-        invoiceId: response.id,
+        invoiceId: response.payload.id,
       });
     } catch (error) {
       showToast(String(error), 'error');
@@ -222,7 +220,7 @@ const SummuryScreen = ({
 
   const handleUpdateInvoice = async () => {
     try {
-      await updateInvoice({
+      await updateInvoiceMutate({
         invoice_id: invoiceId,
         invoice_summury: newInvoiceFormData,
         is_company_phone_number_show: enabled,
@@ -400,7 +398,7 @@ const SummuryScreen = ({
             bg={theme.primary}
             bttnTxt="Save"
             txtColor={theme.primaryText}
-            showLoader={loadingCreateInvoice || loadingInvoiceUpdate}
+            showLoader={isCreatingInvoice || isUpdatingInvoice}
             onPress={isEdit ? handleUpdateInvoice : handleCreateInvoice}
           />
         </View>

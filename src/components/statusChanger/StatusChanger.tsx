@@ -8,8 +8,8 @@ import { icons } from '@/config/icons';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useQuotes } from '@/hooks/apis/useQuotes';
 import Loader from '../loader/Loader';
+import { useUpdateQuoteStatus } from '@/hooks/apis/quotes/useUpdateQuoteStatus';
 
 type Props = {
   visible: boolean;
@@ -26,7 +26,7 @@ const StatusChanger = ({
   onToggleStatus,
 }: Props) => {
 
-  const { loadingUpdateStatus } = useQuotes();
+  const { isUpdatingQuote } = useUpdateQuoteStatus();
 
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
@@ -110,7 +110,7 @@ const StatusChanger = ({
                 );
               })}
         </View>
-        <Loader visible={ loadingUpdateStatus} />
+        <Loader visible={ isUpdatingQuote} />
       </View>
     </BottomModalComponent>
   );

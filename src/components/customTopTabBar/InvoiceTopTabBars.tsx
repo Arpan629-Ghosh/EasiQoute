@@ -12,8 +12,8 @@ import { Theme } from '@/types/theme.types';
 import InterTightMedium from '../appFonts/InterTightMedium';
 import { icons } from '@/config/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useInvoice } from '@/hooks/apis/useInvoice';
 import { useToast } from '@/hooks/useToast';
+import { useDeleteInvoice } from '@/hooks/apis/invoice/useDeleteInvoice';
 
 const InvoiceTopTabBars = ({
   state,
@@ -24,7 +24,7 @@ const InvoiceTopTabBars = ({
 }: any) => {
   const [openEdit, setOpenEdit] = useState(false);
   const { theme, isDark } = useAppTheme();
-  const { deleteInvoice } = useInvoice();
+  const { mutateAsync: deleteInvoice } = useDeleteInvoice();
   const { showToast } = useToast();
   const insets = useSafeAreaInsets();
   const animation = useRef(new Animated.Value(0)).current;

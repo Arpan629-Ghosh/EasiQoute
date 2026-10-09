@@ -1,27 +1,30 @@
-import { FlatList, Image, View } from 'react-native'
-import React, { useEffect, useMemo, useState } from 'react'
-import RenderSectionTabData from '@/components/renderSectionTabData/RenderSectionTabData'
+import { FlatList, Image, View } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import RenderSectionTabData from '@/components/renderSectionTabData/RenderSectionTabData';
 import AppButton from '@/components/appButton/AppButton';
-import { icons } from '@/config/icons'
-import { useAppTheme } from '@/hooks/useAppTheme'
-import {createStyles} from './style'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
-import { useQuotes } from '@/hooks/apis/useQuotes'
-import { useToast } from '@/hooks/useToast'
-import { QuoteSection } from '@/types/apis/quote.types'
-import { QuoteTopTabWithRootProps } from '@/types/navigation.types'
+import { icons } from '@/config/icons';
+import { useAppTheme } from '@/hooks/useAppTheme';
+import { createStyles } from './style';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useToast } from '@/hooks/useToast';
+import { QuoteSection } from '@/types/apis/quote.types';
+import { QuoteTopTabWithRootProps } from '@/types/navigation.types';
+import { useCreateSection } from '@/hooks/apis/quotes/useCreateSection';
+import { useSectionList } from '@/hooks/apis/quotes/useSectionList';
 
-const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Sections'>) => {
+const SectionsScreen = ({
+  navigation,
+  route,
+}: QuoteTopTabWithRootProps<'Sections'>) => {
   const [selectedSections, setSelectedSections] = useState<number[]>([]);
   const { theme } = useAppTheme();
   const { showToast } = useToast();
+
   const {
-    getSections,
-    createSelectedSections,
-    sections,
-    isFetchCall,
-    loadingSections,
-  } = useQuotes();
+    createSelectedSectionMutation,
+    isCreatingSelectedSection,
+  } = useCreateSection();
+  const { sectionList } = useSectionList();
   const insets = useSafeAreaInsets();
   const quoteId = route.params.quoteDetails?.id;
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -29,10 +32,6 @@ const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Section
   const navigateToNewSection = () => {
     navigation.navigate('NewSectionScreen');
   };
-
-  useEffect(() => {
-    getSections();
-  }, [getSections, isFetchCall]);
 
   const handleSection = async () => {
     try {
@@ -43,7 +42,7 @@ const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Section
 
       const payload: QuoteSection = {
         quote_id: quoteId,
-        sections: sections
+        sections: sectionList
           .filter(section => selectedSections.includes(section.id))
           .map(section => ({
             title: section.title,
@@ -52,21 +51,20 @@ const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Section
           })),
       };
 
-      await createSelectedSections(payload);
+      await createSelectedSectionMutation(payload);
       showToast('Quote sections saved successfully.');
       navigation.navigate('Preview', {
-        quoteId: quoteId
-      })
+        quoteId: quoteId,
+      });
     } catch (error) {
       showToast(String(error), 'error');
     }
   };
 
-  
   return (
     <View style={styles.container}>
       <FlatList
-        data={sections}
+        data={sectionList}
         renderItem={({ item }) => (
           <RenderSectionTabData
             item={item}
@@ -101,7 +99,7 @@ const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Section
             buttonWidth="48.5%"
             bttnTxt="Save & Preview"
             txtColor={theme.primaryText}
-            showLoader={loadingSections}
+            showLoader={isCreatingSelectedSection}
             onPress={handleSection}
           />
         </View>
@@ -110,4 +108,4 @@ const SectionsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Section
   );
 };
 
-export default SectionsScreen
+export default SectionsScreen;
