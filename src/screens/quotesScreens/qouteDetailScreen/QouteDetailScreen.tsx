@@ -89,9 +89,6 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
       text: '#64748B',
     };
 
-  // const navigateToEdit = () => {
-  //   navigation.navigate("Summury")
-  // }
   const navigateToBack = () => {
     navigation.goBack();
   };
@@ -115,7 +112,6 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
         quote_id: quoteId,
         status: type.toLowerCase(),
       });
-      // await fetchQuoteDetails(quoteId);
       setSelectedStatus(prev => {
         const isSelected = prev.includes(type);
         const updatedStatus = isSelected ? '' : type;
@@ -295,9 +291,7 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
                 </View>
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                   {quoteDetails?.job_description}
-                  {/* <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
-                    more...
-                  </InterTightMedium> */}
+                 
                 </InterTightRegular>
               </View>
 
@@ -313,9 +307,7 @@ const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailSc
                 </View>
                 <InterTightRegular fsize={14} fcolor={theme.textSecondary}>
                   {quoteDetails?.notes}
-                  {/* <InterTightMedium fsize={14} fcolor={theme.textPrimary}>
-                    more...
-                  </InterTightMedium> */}
+                 
                 </InterTightRegular>
               </View>
             </Card>

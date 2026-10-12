@@ -9,9 +9,7 @@ import {
 } from 'react-native';
 import React, {
   useCallback,
-  useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import { createStyles } from './style';
@@ -28,13 +26,12 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useToast } from '@/hooks/useToast';
 import { pick, types } from '@react-native-documents/picker';
 import { QuoteTopTabWithRootProps } from '@/types/navigation.types';
-import { useClient } from '@/hooks/apis/useClient';
 import { useDebounce } from '@/hooks/useDebounce';
-import { GetClients } from '@/types/apis/client.types';
 import CustomDropdown, { Item } from '@/components/dropdown/CustomDropdown';
 import { formatDateForInput } from '@/utils/formatDate';
 import { useQuoteList } from '@/hooks/apis/quotes/useQuoteList';
 import { useUpdateQuote } from '@/hooks/apis/quotes/useUpdateQuote';
+import { useClientList } from '@/hooks/apis/clients/useClientList';
 
 export interface AttachmentFile {
   uri: string;
@@ -66,7 +63,6 @@ const SummuryScreen = ({
   const [enabled, setEnabled] = useState(
     route.params.quoteDetails?.is_company_phone_number_show || false,
   );
-  const [paginationLoading, setPaginationLoading] = useState(false);
   const [search, setSearch] = useState('');
 
   const [newQuoteFormData, setNewQuoteFormData] = useState<NewQuoteForm>({
@@ -80,13 +76,21 @@ const SummuryScreen = ({
     file: route.params.quoteDetails?.attachments || [],
   });
 
-  const page = useRef(1);
   const { theme } = useAppTheme();
   const { createQuoteMutationAsync, isCreatingQuote } = useQuoteList();
   const { updateQuoteAsync, isUpdatingQuote } = useUpdateQuote();
-  const { clients, current_page, last_page, getClients } = useClient();
-  const { showToast } = useToast();
   const debouncedSearch = useDebounce(search);
+
+const {
+      clientListData,
+      isFetching,
+      isFetchingNextPage,
+      hasNextPage,
+      fetchNextPage,
+} = useClientList({
+    search: debouncedSearch.trim()
+  });
+  const { showToast } = useToast();
   const insets = useSafeAreaInsets();
   const MAX_FILE_SIZE = 10 * 1024 * 1024;
   const MAX_FILES = 10;
@@ -95,48 +99,16 @@ const SummuryScreen = ({
   const quoteId = quoteDetails?.id;
   const isEdit = !!quoteId;
 
-  useEffect(() => {
-    page.current = 1;
-    getClients({
-      search: debouncedSearch,
-      sort_by: 'asc',
-      page: page.current,
-    });
-  }, [getClients, debouncedSearch]);
-
-  const hasMore = useMemo(() => {
-    return current_page < last_page;
-  }, [current_page, last_page]);
-
   const handleLoadMore = useCallback(async () => {
-    if (paginationLoading || !hasMore) {
-      return;
-    }
-    try {
-      setPaginationLoading(true);
-      const nextPage = page.current + 1;
-      page.current = nextPage;
-      const payload: GetClients = {
-        search: debouncedSearch,
-        page: nextPage,
-        sort_by: 'asc',
-      };
-      await getClients(payload);
-    } finally {
-      setPaginationLoading(false);
-    }
-  }, [paginationLoading, hasMore, debouncedSearch, getClients]);
+          if (!hasNextPage || isFetchingNextPage || isFetching) {
+            return;
+          }
+          fetchNextPage();
+        }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
-  const renderFooter = useCallback(() => {
-    if (!paginationLoading) {
-      return null;
-    }
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }, [paginationLoading, styles.loaderContainer]);
+   const renderFooter = useCallback(() => {
+          return isFetchingNextPage && <ActivityIndicator size="small" />;
+        }, [isFetchingNextPage]);
 
   const navigateToAddClientScreen = () => {
     navigation.navigate('AddClientScreen');
@@ -199,11 +171,11 @@ const SummuryScreen = ({
   }, []);
 
   const shapedDataForDropdown = useMemo(() => {
-    return clients.map(client => ({
+    return clientListData.map(client => ({
       label: `${client.name} • ${client.company_name}`,
       value: client.id,
     }));
-  }, [clients]);
+  }, [clientListData]);
 
   const openDocumentPicker = async () => {
     try {

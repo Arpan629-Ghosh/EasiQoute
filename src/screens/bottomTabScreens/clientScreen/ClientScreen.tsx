@@ -6,7 +6,7 @@ import {
   FlatList,
   ActivityIndicator,
 } from 'react-native';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
@@ -15,39 +15,51 @@ import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
 import AppInput from '@/components/appInput/AppInput';
 import { icons } from '@/config/icons';
 import ClientSortBottomSheet from '@/components/clientSortBottomSheet/ClientSortBottomSheet';
-import { useClient } from '@/hooks/apis/useClient';
 import Loader from '@/components/loader/Loader';
-import { useToast } from '@/hooks/useToast';
 import RenderClients from '@/components/renderClients/RenderClients';
 import { useDebounce } from '@/hooks/useDebounce';
-import { Clients, GetClients, SORT_BY } from '@/types/apis/client.types';
+import { Clients, SORT_BY } from '@/types/apis/client.types';
 import { ClientStackProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
+import { useClientList } from '@/hooks/apis/clients/useClientList';
 
 const ClientScreen = ({ navigation }: ClientStackProps<'ClientScreen'>) => {
   const [open, setOpen] = useState(false);
-  const [selctedSortOption, setSelectedSortOptions] = useState<string>('');
+  const [selctedSortOption, setSelectedSortOptions] = useState<string>('A-Z');
   const [search, setSearch] = useState<string>('');
   const [refreshing, setRefreshing] = useState(false);
-  const [paginationLoading, setPaginationLoading] = useState(false);
-  const page = useRef(1);
-  const onEndReachedCalledDuringMomentum = useRef(false);
   const { theme, isDark } = useAppTheme();
-  const { showToast } = useToast();
-  const { getClients, loading, clients, current_page, last_page } = useClient();
   const debouncedSearch = useDebounce(search, 500);
+
+  const sortBy = useMemo<SORT_BY>(() => {
+    switch (selctedSortOption) {
+      case 'Most Active':
+        return 'ma';
+
+      case 'Recently Added':
+        return 'desc';
+
+      default:
+        return 'asc';
+    }
+  }, [selctedSortOption]);
+
+  const {
+    clientListData,
+    isPending,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useClientList({
+    sort_by: sortBy,
+    search: debouncedSearch.trim(),
+  });
+  
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
-
-  useEffect(() => {
-    page.current = 1;
-    const payload: GetClients = {
-      sort_by: 'asc',
-      page: 1,
-    }
-    getClients(payload)
-  }, [getClients])
 
   const handleClose = useCallback(() => {
     setOpen(false);
@@ -57,121 +69,49 @@ const ClientScreen = ({ navigation }: ClientStackProps<'ClientScreen'>) => {
     navigation.navigate('AddClientScreen');
   };
 
-  const toggleSort = useCallback(
-    async (type: string) => {
-      const updatedStatus = selctedSortOption === type ? '' : type;
-
-      setSelectedSortOptions(updatedStatus);
-
-      try {
-        let sort: SORT_BY = 'asc';
-
-        switch (updatedStatus) {
-          case 'Most Active':
-            sort = 'ma';
-            break;
-
-          case 'Recently Added':
-            sort = 'desc';
-            break;
-
-          default:
-            sort = 'asc';
-        }
-
-        const payload: GetClients = {
-          sort_by: sort,
-          page: page.current,
-        };
-
-        await getClients(payload);
-      } catch (error) {
-        showToast(String(error), 'error');
-      }
-    },
-    [selctedSortOption, getClients, showToast],
-  );
-
-  const hasMore = useMemo(() => {
-    return current_page < last_page;
-  }, [current_page, last_page]);
+  const toggleSort = useCallback((type: string = 'A-Z') => {
+    setSelectedSortOptions(previous => (previous === type ? '' : type));
+  }, []);
 
   const handleRefresh = useCallback(async () => {
-    if (refreshing) {
-      return;
-    }
-    try {
-      setRefreshing(true);
-      page.current = 1;
-      const payload: GetClients = {
-        page: 1,
-        sort_by: 'asc',
-      };
-      await getClients(payload);
-    } finally {
-      setRefreshing(false);
-    }
-  }, [refreshing, getClients]);
+      try {
+        setRefreshing(true);
+        await refetch();
+      } finally {
+        setRefreshing(false);
+      }
+    }, [refetch]);
 
-  const handleLoadMore = useCallback(async () => {
-    if (paginationLoading || refreshing || !hasMore) {
-      return;
-    }
-    try {
-      setPaginationLoading(true);
-      const nextPage = page.current + 1;
-      page.current = nextPage;
-      const payload: GetClients = {
-        page: nextPage,
-        sort_by: 'asc',
-      };
-      await getClients(payload);
-    } finally {
-      setPaginationLoading(false);
-    }
-  }, [paginationLoading, refreshing, hasMore, getClients]);
+    const handleLoadMore = useCallback(async () => {
+      if (!hasNextPage || isFetchingNextPage || isFetching) {
+        return;
+      }
+      fetchNextPage();
+    }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
+
+    const renderEmpty = useCallback(() => {
+      if (isFetching) {
+        return null;
+      }
+
+      return (
+        <EmptyStateScreen
+          icon={isDark ? images.img_darkquote : icons.ic_boldqoute}
+          primaryText="No clients Found"
+          message="Click on the + below to create"
+          nextMessage="a new quote."
+        />
+      );
+    }, [isFetching, isDark]);
 
   const renderFooter = useCallback(() => {
-    if (!paginationLoading) {
-      return null;
-    }
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }, [paginationLoading, styles.loaderContainer]);
+      return isFetchingNextPage && <ActivityIndicator size="small" />;
+    }, [isFetchingNextPage]);
 
   const renderItem = useCallback(({ item }: { item: Clients }) => {
     return <RenderClients item={item} />;
   }, []);
 
-  const renderEmpty = useCallback(() => {
-    if (loading) {
-      return null;
-    }
-
-    return (
-      <EmptyStateScreen
-        icon={images.img_noclient}
-        primaryText="No Clients Found"
-        message="Click on the + below to create"
-        nextMessage="a new quote."
-      />
-    );
-  }, [loading]);
-
-  const processedData = useMemo(() => {
-    let result = clients;
-
-    if (!debouncedSearch.trim()) return result;
-
-    result = result.filter(item =>
-      item.name.toLowerCase().includes(debouncedSearch.toLowerCase()),
-    );
-
-    return result;
-  }, [clients, debouncedSearch]);
 
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
@@ -208,7 +148,7 @@ const ClientScreen = ({ navigation }: ClientStackProps<'ClientScreen'>) => {
         </View>
 
         <FlatList
-          data={processedData}
+          data={clientListData  }
           renderItem={renderItem}
           keyExtractor={item => item.id.toString()}
           showsVerticalScrollIndicator={false}
@@ -220,15 +160,7 @@ const ClientScreen = ({ navigation }: ClientStackProps<'ClientScreen'>) => {
           onEndReachedThreshold={0.2}
           ListFooterComponent={renderFooter}
           ListEmptyComponent={renderEmpty}
-          onMomentumScrollBegin={() => {
-            onEndReachedCalledDuringMomentum.current = false;
-          }}
-          onEndReached={() => {
-            if (!onEndReachedCalledDuringMomentum.current) {
-              handleLoadMore();
-              onEndReachedCalledDuringMomentum.current = true;
-            }
-          }}
+          onEndReached={handleLoadMore}
           contentContainerStyle={styles.flatlist}
           style={styles.card}
         />
@@ -245,7 +177,7 @@ const ClientScreen = ({ navigation }: ClientStackProps<'ClientScreen'>) => {
         selectedSortOption={selctedSortOption}
         onToggleSort={toggleSort}
       />
-      {!refreshing && !paginationLoading && <Loader visible={loading} />}
+       <Loader visible={isPending} />
     </LinearGradient>
   );
 };

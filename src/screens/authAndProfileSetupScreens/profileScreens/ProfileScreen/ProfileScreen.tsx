@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import AppImage from '@/components/appImage/AppImage';
 import { useGetUserDetails } from '@/hooks/apis/useGetUserDetails';
 import { ProfileSetupPayload } from '@/types/apis/auth.types';
+import { formatPhone } from '@/utils/formatPhone';
 
 interface ProfileForm {
   name: string;
@@ -64,15 +65,6 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
       ...prev,
       [name]: value,
     }));
-  };
-
-  const formatPhone = (phone: string) => {
-    const digits = phone.replace(/\D/g, '');
-
-    // Remove 44 if already present
-    const number = digits.startsWith('44') ? digits.slice(2) : digits;
-
-    return `+44${number}`;
   };
 
   const handleClose = useCallback(() => {

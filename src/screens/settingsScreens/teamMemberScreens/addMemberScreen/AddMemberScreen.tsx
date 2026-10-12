@@ -14,11 +14,11 @@ import LinearGradient from 'react-native-linear-gradient';
 import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import AppInput from '@/components/appInput/AppInput';
 import AppButton from '@/components/appButton/AppButton';
-import { useSettings } from '@/hooks/apis/useSettings';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
 import { CreateTeamMemberPayload } from '@/types/apis/settings.types';
 import { useTranslation } from 'react-i18next';
+import { useCreateTeamMember } from '@/hooks/apis/settings/useCreateTeamMember';
 
 interface AddMemberForm {
   name: string;
@@ -39,7 +39,7 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
 
   const { theme } = useAppTheme();
   const { showToast } = useToast();
-  const { createTeamMembers, settingLoading } = useSettings();
+  const { createTeamMemberAsync, isCreatingTeamMember } = useCreateTeamMember();
   const { t } = useTranslation();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const editId = route.params?.editId;
@@ -62,7 +62,7 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
       };
 
       if (isEdit) payload.id = editId;
-      await createTeamMembers(payload)
+      await createTeamMemberAsync(payload)
       showToast(isEdit ? 'Team member updated successfully' : 'Team member created successfully.');
       navigation.goBack();
     } catch (error) {
@@ -149,7 +149,7 @@ const AddMemberScreen = ({navigation, route} : RootScreenProps<'AddMemberScreen'
               bg={theme.primary}
               bttnTxt={editId ? t('button.updateMembers') : t('button.addMembers')}
               txtColor={theme.primaryText}
-              showLoader={settingLoading}
+              showLoader={isCreatingTeamMember}
               onPress={handleAddMember}
             />
           </View>

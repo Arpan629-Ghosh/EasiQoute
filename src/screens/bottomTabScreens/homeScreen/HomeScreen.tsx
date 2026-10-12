@@ -36,6 +36,7 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
 
   console.log(isError)
 
+
   return (
     <View style={[styles.safeareaview]}>
       <StatusBar

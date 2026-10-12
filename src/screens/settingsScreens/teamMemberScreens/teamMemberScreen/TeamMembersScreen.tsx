@@ -1,8 +1,6 @@
 import React, {
   useCallback,
-  useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
@@ -14,7 +12,6 @@ import { icons } from '@/config/icons';
 import AppInput from '@/components/appInput/AppInput';
 import AppButton from '@/components/appButton/AppButton';
 import { RootScreenProps } from '@/types/navigation.types';
-import { useSettings } from '@/hooks/apis/useSettings';
 import Loader from '@/components/loader/Loader';
 import RenderTeamMembers from '@/components/renderTeamMembers/RenderTeamMembers';
 import { MemberDetails } from '@/types/apis/settings.types';
@@ -22,83 +19,51 @@ import { useDebounce } from '@/hooks/useDebounce';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
 import { useTranslation } from 'react-i18next';
+import { useTeamMemberList } from '@/hooks/apis/settings/useTeamMemberList';
 
 const TeamMembersScreen = ({
   navigation,
 }: RootScreenProps<'TeamMembersScreen'>) => {
   const [search, setSearch] = useState<string>('');
-  const [paginationLoading, setPaginationLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
-
-  const page = useRef(1);
-  const onEndReachedCalledDuringMomentum = useRef(false);
-
   const debouncedSearch = useDebounce(search);
   const { theme } = useAppTheme();
   const { t } = useTranslation();
   const {
-    loadingTeamMembers,
-    teamMembers,
-    member_current_page,
-    member_last_page,
-    fetchTeamMembers,
-  } = useSettings();
+    teamMemberListData,
+    isPending,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useTeamMemberList({
+    search: debouncedSearch.trim()
+  });
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const navigateToAddMember = () => {
     navigation.navigate('AddMemberScreen');
   };
 
-  useEffect(() => {
-    page.current = 1;
-    fetchTeamMembers({
-      search: debouncedSearch,
-      page: page.current,
-    });
-  }, [fetchTeamMembers, debouncedSearch]);
-
-  const hasMore = useMemo(() => {
-    return member_current_page < member_last_page;
-  }, [member_current_page, member_last_page]);
-
   const handleRefresh = useCallback(async () => {
-    if (refreshing) {
-      return;
-    }
-    page.current = 1;
-    setRefreshing(true);
-    await fetchTeamMembers({
-      search: debouncedSearch,
-      page: page.current,
-    });
-    setRefreshing(false);
-  }, [refreshing, fetchTeamMembers, debouncedSearch]);
+      try {
+        setRefreshing(true);
+        await refetch();
+      } finally {
+        setRefreshing(false);
+      }
+    }, [refetch]);
 
   const handleLoadMore = useCallback(async () => {
-    if (paginationLoading || refreshing || !hasMore) {
-      return;
-    }
-    try {
-      setPaginationLoading(true);
-      const nextPage = page.current + 1;
-      page.current = nextPage;
-      await fetchTeamMembers({
-        search: debouncedSearch,
-        page: nextPage,
-      });
-    } finally {
-      setPaginationLoading(false);
-    }
-  }, [
-    paginationLoading,
-    refreshing,
-    hasMore,
-    fetchTeamMembers,
-    debouncedSearch,
-  ]);
+      if (!hasNextPage || isFetchingNextPage || isFetching) {
+        return;
+      }
+      fetchNextPage();
+    }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
   const renderEmpty = useMemo(() => {
-    if (loadingTeamMembers) {
+    if (isFetching) {
       return null;
     }
     return (
@@ -109,24 +74,17 @@ const TeamMembersScreen = ({
         nextMessage=" below to add team members"
       />
     );
-  }, [loadingTeamMembers]);
+  }, [isFetching]);
 
   const renderItem = useCallback(({ item }: { item: MemberDetails }) => {
     return <RenderTeamMembers item={item} />;
   }, []);
 
-  const renderFooter = useMemo(() => {
-    if (!paginationLoading) {
-      return null;
-    }
+  const renderFooter = useCallback(() => {
+      return isFetchingNextPage && <ActivityIndicator size="small" />;
+    }, [isFetchingNextPage]);
 
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }, [paginationLoading, styles.loaderContainer]);
-
+console.log(teamMemberListData)
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -148,7 +106,7 @@ const TeamMembersScreen = ({
       </View>
       <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
         <FlatList
-          data={teamMembers}
+          data={teamMemberListData}
           renderItem={renderItem}
           keyExtractor={item => String(item.id)}
           style={styles.flatlist}
@@ -163,19 +121,7 @@ const TeamMembersScreen = ({
           updateCellsBatchingPeriod={50}
           initialNumToRender={8}
           windowSize={5}
-          maintainVisibleContentPosition={{
-            minIndexForVisible: 0,
-          }}
-          onMomentumScrollBegin={() => {
-            onEndReachedCalledDuringMomentum.current = false;
-          }}
-          onEndReached={() => {
-            if (!onEndReachedCalledDuringMomentum.current) {
-              handleLoadMore();
-
-              onEndReachedCalledDuringMomentum.current = true;
-            }
-          }}
+          onEndReached={handleLoadMore}
           onEndReachedThreshold={0.2}
           ListFooterComponent={renderFooter}
           ListEmptyComponent={renderEmpty}
@@ -194,9 +140,9 @@ const TeamMembersScreen = ({
           </View>
         </View>
       </LinearGradient>
-      {!refreshing && !paginationLoading && (
-        <Loader visible={loadingTeamMembers} />
-      )}
+      
+        <Loader visible={isPending} />
+   
     </View>
   );
 };

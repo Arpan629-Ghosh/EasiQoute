@@ -1,5 +1,5 @@
 import { FlatList, Image, ListRenderItem, TouchableOpacity, View } from 'react-native';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { createStyles } from './style';
 import AppButton from '@/components/appButton/AppButton';
 import InterTightRegular from '@/components/appFonts/InterTightRegular';
@@ -11,7 +11,6 @@ import InfoRow from '@/components/cardDetailsComponent/InfoRow';
 import MarginBottomSheet from '@/components/marginBottomSheet/MarginBottomSheet';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useSettings } from '@/hooks/apis/useSettings';
 import RenderSubCategoriesDropDown from '@/components/renderSubCategoriesDropdown/RenderSubCategoriesDropDown';
 import { useDebounce } from '@/hooks/useDebounce';
 import DiscountModal from '@/components/discountModal/DiscountModal';
@@ -21,6 +20,8 @@ import { useToast } from '@/hooks/useToast';
 import { QuoteTopTabWithRootProps } from '@/types/navigation.types';
 import { InvoiceItem } from '@/types/apis/invoice.types';
 import { useUpdateQuote } from '@/hooks/apis/quotes/useUpdateQuote';
+import { useItemList } from '@/hooks/apis/settings/useItemList';
+import { useSubCategoryList } from '@/hooks/apis/settings/useSubCategoryList';
 
 
 
@@ -36,11 +37,8 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
   const [openDropDown, setOpenDropDown] = useState(false);
   const [openDiscount, setOpenDiscount] = useState(false);
   const [search, setSearch] = useState('');
-  const [paginationLoading, setPaginationLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [discountPrice, setDiscountPrice] = useState(0);
-  const page = useRef(1);
-  const onEndReachedCalledDuringMomentum = useRef(false);
   const height = useSharedValue(0);
   const opacity = useSharedValue(0);
   const insets = useSafeAreaInsets();
@@ -51,13 +49,16 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
   const { theme } = useAppTheme();
   const { showToast } = useToast();
   const {
-    fetchItems,
-    isStale,
-    items_data,
-    subcat_data,
-    items_current_page,
-    items_last_page,
-  } = useSettings();
+    itemListData,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useItemList();
+  const {
+    subCategoryListData
+  } = useSubCategoryList();
   const { updateQuoteAsync, isUpdatingQuote } = useUpdateQuote();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
@@ -103,39 +104,22 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
     };
   });
 
-  useEffect(() => {
-    if (isStale) {
-      page.current = 1;
-      fetchItems(1);
-    }
-  }, [fetchItems, isStale]);
 
-  useEffect(() => {
-    fetchItems(1);
-  }, [fetchItems]);
+ const handleRefresh = useCallback(async () => {
+     try {
+       setRefreshing(true);
+       await refetch();
+     } finally {
+       setRefreshing(false);
+     }
+   }, [refetch]);
 
-  const hasMore = useMemo(() => {
-    return items_current_page < items_last_page;
-  }, [items_current_page, items_last_page]);
-
-  const handleRefresh = useCallback(async () => {
-    if (refreshing) return;
-    page.current = 1;
-    setRefreshing(true);
-    await fetchItems(1);
-    setRefreshing(false);
-  }, [fetchItems, refreshing]);
-
-  const handleLoadMore = useCallback(() => {
-    if (paginationLoading || refreshing || !hasMore) {
-      return;
-    }
-    setPaginationLoading(true);
-    const nextPage = page.current + 1;
-    page.current = nextPage;
-    fetchItems(nextPage);
-    setPaginationLoading(false);
-  }, [paginationLoading, refreshing, hasMore, fetchItems]);
+  const handleLoadMore = useCallback(async () => {
+      if (!hasNextPage || isFetchingNextPage || isFetching) {
+        return;
+      }
+      fetchNextPage();
+    }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
   const toggleFinancialMargin = () => {
     setOpenFinancialBreakdown(!openFinancialBreakdown);
@@ -168,7 +152,7 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
   }, []);
 
   const processedData = useMemo(() => {
-    let result = items_data;
+    let result = itemListData;
     if (selectedFilterOption) {
       result = result.filter(item =>
         item.category_name
@@ -184,15 +168,15 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
     }
 
     return result;
-  }, [items_data, selectedFilterOption, search]);
+  }, [itemListData, selectedFilterOption, search]);
 
   const processedSubcategoryData = useMemo(() => {
-    let result = [...subcat_data];
+    let result = [...subCategoryListData];
     if (!debouncedSearch.trim()) return result;
     const lower = debouncedSearch.toLowerCase();
     result = result.filter(item => item.name.toLowerCase().includes(lower));
     return result;
-  }, [subcat_data, debouncedSearch]);
+  }, [subCategoryListData, debouncedSearch]);
 
  const handleAddItem = useCallback((updatedItem: FetchItemsData) => {
      setSelectedItems(prev => {
@@ -337,16 +321,7 @@ const ItemsScreen = ({ navigation, route }: QuoteTopTabWithRootProps<'Items'>) =
           maxToRenderPerBatch={10}
           initialNumToRender={8}
           windowSize={5}
-          onMomentumScrollBegin={() => {
-            onEndReachedCalledDuringMomentum.current = false;
-          }}
-          onEndReached={() => {
-            if (!onEndReachedCalledDuringMomentum.current) {
-              handleLoadMore();
-
-              onEndReachedCalledDuringMomentum.current = true;
-            }
-          }}
+          onEndReached={handleLoadMore}
           onEndReachedThreshold={0.2}
         />
       </View>

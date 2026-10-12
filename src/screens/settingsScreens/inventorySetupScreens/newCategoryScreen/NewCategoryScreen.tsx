@@ -8,11 +8,13 @@ import AppInput from '@/components/appInput/AppInput';
 import AppButton from '@/components/appButton/AppButton';
 import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useSettings } from '@/hooks/apis/useSettings';
 import { useToast } from '@/hooks/useToast';
 import { images } from '@/config/images';
 import { CreateCategories } from '@/types/apis/settings.types';
 import { RootScreenProps } from '@/types/navigation.types';
+import { useCreateCategory } from '@/hooks/apis/settings/useCreateCategory';
+import { useDeleteCategory } from '@/hooks/apis/settings/useDeleteCategory';
+import Loader from '@/components/loader/Loader';
 
 
 const NewCategoryScreen = ({ navigation, route }: RootScreenProps<'NewCategoryScreen'>) => {
@@ -21,7 +23,8 @@ const NewCategoryScreen = ({ navigation, route }: RootScreenProps<'NewCategorySc
   const [input, setInput] = useState<string>(name || "")
   const insets = useSafeAreaInsets();
   const { theme } = useAppTheme();
-  const { newCategories, settingLoading, deleteCategory } = useSettings();
+  const { createCategoryAsync, isCreatingCategory } = useCreateCategory();
+  const { deleteCategoryAsync, isDeletingCategory } = useDeleteCategory();
   const { showToast } = useToast();
   const isEdit = !!editId
   
@@ -38,7 +41,7 @@ const NewCategoryScreen = ({ navigation, route }: RootScreenProps<'NewCategorySc
         payload.id = editId;
       }
 
-      await newCategories(payload);
+      await createCategoryAsync(payload);
 
       navigation.goBack();
 
@@ -55,8 +58,8 @@ const NewCategoryScreen = ({ navigation, route }: RootScreenProps<'NewCategorySc
 
   const handleDeleteCategory = async () => {
     try {
-      const response = await deleteCategory(editId as number)
-      showToast(response)
+      const response = await deleteCategoryAsync(editId as number)
+      showToast(response.message)
       navigation.goBack()
     } catch (error) {
       showToast(String(error), 'error')
@@ -99,12 +102,13 @@ const NewCategoryScreen = ({ navigation, route }: RootScreenProps<'NewCategorySc
           <AppButton
             bg={theme.primary}
             bttnTxt="Save"
-            showLoader={settingLoading}
+            showLoader={isCreatingCategory}
             onPress={handleCategory}
             txtColor={theme.primaryText}
           />
         </View>
       </View>
+      <Loader visible={ isDeletingCategory } />
     </LinearGradient>
   );
 }

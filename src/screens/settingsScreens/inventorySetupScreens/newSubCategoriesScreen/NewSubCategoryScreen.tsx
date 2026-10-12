@@ -9,13 +9,17 @@ import AppInput from '@/components/appInput/AppInput';
 import AppButton from '@/components/appButton/AppButton';
 import { icons } from '@/config/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useSettings } from '@/hooks/apis/useSettings';
 import RenderCategoriesDropDown from '@/components/renderCategoriesDropDown/RenderCategoriesDropDown';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useToast } from '@/hooks/useToast';
 import { images } from '@/config/images';
 import { CreateSubCategories } from '@/types/apis/settings.types';
 import { RootScreenProps } from '@/types/navigation.types';
+import { useDeleteSubCategory } from '@/hooks/apis/settings/useDeleteSubCategory';
+import { useSubCategoryList } from '@/hooks/apis/settings/useSubCategoryList';
+import { useCategoryList } from '@/hooks/apis/settings/useCategoryList';
+import { useCreateSubCategories } from '@/hooks/apis/settings/useCreateSubCategories';
+import Loader from '@/components/loader/Loader';
 
 const NewSubCategoryScreen = ({
   navigation,
@@ -28,13 +32,11 @@ const NewSubCategoryScreen = ({
   const [search, setSearch] = useState<string>(catName || '');
   const [input, setInput] = useState<string>(name || '');
   const { theme } = useAppTheme();
-  const {
-    subcat_data,
-    settingLoading,
-    data,
-    newSubCtaegories,
-    deleteSubCategory,
-  } = useSettings();
+
+  const { deleteSubCategoryAsync, isDeletingSubCategory } = useDeleteSubCategory();
+  const { subCategoryListData } = useSubCategoryList();
+  const { categoryListData } = useCategoryList();
+  const { createSubCategoryAsync, isCreatingSubCategory } = useCreateSubCategories();
   const { showToast } = useToast();
   const insets = useSafeAreaInsets();
   const debouncedSearch = useDebounce(search);
@@ -54,7 +56,7 @@ const NewSubCategoryScreen = ({
   const handleSubCategories = async () => {
     try {
       const category_from_input = debouncedSearch.trim().toLowerCase();
-      const category_from_api = data.filter(
+      const category_from_api = categoryListData.filter(
         item => item.name.toLowerCase() === category_from_input,
       );
       if (!category_from_api.length) {
@@ -69,7 +71,7 @@ const NewSubCategoryScreen = ({
       if (isEdit) {
         payload.id = editId;
       }
-      await newSubCtaegories(payload);
+      await createSubCategoryAsync(payload);
       showToast(
         isEdit
           ? 'Sub category updated successfully'
@@ -83,7 +85,7 @@ const NewSubCategoryScreen = ({
 
   const handleDeleteSubCategories = async () => {
     const subcat_from_input = input.toLowerCase();
-    const subcat_from_api = subcat_data.filter(
+    const subcat_from_api = subCategoryListData.filter(
       (item) => item.name.toLowerCase() === subcat_from_input,
     );
     if (!subcat_from_api.length) {
@@ -93,12 +95,12 @@ const NewSubCategoryScreen = ({
     }
     const category_id = subcat_from_api[0].category.id;
     try {
-      const reponse = await deleteSubCategory({
+      const reponse = await deleteSubCategoryAsync({
         id: editId,
         category_id: category_id,
         name: input,
       });
-      showToast(reponse);
+      showToast(reponse.message);
       navigation.goBack();
     } catch (error) {
       showToast(String(error), 'error');
@@ -106,12 +108,12 @@ const NewSubCategoryScreen = ({
   };
 
   const processedData = useMemo(() => {
-    let result = [...data];
+    let result = [...categoryListData];
     if (!debouncedSearch.trim()) return result;
     const lower = debouncedSearch.toLowerCase();
     result = result.filter(item => item.name.toLowerCase().includes(lower));
     return result;
-  }, [data, debouncedSearch]);
+  }, [categoryListData, debouncedSearch]);
 
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
@@ -183,10 +185,11 @@ const NewSubCategoryScreen = ({
             bttnTxt="Save"
             txtColor={theme.primaryText}
             onPress={handleSubCategories}
-            showLoader={settingLoading}
+            showLoader={isCreatingSubCategory}
           />
         </View>
       </View>
+      <Loader visible={isDeletingSubCategory } />
     </LinearGradient>
   );
 };

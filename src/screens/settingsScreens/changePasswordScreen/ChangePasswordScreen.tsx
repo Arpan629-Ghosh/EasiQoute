@@ -14,10 +14,10 @@ import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import AppInput from '@/components/appInput/AppInput';
 import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useSettings } from '@/hooks/apis/useSettings';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
 import { Eye, EyeOff } from 'lucide-react-native';
+import { useChangePassword } from '@/hooks/apis/settings/useChangePassword';
 
 interface ChangePasswordForm {
   oldPassword: string;
@@ -40,7 +40,7 @@ const ChangePasswordScreen = ({navigation} : RootScreenProps<'ChangePasswordScre
   const newRef = useRef<TextInput | null>(null);
   const confirmRef = useRef<TextInput | null>(null);
   const insets = useSafeAreaInsets();
-  const { changePassword, settingLoading } = useSettings();
+  const { changePasswordAsync, isChangingPassword } = useChangePassword();
   const { showToast } = useToast();
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -63,7 +63,7 @@ const ChangePasswordScreen = ({navigation} : RootScreenProps<'ChangePasswordScre
 
   const handleChangePassword = async () => {
     try {
-      await changePassword({
+      await changePasswordAsync({
         old_password: changePasswordData.oldPassword,
         new_password: changePasswordData.newPassword,
       });
@@ -199,7 +199,7 @@ const ChangePasswordScreen = ({navigation} : RootScreenProps<'ChangePasswordScre
               bttnTxt="Change Password"
               txtColor={theme.primaryText}
               onPress={handleChangePassword}
-              showLoader={settingLoading}
+              showLoader={isChangingPassword}
             />
           </View>
         </View>

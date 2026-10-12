@@ -19,9 +19,11 @@ import { SearchAddressPayload } from '@/types/apis/auth.types';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useToast } from '@/hooks/useToast';
 import { useAuth } from '@/hooks/apis/useAuth';
-import { useClient } from '@/hooks/apis/useClient';
 import { RootScreenProps } from '@/types/navigation.types';
 import AddressDropdown from '@/components/adressDropdown/AddressDropdown';
+import { useCreateClients } from '@/hooks/apis/clients/useCreateClients';
+import { useUpdateClient } from '@/hooks/apis/clients/useUpdateClient';
+import { formatPhone } from '@/utils/formatPhone';
 
 interface ClientForm {
   clientName: string;
@@ -56,8 +58,8 @@ const AddClientScreen = ({
   const debouncedSearch = useDebounce(searchAddressInput, 500);
   const { theme } = useAppTheme();
   const { showToast } = useToast();
-  const { createClient, updateClient, updateClientLoader, loading } =
-    useClient();
+  const { createClientMutateAsync, isCreating } = useCreateClients();
+  const { updateClientMutate, isUpdatingClient } = useUpdateClient();
   const { searchAddress } = useAuth();
   const insets = useSafeAreaInsets();
   const clientDetails = route.params?.clientDetails;
@@ -94,10 +96,6 @@ const AddClientScreen = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
 
-  const formatPhone = clientFormData.phNo.startsWith('+44')
-    ? clientFormData.phNo
-    : `${'+44'}${clientFormData.phNo}`;
-
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const updateField = useCallback((name: keyof ClientForm, value: string) => {
@@ -121,10 +119,10 @@ const AddClientScreen = ({
 
   const handleAddClient = async () => {
     try {
-      const res = await createClient({
+      const res = await createClientMutateAsync({
         email: clientFormData.email,
         name: clientFormData.clientName,
-        phone: formatPhone,
+        phone: formatPhone(clientFormData.phNo),
         company_name: clientFormData.companyName,
         address: clientFormData.streetAddress,
         city: clientFormData.city,
@@ -145,7 +143,7 @@ const AddClientScreen = ({
       });
 
       navigation.navigate('ClientDetailScreen', {
-        clientId: res.id,
+        clientId: res.payload.id,
       });
     } catch (error) {
       showToast(String(error), 'error');
@@ -154,11 +152,11 @@ const AddClientScreen = ({
 
   const handleEditClient = async () => {
     try {
-      const res = await updateClient({
+      const res = await updateClientMutate({
         id: clientDetails?.id,
         email: clientFormData.email,
         name: clientFormData.clientName,
-        phone: formatPhone,
+        phone: formatPhone(clientFormData.phNo),
         company_name: clientFormData.companyName,
         address: clientFormData.streetAddress,
         city: clientFormData.city,
@@ -179,7 +177,7 @@ const AddClientScreen = ({
       });
 
       navigation.navigate('ClientDetailScreen', {
-        clientId: res.id,
+        clientId: res.payload.id,
       });
     } catch (error) {
       showToast(String(error), 'error');
@@ -329,7 +327,7 @@ const AddClientScreen = ({
             bttnTxt={isEdit ? 'Update Client' : 'Add Client'}
             bg={theme.primary}
             txtColor={theme.primaryText}
-            showLoader={loading || updateClientLoader}
+            showLoader={isCreating || isUpdatingClient}
             onPress={isEdit ? handleEditClient : handleAddClient}
           />
         </View>

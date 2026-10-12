@@ -17,10 +17,12 @@ import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import Card from '@/components/cardDetailsComponent/Card';
 import SettingInfoRow from '@/components/cardDetailsComponent/SettingInfoRow';
 import CardHeader from '@/components/cardDetailsComponent/CardHeader';
-import { useClient } from '@/hooks/apis/useClient';
 import RecentClientActivity from '@/components/recentClientActivity/RecentClientActivity';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useToast } from '@/hooks/useToast';
+import { useClientDetails } from '@/hooks/apis/clients/useClientDetails';
+import { useDeleteClient } from '@/hooks/apis/clients/useDeleteClient';
+import Loader from '@/components/loader/Loader';
 
 const ClientDetailScreen = ({
   navigation,
@@ -29,7 +31,11 @@ const ClientDetailScreen = ({
   const [openEdit, setOpenEdit] = useState(false);
   const clientId = route.params.clientId;
   const { theme, isDark } = useAppTheme();
-  const { showClientDetail, deleteClient, client_detail } = useClient();
+  const { clientDetails, isPending } = useClientDetails(clientId);
+  const {
+    mutateAsync: deleteClient,
+    isPending: isDeleting
+   } = useDeleteClient();
   const { showToast } = useToast();
   const insets = useSafeAreaInsets();
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -54,10 +60,6 @@ const ClientDetailScreen = ({
   };
 
   useEffect(() => {
-    showClientDetail(clientId);
-  }, [clientId, showClientDetail]);
-
-  useEffect(() => {
     Animated.timing(animation, {
       toValue: openEdit ? 1 : 0,
       duration: 220,
@@ -68,7 +70,7 @@ const ClientDetailScreen = ({
 
   const navigateToEdit = () => {
     navigation.navigate('AddClientScreen', {
-      clientDetails: client_detail || null
+      clientDetails: clientDetails || null
     })
   }
 
@@ -155,10 +157,10 @@ const ClientDetailScreen = ({
       <View style={styles.content}>
         <View style={styles.headerText}>
           <InterTightMedium fsize={20} fcolor={theme.textPrimary}>
-            {client_detail?.name}
+            {clientDetails?.name}
           </InterTightMedium>
           <InterTightRegular fsize={16} fcolor={theme.textSecondary}>
-            {client_detail?.company_name}
+            {clientDetails?.company_name}
           </InterTightRegular>
         </View>
         <View style={styles.amtDetails}>
@@ -166,10 +168,10 @@ const ClientDetailScreen = ({
             <Card style={styles.card}>
               <View style={styles.cardHeader}>
                 <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
-                  {client_detail?.total_quotes}
+                  {clientDetails?.total_quotes}
                 </InterTightMedium>
                 <InterTightMedium fsize={14} fcolor={theme.textMuted}>
-                  £{(client_detail?.total_quotes_amount)?.toFixed(2)}
+                  £{(clientDetails?.total_quotes_amount)?.toFixed(2)}
                 </InterTightMedium>
               </View>
               <InterTightRegular fsize={12} fcolor={theme.textSecondary}>
@@ -179,10 +181,10 @@ const ClientDetailScreen = ({
             <Card style={styles.card}>
               <View style={styles.cardHeader}>
                 <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
-                  {client_detail?.total_invoices}
+                  {clientDetails?.total_invoices}
                 </InterTightMedium>
                 <InterTightMedium fsize={14} fcolor={theme.textMuted}>
-                  £{client_detail?.total_invoices_amount}
+                  £{clientDetails?.total_invoices_amount}
                 </InterTightMedium>
               </View>
               <InterTightRegular fsize={12} fcolor={theme.textSecondary}>
@@ -193,7 +195,7 @@ const ClientDetailScreen = ({
           <Card style={styles.nextCard}>
             <View style={styles.txt}>
               <InterTightMedium fsize={18} fcolor={theme.textPrimary}>
-                {client_detail?.available_credit}
+                {clientDetails?.available_credit}
               </InterTightMedium>
             </View>
             <View style={styles.txt}>
@@ -222,7 +224,7 @@ const ClientDetailScreen = ({
                 style={styles.img}
               />
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                {client_detail?.phone}
+                {clientDetails?.phone}
               </InterTightRegular>
             </View>
             <View style={styles.contactdetail}>
@@ -231,7 +233,7 @@ const ClientDetailScreen = ({
                 style={styles.img}
               />
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                {client_detail?.email}
+                {clientDetails?.email}
               </InterTightRegular>
             </View>
             <View style={styles.contactdetail}>
@@ -240,7 +242,7 @@ const ClientDetailScreen = ({
                 style={styles.img}
               />
               <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
-                {client_detail?.address}
+                {clientDetails?.address}
               </InterTightRegular>
             </View>
           </View>
@@ -253,7 +255,7 @@ const ClientDetailScreen = ({
             <View style={styles.empty} />
           </View>
           <FlatList
-            data={client_detail?.recent_activities}
+            data={clientDetails?.recent_activities}
             renderItem={({ item }) => <RecentClientActivity item={item} />}
             keyExtractor={item => item.id.toString()}
             showsVerticalScrollIndicator={false}
@@ -266,6 +268,7 @@ const ClientDetailScreen = ({
           <Image source={icons.ic_add} style={styles.ic} />
         </TouchableOpacity>
       </View>
+      <Loader visible={ isPending || isDeleting} />
     </LinearGradient>
   );
 };

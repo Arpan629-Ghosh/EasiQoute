@@ -9,7 +9,6 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
@@ -30,7 +29,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DiscountModal from '@/components/discountModal/DiscountModal';
 import { InvoiceTopTabWithRootProps } from '@/types/navigation.types';
 import RenderSubCategoriesDropDown from '@/components/renderSubCategoriesDropdown/RenderSubCategoriesDropDown';
-import { useSettings } from '@/hooks/apis/useSettings';
 import { useDebounce } from '@/hooks/useDebounce';
 import RenderFilterData from '@/components/renderFilterData/RenderFilterData';
 import { FetchItemsData } from '@/types/apis/settings.types';
@@ -38,7 +36,8 @@ import { useToast } from '@/hooks/useToast';
 import MarginBottomSheet from '@/components/marginBottomSheet/MarginBottomSheet';
 import { useInvoiceDetails } from '@/hooks/apis/invoice/useInvoiceDetails';
 import { useUpdateInvoice } from '@/hooks/apis/invoice/useUpdateInvoice';
-import { useFocusEffect } from '@react-navigation/native';
+import { useItemList } from '@/hooks/apis/settings/useItemList';
+import { useSubCategoryList } from '@/hooks/apis/settings/useSubCategoryList';
 
 interface FinancialBreakDown {
   subtotal: string;
@@ -64,22 +63,19 @@ const ItemsScreen = ({
   const [discountPrice, setDiscountPrice] = useState(0);
   const [search, setSearch] = useState('');
   const [refreshing, setRefreshing] = useState(false);
-  const [paginationLoading, setPaginationLoading] = useState(false);
-
-  const page = useRef(1);
-  const onEndReachedCalledDuringMomentum = useRef(false);
-
   const insets = useSafeAreaInsets();
   const height = useSharedValue(0);
   const opacity = useSharedValue(0);
   const { theme } = useAppTheme();
   const {
-    items_data,
-    subcat_data,
-    items_current_page,
-    items_last_page,
-    fetchItems,
-  } = useSettings();
+    itemListData,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useItemList();
+  const { subCategoryListData } = useSubCategoryList();
  
   const { invoiceDetails } = useInvoiceDetails(invoiceId as number);
   const {updateInvoiceMutate, isUpdatingInvoice } = useUpdateInvoice();
@@ -100,16 +96,6 @@ const ItemsScreen = ({
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [openFinancialBreakdown]);
-
- 
-useFocusEffect(
-  useCallback(() => {
-    page.current = 1;
-     fetchItems(1);
-  }, [fetchItems]),
-);
-
-
 
   useEffect(() => {
     if (!invoiceItems?.length) return;
@@ -178,7 +164,7 @@ useFocusEffect(
   });
 
   const processedData = useMemo(() => {
-    let result = items_data;
+    let result = itemListData;
     if (selectedFilterOption) {
       result = result.filter(item =>
         item.category_name
@@ -194,38 +180,33 @@ useFocusEffect(
     }
 
     return result;
-  }, [items_data, selectedFilterOption, search]);
+  }, [itemListData, selectedFilterOption, search]);
 
   const processedSubcategoryData = useMemo(() => {
-    let result = [...subcat_data];
+    let result = [...subCategoryListData];
     if (!debouncedSearch.trim()) return result;
     const lower = debouncedSearch.toLowerCase();
     result = result.filter(item => item.name.toLowerCase().includes(lower));
     return result;
-  }, [subcat_data, debouncedSearch]);
+  }, [subCategoryListData, debouncedSearch]);
 
-  const hasMore = useMemo(() => {
-    return items_current_page < items_last_page;
-  }, [items_current_page, items_last_page]);
+  
 
   const handleRefresh = useCallback(async () => {
-    if (refreshing) return;
-    page.current = 1;
-    setRefreshing(true);
-    await fetchItems(1);
-    setRefreshing(false);
-  }, [fetchItems, refreshing]);
+      try {
+        setRefreshing(true);
+        await refetch();
+      } finally {
+        setRefreshing(false);
+      }
+    }, [refetch]);
 
-  const handleLoadMore = useCallback(() => {
-    if (paginationLoading || refreshing || !hasMore) {
-      return;
-    }
-    setPaginationLoading(true);
-    const nextPage = page.current + 1;
-    page.current = nextPage;
-    fetchItems(nextPage);
-    setPaginationLoading(false);
-  }, [paginationLoading, refreshing, hasMore, fetchItems]);
+   const handleLoadMore = useCallback(async () => {
+      if (!hasNextPage || isFetchingNextPage || isFetching) {
+        return;
+      }
+      fetchNextPage();
+    }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
   const handleAddItem = useCallback((updatedItem: FetchItemsData) => {
     setSelectedItems(prev => {
@@ -371,16 +352,7 @@ useFocusEffect(
           maxToRenderPerBatch={10}
           initialNumToRender={8}
           windowSize={5}
-          onMomentumScrollBegin={() => {
-            onEndReachedCalledDuringMomentum.current = false;
-          }}
-          onEndReached={() => {
-            if (!onEndReachedCalledDuringMomentum.current) {
-              handleLoadMore();
-
-              onEndReachedCalledDuringMomentum.current = true;
-            }
-          }}
+          onEndReached={handleLoadMore}
           onEndReachedThreshold={0.2}
         />
       </View>

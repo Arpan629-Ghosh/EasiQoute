@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
   FlatList,
 } from 'react-native';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
@@ -14,7 +14,6 @@ import { icons } from '@/config/icons';
 import AppInput from '@/components/appInput/AppInput';
 import AppButton from '@/components/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { useSettings } from '@/hooks/apis/useSettings';
 import { useDebounce } from '@/hooks/useDebounce';
 import { FetchItemsData } from '@/types/apis/settings.types';
 import RenderItems from '@/components/renderItems/RenderItems';
@@ -23,67 +22,51 @@ import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
 import { useTranslation } from 'react-i18next';
 import Loader from '@/components/loader/Loader';
+import { useItemList } from '@/hooks/apis/settings/useItemList';
 
 const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
-  const [paginationLoading, setPaginationLoading] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [search, setSearch] = useState<string>('');
-  const page = useRef(1);
   const { theme } = useAppTheme();
   const { t } = useTranslation();
   const {
-    fetchItems,
-    isStale,
-    items_data,
-    items_current_page,
-    items_last_page,
-    settingLoading,
-  } = useSettings();
+    itemListData,
+    isPending,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useItemList();
   const insets = useSafeAreaInsets();
-
   const debouncedsearch = useDebounce(search);
-  const onEndReachedCalledDuringMomentum = useRef(false);
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  useEffect(() => {
-    if (isStale || !items_data.length) {
-      page.current = 1;
-      fetchItems(1);
-    }
-  }, [isStale, items_data.length, fetchItems])
-
-  const hasMore = useMemo(() => {
-    return items_current_page < items_last_page;
-  }, [items_current_page, items_last_page]);
-
   const handleRefresh = useCallback(async () => {
-    if (refreshing) return;
-    page.current = 1;
-    setRefreshing(true);
-    await fetchItems(1);
-    setRefreshing(false);
-  }, [fetchItems, refreshing]);
+      try {
+        setRefreshing(true);
+        await refetch();
+      } finally {
+        setRefreshing(false);
+      }
+    }, [refetch]);
 
-  const handleLoadMore = useCallback(() => {
-    if (paginationLoading || refreshing || !hasMore) {
-      return;
-    }
-    setPaginationLoading(true);
-    const nextPage = page.current + 1;
-    page.current = nextPage;
-    fetchItems(nextPage);
-    setPaginationLoading(false);
-  }, [paginationLoading, refreshing, hasMore, fetchItems]);
+  const handleLoadMore = useCallback(async () => {
+      if (!hasNextPage || isFetchingNextPage || isFetching) {
+        return;
+      }
+      fetchNextPage();
+    }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
   const processedData = useMemo(() => {
     const trimmedSearch = debouncedsearch.trim().toLowerCase();
     if (!trimmedSearch) {
-      return items_data ?? [];
+      return itemListData ?? [];
     }
-    return (items_data ?? []).filter(item =>
+    return (itemListData ?? []).filter(item =>
       item?.name?.toLowerCase()?.includes(trimmedSearch),
     );
-  }, [debouncedsearch, items_data]);
+  }, [debouncedsearch, itemListData]);
 
   const navigateToNewItem = () => {
     navigation.navigate('NewItemsScreen');
@@ -98,20 +81,12 @@ const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
     [],
   );
 
-  const renderFooter = useMemo(() => {
-    if (!paginationLoading) {
-      return null;
-    }
-
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }, [paginationLoading, styles.loaderContainer]);
+ const renderFooter = useCallback(() => {
+     return isFetchingNextPage && <ActivityIndicator size="small" />;
+   }, [isFetchingNextPage]);
 
   const renderEmpty = useMemo(() => {
-    if (settingLoading) {
+    if (isFetching) {
       return null;
     }
     return (
@@ -122,7 +97,7 @@ const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
         nextMessage=" below to add new item."
       />
     );
-  }, [settingLoading]);
+  }, [isFetching]);
 
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
@@ -156,19 +131,7 @@ const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
         updateCellsBatchingPeriod={50}
         initialNumToRender={8}
         windowSize={5}
-        maintainVisibleContentPosition={{
-          minIndexForVisible: 0,
-        }}
-        onMomentumScrollBegin={() => {
-          onEndReachedCalledDuringMomentum.current = false;
-        }}
-        onEndReached={() => {
-          if (!onEndReachedCalledDuringMomentum.current) {
-            handleLoadMore();
-
-            onEndReachedCalledDuringMomentum.current = true;
-          }
-        }}
+        onEndReached={handleLoadMore}
         onEndReachedThreshold={0.2}
         ListFooterComponent={renderFooter}
         ListEmptyComponent={renderEmpty}
@@ -186,7 +149,7 @@ const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {
           </AppButton>
         </View>
       </View>
-    { !refreshing &&  <Loader visible={ settingLoading } />}
+     <Loader visible={ isPending } />
     </LinearGradient>
   );
 };

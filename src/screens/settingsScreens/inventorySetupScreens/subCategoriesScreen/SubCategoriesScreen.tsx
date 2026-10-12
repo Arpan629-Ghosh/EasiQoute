@@ -1,8 +1,6 @@
 import React, {
   useCallback,
-  useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 import {
@@ -21,7 +19,6 @@ import RenderSubCategories from '@/components/renderSubCategories/RenderSubCateg
 import { icons } from '@/config/icons';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useDebounce } from '@/hooks/useDebounce';
-import { useSettings } from '@/hooks/apis/useSettings';
 import { createStyles } from './style';
 import { SubCategoriesPayload } from '@/types/apis/settings.types';
 import { RootScreenProps } from '@/types/navigation.types';
@@ -29,6 +26,7 @@ import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
 import { useTranslation } from 'react-i18next';
 import Loader from '@/components/loader/Loader';
+import { useSubCategoryList } from '@/hooks/apis/settings/useSubCategoryList';
 
 const SubCategoriesScreen = ({
   navigation,
@@ -38,66 +36,36 @@ const SubCategoriesScreen = ({
   const styles = useMemo(() => createStyles(theme), [theme]);
   const insets = useSafeAreaInsets();
   const {
-    fetchSubCategories,
-    isSubcatStale,
-    subcat_data,
-    subcat_current_page,
-    subcat_last_page,
-    settingLoading
-  } = useSettings();
+      subCategoryListData,
+      isPending,
+      isFetching,
+      isFetchingNextPage,
+      hasNextPage,
+      fetchNextPage,
+      refetch,
+    } = useSubCategoryList();
   const [search, setSearch] = useState('');
   const [refreshing, setRefreshing] = useState(false);
-  const [paginationLoading, setPaginationLoading] = useState(false);
-  const page = useRef(1);
-  const onEndReachedCalledDuringMomentum = useRef(false);
   const debouncedSearch = useDebounce(search);
 
-  useEffect(() => {
-    if (isSubcatStale || !subcat_data.length) {
-      page.current = 1;
-      fetchSubCategories(1);
-    }
-  }, [fetchSubCategories, isSubcatStale, subcat_data.length]);
-
   const handleLoadMore = useCallback(async () => {
-    if (
-      paginationLoading ||
-      refreshing ||
-      subcat_current_page >= subcat_last_page
-    ) {
-      return;
-    }
-
-    try {
-      setPaginationLoading(true);
-      const nextPage = page.current + 1;
-      page.current = nextPage;
-
-      await fetchSubCategories(nextPage);
-    } finally {
-      setPaginationLoading(false);
-    }
-  }, [
-    paginationLoading,
-    refreshing,
-    subcat_current_page,
-    subcat_last_page,
-    fetchSubCategories,
-  ]);
+      if (!hasNextPage || isFetchingNextPage || isFetching) {
+        return;
+      }
+      fetchNextPage();
+    }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
   const handleRefresh = useCallback(async () => {
-    if (refreshing) return;
-
-    setRefreshing(true);
-    page.current = 1;
-
-    await fetchSubCategories(1);
-
-    setRefreshing(false);
-  }, [refreshing, fetchSubCategories]);
+      try {
+        setRefreshing(true);
+        await refetch();
+      } finally {
+        setRefreshing(false);
+      }
+    }, [refetch]);
 
   const renderEmpty = useMemo(() => {
-    if (settingLoading) {
+    if (isFetching) {
       return null;
     }
     return (
@@ -108,17 +76,17 @@ const SubCategoriesScreen = ({
         nextMessage=" below to add new item."
       />
     );
-  }, [settingLoading]);
+  }, [isFetching]);
 
   const processedData = useMemo(() => {
     const q = debouncedSearch?.trim()?.toLowerCase();
 
-    if (!q) return subcat_data ?? [];
+    if (!q) return subCategoryListData ?? [];
 
-    return (subcat_data ?? []).filter(item =>
+    return (subCategoryListData ?? []).filter(item =>
       item?.name?.toLowerCase()?.includes(q),
     );
-  }, [subcat_data, debouncedSearch]);
+  }, [subCategoryListData, debouncedSearch]);
 
   const renderItem: ListRenderItem<SubCategoriesPayload> = useCallback(
     ({ item }) => {
@@ -127,15 +95,9 @@ const SubCategoriesScreen = ({
     [],
   );
 
-  const renderFooter = useMemo(() => {
-    if (!paginationLoading) return null;
-
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }, [paginationLoading, styles.loaderContainer]);
+  const renderFooter = useCallback(() => {
+      return isFetchingNextPage && <ActivityIndicator size="small" />;
+    }, [isFetchingNextPage]);
 
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
@@ -168,15 +130,7 @@ const SubCategoriesScreen = ({
         onRefresh={handleRefresh}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
-        onMomentumScrollBegin={() => {
-          onEndReachedCalledDuringMomentum.current = false;
-        }}
-        onEndReached={() => {
-          if (!onEndReachedCalledDuringMomentum.current) {
-            handleLoadMore();
-            onEndReachedCalledDuringMomentum.current = true;
-          }
-        }}
+        onEndReached={handleLoadMore}
         onEndReachedThreshold={0.2}
         ListFooterComponent={renderFooter}
         ListEmptyComponent={renderEmpty}
@@ -195,7 +149,7 @@ const SubCategoriesScreen = ({
           </AppButton>
         </View>
       </View>
-      {!refreshing && <Loader visible={ settingLoading } />}
+      <Loader visible={ isPending } />
     </LinearGradient>
   );
 };

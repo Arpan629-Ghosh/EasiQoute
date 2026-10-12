@@ -10,12 +10,15 @@ import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import AppInput from '@/components/appInput/AppInput';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomDropdown, { Item } from '@/components/dropdown/CustomDropdown';
-import { useSettings } from '@/hooks/apis/useSettings';
 import { useToast } from '@/hooks/useToast';
 import { images } from '@/config/images';
 import { CreateItems } from '@/types/apis/settings.types';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useAppConfig } from '@/hooks/apis/useAppConfig';
+import { useSubCategoryList } from '@/hooks/apis/settings/useSubCategoryList';
+import { useCreateItems } from '@/hooks/apis/settings/useCreateItems';
+import { useDeleteItem } from '@/hooks/apis/settings/useDeleteItem';
+import Loader from '@/components/loader/Loader';
 
 
 interface ItemForm {
@@ -48,7 +51,9 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
   const styles = useMemo(() => createStyles(theme), [theme]);
   const { showToast } = useToast();
   const isEdit = !!editId
-  const { subcat_data, data, settingLoading, error, createItems, deleteItem } = useSettings();
+  const { subCategoryListData } = useSubCategoryList();
+  const { createItemAsync, isCreatingItem} = useCreateItems();
+  const { deleteItemAsync, isDeletingItem } = useDeleteItem();
   const {appConfigData} = useAppConfig();
 
   const updateField = useCallback(
@@ -71,9 +76,9 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
 
   const subCategoryOptions = useMemo(() => {
     return (
-      subcat_data?.map(item => ({ label: item.name, value: item.id })) || []
+      subCategoryListData?.map(item => ({ label: item.name, value: item.id })) || []
     );
-  }, [subcat_data]);
+  }, [subCategoryListData]);
 
   const handleItem = async () => {
     try {
@@ -82,7 +87,6 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
           item.name.toLowerCase() === itemData.category.trim().toLowerCase(),
       );
 
-      console.log(data)
 
       if (!category) {
         showToast('Please select a valid category', 'error');
@@ -113,7 +117,7 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
         payload.id = editId;
       }
 
-      await createItems(payload);
+      await createItemAsync(payload);
 
       showToast(
         isEdit ? 'Item updated successfully' : 'Item created successfully',
@@ -125,17 +129,16 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
     }
   };
 
-  const handleDeletetem = () => {
-    deleteItem(editId as number);
+  const handleDeletetem = async () => {
 
-    if (error) {
+    try {
+      const res = await deleteItemAsync(editId as number);
+      showToast(res.message);
+      navigation.navigate('ItemsScreen')
+    } catch (error) {
       showToast(String(error), 'error')
-      navigation.goBack()
     }
-    else {
-      showToast("Item deleted successfully!")
-      navigation.goBack()
-    }
+   
   }
 
   const measurementUnitOptions = useMemo<Item[]>(() => {
@@ -280,11 +283,12 @@ const NewItemsScreen = ({ navigation, route }: RootScreenProps<'NewItemsScreen'>
             bg={theme.primary}
             bttnTxt={isEdit ? 'Save Changes' : 'Save'}
             txtColor={theme.primaryText}
-            showLoader={settingLoading}
+            showLoader={isCreatingItem}
             onPress={handleItem}
           />
         </View>
       </View>
+      <Loader visible={ isDeletingItem } />
     </LinearGradient>
   );
 };

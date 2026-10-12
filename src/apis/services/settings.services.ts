@@ -102,6 +102,8 @@ export const settingsServices = {
 
     return response.data;
   },
+
+  
   deleteCategory: async (payload: number) => {
     const response = await apiClient.delete<ApiResponse<null>>(
       `${ENDPOINTS.CATEGORIES}/${payload}`,

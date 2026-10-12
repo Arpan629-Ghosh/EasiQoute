@@ -1,8 +1,6 @@
 import React, {
   useCallback,
-  useEffect,
   useMemo,
-  useRef,
   useState,
 } from 'react';
 
@@ -22,7 +20,6 @@ import RenderCategories from '@/components/renderCategories/RenderCategories';
 import { icons } from '@/config/icons';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useDebounce } from '@/hooks/useDebounce';
-import { useSettings } from '@/hooks/apis/useSettings';
 import { createStyles } from './style';
 import { CreateCategoriesPayload } from '@/types/apis/settings.types';
 import { RootScreenProps } from '@/types/navigation.types';
@@ -30,74 +27,52 @@ import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
 import { useTranslation } from 'react-i18next';
 import Loader from '@/components/loader/Loader';
+import { useCategoryList } from '@/hooks/apis/settings/useCategoryList';
 
 const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) => {
-  const [paginationLoading, setPaginationLoading] = useState(false);
   const { theme } = useAppTheme();
   const { t } = useTranslation();
   const styles = useMemo(() => createStyles(theme), [theme]);
   const insets = useSafeAreaInsets();
 
   const {
-    fetchCategories,
-    categoryLoading,
-    data,
-    current_page,
-    last_page,
-    settingLoading,
-    isStale
-  } = useSettings();
+      categoryListData,
+      isPending,
+      isFetching,
+      isFetchingNextPage,
+      hasNextPage,
+      fetchNextPage,
+      refetch,
+    } = useCategoryList();
   const [search, setSearch] = useState('');
   const [refreshing, setRefreshing] = useState(false);
-  const page = useRef(1);
-  const onEndReachedCalledDuringMomentum = useRef(false);
   const debouncedSearch = useDebounce(search);
-
-  useEffect(() => {
-    if (isStale || !data.length) {
-      page.current = 1;
-      fetchCategories(1);
-    }
-  }, [isStale, data.length, fetchCategories])
-
-
-  const hasMore = useMemo(() => {
-    return current_page < last_page;
-  }, [current_page, last_page]);
   
   const handleRefresh = useCallback(async () => {
-    if (refreshing) {
-      return;
-    }
-    page.current = 1;
-    setRefreshing(true);
-    await fetchCategories(1);
-    setRefreshing(false);
-  }, [refreshing, fetchCategories]);
+      try {
+        setRefreshing(true);
+        await refetch();
+      } finally {
+        setRefreshing(false);
+      }
+    }, [refetch]);
 
   const handleLoadMore = useCallback(async () => {
-    if (paginationLoading || refreshing || !hasMore) {
-      return;
-    }
-    try {
-      setPaginationLoading(true);
-      const nextPage = page.current + 1;
-      page.current = nextPage;
-      await fetchCategories(nextPage);
-    } finally {
-      setPaginationLoading(false);
-    }
-  }, [paginationLoading, refreshing, hasMore, fetchCategories]);
+      if (!hasNextPage || isFetchingNextPage || isFetching) {
+        return;
+      }
+      fetchNextPage();
+    }, [hasNextPage, isFetchingNextPage, isFetching, fetchNextPage]);
 
   const processedData = useMemo(() => {
     const trimmedSearch = debouncedSearch?.trim()?.toLowerCase();
     if (!trimmedSearch) {
-      return data ?? [];
+      return categoryListData ?? [];
     }
-    return (data ?? []).filter(item =>
+    return (categoryListData ?? []).filter(item =>
       item?.name?.toLowerCase()?.includes(trimmedSearch),
     );
-  }, [data, debouncedSearch]);
+  }, [categoryListData, debouncedSearch]);
 
 
   const navigateToNewCategory = useCallback(() => {
@@ -116,20 +91,12 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
     [],
   );
 
-  const renderFooter = useMemo(() => {
-    if (!paginationLoading) {
-      return null;
-    }
-
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="small" />
-      </View>
-    );
-  }, [paginationLoading, styles.loaderContainer]);
+  const renderFooter = useCallback(() => {
+      return isFetchingNextPage && <ActivityIndicator size="small" />;
+    }, [isFetchingNextPage]);
 
   const renderEmpty = useMemo(() => {
-    if (settingLoading) {
+    if (isFetching) {
       return null;
     }
     return (
@@ -140,7 +107,7 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
         nextMessage=" below to add new item."
       />
     );
-  }, [settingLoading]);
+  }, [isFetching]);
 
   return (
     <LinearGradient colors={theme.gradientPrimary} style={styles.container}>
@@ -179,19 +146,7 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
         updateCellsBatchingPeriod={50}
         initialNumToRender={8}
         windowSize={5}
-        maintainVisibleContentPosition={{
-          minIndexForVisible: 0,
-        }}
-        onMomentumScrollBegin={() => {
-          onEndReachedCalledDuringMomentum.current = false;
-        }}
-        onEndReached={() => {
-          if (!onEndReachedCalledDuringMomentum.current) {
-            handleLoadMore();
-
-            onEndReachedCalledDuringMomentum.current = true;
-          }
-        }}
+        onEndReached={handleLoadMore}
         onEndReachedThreshold={0.2}
         ListFooterComponent={renderFooter}
         ListEmptyComponent={renderEmpty}
@@ -217,7 +172,7 @@ const CategoriesScreen = ({ navigation }: RootScreenProps<'CategoriesScreen'>) =
           </AppButton>
         </View>
       </View>
-      {!refreshing && <Loader visible={ categoryLoading } />}
+     <Loader visible={ isPending } />
     </LinearGradient>
   );
 };
