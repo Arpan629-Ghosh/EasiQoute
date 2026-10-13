@@ -2,8 +2,16 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "src/assets/fonts/InterTight-BoldItalic.ttf",
+      "sha1": "421a34e4d4daa6852fe3356e5ad2e4ace459cf5e"
+    },
+    {
       "path": "src/assets/fonts/InterTight-Light.ttf",
       "sha1": "d9a7a114754adeccd1852c2eae7f3f8e0ece1719"
+    },
+    {
+      "path": "src/assets/fonts/InterTight-LightItalic.ttf",
+      "sha1": "ab17a4fbe1b17aa5415a72b6df4bfa40c01b6689"
     },
     {
       "path": "src/assets/fonts/InterTight-Medium.ttf",

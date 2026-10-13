@@ -21,6 +21,7 @@ import { HomeStackProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import AppImage from '@/components/appImage/AppImage';
 import { useGetUserDetails } from '@/hooks/apis/useGetUserDetails';
+import { formatDate } from '@/utils/formatDate';
 
 const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
   const { theme, isDark } = useAppTheme();
@@ -35,6 +36,7 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
   } = useHomeScreenData();
 
   console.log(isError)
+  console.log(userDetails);
 
 
   return (
@@ -52,16 +54,15 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
             <View style={styles.headerTxt}>
               <View style={styles.profile}>
                 <View style={styles.profilepic}>
-                  <AppImage
-                    uri={userDetails?.avatar}
-                    style={styles.pic}
-                  />
+                  <AppImage uri={userDetails?.avatar} style={styles.pic} />
                 </View>
                 <InterTightMedium fsize={18} fcolor="#FFFFFF">
                   Welcome, {userDetails?.name.split(' ')[0]}!
                 </InterTightMedium>
               </View>
-              <Image source={images.img_pro} style={styles.pro} />
+              <TouchableOpacity activeOpacity={0.8} onPress={() => navigation.navigate('SubscriptionScreen')}>
+                <Image source={images.img_pro} style={styles.pro} />
+              </TouchableOpacity>
             </View>
             <View style={styles.details}>
               <View style={styles.invoiceqoute}>
@@ -117,29 +118,32 @@ const HomeScreen = ({ navigation }: HomeStackProps<'HomeScreen'>) => {
           </InterTightMedium>
           <View style={styles.empty} />
         </View>
-        
-          <FlatList
-            data={homeScreenData?.recentActivities || []}
-            renderItem={({ item }) => <RenderActivities item={item} />}
-            keyExtractor={item => item.id.toString()}
-            showsVerticalScrollIndicator={false}
+
+        <FlatList
+          data={homeScreenData?.recentActivities || []}
+          renderItem={({ item }) => <RenderActivities item={item} />}
+          keyExtractor={item => item.id.toString()}
+          showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.flatlist}
-          style = {styles.flat}
-            ListEmptyComponent={
-              <EmptyStateScreen
-                icon={isDark ? images.img_darkrecent : images.img_homeEmpty}
-                message="Start with creating quotes and"
-                nextMessage="invoices to show here"
-                primaryText="No Recent Activity"
-                butttonEnabled={true}
-              />
-            }
-          />
-        
+          style={styles.flat}
+          ListEmptyComponent={
+            <EmptyStateScreen
+              icon={isDark ? images.img_darkrecent : images.img_homeEmpty}
+              message="Start with creating quotes and"
+              nextMessage="invoices to show here"
+              primaryText="No Recent Activity"
+              butttonEnabled={true}
+            />
+          }
+        />
       </View>
       <View style={styles.footer}>
         <InterTightRegular fsize={14} fcolor="#89909D">
-          Free trial ends on November 20, 2025
+          {userDetails?.is_trial_period
+            ? `free trial ends on ${formatDate(
+                userDetails?.subscription_ended_at as string,
+              )}`
+            : 'Get the Pro plan to enjoy all premium features.'}
         </InterTightRegular>
       </View>
       <Loader visible={isPending} />

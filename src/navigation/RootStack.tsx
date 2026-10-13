@@ -34,6 +34,7 @@ import NewInvoiceScreen from '@/screens/invoiceScreens/newInvoiceScreens/NewInvo
 import InvoiceDetailsScreens from '@/screens/invoiceScreens/invoiceDetailsScreen/InvoiceDetailsScreens';
 import PaymentDetailsScreen from '@/screens/paymentScreens/paymentDetailsScreen/PaymentDetailsScreen';
 import RecordPaymentScreen from '@/screens/paymentScreens/recordPaymentScreen/RecordPaymentScreen';
+import SubscriptionScreen from '@/screens/subscriptionScreens/subscriptionScreen/SubscriptionScreen';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStack = () => {
@@ -121,7 +122,8 @@ const RootStack = () => {
       <Stack.Screen name='NewInvoiceScreens' component={NewInvoiceScreen} />
       <Stack.Screen name='InvoiceDetailsScreens' component={InvoiceDetailsScreens} />
       <Stack.Screen name='PaymentDetailsScreen' component={PaymentDetailsScreen} />
-      <Stack.Screen name='RecordPaymentScreen' component={RecordPaymentScreen}/>
+      <Stack.Screen name='RecordPaymentScreen' component={RecordPaymentScreen} />
+      <Stack.Screen name='SubscriptionScreen' component={SubscriptionScreen}/>
     </Stack.Navigator>
   );
 };

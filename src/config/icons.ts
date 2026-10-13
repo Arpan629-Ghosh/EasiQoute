@@ -138,4 +138,6 @@ export const icons = {
   ic_disabled: require('@assets/icons/ic_disabled.png'),
   ic_paymenttab: require('@assets/icons/ic_paymenttab.png'),
   ic_boldpayment: require('@assets/icons/ic_boldpayment.png'),
+  ic_subcross: require('@assets/icons/ic_subcross.png'),
+  ic_prostar: require('@assets/icons/ic_prostar.png'),
 };

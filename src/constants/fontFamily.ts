@@ -5,6 +5,8 @@ export const fontFamily = {
         semibold: "InterTight-SemiBold",
         regular: "InterTight-Regular",
         medium: "InterTight-Medium",
-        light: "InterTight-Light"
+        light: "InterTight-Light",
+        bolditalic: "InterTight-BoldItalic",
+        lightitalic: "InterTight-LightItalic",
     }
 }

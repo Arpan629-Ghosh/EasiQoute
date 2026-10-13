@@ -154,9 +154,9 @@ export interface UserDeatails {
   created_at: string;
   updated_at: string;
   is_subscription_active: boolean;
-  subscription_ended_at: null;
+  subscription_ended_at: null | string;
   is_trial_period: boolean;
-  subscription_amount: null;
+  subscription_amount: null | number;
   hasBankAccountDetailAdded: boolean;
   hasSignatureAdded: boolean;
   is_team_member: boolean;

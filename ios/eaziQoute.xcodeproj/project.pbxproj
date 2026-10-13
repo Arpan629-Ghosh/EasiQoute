@@ -9,12 +9,14 @@
 /* Begin PBXBuildFile section */
 		0C80B921A6F3F58F76C31292 /* libPods-eaziQoute.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5DCACB8F33CDC322A6C60F78 /* libPods-eaziQoute.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		426CE454D736445DBC7E0C91 /* InterTight-LightItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 606ECCE4E66F4469B7997810 /* InterTight-LightItalic.ttf */; };
 		4575DE822FB47E8B00CF25DB /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4575DE812FB47E8B00CF25DB /* GoogleService-Info.plist */; };
 		7101156D776A4F8BAA24F2BB /* InterTight-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E74F5FF2BE8F474AA6019B62 /* InterTight-Light.ttf */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		934D40F99DC448B39C4030C0 /* InterTight-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1656A9917E224C00B8E81202 /* InterTight-Medium.ttf */; };
 		987D2609F1E93FDF12B1E215 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		A6CA138FDB74408FAF4E4814 /* InterTight-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BCDC3B43273C42059A33757A /* InterTight-BoldItalic.ttf */; };
 		BAD8EC44901446C59CA95F88 /* InterTight-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3E70019539E74514B4C56AFC /* InterTight-Regular.ttf */; };
 		F4DA694317C549789DF457CB /* InterTight-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 37B5D75F4D534E358CBC94F7 /* InterTight-SemiBold.ttf */; };
 /* End PBXBuildFile section */
@@ -32,8 +34,10 @@
 		45D5E38D2FB5CC8E0067C52F /* eaziQoute.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = eaziQoute.entitlements; path = eaziQoute/eaziQoute.entitlements; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-eaziQoute.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eaziQoute.release.xcconfig"; path = "Target Support Files/Pods-eaziQoute/Pods-eaziQoute.release.xcconfig"; sourceTree = "<group>"; };
 		5DCACB8F33CDC322A6C60F78 /* libPods-eaziQoute.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-eaziQoute.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		606ECCE4E66F4469B7997810 /* InterTight-LightItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InterTight-LightItalic.ttf"; path = "../src/assets/fonts/InterTight-LightItalic.ttf"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = eaziQoute/AppDelegate.swift; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = eaziQoute/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		BCDC3B43273C42059A33757A /* InterTight-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InterTight-BoldItalic.ttf"; path = "../src/assets/fonts/InterTight-BoldItalic.ttf"; sourceTree = "<group>"; };
 		E74F5FF2BE8F474AA6019B62 /* InterTight-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "InterTight-Light.ttf"; path = "../src/assets/fonts/InterTight-Light.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
@@ -71,6 +75,8 @@
 				1656A9917E224C00B8E81202 /* InterTight-Medium.ttf */,
 				3E70019539E74514B4C56AFC /* InterTight-Regular.ttf */,
 				E74F5FF2BE8F474AA6019B62 /* InterTight-Light.ttf */,
+				BCDC3B43273C42059A33757A /* InterTight-BoldItalic.ttf */,
+				606ECCE4E66F4469B7997810 /* InterTight-LightItalic.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -192,6 +198,8 @@
 				934D40F99DC448B39C4030C0 /* InterTight-Medium.ttf in Resources */,
 				BAD8EC44901446C59CA95F88 /* InterTight-Regular.ttf in Resources */,
 				7101156D776A4F8BAA24F2BB /* InterTight-Light.ttf in Resources */,
+				A6CA138FDB74408FAF4E4814 /* InterTight-BoldItalic.ttf in Resources */,
+				426CE454D736445DBC7E0C91 /* InterTight-LightItalic.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

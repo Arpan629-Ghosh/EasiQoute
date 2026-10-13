@@ -154,6 +154,7 @@ export type RootStackParamList = {
     paymentId: number;
   };
   RecordPaymentScreen: undefined;
+  SubscriptionScreen: undefined;
 };
 
 

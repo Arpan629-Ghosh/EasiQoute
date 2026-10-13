@@ -34,7 +34,7 @@
 		<true/>
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string></string>
+	<string/>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UIAppFonts</key>
@@ -43,6 +43,8 @@
 		<string>InterTight-Medium.ttf</string>
 		<string>InterTight-Regular.ttf</string>
 		<string>InterTight-Light.ttf</string>
+		<string>InterTight-BoldItalic.ttf</string>
+		<string>InterTight-LightItalic.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>

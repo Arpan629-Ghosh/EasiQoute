@@ -32,4 +32,6 @@ export const images = {
   img_darkrecent: require('@assets/images/img_darkrecent.png'),
   img_deletepay: require('@assets/images/img_deletepay.png'),
   img_paymentEmpty: require('@assets/images/img_paymentEmpty.png'),
+  img_background_pattern: require('@assets/images/img_background_pattern.png'),
+  img_prosub: require('@assets/images/img_prosub.png'),
 };
