@@ -25,29 +25,36 @@ const MiddleModalComponent = ({
   const styles = useMemo(() => createStyles(theme), [theme])
   return (
     <Modal transparent visible={visible} animationType="fade">
-      <TouchableWithoutFeedback onPress={onClose}>
-        <View style={styles.overlay} />
-      </TouchableWithoutFeedback>
+      <View style={styles.container}>
+        <TouchableWithoutFeedback onPress={onClose}>
+          <View style={styles.overlay} />
+        </TouchableWithoutFeedback>
 
-      <View style={styles.sheet}>{children}</View>
+        <View style={styles.sheet}>{children}</View>
+      </View>
     </Modal>
   );
 };
 
 export default MiddleModalComponent;
 
-const createStyles = (theme: Theme) =>  StyleSheet.create({
-  overlay: {
-    ...StyleSheet.absoluteFill,
-    backgroundColor: 'rgba(0,0,0,0.4)',
-  },
-  sheet: {
-    position: 'absolute',
-    backgroundColor: theme.background,
-    borderRadius: 15,
-    bottom: "40%",
-    left: 16,
-    right: 16,
-    // alignItems: "center"
-  },
-});
+const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    overlay: {
+      ...StyleSheet.absoluteFill,
+      backgroundColor: 'rgba(0,0,0,0.4)',
+    },
+    sheet: {
+      position: 'absolute',
+      backgroundColor: theme.background,
+      borderRadius: 15,
+      left: 16,
+      right: 16,
+      // alignItems: "center"
+    },
+  });

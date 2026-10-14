@@ -8,13 +8,13 @@ import AppButton from '@/components/appButton/AppButton';
 import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import { createStyles } from './style';
 import { useAppTheme } from '@/hooks/useAppTheme';
-import { useAuth } from '@/hooks/apis/useAuth';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff } from 'lucide-react-native';
+import { useSignup } from '@/hooks/apis/auth/useSignup';
 
 
 
@@ -36,7 +36,7 @@ const RegisterScreen = ({navigation} : RootScreenProps<'RegisterScreen'>) => {
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
-  const { signup, loading } = useAuth();
+  const { mutateAsync: signup, isPending: loading } = useSignup();
   const { showToast } = useToast();
   const { t } = useTranslation();
   const pushToken = useSelector((state: RootState) => state.notification.fcmToken)

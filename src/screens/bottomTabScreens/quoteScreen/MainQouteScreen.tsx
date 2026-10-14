@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { createStyles } from './style';
 import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
 import AppInput from '@/components/appInput/AppInput';
@@ -26,6 +26,7 @@ import { QuoteStackProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
 import { useQuoteList } from '@/hooks/apis/quotes/useQuoteList';
+import { useGetUserDetails } from '@/hooks/apis/useGetUserDetails';
 
 interface FilterAndSortingType {
   startDate: string;
@@ -61,6 +62,7 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
     fetchNextPage,
     refetch,
   } = useQuoteList();
+  const { userDetails } = useGetUserDetails();
 
   const insets = useSafeAreaInsets();
   const { theme, isDark } = useAppTheme();
@@ -70,6 +72,9 @@ const MainQuoteScreen = ({ navigation }: QuoteStackProps<'MainQuoteScreen'>) => 
   const debouncedSearch = useDebounce(search);
 
  
+  useEffect(() => {
+    (!userDetails?.is_subscription_active && !userDetails?.is_trial_period) ? setOpenSubscriptionModal(true): setOpenSubscriptionModal(false)
+  }, [userDetails?.is_subscription_active, userDetails?.is_trial_period])
 
   const navigateToNewQuote = useCallback(() => {
     navigation.navigate('NewQuoteScreens');

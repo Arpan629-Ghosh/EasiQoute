@@ -16,12 +16,12 @@ import {Eye, EyeOff} from "lucide-react-native"
 import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import AppButton from '@/components/appButton/AppButton';
 import { useAppTheme } from '@/hooks/useAppTheme';
-import { useAuth } from '@/hooks/apis/useAuth';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useTranslation } from 'react-i18next';
+import { useLogin } from '@/hooks/apis/auth/useLogin';
 
 interface LoginForm {
   email: string;
@@ -38,7 +38,7 @@ const LoginScreen = ({ navigation }: RootScreenProps<'LoginScreen'>) => {
   const emailRef = useRef<TextInput | null>(null);
   const passwordRef = useRef<TextInput | null>(null);
   const { theme } = useAppTheme();
-  const { login, loading } = useAuth();
+  const { mutateAsync: login, isPending: loading } = useLogin();
   const { showToast } = useToast();
   const { t } = useTranslation();
   const pushToken = useSelector((state: RootState) => state.notification.fcmToken)

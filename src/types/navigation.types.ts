@@ -155,6 +155,10 @@ export type RootStackParamList = {
   };
   RecordPaymentScreen: undefined;
   SubscriptionScreen: undefined;
+  SubscriptionAndBillingScreen: {
+    isSubscriptionActive: boolean | undefined,
+    subscriptionEndDate: string | undefined
+  };
 };
 
 

@@ -7,6 +7,9 @@ import InterTightRegular from '../appFonts/InterTightRegular';
 import AppButton from '../appButton/AppButton';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '@/types/navigation.types';
 
 type Props = {
   visible: boolean;
@@ -15,39 +18,47 @@ type Props = {
 const NoSubscription = ({ visible, onClose }: Props) => {
   const { theme } = useAppTheme();
   const styles = useMemo(() => createStyles(theme), [theme])
-
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
+  
+  const handleActivateSubscription = () => {
+    navigation.navigate('SubscriptionScreen');
+    onClose();
+  }
   return (
     <MiddleModalComponent visible={visible} onClose={onClose}>
-      <Image source={images.img_subscription} style={styles.img} />
-      <View style={styles.txtView}>
-        <InterTightSemiBold
-          fsize={20}
-          fcolor={theme.textPrimary}
-          textAlign="center"
-        >
-          Subscription Required
-        </InterTightSemiBold>
-        <InterTightRegular
-          fsize={14}
-          fcolor={theme.textSecondary}
-          textAlign="center"
-        >
-          To continue using EaziQuote, please activate or renew your
-          subscription.
-        </InterTightRegular>
-      </View>
-      <View style={styles.bttnView}>
-        <AppButton
-          bttnTxt="Activate Subscription"
-          txtColor={theme.primaryText}
-          bg={theme.primary}
-        />
-        <AppButton
-          onPress={onClose}
-          bttnTxt="Not Now"
-          bg={theme.background}
-          txtColor="#D23949"
-        />
+      <View style = {styles.content}>
+        <Image source={images.img_subscription} style={styles.img} />
+        <View style={styles.txtView}>
+          <InterTightSemiBold
+            fsize={20}
+            fcolor={theme.textPrimary}
+            textAlign="center"
+          >
+            Subscription Required
+          </InterTightSemiBold>
+          <InterTightRegular
+            fsize={14}
+            fcolor={theme.textSecondary}
+            textAlign="center"
+          >
+            To continue using EaziQuote, please activate or renew your
+            subscription.
+          </InterTightRegular>
+        </View>
+        <View style={styles.bttnView}>
+          <AppButton
+            bttnTxt="Activate Subscription"
+            txtColor={theme.primaryText}
+            bg={theme.primary}
+            onPress={handleActivateSubscription}
+          />
+          <AppButton
+            onPress={onClose}
+            bttnTxt="Not Now"
+            bg={theme.background}
+            txtColor="#D23949"
+          />
+        </View>
       </View>
     </MiddleModalComponent>
   );
@@ -84,4 +95,11 @@ const createStyles = (theme:Theme) =>  StyleSheet.create({
     gap: 12,
     alignItems: 'center',
   },
+  content: {
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    gap: 24,
+    marginTop: 24,
+    marginBottom: 12
+  }
 });

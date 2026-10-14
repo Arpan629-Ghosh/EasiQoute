@@ -9,6 +9,10 @@ export const createStyles = (theme: Theme) =>
       flex: 1,
       backgroundColor: theme.background,
     },
+    scrollContent: {
+      flexGrow: 1,
+      backgroundColor: theme.background,
+    },
     centerLogo: {
       width: '100%',
       flexDirection: 'column',
@@ -139,31 +143,21 @@ export const createStyles = (theme: Theme) =>
       letterSpacing: 16 * 0.16,
     },
     footer: {
+      width: '100%',
       marginTop: 'auto',
+      bottom: 0,
+      left: 0,
+      right: 0,
     },
 
     footerContainer: {
       width: '100%',
-      paddingHorizontal: scaleWidth(15),
-      paddingTop: scaleHeight(12),
+      padding: scaleWidth(12),
       gap: scaleHeight(14),
     },
 
     subscribeButton: {
       width: '100%',
-      alignSelf: 'stretch',
-    },
-
-    gradientContainer: {
-      height: 78,
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-
-      paddingVertical: scaleHeight(12),
-      paddingHorizontal: scaleWidth(15),
-
-      borderRadius: scaleWidth(11),
     },
 
     gradientText: {
@@ -173,32 +167,44 @@ export const createStyles = (theme: Theme) =>
     },
 
     footerLinks: {
+      width: '100%',
+      height: scaleHeight(17),
       flexDirection: 'row',
+      justifyContent: 'center',
       alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingHorizontal: scaleWidth(11),
+      gap: scaleWidth(12),
     },
 
     linkDivider: {
-      width: StyleSheet.hairlineWidth,
-      height: scaleHeight(16),
-      backgroundColor: theme.border,
+      borderWidth: 1,
+      height: scaleHeight(17),
+      borderColor: theme.border,
     },
     primaryButton: {
+      borderRadius: scaleWidth(12),
+    },
+    footerContent: {
+      gap: scaleHeight(16),
+    },
+    empty: {
+      height: 16,
+      width: 16,
+    },
+
+    gradientView: {
       width: '100%',
       height: scaleHeight(48),
-
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
-
       paddingVertical: scaleHeight(12),
       paddingHorizontal: scaleWidth(16),
-      gap: scaleWidth(14),
-
       borderRadius: scaleWidth(12),
-      alignSelf: 'stretch',
-      flexGrow: 0,
-      flexShrink: 0,
+    },
+
+    link: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '28.5%',
     },
   });

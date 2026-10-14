@@ -18,12 +18,12 @@ import AppButton from '@/components/appButton/AppButton';
 import { SearchAddressPayload } from '@/types/apis/auth.types';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useToast } from '@/hooks/useToast';
-import { useAuth } from '@/hooks/apis/useAuth';
 import { RootScreenProps } from '@/types/navigation.types';
 import AddressDropdown from '@/components/adressDropdown/AddressDropdown';
 import { useCreateClients } from '@/hooks/apis/clients/useCreateClients';
 import { useUpdateClient } from '@/hooks/apis/clients/useUpdateClient';
 import { formatPhone } from '@/utils/formatPhone';
+import { useSearchAddress } from '@/hooks/apis/auth/useSearchAddress';
 
 interface ClientForm {
   clientName: string;
@@ -60,7 +60,7 @@ const AddClientScreen = ({
   const { showToast } = useToast();
   const { createClientMutateAsync, isCreating } = useCreateClients();
   const { updateClientMutate, isUpdatingClient } = useUpdateClient();
-  const { searchAddress } = useAuth();
+  const { data } = useSearchAddress(debouncedSearch);
   const insets = useSafeAreaInsets();
   const clientDetails = route.params?.clientDetails;
   const isEdit = !!clientDetails?.id;
@@ -74,7 +74,6 @@ const AddClientScreen = ({
 
       try {
         setAddressLoading(true)
-        const data = await searchAddress(debouncedSearch);
 
         if (Array.isArray(data)) {
           setSearchData(data);

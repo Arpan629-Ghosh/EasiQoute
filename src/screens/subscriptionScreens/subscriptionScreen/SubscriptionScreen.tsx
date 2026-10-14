@@ -1,4 +1,4 @@
-import { Image, Pressable, View } from 'react-native';
+import { Image, Pressable, ScrollView, StatusBar, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
 import { createStyles } from './style';
 import { useAppTheme } from '@/hooks/useAppTheme';
@@ -11,23 +11,49 @@ import LinearGradient from 'react-native-linear-gradient';
 import InterTightMedium from '@/components/appFonts/InterTightMedium';
 import BenefitsList from '@/components/benefitList/BenefitList';
 import { ArrowRight } from 'lucide-react-native';
+import { scaleHeight } from '@/utils/normalize';
+import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import { RootScreenProps } from '@/types/navigation.types';
+import { useGetUserDetails } from '@/hooks/apis/useGetUserDetails';
 
-const SubscriptionScreen = () => {
-  const { theme } = useAppTheme();
+const SubscriptionScreen = ({
+  navigation,
+}: RootScreenProps<'SubscriptionScreen'>) => {
+  const { theme, isDark } = useAppTheme();
   const insets = useSafeAreaInsets();
+  const { userDetails } = useGetUserDetails();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
+  
+
   return (
-    <View style={styles.container}>
+    <ScrollView
+      style={styles.container}
+      contentContainerStyle={styles.scrollContent}
+    >
+      {isDark ? (
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+      ) : (
+        <StatusBar
+          barStyle="dark-content"
+          backgroundColor="transparent"
+          translucent
+        />
+      )}
+
       <View style={styles.backgroundPattern}>
         <Image source={images.img_background_pattern} style={styles.img} />
       </View>
       <View style={styles.content}>
         <View style={styles.centerLogo}>
           <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
-            <View style={styles.crossView}>
+            <TouchableOpacity style={styles.crossView} onPress={() => navigation.goBack()}>
               <Image source={icons.ic_subcross} style={styles.icn} />
-            </View>
+            </TouchableOpacity>
             <View style={styles.crossView} />
           </View>
         </View>
@@ -77,54 +103,67 @@ const SubscriptionScreen = () => {
           <BenefitsList />
         </View>
       </View>
-      <View style={[styles.footer, { paddingBottom: insets.bottom }]}>
-        <View style={styles.footerContainer}>
-          <Pressable
-            onPress={() => {
-              // Connect your subscription action here
-            }}
-            style={styles.subscribeButton}
-          >
-            <LinearGradient
-              colors={['#000000', '#082B60']}
-              start={{ x: 1, y: 0.5 }}
-              end={{ x: 0, y: 0.5 }}
-              style={styles.primaryButton}
+      <View style={styles.footer}>
+        <View
+          style={[
+            styles.footerContainer,
+            { paddingBottom: insets.bottom + scaleHeight(12) },
+          ]}
+        >
+          <View style={styles.footerContent}>
+            <Pressable
+              onPress={() => {
+                navigation.navigate('SubscriptionAndBillingScreen', {
+                  isSubscriptionActive: userDetails?.is_subscription_active,
+                  subscriptionEndDate: userDetails?.subscription_ended_at as string
+                });
+              }}
+              style={styles.subscribeButton}
             >
-              <InterTightMedium fsize={14} fcolor="#FFFFFF">
-                Subscribe Now
-              </InterTightMedium>
+              <LinearGradient
+                colors={['#000000', '#082B60']}
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 1, y: 0.5 }}
+                style={styles.primaryButton}
+              >
+                <View style={styles.gradientView}>
+                  <View style={styles.empty} />
+                  <InterTightMedium fsize={16} fcolor="#FFFFFF">
+                    Subscribe Now
+                  </InterTightMedium>
 
-              <ArrowRight size={20} color="#FFFFFF" />
-            </LinearGradient> 
-          </Pressable>
-
-          <View style={styles.footerLinks}>
-            <Pressable onPress={() => {}}>
-              <InterTightLight fsize={12} fcolor="#2D2D2D">
-                Restore
-              </InterTightLight>
+                  <ArrowRight color="#FFFFFF" style={styles.empty} />
+                </View>
+              </LinearGradient>
             </Pressable>
 
-            <View style={styles.linkDivider} />
+            <View style={styles.footerLinks}>
+              <Pressable onPress={() => {}} style={styles.link}>
+                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
+                  Restore
+                </InterTightRegular>
+              </Pressable>
 
-            <Pressable onPress={() => {}}>
-              <InterTightLight fsize={12} fcolor="#2D2D2D">
-                Terms of Use
-              </InterTightLight>
-            </Pressable>
+              <View style={styles.linkDivider} />
 
-            <View style={styles.linkDivider} />
+              <Pressable onPress={() => {}} style={styles.link}>
+                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
+                  Terms of Use
+                </InterTightRegular>
+              </Pressable>
 
-            <Pressable onPress={() => {}}>
-              <InterTightLight fsize={12} fcolor="#2D2D2D">
-                Privacy Policy
-              </InterTightLight>
-            </Pressable>
+              <View style={styles.linkDivider} />
+
+              <Pressable onPress={() => {}} style={styles.link}>
+                <InterTightRegular fsize={14} fcolor={theme.textPrimary}>
+                  Privacy Policy
+                </InterTightRegular>
+              </Pressable>
+            </View>
           </View>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 

@@ -3,12 +3,12 @@ import React from 'react';
 import InterTightSemiBold from '../appFonts/InterTightSemiBold';
 import AppButton from '../appButton/AppButton';
 import MiddleModalComponent from '../modal/MiddleModalComponent';
-import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '@/types/navigation.types';
 import { useAppTheme } from '@/hooks/useAppTheme';
+import { useLogout } from '@/hooks/apis/auth/useLogout';
 
 interface Props {
   visible: boolean;
@@ -16,7 +16,7 @@ interface Props {
 }
 const LogoutModal = ({ visible, onClose }: Props) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>()
-  const { logout, loading } = useAuth();
+  const { mutateAsync: logout, isPending: loading } = useLogout();
   const { showToast } = useToast();
   const { theme } = useAppTheme();
   const handleLogout = async () => {

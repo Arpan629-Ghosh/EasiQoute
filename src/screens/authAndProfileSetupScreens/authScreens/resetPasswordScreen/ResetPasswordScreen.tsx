@@ -13,16 +13,16 @@ import InterTightRegular from '@/components/appFonts/InterTightRegular';
 import AppInput from '@/components/appInput/AppInput';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
-import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useTranslation } from 'react-i18next';
+import { useForgotPassword } from '@/hooks/apis/auth/useForgotPassword';
 
 const ResetPasswordScreen = ({navigation} : RootScreenProps<'ResetPasswordScreen'>) => {
   const [input, setInput] = useState<string>('');
   const emailRef = useRef<TextInput | null>(null);
   const { theme } = useAppTheme();
-  const { forgotPassword, loading } = useAuth();
+  const { mutateAsync: forgotPassword, isPending: loading } = useForgotPassword();
   const { showToast } = useToast();
   const { t } = useTranslation();
   const styles = useMemo(() => createStyles(theme), [theme]);

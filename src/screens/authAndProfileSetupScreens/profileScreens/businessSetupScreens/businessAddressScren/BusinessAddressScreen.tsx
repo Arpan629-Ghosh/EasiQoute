@@ -22,11 +22,11 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDebounce } from '@/hooks/useDebounce';
-import { useAuth } from '@/hooks/apis/useAuth';
 import { SearchAddressPayload } from '@/types/apis/auth.types';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useTranslation } from 'react-i18next';
 import AddressDropdown from '@/components/adressDropdown/AddressDropdown';
+import { useSearchAddress } from '@/hooks/apis/auth/useSearchAddress';
 
 export interface FormData {
   address: string;
@@ -63,7 +63,7 @@ const BusinessAddressScreen = ({
 
   const { theme } = useAppTheme();
 
-  const { searchAddress } = useAuth();
+  const {  data } = useSearchAddress(debouncedSearch);
   const { t } = useTranslation();
 
   const styles = useMemo(() => createStyles(theme), [theme]);
@@ -90,8 +90,6 @@ const BusinessAddressScreen = ({
 
       try {
         setAddressLoading(true)
-        const data = await searchAddress(debouncedSearch);
-
         if (Array.isArray(data)) {
           setSearchData(data);
         } else if (data) {

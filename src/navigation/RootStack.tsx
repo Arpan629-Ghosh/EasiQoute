@@ -25,7 +25,6 @@ import IntroScreen from '@/screens/authAndProfileSetupScreens/introScreens/Intro
 import ProfileScreen from '@/screens/authAndProfileSetupScreens/profileScreens/ProfileScreen/ProfileScreen';
 import BusinessScreen from '@/screens/authAndProfileSetupScreens/profileScreens/businessSetupScreens/businessScreen/BusinessScreen';
 import BusinessAddressScreen from '@/screens/authAndProfileSetupScreens/profileScreens/businessSetupScreens/businessAddressScren/BusinessAddressScreen';
-import { useAuth } from '@/hooks/apis/useAuth';
 import NewSectionScreen from '@/screens/quotesScreens/newQuoteScreens/newSectionScreen/NewSectionScreen';
 import AddClientScreen from '@/screens/clientScreens/addClientScreen/AddClientScreen';
 import ClientDetailScreen from '@/screens/clientScreens/clientDetailScreen/ClientDetailScreen';
@@ -35,11 +34,14 @@ import InvoiceDetailsScreens from '@/screens/invoiceScreens/invoiceDetailsScreen
 import PaymentDetailsScreen from '@/screens/paymentScreens/paymentDetailsScreen/PaymentDetailsScreen';
 import RecordPaymentScreen from '@/screens/paymentScreens/recordPaymentScreen/RecordPaymentScreen';
 import SubscriptionScreen from '@/screens/subscriptionScreens/subscriptionScreen/SubscriptionScreen';
+import SubscriptionAndBillingScreen from '@/screens/subscriptionScreens/subscriptionAndBillingScreen/SubscriptionAndBillingScreen';
+import { RootState } from '@/redux/store';
+import { useSelector } from 'react-redux';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const RootStack = () => {
-  const { user } = useAuth();
-  // console.log(user)
+  const user = useSelector((state: RootState) => state.auth.user);
+  console.log(user)
   const getInitialScreen = () => {
     if (!user || !user.is_email_verified) return 'LoginScreen';
     if (!user?.is_profile_setup) return 'IntroScreen';
@@ -123,7 +125,8 @@ const RootStack = () => {
       <Stack.Screen name='InvoiceDetailsScreens' component={InvoiceDetailsScreens} />
       <Stack.Screen name='PaymentDetailsScreen' component={PaymentDetailsScreen} />
       <Stack.Screen name='RecordPaymentScreen' component={RecordPaymentScreen} />
-      <Stack.Screen name='SubscriptionScreen' component={SubscriptionScreen}/>
+      <Stack.Screen name='SubscriptionScreen' component={SubscriptionScreen} />
+      <Stack.Screen name='SubscriptionAndBillingScreen' component={SubscriptionAndBillingScreen}/>
     </Stack.Navigator>
   );
 };

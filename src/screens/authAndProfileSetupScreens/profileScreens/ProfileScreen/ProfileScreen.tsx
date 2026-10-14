@@ -17,7 +17,6 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import Header from '@/components/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ImagePicker from '@/components/imagePicker/ImagePicker';
-import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useTranslation } from 'react-i18next';
@@ -25,6 +24,9 @@ import AppImage from '@/components/appImage/AppImage';
 import { useGetUserDetails } from '@/hooks/apis/useGetUserDetails';
 import { ProfileSetupPayload } from '@/types/apis/auth.types';
 import { formatPhone } from '@/utils/formatPhone';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/redux/store';
+import { useProfileSetup } from '@/hooks/apis/auth/useProfileSetup';
 
 interface ProfileForm {
   name: string;
@@ -53,11 +55,13 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
   const phRef = useRef<TextInput | null>(null);
   const insets = useSafeAreaInsets();
   const { isEdit } = route.params || false;
+  console.log(isEdit)
   const { theme, isDark } = useAppTheme();
-  const {  user } = useAuth();
+  const user = useSelector((state: RootState) => state.auth.user)
   const { isProfileUpdating, updateProfileAsync } = useGetUserDetails();
   const { showToast } = useToast();
   const { t } = useTranslation();
+  const { mutateAsync: createProfile, isPending: loading } = useProfileSetup();
   const styles = useMemo(() => createStyles(theme), [theme]);
 
   const handleInput = (name: string, value: string) => {
@@ -89,7 +93,25 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
     }));
   }, []);
 
-  const handleProfleSetup = async () => {
+  const handleCreateProfle = async () => {
+    let payload: ProfileSetupPayload = {
+      name: formData.name,
+      phone: formatPhone(formData.phone),
+      avatar: formData.imageUri || null,
+    };
+    try {
+      await createProfile(payload);
+      showToast('Profile created successfully.');
+      navigation.navigate('BusinessScreen', {
+          isEdit: false,
+      });
+    } catch (error) {
+      showToast(String(error), 'error');
+      console.log('PROFILE SETUP ERROR', error);
+    }
+  };
+
+  const handleUpdateProfle= async () => {
     let payload: ProfileSetupPayload = {
       name: formData.name,
       phone: formatPhone(formData.phone),
@@ -193,10 +215,10 @@ const ProfileScreen = ({ navigation, route }: RootScreenProps<'ProfileScreen'>) 
         <View style={styles.footer}>
           <View style={styles.footerComponent}>
             <AppButton
-              onPress={handleProfleSetup}
+              onPress={isEdit ? handleUpdateProfle : handleCreateProfle}
               bg={theme.primary}
               bttnTxt={isEdit ? 'Update Profile' : 'Continue'}
-              showLoader={isProfileUpdating}
+              showLoader={isProfileUpdating || loading}
               gap={4}
               txtColor={theme.primaryText}
             />

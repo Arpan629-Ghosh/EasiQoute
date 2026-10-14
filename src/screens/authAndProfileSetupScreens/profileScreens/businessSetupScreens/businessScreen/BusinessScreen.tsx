@@ -24,13 +24,13 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import ImagePicker from '@/components/imagePicker/ImagePicker';
 import CountryPickerComponent from '@/components/countryPicker/CountryPickerComponent';
 import { FormData } from '../businessAddressScren/BusinessAddressScreen';
-import { useAuth } from '@/hooks/apis/useAuth';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useTranslation } from 'react-i18next';
 import AppImage from '@/components/appImage/AppImage';
 import { useGetUserDetails } from '@/hooks/apis/useGetUserDetails';
 import { CompanyPayload } from '@/types/apis/auth.types';
+import { useCompanyProfileSetup } from '@/hooks/apis/auth/useCompanyProfileSetup';
 
 interface BusinessForm {
   name: string;
@@ -83,7 +83,7 @@ const BusinessScreen = ({ navigation, route }: RootScreenProps<'BusinessScreen'>
   const { theme, isDark } = useAppTheme();
   const { showToast } = useToast();
   const { t } = useTranslation();
-  const { companyProfileSetup, loading } = useAuth();
+  const { mutateAsync: companyProfileSetup, isPending: loading } = useCompanyProfileSetup();
   const {updateCompanyProfileAsync, isUpdating} = useGetUserDetails()
   const styles = useMemo(() => createStyles(theme), [theme]);
 
