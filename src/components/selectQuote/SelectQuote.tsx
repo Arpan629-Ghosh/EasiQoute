@@ -1,12 +1,12 @@
 import { StyleSheet, View } from 'react-native';
 import React, { useCallback, useMemo } from 'react';
 import { QuoteItem } from '@/types/apis/quote.types';
-import Card from '../cardDetailsComponent/Card';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
-import InterTightMedium from '../appFonts/InterTightMedium';
-import InterTightRegular from '../appFonts/InterTightRegular';
+import InterTightMedium from '../ui/appFonts/InterTightMedium';
+import InterTightRegular from '../ui/appFonts/InterTightRegular';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
+import Card from '../ui/cardDetailsComponent/Card';
 
 interface Props {
   item: QuoteItem;

@@ -4,11 +4,11 @@ import {
   RootScreenProps,
 } from '@/types/navigation.types';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import InvoiceTopTabBars from '@/components/customTopTabBar/InvoiceTopTabBars';
 import SummuryScreen from './tabs/summuryScreen/SummuryScreen';
 import DescriptionsScreen from './tabs/descriptionsScreen/DescriptionsScreen';
 import PaymentScreen from './tabs/paymentScreen/PaymentScreen';
 import { useInvoiceDetails } from '@/hooks/apis/invoice/useInvoiceDetails';
+import InvoiceTopTabBars from '@/components/ui/customTopTabBar/InvoiceTopTabBars';
 
 const Tab = createMaterialTopTabNavigator<InvoiceDetailsTopTabParamList>();
 const InvoiceDetailsScreens = ({ route }: RootScreenProps<'InvoiceDetailsScreens'>) => {

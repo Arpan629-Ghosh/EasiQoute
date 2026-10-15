@@ -3,21 +3,16 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createStyles } from './style';
 import { icons } from '@/config/icons';
 import LinearGradient from 'react-native-linear-gradient';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
-import Card from '@/components/cardDetailsComponent/Card';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
 import { images } from '@/config/images';
-import CardHeader from '@/components/cardDetailsComponent/CardHeader';
-import InfoRow from '@/components/cardDetailsComponent/InfoRow';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import ExpandableItem from '@/components/cardDetailsComponent/ExpandableItem';
-import AppButton from '@/components/appButton/AppButton';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import AppButton from '@/components/ui/appButton/AppButton';
 import StatusChanger from '@/components/statusChanger/StatusChanger';
 import { useAppTheme } from '@/hooks/useAppTheme';
-import Items from '@/components/cardDetailsComponent/Items';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useToast } from '@/hooks/useToast';
 import { FetchItemsData } from '@/types/apis/settings.types';
-import Loader from '@/components/loader/Loader';
+import Loader from '@/components/ui/loader/Loader';
 import { RootScreenProps } from '@/types/navigation.types';
 import { STATUS_COLORS } from '@/config/statusColors';
 import { useFocusEffect } from '@react-navigation/native';
@@ -26,6 +21,11 @@ import { useDeleteQuote } from '@/hooks/apis/quotes/useDeleteQuote';
 import { useDuplicateQuote } from '@/hooks/apis/quotes/useDuplicateQuote';
 import { useUpdateQuoteStatus } from '@/hooks/apis/quotes/useUpdateQuoteStatus';
 import { useGetSelectedSection } from '@/hooks/apis/quotes/useGetSelectedSections';
+import Card from '@/components/ui/cardDetailsComponent/Card';
+import CardHeader from '@/components/ui/cardDetailsComponent/CardHeader';
+import InfoRow from '@/components/ui/cardDetailsComponent/InfoRow';
+import ExpandableItem from '@/components/ui/cardDetailsComponent/ExpandableItem';
+import Items from '@/components/ui/cardDetailsComponent/Items';
 
 const QouteDetailScreen = ({ navigation, route }: RootScreenProps<'QouteDetailScreen'>) => {
   const [open, setOpen] = useState(false)

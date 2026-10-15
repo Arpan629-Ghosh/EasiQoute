@@ -9,12 +9,12 @@ import {
 import React, { useCallback, useMemo, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
-import Header from '@/components/header/Header';
+import Header from '@/components/ui/header/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import AppInput from '@/components/appInput/AppInput';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import AppInput from '@/components/ui/appInput/AppInput';
 import { icons } from '@/config/icons';
-import AppButton from '@/components/appButton/AppButton';
+import AppButton from '@/components/ui/appButton/AppButton';
 import Signature from '@/components/signature/Signature';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';

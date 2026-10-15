@@ -1,17 +1,16 @@
 import { FlatList, Image, ListRenderItem, TouchableOpacity, View } from 'react-native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { createStyles } from './style';
-import AppButton from '@/components/appButton/AppButton';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import AppInput from '@/components/appInput/AppInput';
+import AppButton from '@/components/ui/appButton/AppButton';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import AppInput from '@/components/ui/appInput/AppInput';
 import { icons } from '@/config/icons';
-import RenderFilterData from '@/components/renderFilterData/RenderFilterData';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
-import InfoRow from '@/components/cardDetailsComponent/InfoRow';
+import RenderFilterData from '@/components/flatlist/renderFilterData/RenderFilterData';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
 import MarginBottomSheet from '@/components/marginBottomSheet/MarginBottomSheet';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import RenderSubCategoriesDropDown from '@/components/renderSubCategoriesDropdown/RenderSubCategoriesDropDown';
+import RenderSubCategoriesDropDown from '@/components/flatlist/renderSubCategoriesDropdown/RenderSubCategoriesDropDown';
 import { useDebounce } from '@/hooks/useDebounce';
 import DiscountModal from '@/components/discountModal/DiscountModal';
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
@@ -22,6 +21,7 @@ import { InvoiceItem } from '@/types/apis/invoice.types';
 import { useUpdateQuote } from '@/hooks/apis/quotes/useUpdateQuote';
 import { useItemList } from '@/hooks/apis/settings/useItemList';
 import { useSubCategoryList } from '@/hooks/apis/settings/useSubCategoryList';
+import InfoRow from '@/components/ui/cardDetailsComponent/InfoRow';
 
 
 

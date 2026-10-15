@@ -5,14 +5,14 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { images } from '@/config/images';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { icons } from '@/config/icons';
-import InterTightLight from '@/components/appFonts/InterTightLight';
-import InterTightBoldItalic from '@/components/appFonts/InterTightBoldItalic';
+import InterTightLight from '@/components/ui/appFonts/InterTightLight';
+import InterTightBoldItalic from '@/components/ui/appFonts/InterTightBoldItalic';
 import LinearGradient from 'react-native-linear-gradient';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
 import BenefitsList from '@/components/benefitList/BenefitList';
 import { ArrowRight } from 'lucide-react-native';
 import { scaleHeight } from '@/utils/normalize';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useGetUserDetails } from '@/hooks/apis/useGetUserDetails';
 

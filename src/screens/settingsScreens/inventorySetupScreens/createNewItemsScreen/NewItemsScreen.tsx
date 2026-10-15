@@ -3,11 +3,11 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
-import Header from '@/components/header/Header';
-import AppButton from '@/components/appButton/AppButton';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
-import AppInput from '@/components/appInput/AppInput';
+import Header from '@/components/ui/header/Header';
+import AppButton from '@/components/ui/appButton/AppButton';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
+import AppInput from '@/components/ui/appInput/AppInput';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import CustomDropdown, { Item } from '@/components/dropdown/CustomDropdown';
 import { useToast } from '@/hooks/useToast';
@@ -18,7 +18,7 @@ import { useAppConfig } from '@/hooks/apis/useAppConfig';
 import { useSubCategoryList } from '@/hooks/apis/settings/useSubCategoryList';
 import { useCreateItems } from '@/hooks/apis/settings/useCreateItems';
 import { useDeleteItem } from '@/hooks/apis/settings/useDeleteItem';
-import Loader from '@/components/loader/Loader';
+import Loader from '@/components/ui/loader/Loader';
 
 
 interface ItemForm {

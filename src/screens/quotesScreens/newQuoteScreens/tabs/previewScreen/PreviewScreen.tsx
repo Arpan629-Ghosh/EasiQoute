@@ -1,8 +1,8 @@
 import { ActivityIndicator, Image, Share, TouchableOpacity, View } from 'react-native'
 import React, { useMemo, useState } from 'react'
 import { createStyles } from './style'
-import AppInput from '@/components/appInput/AppInput';
-import AppButton from '@/components/appButton/AppButton';
+import AppInput from '@/components/ui/appInput/AppInput';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { icons } from '@/config/icons'
 import { useAppTheme } from '@/hooks/useAppTheme'
 import {  useSafeAreaInsets } from 'react-native-safe-area-context'

@@ -1,14 +1,14 @@
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
 import BottomModalComponent from '../modal/BottomModalComponent';
-import CardHeader from '../cardDetailsComponent/CardHeader';
 import { icons } from '@/config/icons';
-import AppButton from '../appButton/AppButton';
-import InterTightRegular from '../appFonts/InterTightRegular';
+import AppButton from '../ui/appButton/AppButton';
+import InterTightRegular from '../ui/appFonts/InterTightRegular';
 import { useDispatch } from 'react-redux';
 import { setTheme } from '@/redux/theme/themeSlice';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
+import CardHeader from '../ui/cardDetailsComponent/CardHeader';
 
 type Prop = {
   visible: boolean;

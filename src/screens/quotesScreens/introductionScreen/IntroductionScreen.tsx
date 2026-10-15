@@ -4,11 +4,11 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import LinearGradient from 'react-native-linear-gradient';
 import { createStyles } from './style';
 import { icons } from '@/config/icons';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
-import Card from '@/components/cardDetailsComponent/Card';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { RootScreenProps } from '@/types/navigation.types';
+import Card from '@/components/ui/cardDetailsComponent/Card';
 
 const IntroductionScreen = ({ navigation, route }: RootScreenProps<'IntroductionScreen'>) => {
   const insets = useSafeAreaInsets();

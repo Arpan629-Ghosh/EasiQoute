@@ -14,7 +14,7 @@ import { persistor, RootState, store } from '@/redux/store';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { PersistGate } from 'redux-persist/integration/react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import ToastProvider from '@/components/toast/ToastContext';
+import ToastProvider from '@/components/ui/toast/ToastContext';
 import { navigationRef } from '@/utils/navigationRef';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { queryClient } from '@/config/queryClient';

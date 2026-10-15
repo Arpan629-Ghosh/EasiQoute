@@ -14,23 +14,22 @@ import React, {
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import AppInput from '@/components/appInput/AppInput';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import AppInput from '@/components/ui/appInput/AppInput';
 import { icons } from '@/config/icons';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
-import InfoRow from '@/components/cardDetailsComponent/InfoRow';
-import AppButton from '@/components/appButton/AppButton';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import DiscountModal from '@/components/discountModal/DiscountModal';
 import { InvoiceTopTabWithRootProps } from '@/types/navigation.types';
-import RenderSubCategoriesDropDown from '@/components/renderSubCategoriesDropdown/RenderSubCategoriesDropDown';
+import RenderSubCategoriesDropDown from '@/components/flatlist/renderSubCategoriesDropdown/RenderSubCategoriesDropDown';
 import { useDebounce } from '@/hooks/useDebounce';
-import RenderFilterData from '@/components/renderFilterData/RenderFilterData';
+import RenderFilterData from '@/components/flatlist/renderFilterData/RenderFilterData';
 import { FetchItemsData } from '@/types/apis/settings.types';
 import { useToast } from '@/hooks/useToast';
 import MarginBottomSheet from '@/components/marginBottomSheet/MarginBottomSheet';
@@ -38,6 +37,7 @@ import { useInvoiceDetails } from '@/hooks/apis/invoice/useInvoiceDetails';
 import { useUpdateInvoice } from '@/hooks/apis/invoice/useUpdateInvoice';
 import { useItemList } from '@/hooks/apis/settings/useItemList';
 import { useSubCategoryList } from '@/hooks/apis/settings/useSubCategoryList';
+import InfoRow from '@/components/ui/cardDetailsComponent/InfoRow';
 
 interface FinancialBreakDown {
   subtotal: string;

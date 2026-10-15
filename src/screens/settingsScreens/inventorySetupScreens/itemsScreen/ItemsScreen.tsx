@@ -9,19 +9,19 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
-import Header from '@/components/header/Header';
+import Header from '@/components/ui/header/Header';
 import { icons } from '@/config/icons';
-import AppInput from '@/components/appInput/AppInput';
-import AppButton from '@/components/appButton/AppButton';
+import AppInput from '@/components/ui/appInput/AppInput';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDebounce } from '@/hooks/useDebounce';
 import { FetchItemsData } from '@/types/apis/settings.types';
-import RenderItems from '@/components/renderItems/RenderItems';
+import RenderItems from '@/components/flatlist/renderItems/RenderItems';
 import { RootScreenProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
 import { useTranslation } from 'react-i18next';
-import Loader from '@/components/loader/Loader';
+import Loader from '@/components/ui/loader/Loader';
 import { useItemList } from '@/hooks/apis/settings/useItemList';
 
 const ItemsScreen = ({ navigation }: RootScreenProps<'ItemsScreen'>) => {

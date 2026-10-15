@@ -5,8 +5,8 @@ import { SearchAddressPayload } from '@/types/apis/auth.types';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Dropdown } from 'react-native-element-dropdown';
 import { fontFamily } from '@/constants/fontFamily';
-import RenderAddress from '../renderAddress/RenderAddress';
-import InterTightRegular from '../appFonts/InterTightRegular';
+import RenderAddress from '../flatlist/renderAddress/RenderAddress';
+import InterTightRegular from '../ui/appFonts/InterTightRegular';
 import { icons } from '@/config/icons';
 
 interface Props {

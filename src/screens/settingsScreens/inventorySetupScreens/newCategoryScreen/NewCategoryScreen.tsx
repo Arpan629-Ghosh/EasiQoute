@@ -3,10 +3,10 @@ import React, { useMemo, useState } from 'react'
 import { useAppTheme } from '@/hooks/useAppTheme'
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
-import Header from '@/components/header/Header';
-import AppInput from '@/components/appInput/AppInput';
-import AppButton from '@/components/appButton/AppButton';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import Header from '@/components/ui/header/Header';
+import AppInput from '@/components/ui/appInput/AppInput';
+import AppButton from '@/components/ui/appButton/AppButton';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useToast } from '@/hooks/useToast';
 import { images } from '@/config/images';
@@ -14,7 +14,7 @@ import { CreateCategories } from '@/types/apis/settings.types';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useCreateCategory } from '@/hooks/apis/settings/useCreateCategory';
 import { useDeleteCategory } from '@/hooks/apis/settings/useDeleteCategory';
-import Loader from '@/components/loader/Loader';
+import Loader from '@/components/ui/loader/Loader';
 
 
 const NewCategoryScreen = ({ navigation, route }: RootScreenProps<'NewCategoryScreen'>) => {

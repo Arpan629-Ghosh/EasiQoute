@@ -12,17 +12,17 @@ import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { icons } from '@/config/icons';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import Card from '@/components/cardDetailsComponent/Card';
-import SettingInfoRow from '@/components/cardDetailsComponent/SettingInfoRow';
-import CardHeader from '@/components/cardDetailsComponent/CardHeader';
-import RecentClientActivity from '@/components/recentClientActivity/RecentClientActivity';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import RecentClientActivity from '@/components/flatlist/recentClientActivity/RecentClientActivity';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useToast } from '@/hooks/useToast';
 import { useClientDetails } from '@/hooks/apis/clients/useClientDetails';
 import { useDeleteClient } from '@/hooks/apis/clients/useDeleteClient';
-import Loader from '@/components/loader/Loader';
+import Loader from '@/components/ui/loader/Loader';
+import Card from '@/components/ui/cardDetailsComponent/Card';
+import SettingInfoRow from '@/components/ui/cardDetailsComponent/SettingInfoRow';
+import CardHeader from '@/components/ui/cardDetailsComponent/CardHeader';
 
 const ClientDetailScreen = ({
   navigation,

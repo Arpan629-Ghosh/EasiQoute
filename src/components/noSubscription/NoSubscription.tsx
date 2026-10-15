@@ -2,9 +2,9 @@ import { Image, StyleSheet, View } from 'react-native'
 import React, { useMemo } from 'react'
 import MiddleModalComponent from '../modal/MiddleModalComponent'
 import { images } from '@/config/images';
-import InterTightSemiBold from '../appFonts/InterTightSemiBold';
-import InterTightRegular from '../appFonts/InterTightRegular';
-import AppButton from '../appButton/AppButton';
+import InterTightSemiBold from '../ui/appFonts/InterTightSemiBold';
+import InterTightRegular from '../ui/appFonts/InterTightRegular';
+import AppButton from '../ui/appButton/AppButton';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import { useNavigation } from '@react-navigation/native';

@@ -1,13 +1,13 @@
 import { FlatList, ListRenderItem, StyleSheet, View } from 'react-native';
 import React, { useCallback, useMemo } from 'react';
 import BottomModalComponent from '../modal/BottomModalComponent';
-import InterTightMedium from '../appFonts/InterTightMedium';
-import InterTightSemiBold from '../appFonts/InterTightSemiBold';
-import AppButton from '../appButton/AppButton';
+import InterTightMedium from '../ui/appFonts/InterTightMedium';
+import InterTightSemiBold from '../ui/appFonts/InterTightSemiBold';
+import AppButton from '../ui/appButton/AppButton';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import { FetchItemsData } from '@/types/apis/settings.types';
-import RenderMargin from '../renderMargin/RenderMargin';
+import RenderMargin from '../flatlist/renderMargin/RenderMargin';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = {

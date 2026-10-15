@@ -1,11 +1,11 @@
 import { View, TextInput, ScrollView, KeyboardAvoidingView, Platform, TouchableOpacity } from 'react-native'
 import React, {  useMemo, useRef, useState } from 'react'
 import GradientHeader from '@/components/gradient/GradientHeader';
-import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import AppInput from '@/components/appInput/AppInput';
-import AppButton from '@/components/appButton/AppButton';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
+import InterTightSemiBold from '@/components/ui/appFonts/InterTightSemiBold';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import AppInput from '@/components/ui/appInput/AppInput';
+import AppButton from '@/components/ui/appButton/AppButton';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
 import { createStyles } from './style';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useSelector } from 'react-redux';

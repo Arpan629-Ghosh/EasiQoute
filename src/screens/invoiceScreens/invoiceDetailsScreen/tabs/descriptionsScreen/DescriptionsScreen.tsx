@@ -10,15 +10,16 @@ import React, { useMemo } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
-import Card from '@/components/cardDetailsComponent/Card';
-import CardHeader from '@/components/cardDetailsComponent/CardHeader';
+
 import { icons } from '@/config/icons';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
 import { useToast } from '@/hooks/useToast';
-import AppButton from '@/components/appButton/AppButton';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { InvoiceDetailsScreenProps } from '@/types/navigation.types';
 import { useInvoiceDetails } from '@/hooks/apis/invoice/useInvoiceDetails';
+import Card from '@/components/ui/cardDetailsComponent/Card';
+import CardHeader from '@/components/ui/cardDetailsComponent/CardHeader';
 
 const DescriptionsScreen = ({ route }: InvoiceDetailsScreenProps<'Description'>) => {
   const invoiceId = route.params.invoiceId

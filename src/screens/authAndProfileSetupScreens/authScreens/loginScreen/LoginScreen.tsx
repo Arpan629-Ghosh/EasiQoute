@@ -9,12 +9,12 @@ import {
 import React, { useMemo, useRef, useState } from 'react';
 import { createStyles } from './styles';
 import GradientHeader from '@components/gradient/GradientHeader';
-import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import AppInput from '@/components/appInput/AppInput';
+import InterTightSemiBold from '@/components/ui/appFonts/InterTightSemiBold';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import AppInput from '@/components/ui/appInput/AppInput';
 import {Eye, EyeOff} from "lucide-react-native"
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
-import AppButton from '@/components/appButton/AppButton';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/redux/store';

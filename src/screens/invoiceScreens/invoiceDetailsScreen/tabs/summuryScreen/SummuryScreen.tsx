@@ -3,18 +3,15 @@ import React, { useCallback, useMemo, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
-import Card from '@/components/cardDetailsComponent/Card';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
 import { images } from '@/config/images';
-import CardHeader from '@/components/cardDetailsComponent/CardHeader';
-import InfoRow from '@/components/cardDetailsComponent/InfoRow';
+
 import { icons } from '@/config/icons';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import ExpandableItem from '@/components/cardDetailsComponent/ExpandableItem';
-import Items from '@/components/cardDetailsComponent/Items';
-import AppButton from '@/components/appButton/AppButton';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+
+import AppButton from '@/components/ui/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Loader from '@/components/loader/Loader';
+import Loader from '@/components/ui/loader/Loader';
 import { InvoiceItem } from '@/types/apis/invoice.types';
 import StatusChanger from '@/components/statusChanger/StatusChanger';
 import { InvoiceDetailsScreenProps } from '@/types/navigation.types';
@@ -23,6 +20,11 @@ import { formatDate } from '@/utils/formatDate';
 import { STATUS_COLORS } from '@/config/statusColors';
 import { useUpdateQuoteStatus } from '@/hooks/apis/quotes/useUpdateQuoteStatus';
 import { useInvoiceDetails } from '@/hooks/apis/invoice/useInvoiceDetails';
+import Card from '@/components/ui/cardDetailsComponent/Card';
+import CardHeader from '@/components/ui/cardDetailsComponent/CardHeader';
+import InfoRow from '@/components/ui/cardDetailsComponent/InfoRow';
+import ExpandableItem from '@/components/ui/cardDetailsComponent/ExpandableItem';
+import Items from '@/components/ui/cardDetailsComponent/Items';
 
 const SummuryScreen = ({ route }: InvoiceDetailsScreenProps<'Summury'>) => {
   const [open, setOpen] = useState(false);

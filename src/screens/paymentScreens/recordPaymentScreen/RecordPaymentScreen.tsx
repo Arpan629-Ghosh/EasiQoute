@@ -7,13 +7,12 @@ import React, {
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
-import Header from '@/components/header/Header';
+import Header from '@/components/ui/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import AppInput from '@/components/appInput/AppInput';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import AppInput from '@/components/ui/appInput/AppInput';
 import { icons } from '@/config/icons';
-import InfoRow from '@/components/cardDetailsComponent/InfoRow';
-import AppButton from '@/components/appButton/AppButton';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { ScrollView } from 'react-native-gesture-handler';
 import CustomDropdown, { Item } from '@/components/dropdown/CustomDropdown';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -24,6 +23,7 @@ import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useInvoiceList } from '@/hooks/apis/invoice/useInvoiceList';
 import { useClientList } from '@/hooks/apis/clients/useClientList';
+import InfoRow from '@/components/ui/cardDetailsComponent/InfoRow';
 
 export interface RecordPaymentProps {
   amtType: 'deposit' | 'invoice';

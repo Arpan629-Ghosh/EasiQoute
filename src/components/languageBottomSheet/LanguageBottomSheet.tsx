@@ -3,15 +3,15 @@ import React, { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 
 import BottomModalComponent from '../modal/BottomModalComponent';
-import CardHeader from '../cardDetailsComponent/CardHeader';
-import AppButton from '../appButton/AppButton';
-import InterTightRegular from '../appFonts/InterTightRegular';
+import AppButton from '../ui/appButton/AppButton';
+import InterTightRegular from '../ui/appFonts/InterTightRegular';
 
 import { icons } from '@/config/icons';
 import { setLanguage } from '@/redux/language/languageSlice';
 import { useAppLanguage } from '@/hooks/useAppLanguage';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
+import CardHeader from '../ui/cardDetailsComponent/CardHeader';
 
 type Prop = {
   visible: boolean;

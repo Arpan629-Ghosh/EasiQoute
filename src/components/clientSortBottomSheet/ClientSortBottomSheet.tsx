@@ -3,9 +3,9 @@ import React, { useMemo } from 'react';
 import BottomModalComponent from '../modal/BottomModalComponent';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
-import InterTightMedium from '../appFonts/InterTightMedium';
+import InterTightMedium from '../ui/appFonts/InterTightMedium';
 import { icons } from '@/config/icons';
-import InterTightRegular from '../appFonts/InterTightRegular';
+import InterTightRegular from '../ui/appFonts/InterTightRegular';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface Props {

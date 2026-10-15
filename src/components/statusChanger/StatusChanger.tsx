@@ -1,14 +1,14 @@
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, { useMemo } from 'react';
 import BottomModalComponent from '../modal/BottomModalComponent';
-import InterTightMedium from '../appFonts/InterTightMedium';
-import InterTightRegular from '../appFonts/InterTightRegular';
+import InterTightMedium from '../ui/appFonts/InterTightMedium';
+import InterTightRegular from '../ui/appFonts/InterTightRegular';
 import { InvoiceStatus, StatusData } from '@/config/status';
 import { icons } from '@/config/icons';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Loader from '../loader/Loader';
+import Loader from '../ui/loader/Loader';
 import { useUpdateQuoteStatus } from '@/hooks/apis/quotes/useUpdateQuoteStatus';
 
 type Props = {

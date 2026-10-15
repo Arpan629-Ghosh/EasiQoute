@@ -12,10 +12,10 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Header from '@/components/header/Header';
-import AppInput from '@/components/appInput/AppInput';
-import AppButton from '@/components/appButton/AppButton';
-import RenderSubCategories from '@/components/renderSubCategories/RenderSubCategories';
+import Header from '@/components/ui/header/Header';
+import AppInput from '@/components/ui/appInput/AppInput';
+import AppButton from '@/components/ui/appButton/AppButton';
+import RenderSubCategories from '@/components/flatlist/renderSubCategories/RenderSubCategories';
 import { icons } from '@/config/icons';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useDebounce } from '@/hooks/useDebounce';
@@ -25,7 +25,7 @@ import { RootScreenProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
 import { images } from '@/config/images';
 import { useTranslation } from 'react-i18next';
-import Loader from '@/components/loader/Loader';
+import Loader from '@/components/ui/loader/Loader';
 import { useSubCategoryList } from '@/hooks/apis/settings/useSubCategoryList';
 
 const SubCategoriesScreen = ({

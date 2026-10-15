@@ -1,9 +1,9 @@
 import { Image, ImageSourcePropType, StyleSheet, View } from 'react-native';
 import React from 'react';
-import InterTightMedium from '../appFonts/InterTightMedium';
+import InterTightMedium from '../ui/appFonts/InterTightMedium';
 import { useAppTheme } from '@/hooks/useAppTheme';
-import InterTightRegular from '../appFonts/InterTightRegular';
-import AppButton from '../appButton/AppButton';
+import InterTightRegular from '../ui/appFonts/InterTightRegular';
+import AppButton from '../ui/appButton/AppButton';
 import { icons } from '@/config/icons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';

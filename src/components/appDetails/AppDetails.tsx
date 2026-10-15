@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native'
 import React from 'react'
-import InterTightMedium from '../appFonts/InterTightMedium';
-import InterTightRegular from '../appFonts/InterTightRegular';
+import InterTightMedium from '../ui/appFonts/InterTightMedium';
+import InterTightRegular from '../ui/appFonts/InterTightRegular';
 
 
 interface Prop {

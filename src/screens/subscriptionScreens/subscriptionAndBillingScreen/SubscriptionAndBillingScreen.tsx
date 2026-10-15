@@ -2,14 +2,14 @@ import { View } from 'react-native';
 import React, { useMemo } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
-import Header from '@/components/header/Header';
-import Card from '@/components/cardDetailsComponent/Card';
+import Header from '@/components/ui/header/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import AppButton from '@/components/appButton/AppButton';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { RootScreenProps } from '@/types/navigation.types';
 import { formatDate } from '@/utils/formatDate';
+import Card from '@/components/ui/cardDetailsComponent/Card';
 
 const SubscriptionAndBillingScreen = ({
   route,

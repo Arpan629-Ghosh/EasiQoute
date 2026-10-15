@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import React from 'react';
-import InterTightSemiBold from '../appFonts/InterTightSemiBold';
-import AppButton from '../appButton/AppButton';
+import InterTightSemiBold from '../ui/appFonts/InterTightSemiBold';
+import AppButton from '../ui/appButton/AppButton';
 import MiddleModalComponent from '../modal/MiddleModalComponent';
 import { useToast } from '@/hooks/useToast';
 import { useNavigation } from '@react-navigation/native';

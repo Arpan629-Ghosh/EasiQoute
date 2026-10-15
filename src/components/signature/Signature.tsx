@@ -3,9 +3,9 @@ import React, { SetStateAction, useMemo, useRef } from 'react';
 import MiddleModalComponent from '../modal/MiddleModalComponent';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { Theme } from '@/types/theme.types';
-import InterTightMedium from '../appFonts/InterTightMedium';
+import InterTightMedium from '../ui/appFonts/InterTightMedium';
 import { icons } from '@/config/icons';
-import AppButton from '../appButton/AppButton';
+import AppButton from '../ui/appButton/AppButton';
 import SignatureView, { SignatureViewRef } from 'react-native-signature-canvas';
 import { useTranslation } from 'react-i18next';
 

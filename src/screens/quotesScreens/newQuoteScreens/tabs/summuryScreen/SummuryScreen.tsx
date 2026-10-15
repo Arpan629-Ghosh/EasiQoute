@@ -13,13 +13,13 @@ import React, {
   useState,
 } from 'react';
 import { createStyles } from './style';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import AppInput from '@/components/appInput/AppInput';
-import AppButton from '@/components/appButton/AppButton';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import AppInput from '@/components/ui/appInput/AppInput';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { icons } from '@/config/icons';
 import DateTimePicker from 'react-native-modal-datetime-picker';
-import CustomToggle from '@/components/switch/CustomToggle';
+import CustomToggle from '@/components/ui/switch/CustomToggle';
 import { images } from '@/config/images';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';

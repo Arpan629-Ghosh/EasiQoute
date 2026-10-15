@@ -13,13 +13,13 @@ import React, {
   useState,
 } from 'react';
 
-import AppButton from '@/components/appButton/AppButton';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { createStyles } from './style';
-import AppInput from '@/components/appInput/AppInput';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
+import AppInput from '@/components/ui/appInput/AppInput';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
 import { TextInput } from 'react-native-gesture-handler';
 import { useAppTheme } from '@/hooks/useAppTheme';
-import Header from '@/components/header/Header';
+import Header from '@/components/ui/header/Header';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useDebounce } from '@/hooks/useDebounce';
 import { SearchAddressPayload } from '@/types/apis/auth.types';

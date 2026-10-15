@@ -3,12 +3,12 @@ import SummuryScreen from './tabs/summuryScreen/SummuryScreen';
 import ItemsScreen from './tabs/itemsScreen/ItemsScreen';
 import SectionsScreen from './tabs/sectionsScreen/SectionsScreen';
 import PreviewScreen from './tabs/previewScreen/PreviewScreen';
-import CustomTabBars from '@/components/customTopTabBar/CustomTopTabBars';
 import {
   NewQuoteTopTabParamList,
   RootScreenProps,
 } from '@/types/navigation.types';
 import { useState } from 'react';
+import CustomTabBars from '@/components/ui/customTopTabBar/CustomTopTabBars';
 
 const Tab = createMaterialTopTabNavigator<NewQuoteTopTabParamList>();
 const NewQuoteScreens = ({ route }: RootScreenProps<'NewQuoteScreens'>) => {

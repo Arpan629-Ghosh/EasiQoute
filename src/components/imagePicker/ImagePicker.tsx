@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import React from 'react';
 import BottomModalComponent from '../modal/BottomModalComponent';
-import AppButton from '../appButton/AppButton';
+import AppButton from '../ui/appButton/AppButton';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import {Image} from 'react-native-compressor'

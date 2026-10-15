@@ -3,13 +3,13 @@ import React, { useMemo, useState } from 'react';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import LinearGradient from 'react-native-linear-gradient';
-import Header from '@/components/header/Header';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import AppInput from '@/components/appInput/AppInput';
-import AppButton from '@/components/appButton/AppButton';
+import Header from '@/components/ui/header/Header';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import AppInput from '@/components/ui/appInput/AppInput';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { icons } from '@/config/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import RenderCategoriesDropDown from '@/components/renderCategoriesDropDown/RenderCategoriesDropDown';
+import RenderCategoriesDropDown from '@/components/flatlist/renderCategoriesDropDown/RenderCategoriesDropDown';
 import { useDebounce } from '@/hooks/useDebounce';
 import { useToast } from '@/hooks/useToast';
 import { images } from '@/config/images';
@@ -19,7 +19,7 @@ import { useDeleteSubCategory } from '@/hooks/apis/settings/useDeleteSubCategory
 import { useSubCategoryList } from '@/hooks/apis/settings/useSubCategoryList';
 import { useCategoryList } from '@/hooks/apis/settings/useCategoryList';
 import { useCreateSubCategories } from '@/hooks/apis/settings/useCreateSubCategories';
-import Loader from '@/components/loader/Loader';
+import Loader from '@/components/ui/loader/Loader';
 
 const NewSubCategoryScreen = ({
   navigation,

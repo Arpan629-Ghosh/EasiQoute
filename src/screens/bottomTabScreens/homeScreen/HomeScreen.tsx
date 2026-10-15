@@ -8,18 +8,18 @@ import {
 import React, { useMemo } from 'react';
 import { createStyles } from './style';
 import { images } from '@/config/images';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
 import { icons } from '@/config/icons';
 import Icons from '@/components/icons/Icons';
 import AppDetails from '@/components/appDetails/AppDetails';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import RenderActivities from '@/components/renderActivities/RenderActivities';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import RenderActivities from '@/components/flatlist/renderActivities/RenderActivities';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { useHomeScreenData } from '@/hooks/apis/home/useHomeScreenData';
-import Loader from '@/components/loader/Loader';
+import Loader from '@/components/ui/loader/Loader';
 import { HomeStackProps } from '@/types/navigation.types';
 import EmptyStateScreen from '@/components/emptyStateScreen/EmptyStateScreen';
-import AppImage from '@/components/appImage/AppImage';
+import AppImage from '@/components/ui/appImage/AppImage';
 import { useGetUserDetails } from '@/hooks/apis/useGetUserDetails';
 import { formatDate } from '@/utils/formatDate';
 

@@ -4,7 +4,7 @@ import { InvoiceTopTabWithRootProps } from '@/types/navigation.types'
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
 import WebView from 'react-native-webview';
-import AppButton from '@/components/appButton/AppButton';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { icons } from '@/config/icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 

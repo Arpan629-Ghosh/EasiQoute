@@ -1,11 +1,11 @@
 import { StyleSheet, View } from 'react-native'
 import React, { useMemo, useState } from 'react'
 import MiddleModalComponent from '../modal/MiddleModalComponent'
-import InterTightMedium from '../appFonts/InterTightMedium';
+import InterTightMedium from '../ui/appFonts/InterTightMedium';
 import { useAppTheme } from '@/hooks/useAppTheme';
-import InterTightRegular from '../appFonts/InterTightRegular';
-import AppInput from '../appInput/AppInput';
-import AppButton from '../appButton/AppButton';
+import InterTightRegular from '../ui/appFonts/InterTightRegular';
+import AppInput from '../ui/appInput/AppInput';
+import AppButton from '../ui/appButton/AppButton';
 import { Theme } from '@/types/theme.types';
 
 

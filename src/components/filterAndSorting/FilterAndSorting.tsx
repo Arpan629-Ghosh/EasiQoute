@@ -1,11 +1,11 @@
 import { Image,StyleSheet, TouchableOpacity, View } from 'react-native';
 import React, {useMemo, useState } from 'react';
 import BottomModalComponent from '../modal/BottomModalComponent';
-import InterTightMedium from '../appFonts/InterTightMedium';
-import AppInput from '../appInput/AppInput';
+import InterTightMedium from '../ui/appFonts/InterTightMedium';
+import AppInput from '../ui/appInput/AppInput';
 import { StatusData } from '@/config/status';
-import AppButton from '../appButton/AppButton';
-import InterTightRegular from '../appFonts/InterTightRegular';
+import AppButton from '../ui/appButton/AppButton';
+import InterTightRegular from '../ui/appFonts/InterTightRegular';
 import { icons } from '@/config/icons';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 import { useAppTheme } from '@/hooks/useAppTheme';

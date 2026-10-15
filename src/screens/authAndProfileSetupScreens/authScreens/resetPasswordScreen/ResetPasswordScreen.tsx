@@ -7,12 +7,12 @@ import {
 } from 'react-native';
 import React, { useMemo, useRef, useState } from 'react';
 import { createStyles } from './style';
-import AppButton from '@/components/appButton/AppButton';
-import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import AppInput from '@/components/appInput/AppInput';
+import AppButton from '@/components/ui/appButton/AppButton';
+import InterTightSemiBold from '@/components/ui/appFonts/InterTightSemiBold';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import AppInput from '@/components/ui/appInput/AppInput';
 import { useAppTheme } from '@/hooks/useAppTheme';
-import Header from '@/components/header/Header';
+import Header from '@/components/ui/header/Header';
 import { useToast } from '@/hooks/useToast';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useTranslation } from 'react-i18next';

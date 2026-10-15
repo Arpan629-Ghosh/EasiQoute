@@ -1,5 +1,5 @@
-import AppButton from '@/components/appButton/AppButton';
-import InterTightSemiBold from '@/components/appFonts/InterTightSemiBold';
+import AppButton from '@/components/ui/appButton/AppButton';
+import InterTightSemiBold from '@/components/ui/appFonts/InterTightSemiBold';
 import React, { useMemo, useRef, useState } from 'react';
 import {
   View,
@@ -143,7 +143,6 @@ const IntroScreen = ({ navigation }: RootScreenProps<'IntroScreen'>) => {
               txtColor={theme.primaryText}
             />
           )}
-          
         </View>
       </View>
     </View>

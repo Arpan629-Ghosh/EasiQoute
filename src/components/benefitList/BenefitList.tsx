@@ -10,7 +10,7 @@ import {
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { scaleHeight, scaleWidth } from '@/utils/normalize';
 import { fontFamily } from '@/constants/fontFamily';
-import InterTightRegular from '../appFonts/InterTightRegular';
+import InterTightRegular from '../ui/appFonts/InterTightRegular';
 import { Theme } from '@/types/theme.types';
 
 

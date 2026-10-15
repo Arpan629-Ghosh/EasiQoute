@@ -3,11 +3,11 @@ import React, { useMemo, useState } from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
-import Header from '@/components/header/Header';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import AppInput from '@/components/appInput/AppInput';
+import Header from '@/components/ui/header/Header';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import AppInput from '@/components/ui/appInput/AppInput';
 import { icons } from '@/config/icons';
-import AppButton from '@/components/appButton/AppButton';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useToast } from '@/hooks/useToast';
 import { images } from '@/config/images';
@@ -15,7 +15,7 @@ import { Sections } from '@/types/apis/quote.types';
 import { RootScreenProps } from '@/types/navigation.types';
 import { useCreateSection } from '@/hooks/apis/quotes/useCreateSection';
 import { useDeleteSections } from '@/hooks/apis/quotes/useDeleteSections';
-import Loader from '@/components/loader/Loader';
+import Loader from '@/components/ui/loader/Loader';
 
 interface SectionForm {
   order: string;

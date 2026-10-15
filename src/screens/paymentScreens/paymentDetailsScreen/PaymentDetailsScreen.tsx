@@ -8,17 +8,19 @@ import { createStyles } from './style';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { icons } from '@/config/icons';
 import { images } from '@/config/images';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
-import Card from '@/components/cardDetailsComponent/Card';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
+
 import { PAYMENT_STATUS_COLORS } from '@/config/statusColors';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import CardHeader from '@/components/cardDetailsComponent/CardHeader';
-import InfoRow from '@/components/cardDetailsComponent/InfoRow';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+
 import { formatDate } from '@/utils/formatDate';
-import AppButton from '@/components/appButton/AppButton';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { Allocation } from '@/types/apis/payments.types';
-import RenderAllocation from '@/components/renderAllocation/RenderAllocation';
-import Loader from '@/components/loader/Loader';
+import RenderAllocation from '@/components/flatlist/renderAllocation/RenderAllocation';
+import Loader from '@/components/ui/loader/Loader';
+import Card from '@/components/ui/cardDetailsComponent/Card';
+import CardHeader from '@/components/ui/cardDetailsComponent/CardHeader';
+import InfoRow from '@/components/ui/cardDetailsComponent/InfoRow';
 
 const PaymentDetailsScreen = ({
   route, navigation

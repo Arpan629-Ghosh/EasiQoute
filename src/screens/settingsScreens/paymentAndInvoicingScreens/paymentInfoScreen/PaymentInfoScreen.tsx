@@ -2,12 +2,12 @@ import { View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native'
 import React, { useMemo } from 'react'
 import { useAppTheme } from '@/hooks/useAppTheme'
 import { createStyles } from './style';
-import Header from '@/components/header/Header';
+import Header from '@/components/ui/header/Header';
 import LinearGradient from 'react-native-linear-gradient';
-import InterTightRegular from '@/components/appFonts/InterTightRegular';
-import InterTightMedium from '@/components/appFonts/InterTightMedium';
-import AppInput from '@/components/appInput/AppInput';
-import AppButton from '@/components/appButton/AppButton';
+import InterTightRegular from '@/components/ui/appFonts/InterTightRegular';
+import InterTightMedium from '@/components/ui/appFonts/InterTightMedium';
+import AppInput from '@/components/ui/appInput/AppInput';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 

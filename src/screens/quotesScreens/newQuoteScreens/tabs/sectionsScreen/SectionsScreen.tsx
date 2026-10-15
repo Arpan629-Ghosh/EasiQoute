@@ -1,7 +1,7 @@
 import { FlatList, Image, View } from 'react-native';
 import React, { useMemo, useState } from 'react';
-import RenderSectionTabData from '@/components/renderSectionTabData/RenderSectionTabData';
-import AppButton from '@/components/appButton/AppButton';
+import RenderSectionTabData from '@/components/flatlist/renderSectionTabData/RenderSectionTabData';
+import AppButton from '@/components/ui/appButton/AppButton';
 import { icons } from '@/config/icons';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
