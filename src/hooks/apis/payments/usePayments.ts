@@ -53,28 +53,19 @@ export const usePayments = (params?: PaymentQueryParams) => {
       },
     });
   
-    
-    
 
   return {
     paymentLists,
-
     paymentListsMeta: latestPage?.meta,
     paymentListsLinks: latestPage?.links,
-
     isPending: paymentListing.isPending,
     isFetching: paymentListing.isFetching,
     isFetchingNextPage: paymentListing.isFetchingNextPage,
-
     hasNextPage: paymentListing.hasNextPage,
-
     fetchNextPage: paymentListing.fetchNextPage,
-
     refetch: paymentListing.refetch,
-
     isError: paymentListing.isError,
     paymentListsError: paymentListing.error,
-
     createPayment: createPaymentMutation.mutate,
     createPaymentAsync: createPaymentMutation.mutateAsync,
     isCreatingPayment: createPaymentMutation.isPending,

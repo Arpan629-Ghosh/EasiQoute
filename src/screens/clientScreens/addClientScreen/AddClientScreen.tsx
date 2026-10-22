@@ -3,9 +3,16 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  TextInput,
   View,
 } from 'react-native';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import LinearGradient from 'react-native-linear-gradient';
 import { useAppTheme } from '@/hooks/useAppTheme';
 import { createStyles } from './style';
@@ -55,6 +62,16 @@ const AddClientScreen = ({
   const [searchData, setSearchData] = useState<SearchAddressPayload[]>([]);
   const [searchAddressInput, setSearchAddressInput] = useState('');
   const [addressLoading, setAddressLoading] = useState<boolean>(false);
+  const clientNameRef = useRef<TextInput>(null);
+  const companyNameRef = useRef<TextInput>(null);
+  const phoneRef = useRef<TextInput>(null);
+  const emailRef = useRef<TextInput>(null);
+  const streetAddressRef = useRef<TextInput>(null);
+  const cityRef = useRef<TextInput>(null);
+  const postcodeRef = useRef<TextInput>(null);
+  const countryRef = useRef<TextInput>(null);
+
+ 
   const debouncedSearch = useDebounce(searchAddressInput, 500);
   const { theme } = useAppTheme();
   const { showToast } = useToast();
@@ -64,6 +81,13 @@ const AddClientScreen = ({
   const insets = useSafeAreaInsets();
   const clientDetails = route.params?.clientDetails;
   const isEdit = !!clientDetails?.id;
+
+  const focusNext = useCallback(
+    (nextRef: React.RefObject<TextInput | null>) => {
+      nextRef.current?.focus();
+    },
+    [],
+  );
 
   useEffect(() => {
     const fetchAddress = async () => {
@@ -208,12 +232,14 @@ const AddClientScreen = ({
                 Client Name
               </InterTightRegular>
               <AppInput
+                ref={clientNameRef}
                 placeholder="Full name"
                 value={clientFormData.clientName}
                 onChangeText={txt => updateField('clientName', txt)}
                 textContentType="name"
                 keyboardType="name-phone-pad"
                 returnKeyType="next"
+                onSubmitEditing={() => focusNext(companyNameRef)}
               />
             </View>
             <View style={styles.inp}>
@@ -221,12 +247,14 @@ const AddClientScreen = ({
                 Company Name
               </InterTightRegular>
               <AppInput
+                ref={companyNameRef}
                 placeholder="Company name"
                 value={clientFormData.companyName}
                 onChangeText={txt => updateField('companyName', txt)}
                 textContentType="name"
                 keyboardType="name-phone-pad"
                 returnKeyType="next"
+                onSubmitEditing={() => focusNext(phoneRef)}
               />
             </View>
           </View>
@@ -239,11 +267,13 @@ const AddClientScreen = ({
                 Phone Number
               </InterTightRegular>
               <AppInput
+                ref={phoneRef}
                 placeholder="Phone number"
                 value={clientFormData.phNo}
                 onChangeText={txt => updateField('phNo', txt)}
                 keyboardType="number-pad"
                 returnKeyType="next"
+                onSubmitEditing={() => focusNext(emailRef)}
               />
             </View>
             <View style={styles.inp}>
@@ -251,6 +281,7 @@ const AddClientScreen = ({
                 Email Address
               </InterTightRegular>
               <AppInput
+                ref={emailRef}
                 placeholder="Email Address"
                 value={clientFormData.email}
                 onChangeText={txt => updateField('email', txt)}
@@ -258,6 +289,7 @@ const AddClientScreen = ({
                 autoCapitalize="none"
                 textContentType="emailAddress"
                 keyboardType="email-address"
+                onSubmitEditing={() => focusNext(streetAddressRef)}
               />
             </View>
           </View>
@@ -277,10 +309,12 @@ const AddClientScreen = ({
                 Street Address
               </InterTightRegular>
               <AppInput
+                ref={streetAddressRef}
                 placeholder="Street Address"
                 value={clientFormData.streetAddress}
                 onChangeText={txt => updateField('streetAddress', txt)}
                 returnKeyType="next"
+                onSubmitEditing={() => focusNext(cityRef)}
               />
             </View>
             <View style={styles.inp}>
@@ -288,11 +322,13 @@ const AddClientScreen = ({
                 City
               </InterTightRegular>
               <AppInput
+                ref={cityRef}
                 placeholder="City"
                 value={clientFormData.city}
                 onChangeText={txt => updateField('city', txt)}
                 textContentType="name"
                 returnKeyType="next"
+                onSubmitEditing={() => focusNext(postcodeRef)}
               />
             </View>
             <View style={styles.inp}>
@@ -300,10 +336,12 @@ const AddClientScreen = ({
                 Postcode
               </InterTightRegular>
               <AppInput
+                ref={postcodeRef}
                 placeholder="Postcode"
                 value={clientFormData.postcode}
                 onChangeText={txt => updateField('postcode', txt)}
                 returnKeyType="next"
+                onSubmitEditing={() => focusNext(countryRef)}
               />
             </View>
             <View style={styles.inp}>
@@ -311,6 +349,7 @@ const AddClientScreen = ({
                 Country
               </InterTightRegular>
               <AppInput
+                ref={countryRef}
                 placeholder="Country"
                 value={clientFormData.country}
                 onChangeText={txt => updateField('country', txt)}

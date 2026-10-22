@@ -31,20 +31,14 @@ export const useInvoiceList = (
     
     return {
         invoiceListData,
-
         invoiceListsMeta: latestPage?.meta,
         invoiceListsLinks: latestPage?.links,
-
         isPending: invoiceList.isPending,
         isFetching: invoiceList.isFetching,
         isFetchingNextPage: invoiceList.isFetchingNextPage,
-
         hasNextPage: invoiceList.hasNextPage,
-
         fetchNextPage: invoiceList.fetchNextPage,
-
         refetch: invoiceList.refetch,
-
         isError: invoiceList.isError,
         invoiceListsError: invoiceList.error,
     }
